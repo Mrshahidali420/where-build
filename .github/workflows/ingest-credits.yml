@@ -32,6 +32,10 @@ on:
         description: 'Cap the id list to this many (testing only)'
         required: false
         default: ''
+      max_calls:
+        description: 'API call ceiling for this run (blank = 300 for delta, 1200 for full-refresh; raise it for the first full walk)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -71,6 +75,7 @@ jobs:
           SITE_CONFIG: ../../sites/anime/site.config.mjs
           MODE: ${{ github.event.inputs.mode || (github.event.schedule == '30 0 * * 1' && 'full-refresh') || 'delta' }}
           LIMIT: ${{ github.event.inputs.limit }}
+          MAX_CALLS: ${{ github.event.inputs.max_calls }}
           PUSH: '1'
         run: node scripts/ingest-credits.mjs
 
