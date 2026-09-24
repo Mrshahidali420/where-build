@@ -1,0 +1,7 @@
+# WhereManhua
+
+> Chinese comics and the donghua made from them: creators, studios, seasons and episode dates, and the cultivation and xianxia lines they belong to.
+
+Data source: AniList. The site rebuilds every day.
+
+Status: in development. It lives on a preview address that is not indexed, and has no pages of its own yet.

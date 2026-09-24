@@ -1,0 +1,114 @@
+---
+/**
+ * Search. What people look for with the site's own search box.
+ *
+ * Only two things are ever sent (see /privacy): the result a person picked,
+ * and the words of a search that found nothing, cleaned of anything that
+ * looks like an e-mail, a link or a phone number. The words are shown here
+ * only when two or more different people typed the same thing.
+ */
+import Admin from '../../layouts/Admin.astro'
+import Hint from '../../components/admin/Hint.astro'
+import BarList from '../../components/admin/BarList.astro'
+import Kpi from '../../components/admin/Kpi.astro'
+import Split from '../../components/admin/Split.astro'
+import { envOf } from '../../lib/runtime.js'
+import { gate, rangeOf, humanize, num } from '../../lib/admin.js'
+import { actionsFor, tally } from '../../lib/admin-more.js'
+import { missingTitleHint } from '../../lib/admin-hints.js'
+
+export const prerender = false
+
+const env = envOf(Astro)
+const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
+if (secret && !signedIn && Astro.request.method !== 'POST') {
+  return Astro.redirect('/my-admin')
+}
+
+const range = rangeOf(Astro.url, '7d')
+
+let rows = []
+if (signedIn) rows = await actionsFor(db, range, ['search_pick', 'search_none', 'search_none_all'], 1000)
+
+const picks = rows.filter((row) => row.name === 'search_pick')
+const nones = rows.filter((row) => row.name === 'search_none')
+// Every search that found nothing, counted without its words.
+const noneAll = rows.filter((row) => row.name === 'search_none_all')
+const counted = [...picks, ...noneAll]
+const total = counted.reduce((n, row) => n + (row.n || 0), 0)
+const noneTotal = noneAll.reduce((n, row) => n + (row.n || 0), 0)
+
+const surfaces = tally(counted, (row) => row.detail)
+const surfaceParts = [
+  { name: 'Box at the top', value: surfaces.find((row) => row.key === 'dropdown')?.n || 0, tone: 'blue' },
+  { name: 'Full search page', value: surfaces.find((row) => row.key === 'page')?.n || 0, tone: 'violet' },
+]
+const pickTotal = picks.reduce((n, row) => n + (row.n || 0), 0)
+const noneShare = total ? Math.round((noneTotal / total) * 100) : 0
+
+const found = tally(picks, (row) => row.item).slice(0, 15)
+const foundRows = found.map((row) => ({
+  name: row.label || humanize(row.key, ''),
+  href: row.key,
+  sub: row.key,
+  value: row.n,
+  unit: 'picks',
+}))
+
+const missing = tally(nones, (row) => row.item).slice(0, 30)
+const missingRows = missing.map((row) => ({
+  name: `“${row.key}”`,
+  sub: `${num(row.people)} people`,
+  value: row.n,
+  unit: 'searches',
+  tone: 'bad',
+}))
+---
+
+
+<Admin
+  title="Search"
+  here="/my-admin/search"
+  range={range}
+  signedIn={signedIn}
+  secret={secret}
+  wrongWord={wrongWord}
+  note={`${range.label}. The site's own search box. What people type into Google is only in Search Console.`}
+>
+  <section class="kpis" aria-label="Searches at a glance">
+    <Kpi label="Searches" value={total} hero />
+    <Kpi label="Found a result" value={pickTotal} />
+    <Kpi label="Found nothing" value={noneTotal} unit={total ? `${noneShare}%` : ''} />
+  </section>
+
+  <div class="panel wide">
+    <h2>How much do people search, and where?</h2>
+    <p class="say">A search is counted when a result is picked, or when it finds nothing.</p>
+    {total === 0 ? (
+      <p class="empty">No searches counted in this window yet.</p>
+    ) : (
+      <Split parts={surfaceParts} label="Which search box" />
+    )}
+  </div>
+
+  <div class="panel">
+    <h2>What do they find?</h2>
+    <p class="say">The results people picked most.</p>
+    <BarList rows={foundRows} empty="Nobody picked a search result yet." />
+  </div>
+
+  <div class="panel">
+    <h2>What did they look for and not find?</h2>
+    <p class="say">
+      Only words that two or more different people searched for are shown. A
+      title here is one people want and the index does not hold.
+    </p>
+    <BarList rows={missingRows} empty="Nothing yet. Words show here once two different people search for the same missing title." />
+    <Hint hint={missingTitleHint(missing.length)} />
+  </div>
+
+  <p class="say">
+    Searches on Google that led here:
+    <a href="https://search.google.com/search-console" rel="noopener" target="_blank">open Search Console</a>.
+  </p>
+</Admin>

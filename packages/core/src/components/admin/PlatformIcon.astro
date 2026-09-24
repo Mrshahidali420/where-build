@@ -1,0 +1,22 @@
+---
+/**
+ * A platform's logo at 20 px, for click rows and platform rankings. The logos
+ * are the ones the site already serves from /brand/ (see src/lib/format.js),
+ * so nothing is fetched from outside. A platform with no logo gets a letter
+ * badge in its brand colour instead. Decorative: the name is always written
+ * next to it, so the image has an empty alt.
+ */
+import { markOf } from '../../lib/format.js'
+
+const { name = '' } = Astro.props
+const mark = markOf(name || '?')
+const letters = String(mark.initials || '?').slice(0, 2).toUpperCase()
+---
+
+{mark.src ? (
+  <span class:list={['mark', { plate: mark.plate }]} aria-hidden="true">
+    <img src={mark.src} alt="" width="20" height="20" decoding="async" />
+  </span>
+) : (
+  <span class="mark" style={`background:${mark.color || '#2a2f55'}`} aria-hidden="true">{letters}</span>
+)}

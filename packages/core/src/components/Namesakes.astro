@@ -1,0 +1,54 @@
+---
+/**
+ * Other characters who share this page's name (src/lib/namesakes.mjs).
+ *
+ * Two shapes, because the same list does two jobs:
+ *
+ * - `high`: this page's character is the lesser-known owner of the name, so a
+ *   reader who searched for the famous one probably landed here by mistake.
+ *   A short note sits under the title and names the others in the words they
+ *   searched ("Percival from The Seven Deadly Sins"), most-loved first.
+ * - otherwise: this is the famous one (or no one is better known), so the
+ *   list waits below the main content with small faces, as it always has.
+ *
+ * The caller renders one of the two, never both: two lists of the same links
+ * on one page say nothing new.
+ */
+import { namesakeLabel } from '../lib/namesakes.mjs'
+
+const { name, people = [], high = false, here = '' } = Astro.props
+---
+
+{
+  people.length > 0 &&
+    (high ? (
+      <aside class="namesakes-note" aria-labelledby="namesakes-note-head">
+        <h2 id="namesakes-note-head" class="namesakes-note__head">Other characters named {name}</h2>
+        {here && <p class="namesakes-note__here">This page is {name} from {here}. Looking for a different one?</p>}
+        <ul class="link-pills">
+          {people.map((other) => (
+            <li>
+              <a href={`/character/${other.slug}`}>{namesakeLabel(other)}</a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    ) : (
+      <section class="section">
+        <div class="section__head">
+          <h2>Other characters named {name}</h2>
+          <p>Same name, a different story. Open one to see where they turn up.</p>
+        </div>
+        <ul class="appears">
+          {people.map((other) => (
+            <li>
+              <a href={`/character/${other.slug}`}>
+                <img src={other.image} alt={`${other.name} portrait`} width="46" height="64" loading="lazy" decoding="async" />
+                <span><b>{namesakeLabel(other)}</b></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+}

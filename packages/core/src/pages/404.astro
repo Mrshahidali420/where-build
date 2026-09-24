@@ -1,0 +1,147 @@
+---
+/**
+ * The not-found page.
+ *
+ * Real people land here from an old bookmark and, more often than we would
+ * like, straight from a search result. A dead end plus two browse links wastes
+ * that visit. So this page now reads the address the visitor asked for, turns
+ * the slug back into words, and offers that word straight to the site search.
+ *
+ * Addresses that really do have a home somewhere else are handled before this
+ * page is ever reached: data/manual-redirects.json is merged into the redirect
+ * map at build time and the worker sends a 301.
+ */
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+
+// Where a lost reader most likely wanted to go. Each row says what is behind
+// it, so the reader can pick without guessing, and the address is shown so the
+// row reads as a real place and not an advert. The script below moves the row
+// for the section they were in (an old /anime/... link puts "Anime" first).
+const NEXT = [
+  { href: '/', name: 'Homepage', what: 'Trending manhwa, manga, manhua, novels and anime, and what airs this week.' },
+  { href: '/where-to-read', name: 'Where to read', what: 'Every official site and app for manhwa, manga, manhua and light novels, free and paid.' },
+  { href: '/where-to-watch', name: 'Where to watch', what: 'The official streaming services for anime, and which ones are free.' },
+  { href: '/manhwa', name: 'Manhwa', what: 'Korean webtoons, ordered by how many people are reading them.' },
+  { href: '/manga', name: 'Manga', what: 'Japanese comics, ordered by how many people are reading them.' },
+  { href: '/manhua', name: 'Manhua', what: 'Chinese comics, ordered by how many people are reading them.' },
+  { href: '/novel', name: 'Light novels', what: 'Light novels and web novels, and where to read them legally.' },
+  { href: '/anime', name: 'Anime', what: 'Every anime in the index, with where to watch it.' },
+  { href: '/schedule', name: 'Schedule', what: 'Anime episodes airing this week, day by day, and what is coming next.' },
+  { href: '/genre', name: 'Genres', what: 'Action, romance, fantasy and the rest, across every kind.' },
+  { href: '/character', name: 'Characters', what: 'Profiles of the best-loved characters, with who voices them.' },
+  { href: '/my-list', name: 'My list', what: 'The titles you saved on this device, with where to read or watch each one.' },
+  { href: '/shop', name: 'Shop', what: 'Books, box sets and figures for the series in the index, on Amazon.' },
+]
+---
+
+<Base
+  title={`Not found — ${config.name}`}
+  description="That page is not in the index."
+  noindex={true}
+  missing={true}
+>
+  <div class="shell">
+    <section class="hero">
+      <h1>That one is not in the index.</h1>
+      <p id="miss-lede">
+        Either the title has not been added yet, or the link is old. Start from a browse
+        page and work down — the lists are ordered by how many people are reading.
+      </p>
+      <p id="miss-try" hidden>
+        <button type="button" class="miss-search" id="miss-search">
+          Search this index for <b id="miss-name"></b>
+        </button>
+      </p>
+    </section>
+
+    <p class="miss-about">
+      {config.name} is a free guide to where you can read manhwa, manga, manhua and
+      light novels, and where you can watch anime, on official sites only. Every
+      title shows the platforms that carry it, which of them are free, and what
+      is new this week.
+    </p>
+
+    <nav class="miss-next" aria-labelledby="miss-next-head">
+      <h2 id="miss-next-head">Choose where to go next</h2>
+      <ul id="miss-rows">
+        {
+          NEXT.map((row) => (
+            <li>
+              <a href={row.href} data-miss={row.href}>
+                <span class="miss-next__name">{row.name}</span>
+                <span class="miss-next__what">{row.what}</span>
+                <span class="miss-next__path">{row.href} →</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <script is:inline>
+    // A reader who was lost inside one section most likely wants that section
+    // back. Move its row to the top: /anime/... puts "Anime" first, and
+    // /novel/... puts "Light novels" first. Other addresses keep the order.
+    ;(function () {
+      var first = '/' + (location.pathname.split('/').filter(Boolean)[0] || '')
+      var list = document.getElementById('miss-rows')
+      var row = list && list.querySelector('a[data-miss="' + first.replace(/"/g, '') + '"]')
+      if (row && first !== '/') list.insertBefore(row.parentNode, list.firstChild)
+    })()
+
+    // Turn "/manga/uchi-de-kuzu-otoko-wa-kaemasen" into "uchi de kuzu otoko wa
+    // kaemasen", then hand that to the search box the header already carries.
+    ;(function () {
+      var raw = ''
+      try {
+        raw = decodeURIComponent(location.pathname)
+      } catch (e) {
+        raw = location.pathname
+      }
+      var last = raw.split('/').filter(Boolean).pop() || ''
+      // Old addresses carried the source id on the end. Drop it.
+      var words = last
+        .replace(/-\d{3,}$/, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/[^a-z0-9 ']/gi, ' ')
+        .trim()
+      if (words.length < 3) return
+
+      var box = document.getElementById('miss-try')
+      var name = document.getElementById('miss-name')
+      var btn = document.getElementById('miss-search')
+      var input = document.getElementById('finder-input')
+      if (!box || !name || !btn || !input) return
+
+      name.textContent = words
+      box.hidden = false
+
+      btn.addEventListener('click', function () {
+        // On a phone the search box lives inside the closed menu panel.
+        if (getComputedStyle(input).display === 'none' || input.offsetParent === null) {
+          var menuBtn = document.querySelector('.menu-btn')
+          if (menuBtn) menuBtn.click()
+        }
+        input.value = words
+        input.dispatchEvent(new Event('input', { bubbles: true }))
+        input.focus()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+    })()
+  </script>
+
+  <script>
+    // Which "where to go next" link a lost reader picked. It answers whether
+    // this list helps, and which section people wanted. Only our own address
+    // is counted, never the broken one they typed (that is already the page's
+    // own row).
+    import { missNextRow, sendOwn } from '../lib/own-count.js'
+    document.getElementById('miss-rows')?.addEventListener('click', (event) => {
+      const link = event.target.closest && event.target.closest('a[data-miss]')
+      if (link) sendOwn(missNextRow(link.getAttribute('href')))
+    })
+  </script>
+</Base>

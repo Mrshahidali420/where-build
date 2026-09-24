@@ -1,0 +1,221 @@
+---
+/**
+ * Now. What is happening on the site in the last few minutes.
+ *
+ * This is the only page that reloads itself, and it only asks small questions
+ * about the last five minutes, so the free allowance is never at risk.
+ */
+import Admin from '../layouts/Admin.astro'
+import BarList from '../components/admin/BarList.astro'
+import ClickFeed from '../components/admin/ClickFeed.astro'
+import Columns from '../components/admin/Columns.astro'
+import Kpi from '../components/admin/Kpi.astro'
+import PageFeed from '../components/admin/PageFeed.astro'
+import { envOf } from '../lib/runtime.js'
+import {
+  gate,
+  ask,
+  askOne,
+  clock,
+  dayKey,
+  RECENT,
+  humanize,
+  num,
+  sectionName,
+  sourceName,
+} from '../lib/admin.js'
+import { CLICK } from '../lib/action-sql.js'
+
+export const prerender = false
+
+const env = envOf(Astro)
+const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
+
+const now = Date.now()
+const today = new Date(now).toISOString().slice(0, 10)
+
+let live = {}
+let todayRow = {}
+let hours = []
+let looking = []
+let clicks = []
+let missing = []
+
+if (signedIn) {
+  const [a, b, h, c, d, e] = await Promise.all([
+    askOne(
+      db,
+      `SELECT COUNT(DISTINCT CASE WHEN visitor <> '' THEN visitor END) AS people,
+              SUM(kind = 'view') AS views,
+              COUNT(DISTINCT CASE WHEN session <> '' THEN session END) AS visits
+       FROM events WHERE ${RECENT} AND ts > ?`,
+      now - 300000
+    ),
+    // Today, split in two so each half walks only the rows it needs through
+    // the (day, kind) index: the page views for "people", and the views and
+    // clicks hour by hour for the chart. Together they read about what the
+    // one old "whole of today" question read, which matters on the one page
+    // that reloads itself.
+    askOne(
+      db,
+      `SELECT COUNT(DISTINCT CASE WHEN visitor <> '' THEN visitor END) AS people
+       FROM events WHERE day = ? AND kind = 'view'`,
+      today
+    ),
+    ask(
+      db,
+      `SELECT CAST(ts / 3600000 AS INTEGER) % 24 AS hour,
+              SUM(kind = 'view') AS views, SUM(${CLICK}) AS clicks
+       FROM events WHERE day = ? AND kind IN ('view', 'buy', 'read', 'watch', 'other')
+       GROUP BY hour`,
+      today
+    ),
+    ask(
+      db,
+      `SELECT ts, path, label, page_type, country, device, step, referrer, campaign, prev
+       FROM events WHERE ${RECENT} AND kind = 'view' ORDER BY ts DESC LIMIT 20`
+    ),
+    ask(
+      db,
+      `SELECT ts, name, kind, path, label, page_type, platform, shop_kind, detail, country, target
+       FROM events WHERE ${RECENT} AND ${CLICK} ORDER BY ts DESC LIMIT 30`
+    ),
+    // Addresses people asked for that are not here. Grouped, because one bad
+    // link on somebody else's site sends the same wrong address over and over,
+    // and the count is what says whether it is worth fixing.
+    ask(
+      db,
+      `SELECT path,
+              COUNT(*) AS hits,
+              MAX(ts) AS last,
+              MAX(referrer) AS referrer,
+              MAX(prev) AS prev
+       FROM events WHERE day >= ? AND kind = 'missing'
+       GROUP BY path ORDER BY hits DESC, last DESC LIMIT 25`,
+      dayKey(6, now)
+    ),
+  ])
+  live = a
+  todayRow = b
+  hours = h
+  looking = c
+  clicks = d
+  missing = e
+}
+
+/**
+ * Where this one page view came from, in three words or less.
+ * A tagged link wins, then another website, then one of our own pages, and
+ * last of all a person who typed the address.
+ *
+ * An outside site only counts on the FIRST page of a visit. The browser keeps
+ * the first referrer on a page, so pressing Back to a page that arrived from
+ * Google reports Google a second time. That is the same arrival, not a new
+ * one, and counting it twice would make search look busier than it is.
+ */
+function cameFrom(row) {
+  const first = (row.step || 1) === 1
+  if (first && row.campaign) return sourceName(`utm:${row.campaign}`)
+  if (first && row.referrer) return sourceName(row.referrer)
+  if (row.prev) return `from ${humanize(row.prev, '')}`
+  return first ? 'Typed the address' : 'Came back'
+}
+
+// Today hour by hour, for the column chart. Hours still to come stay empty.
+const byHour = new Map(hours.map((row) => [Number(row.hour), row]))
+const nowHour = new Date(now).getUTCHours()
+const hourColumns = Array.from({ length: 24 }, (_, hour) => {
+  const row = byHour.get(hour) || {}
+  const tag = `${String(hour).padStart(2, '0')}:00`
+  return {
+    label: tag,
+    parts: [row.views || 0, row.clicks || 0],
+    title: `${tag}: ${num(row.views)} views, ${num(row.clicks)} clicks out`,
+  }
+})
+const viewsToday = hours.reduce((n, row) => n + (row.views || 0), 0)
+const clicksToday = hours.reduce((n, row) => n + (row.clicks || 0), 0)
+
+const pageRows = looking.map((row) => ({
+  ts: row.ts,
+  href: row.path,
+  name: humanize(row.path, row.label),
+  section: sectionName(row.page_type),
+  from: cameFrom(row),
+  country: row.country,
+  step: row.step,
+  device: row.device,
+}))
+
+const brokenRows = missing.map((row) => ({
+  name: row.path,
+  href: row.path,
+  sub: `${
+    row.referrer
+      ? `sent from ${sourceName(row.referrer)}`
+      : row.prev
+        ? `sent from our own ${humanize(row.prev, '')}`
+        : 'typed or a bookmark'
+  } · last ${clock(row.last).replace(' UTC', '')}`,
+  value: row.hits || 0,
+  unit: 'hits',
+}))
+---
+
+<Admin
+  title="Now"
+  here="/my-admin"
+  signedIn={signedIn}
+  secret={secret}
+  wrongWord={wrongWord}
+  refresh={60}
+  note="The last five minutes and today so far. Reloads itself every 60 seconds."
+>
+  <section class="kpis" aria-label="Right now and today">
+    <Kpi label="People here now" value={live.people || 0} live hero />
+    <Kpi label="Pages opened in 5 min" value={live.views || 0} />
+    <Kpi label="People today" value={todayRow.people || 0} />
+    <Kpi label="Page views today" value={viewsToday} />
+    <Kpi label="Clicks out today" value={clicksToday} />
+  </section>
+
+  <div class="panel wide">
+    <h2>How is today going, hour by hour?</h2>
+    <p class="say">Page views (blue) with clicks out on top (amber). The bright column is this hour, UTC.</p>
+    {viewsToday + clicksToday === 0 ? (
+      <p class="empty">Nothing counted yet today.</p>
+    ) : (
+      <Columns
+        columns={hourColumns}
+        tones={['blue', 'amber']}
+        names={['Page views', 'Clicks out']}
+        mark={nowHour}
+        height={64}
+        peakWord="busiest hour"
+        label="Page views and clicks out today, by hour"
+      />
+    )}
+  </div>
+
+  <div class="panel">
+    <h2>What are they looking at?</h2>
+    <p class="say">The last 20 pages opened, newest first. A rose dot means the visit started on that page.</p>
+    <PageFeed rows={pageRows} empty="Nobody has opened a page yet." />
+  </div>
+
+  <div class="panel">
+    <h2>The last 30 clicks out</h2>
+    <p class="say">Every link that sends a reader away. That hand-off is the job of this site.</p>
+    <ClickFeed rows={clicks} empty="No clicks out yet." />
+  </div>
+
+  <div class="panel wide">
+    <h2>Broken links people hit</h2>
+    <p class="say">
+      Addresses asked for in the last 7 days that are not on this site. "Sent
+      from" is where the bad link lives. Our own page there means the bad link
+      is ours to fix.
+    </p>
+    <BarList rows={brokenRows} tone="bad" empty="Nothing broken. Good." />
+  </div>
+</Admin>

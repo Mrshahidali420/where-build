@@ -1,0 +1,29 @@
+---
+/**
+ * /where-to-watch/manhwa, /where-to-watch/manhua, /where-to-watch/novel:
+ * every comic or novel of one section that got an anime, and where each
+ * anime legally streams.
+ *
+ * Why here and not under /manhwa: the question is a streaming question
+ * ("where to watch manhwa anime"), and /where-to-watch is the hub for those,
+ * so the list sits under the page Google already ties to that intent. The
+ * last word is the section's own folder name, so the URL reads like the
+ * search. /manhwa/<word> is also taken by title pages: a list there could
+ * one day collide with a real title's address.
+ *
+ * Built as a file, like /where-to-watch itself. The rows need the whole
+ * catalog, which the Worker never loads, and a static page costs no Worker
+ * time at all. Pages 2 and on are [list]/[page].astro.
+ */
+export const prerender = true
+import WatchList from '../../components/WatchList.astro'
+import { WATCH_LIST_KEYS } from '../../lib/watch-lists.mjs'
+
+export function getStaticPaths() {
+  return WATCH_LIST_KEYS.map((list) => ({ params: { list }, props: { listKey: list } }))
+}
+
+const { listKey } = Astro.props
+---
+
+<WatchList listKey={listKey} current={1} />

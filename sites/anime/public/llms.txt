@@ -1,0 +1,7 @@
+# WhereAnime
+
+> Every episode date, every voice actor, every studio and song, and the order to watch each franchise in, for anime from Japan and beyond.
+
+Data source: AniList, plus song lists from AnimeThemes. The site rebuilds every day.
+
+Status: in development. It lives on a preview address that is not indexed, and has no pages of its own yet.

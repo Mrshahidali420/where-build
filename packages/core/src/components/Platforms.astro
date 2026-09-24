@@ -1,0 +1,115 @@
+---
+/**
+ * The answer box. It is the reason a reader came to the page, so it is a real
+ * comparison and not a list of logos: for every official platform it says how
+ * you pay, what you get without paying, and where the service works.
+ *
+ * The rows are ordered cheapest-for-the-reader first, and the language
+ * editions of one platform are merged into a single row. AniList hands us an
+ * arbitrary list with WEBTOON in it four times; the order and the grouping are
+ * our own work, and they are the reason this table beats the raw source.
+ *
+ * The facts come from platform-facts.js and belong to the PLATFORM, so a title
+ * added tomorrow gets a filled table tomorrow with no extra step.
+ */
+import { platform } from '../lib/format.js'
+import Mark from './Mark.astro'
+import { rankedRows, bestValue } from '../lib/answers.mjs'
+import { checkedText, checkedISO } from '../lib/checked.js'
+
+// withVerdict: print the one-line "cheapest way in" above the table. Only the
+// title page asks for it. The free page already says the same thing in its
+// opening line, and saying it twice reads as filler.
+const { heading, links, empty, count, verb = 'read', withVerdict = false } = Astro.props
+
+// "Free to read" / "Free to watch" — the reader's own word for what they want.
+const freeLabel = `Free to ${verb}`
+
+const rows = rankedRows(links)
+const verdict = withVerdict ? bestValue(rows, verb === 'watch' ? 'anime' : 'comic') : null
+
+// checkedText and checkedISO come from src/lib/checked.js: the build stamp,
+// rewritten by every nightly build.
+
+// The anime page's table is the one the /where-to-watch lists link into
+// (/anime/<slug>#watch). Only there: withVerdict marks the title page, and
+// the comic pages keep their markup exactly as it was (Full Bloom included).
+const anchor = withVerdict && verb === 'watch' ? 'watch' : undefined
+---
+
+<section class="answer" id={anchor}>
+  <div class="answer__head">
+    <h2>{heading}</h2>
+    {rows.length > 0 && <p class="answer__count">{count}</p>}
+  </div>
+
+  {
+    rows.length > 0 ? (
+      <div class="compare">
+        {verdict && <p class="verdict">{verdict}</p>}
+
+        <div class="compare__head" aria-hidden="true">
+          <span>Platform</span>
+          <span>How you pay</span>
+          <span>{freeLabel}</span>
+          <span>Works in</span>
+          {/* matches the Open cell, so the header columns line up with the rows */}
+          <span>Open</span>
+        </div>
+
+        <ul class="platforms">
+          {rows.map(({ link, facts, languages }, at) => {
+            const brand = platform(link.site)
+            return (
+              <li class="platform" style={`--mark:${brand.color}`}>
+                <a
+                  href={link.url}
+                  rel="noopener nofollow sponsored"
+                  target="_blank"
+                  data-go={verb}
+                  data-platform={link.site}
+                >
+                  <Mark site={link.site} size="22px" class="platform__edge" />
+                  <span class="platform__name">
+                    {link.site}
+                    {at === 0 && facts.free && <b class="platform__best">Best value</b>}
+                  </span>
+                  <span class="platform__sub">
+                    {[
+                      languages.length > 2 ? `${languages.length} languages` : languages.join(', '),
+                      facts.account ? 'Sign-in needed' : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ') || 'Official'}
+                  </span>
+
+                  <span class="platform__fact platform__fact--pay">
+                    <b>How you pay</b>
+                    {facts.pay || brand.note || 'Official'}
+                  </span>
+                  <span class="platform__fact platform__fact--free">
+                    <b>{freeLabel}</b>
+                    {facts.free || '—'}
+                  </span>
+                  <span class="platform__fact platform__fact--region">
+                    <b>Works in</b>
+                    {facts.region || '—'}
+                  </span>
+
+                  <span class="platform__go">Open</span>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+
+        <p class="compare__checked">
+          We checked these on <time datetime={checkedISO}>{checkedText}</time>. Platforms
+          change their terms, so the platform's own page is the last word.
+        </p>
+      </div>
+    ) : (
+      <div class="empty"><slot name="empty">{empty}</slot></div>
+    )
+  }
+</section>

@@ -1,0 +1,111 @@
+---
+/**
+ * The body of a genre listing page: /genre/{slug}/{kind} and its numbered
+ * pages. Page 1 and the numbered pages are two routes (the same split as
+ * /{kind}/only/{filter}), so the shared markup lives here. The leading
+ * underscore keeps Astro from treating this file as a route.
+ */
+import Base from '../../../layouts/Base.astro'
+import CoverGrid from '../../../components/CoverGrid.astro'
+import Pager from '../../../components/Pager.astro'
+import { listingJsonld } from '../../../lib/listing-jsonld.js'
+import {
+  genreLists,
+  kindPageCount,
+  GENRE_KINDS,
+  GENRE_PER_PAGE,
+  KIND_LABEL,
+} from '../../../lib/genre-lists.js'
+
+const { genre, kind, current } = Astro.props
+const lists = genreLists(genre.name)
+const all = lists[kind]
+const pageCount = kindPageCount(all)
+const items = all.slice((current - 1) * GENRE_PER_PAGE, current * GENRE_PER_PAGE)
+const reach = Math.min(all.length, pageCount * GENRE_PER_PAGE)
+const n = (value) => value.toLocaleString('en-US')
+const lower = genre.name.toLowerCase()
+const label = KIND_LABEL[kind]
+const base = `/genre/${genre.slug}/${kind}`
+const path = current === 1 ? base : `${base}/${current}`
+const watched = kind === 'anime'
+
+const ORIGIN = {
+  manhwa: 'Korean comics',
+  manga: 'Japanese comics',
+  manhua: 'Chinese comics',
+  novel: 'Light and web novels',
+  anime: 'Anime series and films',
+}
+const blurb = `${ORIGIN[kind]} tagged ${lower}, ${watched ? 'most-watched' : 'most-read'} first. Each one ${
+  watched ? 'links to the services licensed to stream it' : 'lists the official apps that carry it'
+}.`
+
+// Sibling kinds in the same genre, so a reader can switch without going back.
+const others = GENRE_KINDS.filter((k) => k !== kind && lists[k].length > 0).map((k) => ({
+  kind: k,
+  href: kindPageCount(lists[k]) > 0 ? `/genre/${genre.slug}/${k}` : `/genre/${genre.slug}#${k}`,
+}))
+
+const heading = `${genre.name} ${label}`
+const title =
+  current === 1
+    ? `${heading} — ${watched ? 'most-watched' : 'most-read'} first, with official links`
+    : `${heading} — page ${current} of ${pageCount}`
+const description = `${n(all.length)} ${lower} ${label}, ${watched ? 'most-watched' : 'most-read'} first. Each title shows where to ${
+  watched ? 'watch' : 'read'
+} it legally, free or paid.`
+
+const jsonld = listingJsonld({ name: heading, description, path, items, total: all.length })
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={path}
+  jsonld={jsonld}
+  crumbs={[
+    { name: 'Genres', href: '/genre' },
+    { name: genre.name, href: `/genre/${genre.slug}` },
+    { name: label.charAt(0).toUpperCase() + label.slice(1) },
+  ]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{heading}</h1>
+        <p>{blurb}</p>
+        <p class="answer__count">
+          Showing {n((current - 1) * GENRE_PER_PAGE + 1)}–{n((current - 1) * GENRE_PER_PAGE + items.length)} of {n(all.length)}
+        </p>
+      </div>
+
+      <nav class="genre-quick" aria-label={`Other kinds of ${lower}`}>
+        <a href={`/genre/${genre.slug}`}>All {lower}</a>
+        {others.map((o) => <a href={o.href}>{KIND_LABEL[o.kind].charAt(0).toUpperCase() + KIND_LABEL[o.kind].slice(1)}</a>)}
+      </nav>
+
+      <CoverGrid items={items} base={`/${kind}`} eager={6} />
+    </section>
+
+    <Pager current={current} count={pageCount} base={base} segment="" label={heading} />
+
+    {
+      reach < all.length && current === pageCount && (
+        <section class="section">
+          <p class="genre-intro">
+            These pages hold the {n(reach)} most-read of {n(all.length)} {lower} {label}.
+            The rest are in the full <a href={`/${kind}`}>{label} list</a>, and every
+            title has its own page.
+          </p>
+        </section>
+      )
+    }
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href={`/genre/${genre.slug}`}>Back to {genre.name} →</a>
+      <a href="/genre">All genres →</a>
+      <a href={`/${kind}`}>All {label} →</a>
+    </nav>
+  </div>
+</Base>

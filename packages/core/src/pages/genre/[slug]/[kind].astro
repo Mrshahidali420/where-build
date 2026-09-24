@@ -1,0 +1,29 @@
+---
+/**
+ * Page 1 of a genre listing by kind: /genre/action/manhwa.
+ *
+ * The genre page shows 18 covers per kind. This is where "see more" goes.
+ * Only kinds with more titles than the genre page shows get a listing, and
+ * each listing stops at GENRE_MAX_PAGES. See src/lib/genre-lists.js.
+ */
+export const prerender = true
+import KindListing from './_KindListing.astro'
+import { genres } from '../../../lib/catalog.js'
+import { genreLists, kindPageCount, GENRE_KINDS } from '../../../lib/genre-lists.js'
+
+export function getStaticPaths() {
+  const paths = []
+  for (const genre of genres) {
+    const lists = genreLists(genre.name)
+    for (const kind of GENRE_KINDS) {
+      if (kindPageCount(lists[kind]) > 0) paths.push({ params: { slug: genre.slug, kind }, props: { genre } })
+    }
+  }
+  return paths
+}
+
+const { kind } = Astro.params
+const { genre } = Astro.props
+---
+
+<KindListing genre={genre} kind={kind} current={1} />

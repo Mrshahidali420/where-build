@@ -1,0 +1,60 @@
+---
+/**
+ * A day-by-day chart: the first line is drawn as a filled area, any others as
+ * dashed lines on their own scale, so a small number (clicks) still shows its
+ * shape next to a big one (views). Inline SVG, drawn on the server.
+ *
+ * series: rows of { day, ...numbers }, oldest first.
+ * lines: [{ field, name, tone }].
+ */
+import { num } from '../../lib/admin.js'
+import { shortDay, sparkPath } from '../../lib/admin-chart.js'
+
+const { series = [], lines = [], height = 96, label = 'Day by day' } = Astro.props
+const W = 300
+const drawn = lines.map((l, i) => {
+  const values = series.map((row) => row[l.field] || 0)
+  return {
+    ...l,
+    i,
+    total: values.reduce((n, v) => n + v, 0),
+    peak: Math.max(0, ...values),
+    path: sparkPath(values, W, height, 4),
+  }
+})
+const first = series[0]?.day
+const last = series[series.length - 1]?.day
+const lead = drawn[0]
+const said = drawn.map((l) => `${l.name} ${num(l.total)}`).join(', ')
+---
+
+{series.length > 1 && (
+  <figure class="chart">
+    {lead && <span class="peak">{`busiest day ${num(lead.peak)}`}</span>}
+    <svg viewBox={`0 0 ${W} ${height}`} height={height} preserveAspectRatio="none" role="img" aria-label={`${label}: ${said}`}>
+      {[0.25, 0.5, 0.75].map((f) => (
+        <line class="grid-line" x1="0" x2={W} y1={height * f} y2={height * f} vector-effect="non-scaling-stroke" />
+      ))}
+      {drawn.map((l) => (
+        <g class={`t-${l.tone || 'blue'}`}>
+          {l.i === 0 && <path d={l.path.area} fill="currentColor" fill-opacity="0.13" />}
+          <path
+            d={l.path.line}
+            fill="none"
+            stroke="currentColor"
+            stroke-width={l.i === 0 ? 2 : 1.6}
+            stroke-dasharray={l.i === 0 ? undefined : '4 3'}
+            stroke-linejoin="round"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      ))}
+    </svg>
+    <div class="axis"><span>{shortDay(first)}</span><span>{shortDay(last)}</span></div>
+    <ul class="legend">
+      {drawn.map((l) => (
+        <li><i class={`bg-${l.tone || 'blue'}`}></i>{l.name} <b>{num(l.total)}</b></li>
+      ))}
+    </ul>
+  </figure>
+)}

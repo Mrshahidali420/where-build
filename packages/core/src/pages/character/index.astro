@@ -1,0 +1,143 @@
+---
+/**
+ * The character wall.
+ *
+ * A lot of people arrive knowing a name and nothing else, so this page is a
+ * name-to-title door. It used to be a bare grid with no structured data and
+ * every portrait lazy-loaded, which cost the largest paint on a phone.
+ *
+ * Now the first row loads eagerly, the page carries CollectionPage + ItemList
+ * + FAQPage, and there are real doors out of it at the bottom.
+ */
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import config from '../../lib/site.mjs'
+import CharacterTile from '../../components/CharacterTile.astro'
+import Pager from '../../components/Pager.astro'
+import { charactersWithPages } from '../../lib/catalog.js'
+import { AMAZON_DISCLOSURE } from '../../lib/shop-links.js'
+import { displayName } from '../../lib/names.mjs'
+
+export const PER_PAGE = 120
+
+// No cap. The title listings dropped theirs on 22 Sep 2026 for the same
+// reason: 124,030 character pages had no link pointing at them, and Google
+// had never fetched a single one of them.
+export const PEOPLE = charactersWithPages
+
+// How many portraits load straight away. One phone row is two, one desktop
+// row is six, so eight covers the first paint on both without pulling the
+// whole grid down the wire.
+const EAGER = 8
+
+const items = PEOPLE.slice(0, PER_PAGE)
+const pageCount = Math.ceil(PEOPLE.length / PER_PAGE)
+
+const faqs = [
+  {
+    q: 'I only remember a character name. Can I find the series?',
+    a: 'Yes. That is what this page is for. Search the name, open the character, and the page names every manhwa, manga, manhua and anime they appear in, with the official apps that carry each one.',
+  },
+  {
+    q: 'Where do these characters come from?',
+    a: 'From AniList, the open catalog this index is built on. Nothing is typed in by hand. A character page exists only when the series they belong to is also in this index.',
+  },
+  {
+    q: 'Why does a character I searched for have no page?',
+    a: 'Only characters attached to a title in this index get a page, and the index keeps to officially licensed series. Minor characters with no entry in the source catalog also have none here.',
+  },
+  {
+    q: 'How are the characters ordered?',
+    a: 'By how many AniList members keep each character in their favourites, most-loved first, so the names most people are looking for sit on the first pages.',
+  },
+]
+
+const site = config.siteUrl
+const title = 'Manhwa and anime characters — who they are and where to read them'
+const description =
+  'Look up a character by name and jump straight to the manhwa, manga or anime they are in, plus the official apps that carry it.'
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${site}/character#collection`,
+      url: `${site}/character`,
+      name: title,
+      description,
+      dateModified: new Date().toISOString().slice(0, 10),
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: PEOPLE.length,
+        itemListOrder: 'https://schema.org/ItemListOrderDescending',
+        itemListElement: items.slice(0, 40).map((person, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: displayName(person).primary,
+          url: `${site}/character/${person.slug}`,
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${site}/character#faq`,
+      mainEntity: faqs.map((row) => ({
+        '@type': 'Question',
+        name: row.q,
+        acceptedAnswer: { '@type': 'Answer', text: row.a },
+      })),
+    },
+  ],
+}
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical="/character"
+  jsonld={jsonld}
+  crumbs={[{ name: 'Characters' }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Characters</h1>
+        <p>
+          You remember the name, not the title. Open a character and this index
+          names every manhwa, manga, manhua and anime they appear in, with the
+          official places to read or watch each one.
+        </p>
+        <p class="answer__count">{PEOPLE.length.toLocaleString()} characters indexed</p>
+      </div>
+      <ul class="people people--wall people--doors">
+        {items.map((person, i) => <CharacterTile person={person} eager={i < EAGER} />)}
+      </ul>
+      <p class="wall__note">Merch doors open the official shelves in your own country's store. {AMAZON_DISCLOSURE}</p>
+    </section>
+    <Pager current={1} count={pageCount} base="/character" label="characters" />
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <div class="qa2">
+        {
+          faqs.map((row) => (
+            <details>
+              <summary>{row.q}</summary>
+              <p class="qa2__a">{row.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href="/genre">Browse by genre →</a>
+      <a href="/where-to-read">Where to read →</a>
+      <a href="/where-to-watch">Where to watch →</a>
+      <a href="/mood">Browse by mood →</a>
+    </nav>
+  </div>
+</Base>

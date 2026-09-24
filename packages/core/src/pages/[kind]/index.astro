@@ -1,0 +1,310 @@
+---
+/**
+ * The five front doors: /manhwa, /manga, /manhua, /novel and /anime.
+ *
+ * These are the pages most search traffic lands on, and most of it lands on a
+ * phone. The grid alone answered nothing, so each page now carries a short
+ * piece of prose that says what the word means and what the list is ordered
+ * by, a FAQ block, a row of genre doors, and links on to the other kinds.
+ *
+ * Everything below is written per kind in KINDS, so the four pages never say
+ * the same sentence twice and there is no second copy of any list.
+ */
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import siteConfig from '../../lib/site.mjs'
+import CoverGrid from '../../components/CoverGrid.astro'
+import Pager from '../../components/Pager.astro'
+import FilterChips from '../../components/FilterChips.astro'
+import { animeByPopularity, novelsByPopularity, comicsOfCountry, genres } from '../../lib/catalog.js'
+import { listingJsonld } from '../../lib/listing-jsonld.js'
+import { WATCH_LISTS, watchListPath } from '../../lib/watch-lists.mjs'
+
+export const PER_PAGE = 60
+// Every page of every listing is built. There used to be a cap of 100 pages
+// here, on the theory that the sitemaps link each title anyway. Search Console
+// settled that on 22 Sep 2026: a sitemap is a hint, and roughly 322,000 pages
+// that nothing linked to had never been fetched once. Pages are cheap; being
+// invisible is not.
+
+
+export const KINDS = {
+  manhwa: {
+    label: 'Manhwa',
+    verb: 'read',
+    blurb:
+      'Korean webcomics, ranked by how many people are reading them. Every entry lists the official apps that carry it.',
+    title: 'Where to read manhwa — official platforms for every series',
+    description:
+      'Find where to legally read any manhwa. Official links to WEBTOON, Tapas, Tappytoon, Lezhin, Kakao and more, with the anime adaptation when one exists.',
+    items: () => comicsOfCountry('KR'),
+    about: [
+      'Manhwa is the Korean word for comics. Most of what people mean by it today is a webtoon: a colour comic drawn as one long vertical strip, made to be scrolled on a phone rather than turned like a page.',
+      `Every series on this page lists the official apps licensed to carry it, and what each one costs: free with ads, a free tier that unlocks over time, paid chapters, a subscription, or print. ${siteConfig.name} hosts no chapters and never links to unlicensed copies.`,
+      'The order is reader count, most-read first, rebuilt every day at 02:00 UTC. A series that starts this week shows up here the next morning.',
+    ],
+    faqs: [
+      {
+        q: 'What is manhwa?',
+        a: 'Manhwa is the Korean word for comics. Outside Korea it usually means a full-colour webtoon, drawn as one tall strip and read by scrolling down on a phone.',
+      },
+      {
+        q: 'Where can I read manhwa legally?',
+        a: 'On the apps that hold the licence: WEBTOON, Tapas, Tappytoon, Lezhin, KakaoPage, Ridi and others. Open any title on this page and it names the ones that carry that series, with the price of each.',
+      },
+      {
+        q: 'Is any manhwa free to read?',
+        a: 'Plenty. WEBTOON and Tapas carry many series free with ads, and several apps unlock one chapter at a time for waiting instead of paying. Each title page marks which of its platforms are free.',
+      },
+      {
+        q: 'What is the difference between manhwa, manga and manhua?',
+        a: 'Manhwa is Korean, manga is Japanese and manhua is Chinese. Manhwa and manhua are usually in colour and scroll vertically; manga is usually black and white and reads right to left.',
+      },
+    ],
+  },
+  manga: {
+    label: 'Manga',
+    verb: 'read',
+    blurb:
+      'Japanese manga with the publisher or app that officially carries the English release.',
+    title: 'Where to read manga — official platforms for every series',
+    description:
+      'Find where to legally read any manga. Official links to MANGA Plus, VIZ, Azuki, Comikey, Yen Press and more, plus the anime when there is one.',
+    items: () => comicsOfCountry('JP'),
+    about: [
+      'Manga is the Japanese word for comics. It is usually drawn in black and white, laid out as pages, and read right to left — and it has the deepest print catalogue of the three, so most big series also exist as physical volumes in English.',
+      `Every series here lists the official places to read it in English: the publisher app, the free simulpub, the subscription library, or the printed volume. ${siteConfig.name} hosts nothing and never links to a scan site.`,
+      'Where a manga has an anime, the title page links to it, and to the streaming services that hold it.',
+    ],
+    faqs: [
+      {
+        q: 'Where can I read manga legally for free?',
+        a: 'MANGA Plus by Shueisha and the VIZ free chapters carry many of the biggest series at no cost, usually the newest chapter and the first few. Each title page on this site marks which of its platforms are free.',
+      },
+      {
+        q: 'Which apps hold official English manga?',
+        a: 'MANGA Plus, VIZ, Shonen Jump, Azuki, Comikey, INKR, K MANGA and the print publishers such as Yen Press, Kodansha and Seven Seas. A title page names only the ones licensed for that series.',
+      },
+      {
+        q: 'Does every manga get an anime?',
+        a: 'No, and most do not. When one exists, the title page links straight to it and to the services streaming it. You can also browse the anime side of this index on its own.',
+      },
+      {
+        q: 'How is this list ordered?',
+        a: 'By how many people are reading each series, most-read first. It rebuilds every day at 02:00 UTC from AniList, so nothing here is hand-picked.',
+      },
+    ],
+  },
+  manhua: {
+    label: 'Manhua',
+    verb: 'read',
+    blurb: 'Chinese webcomics and the platforms that publish them in English.',
+    title: 'Where to read manhua — official platforms for every series',
+    description:
+      'Find where to legally read any manhua. Official links to Bilibili Comics, KuaiKan, WebComics, INKR and more.',
+    items: () => comicsOfCountry('CN'),
+    about: [
+      'Manhua is the Chinese word for comics. Like manhwa it is mostly full colour and scrolls vertically, and a lot of it is cultivation and fantasy work adapted from web novels.',
+      'The official English catalogue is thinner than the Korean or Japanese one, so the platform list on a manhua title page is often short. Where a series has no licensed English release, the page says so rather than sending you somewhere else.',
+      'Titles from Taiwan sit here too, because a reader looking for Chinese-language comics does not sort by which side of the strait they came from.',
+    ],
+    faqs: [
+      {
+        q: 'What is manhua?',
+        a: 'Manhua is the Chinese word for comics. Most of what reaches English readers is full colour, scrolls vertically like a webtoon, and is often adapted from a web novel.',
+      },
+      {
+        q: 'Where can I read manhua in English?',
+        a: 'Bilibili Comics, KuaiKan, WebComics, INKR and Tapas hold most of the licensed English releases. Open a title and it lists the ones licensed for that series and what each costs.',
+      },
+      {
+        q: 'Why do some manhua have no reading links?',
+        a: 'Because no platform holds an English licence for them yet. That is the honest answer, and it is better than pointing you at an unlicensed copy. If a licence appears, the link shows up the next morning.',
+      },
+      {
+        q: 'Is manhua the same as manhwa?',
+        a: 'No. Manhua is Chinese and manhwa is Korean. They look similar — colour, vertical scroll — but they are separate industries with separate platforms.',
+      },
+    ],
+  },
+  novel: {
+    label: 'Novels',
+    verb: 'read',
+    blurb: 'Light novels and web novels, and the official stores and apps that publish them in English.',
+    title: 'Where to read light novels — official platforms for every series',
+    description:
+      'Find where to legally read any light novel or web novel. Official links to J-Novel Club, BookWalker, Kobo, Kindle and more.',
+    items: () => novelsByPopularity,
+    about: [
+      'A light novel is a short Japanese prose novel, usually in a series of small volumes with a handful of illustrations. A web novel is the same kind of story first posted free on a site such as Syosetu or Munpia, often before a publisher picks it up.',
+      'Many of the most-read manhwa and anime began as a novel. When the source is in this index, the novel page links to its comic and its anime, and they link back.',
+      'Novels are sold rather than streamed, so the platform list is mostly stores: J-Novel Club, BookWalker, Kobo and Kindle. The list names who holds the English licence; the page never links to a fan translation.',
+    ],
+    faqs: [
+      {
+        q: 'What is a light novel?',
+        a: 'A light novel is a short Japanese novel aimed at young adult readers, sold in small volumes with a few illustrations. Most anime with a fantasy or isekai setting started as one.',
+      },
+      {
+        q: 'What is the difference between a light novel and a web novel?',
+        a: 'A web novel is posted free by its author on a site such as Syosetu or Munpia. A light novel is the edited, illustrated version a publisher sells. Many stories exist as both.',
+      },
+      {
+        q: 'Where can I read light novels in English?',
+        a: 'J-Novel Club, Yen Press through BookWalker, Kobo and Kindle hold most of the licensed English releases. Open a title and it lists the stores licensed for that series.',
+      },
+      {
+        q: 'Why does a novel have no reading links?',
+        a: 'Because no publisher holds an English licence for it yet. The page says so instead of pointing you at an unofficial translation. If a licence appears, the link shows up the next morning.',
+      },
+    ],
+  },
+  anime: {
+    label: 'Anime',
+    verb: 'watch',
+    blurb:
+      'Every series with the streaming platforms that actually hold it, and a link to the comic it came from.',
+    title: 'Where to watch anime — official streaming for every series',
+    description:
+      'Find where to legally stream any anime. Official links to Crunchyroll, Netflix, Hulu, Prime Video, Disney+ and HIDIVE, plus where to read the original manga.',
+    items: () => animeByPopularity,
+    about: [
+      'Anime is animation made in Japan. A large part of it is adapted from a manga, a manhwa or a light novel, and where that source exists this index links you to it.',
+      'Every series here lists the streaming services that actually hold it, not a guess: Crunchyroll, Netflix, Hulu, Prime Video, Disney+, HIDIVE and the rest. Rights change by country, so the page names the service rather than promising it is in your region.',
+      'The order is viewer count, most-watched first, rebuilt every day at 02:00 UTC.',
+    ],
+    faqs: [
+      {
+        q: 'Where can I watch anime legally?',
+        a: 'Crunchyroll carries the largest catalogue, with Netflix, Hulu, Prime Video, Disney+ and HIDIVE holding the rest. Open any title here and it names the services licensed to stream that series.',
+      },
+      {
+        q: 'Can I watch anime free and legally?',
+        a: 'Yes, some of it. Crunchyroll streams many series free with ads, and Tubi, Pluto TV and YouTube channels run by the studios carry more. Each title page marks which of its services are free.',
+      },
+      {
+        q: 'Where can I read the manga an anime came from?',
+        a: 'The title page links to it. If the source comic is in this index, you get the official apps that carry it, so you can carry on from where the season stopped.',
+      },
+      {
+        q: 'Why does a service show for a series I cannot open?',
+        a: 'Streaming rights are sold country by country. A service may hold a series in one region and not in yours. The list names who is licensed; only the service itself can say what plays where you are.',
+      },
+    ],
+  },
+}
+
+export function getStaticPaths() {
+  return Object.keys(KINDS).map((kind) => ({ params: { kind } }))
+}
+
+const { kind } = Astro.params
+const config = KINDS[kind]
+const all = config.items()
+const items = all.slice(0, PER_PAGE)
+const pageCount = Math.ceil(all.length / PER_PAGE)
+
+// Genre doors. A reader who lands on /manhwa from a search rarely wants the
+// whole 40,000, they want one shelf of it.
+const genreRows = genres.slice(0, 12)
+
+// The other three kinds, as plain doors out of this page.
+const others = Object.entries(KINDS).filter(([key]) => key !== kind)
+
+// Manhwa, manhua and novels each have a "with an anime" list under
+// /where-to-watch. Manga and anime do not (see src/lib/watch-lists.mjs).
+const watchList = WATCH_LISTS[kind]
+
+const site = siteConfig.siteUrl
+const collection = listingJsonld({
+  name: config.title,
+  description: config.description,
+  path: `/${kind}`,
+  items,
+  total: all.length,
+})
+delete collection['@context']
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    collection,
+    {
+      '@type': 'FAQPage',
+      '@id': `${site}/${kind}#faq`,
+      mainEntity: config.faqs.map((row) => ({
+        '@type': 'Question',
+        name: row.q,
+        acceptedAnswer: { '@type': 'Answer', text: row.a },
+      })),
+    },
+  ],
+}
+---
+
+<Base
+  title={config.title}
+  description={config.description}
+  canonical={`/${kind}`}
+  jsonld={jsonld}
+  crumbs={[{ name: config.label }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{config.label}</h1>
+        <p>{config.blurb}</p>
+        <p class="answer__count">{all.length.toLocaleString()} titles in the index</p>
+      </div>
+      <FilterChips kind={kind} />
+      <CoverGrid items={items} base={`/${kind}`} eager={6} />
+    </section>
+
+    <Pager current={1} count={pageCount} base={`/${kind}`} label={config.label} />
+
+    <section class="section">
+      <div class="section__head">
+        <h2>{config.label} by genre</h2>
+        <p>Pick a shelf instead of scrolling the whole index.</p>
+      </div>
+      <nav class="genre-quick" aria-label={`${config.label} genres`}>
+        {genreRows.map((g) => <a href={`/genre/${g.slug}`}>{g.name}</a>)}
+      </nav>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>About {config.label.toLowerCase()}</h2>
+      </div>
+      <div class="genre-intro">
+        {config.about.map((line) => <p>{line}</p>)}
+        {watchList && (
+          <p>
+            Looking for the anime instead? Here is <a href={watchListPath(kind)}>every {watchList.one} with an anime, and where to watch it</a>.
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <div class="qa2">
+        {
+          config.faqs.map((row) => (
+            <details>
+              <summary>{row.q}</summary>
+              <p class="qa2__a">{row.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      {others.map(([key, other]) => <a href={`/${key}`}>{other.label} →</a>)}
+      <a href="/genre">All genres →</a>
+    </nav>
+  </div>
+</Base>

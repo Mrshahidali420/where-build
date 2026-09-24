@@ -1,0 +1,510 @@
+---
+import Base from '../../layouts/Base.astro'
+import config from '../../lib/site.mjs'
+import Platforms from '../../components/Platforms.astro'
+import {
+  kindOfAppearance,
+  truncate,
+  bioHtml,
+  bioText,
+  genreSlug,
+  parseHeight,
+  parseFacts,
+} from '../../lib/format.js'
+import { loadCharacter, loadTitle, envOf, countryOf, notFound, unavailable } from '../../lib/runtime.js'
+import { characterFaq, faqJsonld, wordOf, verbOf, uniqueBySite, linksOf } from '../../lib/answers.mjs'
+import { characterShopLinks } from '../../lib/shop-links.js'
+// The merch page answers 404 when this gate says no, so the link obeys it too.
+import { hasCharacterBuyPage } from '../../lib/gates.mjs'
+import BuyBox from '../../components/BuyBox.astro'
+import TopPicks from '../../components/TopPicks.astro'
+import { picksForPerson, picksShowFor } from '../../lib/picks.js'
+import { checkedISO, checkedLong } from '../../lib/checked.js'
+import { displayName } from '../../lib/names.mjs'
+import Namesakes from '../../components/Namesakes.astro'
+import { storyName } from '../../lib/namesakes.mjs'
+import AlsoLookFor from '../../components/AlsoLookFor.astro'
+import { ageOf } from '../../lib/age.mjs'
+
+// Rendered by the Worker on request, so the cast list has no ceiling.
+let person
+try {
+  person = await loadCharacter(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+if (!person || !person.image || !person.appearsIn?.length) return notFound(Astro)
+
+// The name fans search leads the page. AniList's full name is in Western order
+// ("Jin-U Seong"), but a Korean or Chinese character is searched family name
+// first ("Sung Jin-Woo"), and AniList already holds that form as an alias.
+// `formal` is the AniList name when it differs, `alternates` every other name.
+// See names.mjs for the exact rule. For most characters nothing changes.
+const { primary, formal, alternates } = displayName(person)
+
+// A better-known character owns this name, so the namesake list moves up under
+// the title: a reader who searched for the famous one finds it before
+// scrolling. Worked out at build time (src/lib/namesakes.mjs).
+const namesakesHigh = !!person.namesakesHigh && person.namesakes?.length > 0
+
+// Character pages that are being TESTED with the newer wording. Every branch
+// below that reads this Set is a change with no evidence behind it yet.
+//
+// Why a list and not a default. Google has indexed a small share of this site,
+// so a page with no impressions is a page Google has not looked at, NOT a page
+// whose wording failed. No data says the current wording is wrong. The data
+// that exists says the opposite: the pages Google did index earn clicks from
+// position 3 and 4 with exactly this wording. The bottleneck is indexing.
+//
+// So the old wording stays everywhere until a test beats it. Judge this one
+// after four weeks: compare the slug's click rate against the 28 days before
+// 22 Sep 2026. Add slugs when it wins, remove them when it does not.
+const TITLE_TEST = new Set([
+  // 989 impressions, 2 clicks, position 10.8 over 28 days. Its lead title is a
+  // comic no platform carries, so the main section told every reader that
+  // nobody carries it, while its anime runs on Crunchyroll, Netflix and Hulu.
+  'anos-voldigoad',
+])
+const testing = TITLE_TEST.has(person.slug)
+
+// The lead title is the one this page is about. A comic wins over its own
+// anime: the comic is where the character was made, and a reader searching a
+// character's name nearly always types the comic word with it.
+//
+// Under test only: a comic nobody carries answers nothing, so when the
+// preferred title has no official link and a sibling title has one, the
+// sibling leads instead. Three tries at most, because a character with many
+// appearances must not cost many shard reads. Off test, the first title leads
+// exactly as it always has and the page reads one shard, as before.
+const ranked = (rows) => [
+  ...rows.filter((a) => a.kind !== 'anime'),
+  ...rows.filter((a) => a.kind === 'anime'),
+]
+const main = person.appearsIn.filter((a) => a.role === 'MAIN')
+const order = ranked(main.length ? main : person.appearsIn)
+
+let lead = order[0]
+let series = null
+let links = []
+try {
+  for (const row of testing ? order.slice(0, 3) : order.slice(0, 1)) {
+    const found = await loadTitle(envOf(Astro), kindOfAppearance(row), row.slug)
+    const rows = found ? uniqueBySite(linksOf(found)) : []
+    // The first title that reads at all is the fallback; the first title that
+    // carries a link wins outright.
+    if (!series) { lead = row; series = found; links = rows }
+    if (rows.length) { lead = row; series = found; links = rows; break }
+  }
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+const leadKind = kindOfAppearance(lead)
+// The word a person actually types: "manga", "manhwa", "manhua" or "anime".
+// The old title never used it, so a search for "<name> manga" matched nothing
+// on the page itself.
+const word = wordOf(leadKind)
+const verb = verbOf(leadKind)
+
+// Every kind of thing this character actually turns up in. A reader who met
+// them in the anime types "anime"; a reader who met them in the comic types
+// the comic word. When both are true, both belong in the title, because they
+// are two different searches for the same page.
+//
+// The comic word goes first: the comic is where the character was made, and a
+// name search nearly always carries the comic word with it.
+const mediaWords = [...new Set(person.appearsIn.map((a) => wordOf(kindOfAppearance(a))))]
+  .sort((a, b) => (a === 'anime' ? 1 : 0) - (b === 'anime' ? 1 : 0))
+  .slice(0, 2)
+const media = mediaWords.join(' and ')
+
+// Double quotes inside a story's name are punctuation, not words. They cost two
+// letters each and add nothing to a search.
+const unquote = (text) => String(text || '').replace(/["“”]/g, '').replace(/\s+/g, ' ').trim()
+
+// The story's whole name stays in the title, however long it runs.
+//
+// Google shows about sixty letters on a phone and cuts the rest, but it still
+// READS the rest, and the words it reads still count when it decides which
+// page answers a search. A shortened name would lose those words for good, to
+// win nothing: the part a reader sees -- the character's name -- sits at the
+// front either way.
+// The same words the title tag now ends with, kept here so the reasoning above
+// stays next to the pieces it is about.
+
+// The character record holds only a thumbnail of the story. The story's own
+// record, loaded above, holds the official places to read it, who made it and
+// what it is about, and all of that belongs on this page too: a reader who
+// lands here wants the same answer as a reader who lands on the title page.
+const siteCount = links.length
+const authors = (series?.authors || []).map((a) => a.name).filter(Boolean).slice(0, 3)
+const genres = (series?.genres || []).slice(0, 6)
+
+// Other faces from the same story. Real internal links, and the next click a
+// reader who came for one character usually wants.
+const siblings = (series?.characters || [])
+  .filter((c) => c.image && c.slug !== person.slug)
+  .slice(0, 11)
+
+// "How tall is X" is one of the most common searches that reaches this page,
+// and the answer is already inside the bio AniList gave us. Reading it here
+// costs nothing: the bio is loaded for this page anyway.
+const height = parseHeight(person.description)
+
+// Who speaks this part. Only an anime has a voice, so the first anime row that
+// carries one wins. "Who voices X" is a heavy search and today we answer it
+// with nothing at all.
+const voiced = person.appearsIn.find((a) => a.voice) || null
+// The English dub, from the same kind of row. Absent until the anime carries it.
+const voicedEn = person.appearsIn.find((a) => a.voiceEn) || null
+
+// AniList's age as a person would say it: "17-" becomes "17 or older".
+const age = ageOf(person.age)?.text || ''
+
+const personal = [
+  age ? ['Age', age] : null,
+  height ? ['Height', height] : null,
+  person.gender ? ['Gender', person.gender] : null,
+  person.bloodType ? ['Blood type', person.bloodType] : null,
+  person.birthday ? ['Birthday', person.birthday] : null,
+].filter(Boolean)
+
+// The fact lines AniList writers put at the top of a bio (rank, affiliation,
+// occupation, race...), lifted into the table. `bio` is the same description
+// without those lines, so the About section never prints them a second time.
+// The record's own rows win the table; a bio line for the same thing stays in
+// the bio unless it says exactly the same (see parseFacts).
+const { facts: bioFacts, bio } = parseFacts(person.description, {
+  // The bio repeats AniList's own wording ("17-"), not the cleaned one, so the
+  // match is made on the raw age.
+  own: Object.fromEntries(personal.map(([term, value]) => [term.toLowerCase(), term === 'Age' ? person.age : value])),
+})
+const fromBio = bioFacts.map((f) => [f.label, f.value])
+
+const facts = [
+  ...personal,
+  ...fromBio,
+  voiced ? ['Japanese voice', voiced.voice] : null,
+  voicedEn ? ['English voice', voicedEn.voiceEn] : null,
+  ['From', lead.title],
+  authors.length ? ['Made by', authors.join(' · ')] : null,
+  series?.startYear ? ['Started', String(series.startYear)] : null,
+  ['Appears in', `${person.appearsIn.length} ${person.appearsIn.length === 1 ? 'title' : 'titles'}`],
+  person.favourites ? ['AniList favourites', person.favourites.toLocaleString()] : null,
+].filter(Boolean)
+
+// A character is what a figure is actually made of, so this page offers the
+// character's own merch AND the story's books. A well-known face gets its merch
+// first; a lesser one gets the books first; a face in the crowd, or a story too
+// small for figures, gets only the books and one series merch row. The rules
+// live in characterShopLinks. `buys` says which of them it gave us.
+const buys = characterShopLinks(person, series || lead, countryOf(Astro))
+// Hand-picked products, for readers on amazon.com only (see src/lib/picks.js).
+const picked = picksShowFor(countryOf(Astro)) ? picksForPerson(person, series || lead) : null
+const merchIsCharacter = buys.some((row) => row.kind === 'figures')
+const merchFirst = buys[0]?.kind === 'figures'
+// The heading names whatever the first row sells, so the box never promises
+// figures above a row of books. The book rows can name two series (the big
+// story first, then the spin-off this page leads with), so the words stay
+// general rather than name a title the first row may not be.
+const buyHeading = merchFirst
+  ? `Own a piece of ${primary}`
+  : merchIsCharacter
+    ? `Books and merch of ${primary}`
+    : `Own the story ${primary} is from`
+const buySub = merchFirst
+  ? `Figures, prints and apparel of ${primary}, then the books of the story, from Amazon's live search.`
+  : merchIsCharacter
+    ? `The books of the story, then figures and merch of ${primary}, from Amazon's live search.`
+    : `Printed volumes and series merch, from Amazon's live search.`
+
+// Without the fact lines, so "Who is X?" opens on a sentence, not "Height:".
+const bioPlain = bio.trim() ? bioText(bio) : ''
+const faq = characterFaq(person, lead, leadKind, series, truncate(bioPlain, 220), height, voiced?.voice || '', bioFacts, voicedEn?.voiceEn || '')
+
+// The old description was the same sentence on every character page with only
+// the name swapped, which says nothing a searcher cannot already see in the
+// title. These are the facts this page actually holds, so the line is different
+// on every page and answers part of the question before the click.
+//
+// An alias is only worth printing when it is short and in the reader's own
+// script. A native-script alias is the same name again to a Japanese reader and
+// noise to everyone else, and it eats the room the closing promise needs.
+// A record built from a title's cast list carries no alias list at all, so the
+// page must never read one straight off the record. The alias the page already
+// leads with is skipped, or the line would say the same name twice.
+const alias = (person.aliases || []).find((a) => a !== primary && a.length <= 20 && /^[ -~]+$/.test(a))
+const said = (bits) => bits.filter(Boolean).join(', ')
+// When the page leads with the fan spelling, the AniList spelling follows in
+// brackets, so a search for either name finds both in the snippet.
+const namedAs = formal ? `${primary} (${formal})` : primary
+const opening = `${namedAs} is a ${lead.role === 'MAIN' ? 'main character' : 'character'} in the ${word} ${unquote(lead.title)}.`
+// Under test only: "where to read it legally" is a promise, while a platform
+// name is proof, and a reader decides on proof. Three names at most, because
+// the line has 165 letters to live in.
+//
+// Off test this stays the sentence that earns clicks from position 3 today.
+const sites = testing ? links.slice(0, 3).map((l) => l.site).filter(Boolean) : []
+const listed =
+  sites.length > 1 ? `${sites.slice(0, -1).join(', ')} and ${sites[sites.length - 1]}` : sites[0]
+const promise = sites.length
+  ? ` ${verb === 'watch' ? 'Watch' : 'Read'} it on ${listed}.`
+  : ` Full profile, every title they appear in, and where to ${verb} it legally.`
+
+// Tried longest first, and the first one that fits is kept. The story's own
+// name is never shortened here: a description that names the wrong story is
+// worse than one Google trims, because Google trims the END and a wrong name
+// sits at the front where the reader reads it.
+const description =
+  [
+    `${opening} ${said([age && `Age ${age}`, height && `height ${height}`, person.gender, alias && `also called ${alias}`])}.${promise}`,
+    `${opening} ${said([age && `Age ${age}`, height && `height ${height}`, person.gender])}.${promise}`,
+    `${opening} ${said([age && `Age ${age}`, person.gender, alias && `also called ${alias}`])}.${promise}`,
+    `${opening} ${said([age && `Age ${age}`, person.gender])}.${promise}`,
+    `${opening}${promise}`,
+    `${opening} Where to ${verb} it legally.`,
+  ].find((line) => line.length <= 165) || `${opening} Where to ${verb} it legally.`
+
+// The title tag, built after the facts are known.
+//
+// The old title said the name and the story and stopped there. At position 3
+// that earns about half the clicks the slot is worth, because it only repeats
+// what the searcher already typed and promises nothing. Search Console showed
+// exactly that: pages sitting in the top five with a click rate under 5%.
+//
+// So the title now ends with the facts this page really holds. Nothing is
+// promised that the page cannot show, and the tail is chosen from what the
+// record gave us, longest true one first.
+const promised = [
+  age && 'Age',
+  height && 'Height',
+  voiced && 'Voice Actor',
+].filter(Boolean)
+
+// A character who turns up in both the comic and the anime has two answers,
+// and a title that names a voice actor then offers only "where to read" reads
+// as a mistake. So the closing promise follows what the page really lists.
+//
+// When the lead title really carries links, promise that one thing. "Read or
+// Watch" on a page whose comic nobody carries sends the reader to a dead end,
+// and a promise the page cannot keep costs the next click too.
+const bothMedia = mediaWords.length > 1
+const goTo = testing && links.length
+  ? verb === 'watch' ? 'Watch' : 'Read'
+  : bothMedia ? 'Read or Watch' : verb === 'watch' ? 'Watch' : 'Read'
+
+const titleTail = promised.length
+  ? `: ${promised.join(', ')} and Where to ${goTo}`
+  : `: Full Profile and Where to ${goTo}`
+
+// Google shows about sixty letters and cuts the rest. On a long story name the
+// old order spends all sixty on the character's name and the story's name --
+// the words the searcher already typed -- so the part that earns the click
+// never appears. Putting the promise second fixes that, and loses no word:
+// Google still READS the whole title and still counts the story's name.
+//
+// It is NOT the default, and must not become one without evidence. See
+// TITLE_TEST at the top of this file for why.
+//
+// The fan spelling leads. The AniList spelling rides along in brackets only
+// while the whole title stays inside what a phone shows (TITLE_ROOM), because
+// the bracket would otherwise push the story's name out of sight. Google still
+// finds the AniList spelling in the h1, the description and the structured
+// data, so dropping it here loses no search.
+const TITLE_ROOM = 65
+const titleFor = (name) =>
+  testing
+    ? `${unquote(name)}${titleTail} — ${unquote(lead.title)} ${media} character`
+    : `${unquote(name)} — ${unquote(lead.title)} ${media} character${titleTail}`
+const withFormal = formal ? titleFor(`${primary} (${formal})`) : ''
+const pageTitle = withFormal && withFormal.length <= TITLE_ROOM ? withFormal : titleFor(primary)
+
+// The date of the last nightly check against AniList, shared by every page.
+const updated = checkedISO
+
+// schema.org Person also has jobTitle and affiliation. Filled only when the bio
+// states them, in the bio's own words. Rank is left out: "S-Class" is a grade,
+// not a job.
+const factOf = (...labels) =>
+  labels.map((l) => bioFacts.find((f) => f.label === l)?.value).find(Boolean) || ''
+const jobTitle = factOf('Occupation', 'Position')
+// One Organization per affiliation line. A single line is never split on its
+// commas: "Team 7, Konoha" may be one name.
+const affiliations = (bioFacts.find((f) => f.label === 'Affiliation')?.values || [])
+  .map((name) => ({ '@type': 'Organization', name }))
+const affiliation = affiliations.length > 1 ? affiliations : affiliations[0]
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${config.siteUrl}/character/${person.slug}#person`,
+  url: `${config.siteUrl}/character/${person.slug}`,
+  dateModified: updated,
+  name: primary,
+  // Every other name the character goes by, AniList's own spelling first.
+  alternateName: formal || alternates.length ? [formal, ...alternates].filter(Boolean) : undefined,
+  image: person.image,
+  // schema.org gives Person a height field, so the fact is machine readable
+  // as well as printed.
+  height: height || undefined,
+  jobTitle: jobTitle || undefined,
+  affiliation: affiliation || undefined,
+  description: truncate(bioPlain || description, 300),
+  subjectOf: person.appearsIn.map((a) => ({
+    '@type': a.kind === 'anime' ? 'TVSeries' : 'Book',
+    name: a.title,
+    url: `${config.siteUrl}/${kindOfAppearance(a)}/${a.slug}`,
+  })),
+}
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  canonical={`/character/${person.slug}`}
+  image={person.image}
+  jsonld={faq.length ? [jsonld, faqJsonld(faq)] : jsonld}
+  crumbs={[{ name: 'Characters', href: '/character' }, { name: primary }]}
+>
+  <div class="shell">
+    <article class="person">
+      <div class="person__portrait">
+        <img src={person.image} alt={`${primary} portrait`} width="440" height="587" loading="eager" fetchpriority="high" decoding="async" />
+      </div>
+      <div>
+        <h1>{primary}{formal && <> <span class="person__formal">({formal})</span></>}</h1>
+        {/* One line for every other name: the native spelling first, then the
+            AniList alternatives. It used to be two lines, native and aliases. */}
+        {alternates.length > 0 && (
+          <p class="person__alias">Also known as {alternates.join(' · ')}</p>
+        )}
+        {namesakesHigh && (
+          <Namesakes name={primary} people={person.namesakes} high here={storyName(lead.title)} />
+        )}
+        <p>
+          {primary} is a {lead.role === 'MAIN' ? 'main character' : 'character'} in the {word}{' '}
+          <a href={`/${leadKind}/${lead.slug}`}>{lead.title}</a>
+          {authors.length > 0 && <> by {authors.join(' and ')}</>}. Every official place to {verb}{' '}
+          that story is listed further down this page.{' '}
+          <span class="title-answer__stamp">Checked {checkedLong}.</span>
+        </p>
+        <dl class="facts">
+          {facts.map(([term, value]) => (
+            <div><dt>{term}</dt><dd>{value}</dd></div>
+          ))}
+        </dl>
+        {genres.length > 0 && (
+          <div class="chips">
+            {genres.map((genre) => (
+              <a href={`/genre/${genreSlug(genre)}`}>{genre}</a>
+            ))}
+          </div>
+        )}
+      </div>
+    </article>
+
+    {buys.length > 0 && (
+      <BuyBox id="buy" heading={buyHeading} sub={buySub} rows={buys} />
+    )}
+
+    {picked && (
+      <TopPicks
+        heading={`Top picks for ${picked.from || primary}`}
+        sub="Real products on Amazon, picked by hand."
+        picks={picked.picks}
+      />
+    )}
+
+    {merchIsCharacter && hasCharacterBuyPage(person) && (
+      <a class="crosslink" href={`/character/${person.slug}/buy`}>
+        <div>
+          <span class="crosslink__lead">The full merch page</span>
+          <span class="crosslink__title">Where to buy {primary} merch</span>
+          <span class="crosslink__lead">Figures, posters and apparel, in your own store</span>
+        </div>
+      </a>
+    )}
+
+    {bio.trim() && (
+      <section class="section">
+        <div class="section__head">
+          <h2>About {primary}</h2>
+          <p>From AniList, the same source as the rest of this page.</p>
+        </div>
+        <div class="synopsis" set:html={bioHtml(bio)} />
+      </section>
+    )}
+
+    {series && (
+      <Platforms
+        heading={`Where to ${verb} ${lead.title}`}
+        links={links}
+        verb={verb}
+        count={`${siteCount} official ${siteCount === 1 ? 'place' : 'places'}`}
+        empty={`No platform we track holds an official licence for ${lead.title} yet. This page is rebuilt every day, so a new one shows up here on its own.`}
+      />
+    )}
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Where {primary} shows up</h2>
+        <p>Open a title to see the official apps that carry it.</p>
+      </div>
+      <ul class="appears">
+        {person.appearsIn.map((a) => (
+          <li>
+            <a href={`/${kindOfAppearance(a)}/${a.slug}`}>
+              <img src={a.cover} alt={`Cover of ${a.title}`} width="46" height="64" loading="lazy" decoding="async" />
+              <span><b>{a.title}</b><span>{kindOfAppearance(a)}</span></span>
+              <em>{a.role === 'MAIN' ? 'Main character' : a.role === 'SUPPORTING' ? 'Supporting' : 'Appears'}</em>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {siblings.length > 0 && (
+      <section class="section">
+        <div class="section__head">
+          <h2>Other characters in {lead.title}</h2>
+          <p>Tap a face to see every other story that character turns up in.</p>
+        </div>
+        <ul class="people">
+          {siblings.map((mate) => (
+            <li>
+              <a href={`/character/${mate.slug}`}>
+                <img src={mate.image} alt={`${mate.name} portrait`} width="220" height="293" loading="lazy" decoding="async" />
+                <b>{mate.name}</b>
+                <span>{mate.role === 'MAIN' ? 'Main' : 'Supporting'}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {/* Other pages that share this name, worked out at build time by
+        make-shards.mjs (the Worker never holds the whole cast). A reader who
+        searched "Luna" may want a different Luna; this is the way across.
+        On the famous one's page it waits down here; on a lesser one's page
+        it sits under the title instead (see namesakesHigh above). */}
+    {!namesakesHigh && <Namesakes name={primary} people={person.namesakes} />}
+
+    <AlsoLookFor path={Astro.url.pathname} />
+
+    {faq.length > 0 && (
+      <section class="section">
+        <div class="section__head">
+          <h2>Common questions about {primary}</h2>
+          <p>Answered from the same facts as the rest of this page.</p>
+        </div>
+        <dl class="qa">
+          {faq.map((row) => (
+            <div><dt>{row.q}</dt><dd>{row.a}</dd></div>
+          ))}
+        </dl>
+      </section>
+    )}
+  </div>
+</Base>

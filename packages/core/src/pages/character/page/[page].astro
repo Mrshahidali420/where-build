@@ -1,0 +1,44 @@
+---
+export const prerender = true
+import Base from '../../../layouts/Base.astro'
+import CharacterTile from '../../../components/CharacterTile.astro'
+import { AMAZON_DISCLOSURE } from '../../../lib/shop-links.js'
+import Pager from '../../../components/Pager.astro'
+import { PEOPLE, PER_PAGE } from '../index.astro'
+
+export function getStaticPaths() {
+  const pageCount = Math.ceil(PEOPLE.length / PER_PAGE)
+  const paths = []
+  for (let page = 2; page <= pageCount; page++) {
+    paths.push({
+      params: { page: String(page) },
+      props: { pageCount, items: PEOPLE.slice((page - 1) * PER_PAGE, page * PER_PAGE) },
+    })
+  }
+  return paths
+}
+
+const { page } = Astro.params
+const { pageCount, items } = Astro.props
+const current = Number(page)
+---
+
+<Base
+  title={`Characters — page ${current} of ${pageCount}`}
+  description="Look up a character by name and jump to the manhwa, manga or anime they are in."
+  canonical={`/character/page/${current}`}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Characters</h1>
+        <p>You remember the name, not the title. Start here.</p>
+      </div>
+      <ul class="people people--wall people--doors">
+        {items.map((person) => <CharacterTile person={person} />)}
+      </ul>
+      <p class="wall__note">Merch doors open the official shelves in your own country's store. {AMAZON_DISCLOSURE}</p>
+    </section>
+    <Pager current={current} count={pageCount} base="/character" label="characters" />
+  </div>
+</Base>

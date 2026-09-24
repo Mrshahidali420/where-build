@@ -1,0 +1,53 @@
+---
+/**
+ * One big number: what it is, the number, how it moved against the period
+ * before (arrow AND words, so it never depends on colour), and an optional
+ * small trend line under it.
+ *
+ * value: a number (spaced as 12 400) or ready text such as "4.2%".
+ * now / before: the two numbers the change is worked out from.
+ * span: what "before" was, said short: "vs last week".
+ */
+import Spark from './Spark.astro'
+import { num } from '../../lib/admin.js'
+import { deltaOf } from '../../lib/admin-chart.js'
+
+const {
+  label,
+  value,
+  unit = '',
+  now,
+  before,
+  span = 'vs last week',
+  spark = null,
+  tone = 'blue',
+  live = false,
+  hero = false,
+  // Some numbers are better when they fall (people who leave at once).
+  lowerIsBetter = false,
+  // Colours the number itself: 'good' or 'bad', for a yes/no fact.
+  mood = '',
+} = Astro.props
+
+const d = now != null && before != null ? deltaOf(now, before) : null
+const good = d && d.dir !== 'flat' ? (d.dir === 'up') !== lowerIsBetter : null
+const shown = typeof value === 'number' ? num(value) : value ?? '—'
+---
+
+<div class:list={['kpi', { live, hero }]}>
+  <div class="label">
+    {live && <span class="pulse" aria-hidden="true"></span>}
+    {label}
+  </div>
+  <div class:list={['value', mood && `t-${mood}`]}>{shown}{unit && <small>{unit}</small>}</div>
+  {d && d.pct !== null && (
+    <div class:list={['delta', good === true && 'up', good === false && 'down']}>
+      <b aria-hidden="true">{d.arrow} {Math.abs(d.pct)}%</b>
+      <span class="sr-only">{d.words}</span>
+      <span>{span}</span>
+    </div>
+  )}
+  {spark && spark.length > 1 && (
+    <Spark values={spark} tone={tone} label={`${label}, day by day`} />
+  )}
+</div>

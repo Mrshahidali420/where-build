@@ -1,0 +1,180 @@
+---
+/**
+ * "Manhwa like X."
+ *
+ * A recommendation page only earns its place if it says WHY each pick belongs
+ * and WHERE you can legally get it. Both facts come from the record, so the
+ * page writes itself for a title added tomorrow. See src/lib/answers.mjs.
+ */
+import Base from '../../../layouts/Base.astro'
+import config from '../../../lib/site.mjs'
+import AlsoLookFor from '../../../components/AlsoLookFor.astro'
+import { loadTitle, envOf, countryOf, notFound, unavailable } from '../../../lib/runtime.js'
+import { sectionOf, SECTIONS } from '../../../lib/section.mjs'
+import { likeAnswer, verbOf, wordOf, listWords } from '../../../lib/answers.mjs'
+import { shopLinks } from '../../../lib/shop-links.js'
+import { hasLikePage } from '../../../lib/gates.mjs'
+import BuyBox from '../../../components/BuyBox.astro'
+
+const KINDS = new Set(SECTIONS)
+
+const { kind, slug } = Astro.params
+if (!KINDS.has(kind)) return notFound(Astro)
+
+let item
+try {
+  item = await loadTitle(envOf(Astro), kind, slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+if (!item) return notFound(Astro)
+
+const isComic = item.kind !== 'anime'
+if (sectionOf(item) !== kind) return notFound(Astro)
+// Too few picks to make a list. A page of "0 similar titles" is a thin page,
+// so it answers 404, the same gate that keeps it out of the sitemap.
+if (!hasLikePage(item)) return notFound(Astro)
+
+const verb = verbOf(kind)
+const word = wordOf(kind)
+const answer = likeAnswer(item, kind)
+const home = `/${kind}/${item.slug}`
+const kindLabel = word.charAt(0).toUpperCase() + word.slice(1)
+
+// A reader who came looking for "something like X" already loves X. The offer
+// is for X itself, not for the picks: those each have their own page.
+const buys = shopLinks(item, countryOf(Astro))
+
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': `${config.siteUrl}${home}/like#page`,
+    url: `${config.siteUrl}${home}/like`,
+    name: answer.heading,
+    inLanguage: 'en',
+    dateModified: new Date().toISOString().slice(0, 10),
+    about: { '@id': `${config.siteUrl}${home}#item` },
+  },
+  ...(answer.picks.length
+    ? [
+        {
+          '@type': 'ItemList',
+          name: answer.heading,
+          numberOfItems: answer.picks.length,
+          itemListElement: answer.picks.map((pick, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `${config.siteUrl}/${kind}/${pick.slug}`,
+            name: pick.title,
+          })),
+        },
+      ]
+    : []),
+]
+---
+
+<Base
+  title={answer.pageTitle}
+  description={answer.description}
+  image={item.cover}
+  jsonld={jsonld}
+  crumbs={[{ name: kindLabel, href: `/${kind}` }, { name: item.title, href: home }, { name: 'Similar' }]}
+>
+  <div class="shell title-page">
+    <div class="cover-rail">
+      <div class="cover-wrap">
+        <img class="cover" src={item.cover} alt={`Cover of ${item.title}`} width="460" height="651" />
+      </div>
+    </div>
+
+    <header class="title-head">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <a href={`/${kind}`}>{kindLabel}</a>
+        <a href={home}>{item.title}</a>
+      </nav>
+      <h1>{answer.heading}</h1>
+      <ul class="title-head__meta">
+        <li>{answer.picks.length} close matches</li>
+        {item.genres && item.genres.slice(0, 3).map((genre) => <li>{genre}</li>)}
+      </ul>
+    </header>
+
+    <div class="title-body">
+      <p class="title-answer">{answer.lede}</p>
+
+      {
+        answer.picks.length > 0 && (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>The closest matches</h2>
+              <p>Most-read first. Each one names the official platforms that carry it.</p>
+            </div>
+            <ul class="picks">
+              {answer.picks.map((pick) => (
+                <li class="pick">
+                  <a class="pick__art" href={`/${kind}/${pick.slug}`} tabindex="-1" aria-hidden="true">
+                    <img src={pick.cover} alt={`Cover of ${pick.title}`} width="220" height="311" loading="lazy" decoding="async" />
+                  </a>
+                  <div class="pick__body">
+                    <h3>
+                      <a href={`/${kind}/${pick.slug}`}>{pick.title}</a>
+                    </h3>
+                    {pick.shared && pick.shared.length > 0 && (
+                      <p class="pick__why">
+                        Shares {listWords(pick.shared.map((g) => g.toLowerCase()))} with {item.title}.
+                      </p>
+                    )}
+                    <p class="pick__where">
+                      {pick.sites.length > 0 ? (
+                        <>
+                          <b>{verb === 'read' ? 'Read it on' : 'Watch it on'}</b>{' '}
+                          {listWords(pick.sites)}
+                        </>
+                      ) : (
+                        <b class="pick__where--none">No official platform yet</b>
+                      )}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        answer.paragraphs.map((block) => (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>{block.heading}</h2>
+            </div>
+            <p class="overview">{block.text}</p>
+          </section>
+        ))
+      }
+
+      <AlsoLookFor path={Astro.url.pathname} frame="answer" />
+
+      {
+        buys.length > 0 && (
+          <BuyBox
+            heading={`Own ${item.title}`}
+            sub="Books, discs and figures, straight from Amazon."
+            rows={buys}
+          />
+        )
+      }
+
+      <a class="crosslink" href={home}>
+        <div>
+          <span class="crosslink__lead">Back to the title</span>
+          <span class="crosslink__title">{item.title}</span>
+          <span class="crosslink__lead">Where to {verb} it, the facts, the cast</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</Base>

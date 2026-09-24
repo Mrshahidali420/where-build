@@ -1,0 +1,65 @@
+---
+export const prerender = true
+import Base from '../../../../layouts/Base.astro'
+import CoverGrid from '../../../../components/CoverGrid.astro'
+import FilterChips from '../../../../components/FilterChips.astro'
+import Pager from '../../../../components/Pager.astro'
+import { KINDS, PER_PAGE } from '../../index.astro'
+import { FILTER_MAX_PAGES, filtersFor } from '../../../../lib/filters.js'
+
+
+export function getStaticPaths() {
+  const paths = []
+  for (const [kind, config] of Object.entries(KINDS)) {
+    for (const [filter, def] of filtersFor(kind)) {
+      const all = config.items().filter((item) => def.keep(item, kind))
+      const pageCount = Math.min(FILTER_MAX_PAGES, Math.ceil(all.length / PER_PAGE))
+      for (let page = 2; page <= pageCount; page++) {
+        paths.push({
+          params: { kind, filter, page: String(page) },
+          props: {
+            config,
+            def,
+            pageCount,
+            items: all.slice((page - 1) * PER_PAGE, page * PER_PAGE),
+            total: all.length,
+          },
+        })
+      }
+    }
+  }
+  return paths
+}
+
+const { kind, filter, page } = Astro.params
+const { config, def, pageCount, items, total } = Astro.props
+const current = Number(page)
+---
+
+<Base
+  title={`${config.label}: ${def.label.toLowerCase()} — page ${current} of ${pageCount}`}
+  description={def.blurb(kind === 'anime' ? 'anime' : kind)}
+  canonical={`/${kind}/only/${filter}/${current}`}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{config.label} — {def.label.toLowerCase()}</h1>
+        <p>{def.blurb(kind === 'anime' ? 'anime' : kind)}</p>
+        <p class="answer__count">
+          Showing {(current - 1) * PER_PAGE + 1}–{Math.min(current * PER_PAGE, total)} of {total}
+        </p>
+      </div>
+      <FilterChips kind={kind} active={filter} />
+      <CoverGrid items={items} base={`/${kind}`} eager={6} />
+    </section>
+
+    <Pager
+      current={current}
+      count={pageCount}
+      base={`/${kind}/only/${filter}`}
+      segment=""
+      label={`${config.label}, ${def.label.toLowerCase()}`}
+    />
+  </div>
+</Base>

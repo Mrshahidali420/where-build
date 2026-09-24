@@ -1,0 +1,19 @@
+---
+/**
+ * Pages 2 and on of a "with an anime" list: /where-to-watch/novel/2.
+ * Page 1 is /where-to-watch/novel itself; there is no /1 twin.
+ */
+export const prerender = true
+import WatchList from '../../../components/WatchList.astro'
+import { watchListPages } from '../../../lib/watch-list-data.js'
+
+export function getStaticPaths() {
+  return watchListPages()
+    .filter(({ page }) => page > 1)
+    .map(({ key, page }) => ({ params: { list: key, page: String(page) }, props: { listKey: key, current: page } }))
+}
+
+const { listKey, current } = Astro.props
+---
+
+<WatchList listKey={listKey} current={current} />

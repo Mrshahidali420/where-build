@@ -1,0 +1,34 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://fundingchoicesmessages.google.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://challenges.cloudflare.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://partner.googleadservices.com https://adservice.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://graphql.anilist.co https://fundingchoicesmessages.google.com https://challenges.cloudflare.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; frame-src https://fundingchoicesmessages.google.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://challenges.cloudflare.com https://www.youtube-nocookie.com https://www.youtube.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.safeframe.googlesyndication.com https://www.google.com; fenced-frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; object-src 'none'; base-uri 'self'; form-action 'self'
+
+# The Workers dev address is never indexed, whatever the file. Static pages
+# never run the Worker, so its guard (src/lib/dev-guard.js) cannot add this
+# header to them; this rule does. A real domain does not match it.
+https://:worker.:account.workers.dev/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/*.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+# Search slices. The catalog is rebuilt once a day, so an hour of browser
+# cache costs nothing and makes the second search on a visit instant.
+/search/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# "My list" rows and the "For you" pool (scripts/make-shards.mjs). Rebuilt
+# once a day like the search slices, so the same hour of browser cache.
+/d/l/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/d/feed.v1.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400

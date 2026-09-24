@@ -1,0 +1,83 @@
+---
+/**
+ * One page of one season hub: /anime/season/2025/fall and its /2, /3 pages.
+ *
+ * People search "fall 2025 anime" to see what a season held and where to
+ * watch it. This page answers both from the catalog alone: every anime that
+ * AniList files under that season, most-watched first, each card carrying
+ * the streaming services licensed to show it. Nothing on it is typed by hand.
+ */
+import Base from '../layouts/Base.astro'
+import CoverGrid from './CoverGrid.astro'
+import Pager from './Pager.astro'
+import { listingJsonld } from '../lib/listing-jsonld.js'
+import { seasonNeighbours, seasonPage, SEASON_PER_PAGE } from '../lib/seasons.mjs'
+
+const { hub, current } = Astro.props
+const items = seasonPage(hub, current)
+const total = hub.items.length
+const { prev, next } = seasonNeighbours(hub.key)
+const path = current === 1 ? hub.path : `${hub.path}/${current}`
+
+// AniList files announced shows under seasons still ahead, so the verb follows
+// the calendar: a future season has not aired anything yet.
+const verb = {
+  past: 'started airing in',
+  now: 'started airing, or are due to start, in',
+  future: 'are due to start airing in',
+}[hub.when]
+
+const description = `All ${total} anime that ${verb} ${hub.label}, most popular first. ${hub.streaming} of them list an official place to watch.`
+
+const jsonld =
+  current === 1
+    ? listingJsonld({ name: `${hub.label} anime`, description, path, items, total })
+    : undefined
+
+const title =
+  current === 1
+    ? `${hub.label} Anime — Every Series and Where to Watch It`
+    : `${hub.label} Anime — page ${current} of ${hub.pages}`
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={path}
+  jsonld={jsonld}
+  crumbs={[
+    { name: 'Anime', href: '/anime' },
+    { name: 'Seasons', href: '/anime/season' },
+    { name: hub.label },
+  ]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{hub.label} Anime</h1>
+        <p>
+          {total} anime in this index {verb} {hub.label}.
+          {' '}{hub.streaming === total
+            ? 'Every one of them lists at least one official place to watch it.'
+            : `${hub.streaming} of them list at least one official place to watch it.`}
+          {' '}The list is sorted by popularity on AniList, most popular first.
+        </p>
+        {current > 1 && (
+          <p class="answer__count">
+            Showing {(current - 1) * SEASON_PER_PAGE + 1}–{Math.min(current * SEASON_PER_PAGE, total)} of {total}
+          </p>
+        )}
+      </div>
+      <CoverGrid items={items} base="/anime" eager={6} />
+    </section>
+
+    <Pager current={current} count={hub.pages} base={hub.path} segment="" label={`${hub.label} anime`} />
+
+    <nav class="genre-next" aria-label="Other seasons">
+      {prev && <a href={prev.path}>← {prev.label} anime</a>}
+      {next && <a href={next.path}>{next.label} anime →</a>}
+      <a href="/anime/season">All seasons →</a>
+      <a href="/schedule">Airing this week →</a>
+    </nav>
+  </div>
+</Base>

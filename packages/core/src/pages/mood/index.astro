@@ -1,0 +1,122 @@
+---
+export const prerender = true
+/**
+ * The mood hub: "what are you in the mood for?"
+ *
+ * Every button here is a plain link to a real page. No script decides where
+ * you go, so the whole thing works with JavaScript switched off and a search
+ * engine can follow every answer. That is the whole trick.
+ */
+import Base from '../../layouts/Base.astro'
+import config from '../../lib/site.mjs'
+import { comics, anime } from '../../lib/catalog.js'
+import { MOODS, pickForMood } from '../../lib/moods.mjs'
+import { faqJsonld } from '../../lib/answers.mjs'
+
+const rows = MOODS.map((mood) => {
+  const picked = [...pickForMood(comics, mood, 3), ...pickForMood(anime, mood, 1)]
+  return {
+    mood,
+    count: pickForMood(comics, mood, 9999).length + pickForMood(anime, mood, 9999).length,
+    covers: picked.slice(0, 3),
+    lead: picked[0],
+  }
+})
+
+const faq = [
+  {
+    q: 'What should I read if I do not know the title?',
+    a: 'Start from the feeling instead. Pick the mood that matches what you want tonight, and the index builds the list for you from the story tags every title already carries.',
+  },
+  {
+    q: 'Do I need an account?',
+    a: 'No. There is no sign-up on this site and nothing to install. Every mood is an ordinary page you can bookmark or share.',
+  },
+  {
+    q: 'Where do these recommendations come from?',
+    a: 'From the tags on each title, not from votes or from an algorithm watching you. A title appears under a mood only when it carries the story tags that define that mood, so you can always see why it is there.',
+  },
+]
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': `${config.siteUrl}/mood#page`,
+    url: `${config.siteUrl}/mood`,
+    name: 'What are you in the mood for?',
+    description:
+      'Find manhwa, manga, manhua and anime by the feeling you want tonight, with the official platforms that legally carry each one.',
+    inLanguage: 'en',
+  },
+  {
+    '@type': 'ItemList',
+    name: 'Reading moods',
+    numberOfItems: MOODS.length,
+    itemListElement: MOODS.map((mood, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${config.siteUrl}/mood/${mood.slug}`,
+      name: mood.title,
+    })),
+  },
+  faqJsonld(faq),
+]
+---
+
+<Base
+  title="What Are You in the Mood For? — Find Manhwa, Manga & Anime by Feeling"
+  description="Pick a feeling and get the manhwa, manga, manhua and anime that match it: revenge, second chances, dungeons and levels, quiet stories and more. Every title links to an official platform."
+  canonical="/mood"
+  jsonld={jsonld}
+  crumbs={[{ name: 'Moods' }]}
+>
+  <div class="shell">
+    <section class="section" data-phase="night">
+      <div class="section__head">
+        <h1>What are you in the mood for?</h1>
+        <p>
+          Most people do not arrive knowing the title. They arrive knowing the feeling. Pick
+          one below and the index builds the list, from the story tags each title already
+          carries. No account, nothing to install.
+        </p>
+      </div>
+
+      <ul class="moods">
+        {
+          rows.map(({ mood, count, covers }) => (
+            <li class="mood">
+              <a class="mood__link" href={`/mood/${mood.slug}`}>
+                <span class="mood__art" aria-hidden="true">
+                  {covers.map((c) => (
+                    <img src={c.cover} alt={`Cover of ${c.title}`} width="40" height="57" loading="lazy" decoding="async" />
+                  ))}
+                </span>
+                <span class="mood__body">
+                  <b class="mood__ask">{mood.ask}</b>
+                  <em class="mood__blurb">{mood.blurb}</em>
+                  <span class="mood__count">{count.toLocaleString()} titles</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" data-phase="dawn">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <dl class="qa">
+        {
+          faq.map((row) => (
+            <div>
+              <dt>{row.q}</dt>
+              <dd>{row.a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+  </div>
+</Base>

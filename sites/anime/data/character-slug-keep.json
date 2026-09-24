@@ -1,0 +1,4 @@
+{
+  "note": "Character pages whose address must never move, kept by hand. Read by the slug migrations in src/lib/reslug.mjs. Empty until this site has pages with search impressions.",
+  "slugs": []
+}

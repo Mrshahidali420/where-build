@@ -1,0 +1,342 @@
+---
+/**
+ * One genre page, built for every genre in the catalog.
+ *
+ * This is where the genre wall sends a reader, and most of them arrive on a
+ * phone, so the page has to answer "what is in here" before the first grid.
+ * It carries a lede with real counts, a jump row, the most-read titles of each
+ * kind, four picks (top rated, completed, ongoing, free to start), a short
+ * piece of prose, a FAQ built from the numbers of this genre, and doors out to
+ * the sibling genres.
+ *
+ * Every kind with more titles than fit here opens a full listing at
+ * /genre/{slug}/{kind}, and every pick opens its own page at
+ * /genre/{slug}/only/{shelf}. See src/lib/genre-lists.js for the rules.
+ *
+ * Until 23 Sep 2026 this page listed titles in catalog file order under a
+ * heading that said "most-read first". The action manhwa list opened on
+ * Archlord, not Solo Leveling. genre-lists.js sorts by popularity now.
+ */
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import config from '../../lib/site.mjs'
+import CoverGrid from '../../components/CoverGrid.astro'
+import { genres } from '../../lib/catalog.js'
+import { listingJsonld } from '../../lib/listing-jsonld.js'
+import { FILTERS } from '../../lib/filters.js'
+import {
+  genreLists,
+  kindPageCount,
+  shelfItems,
+  SHELVES,
+  SHELF_MINIMUM,
+  GENRE_SHOWN,
+  GENRE_PER_PAGE,
+  GENRE_KINDS,
+  KIND_LABEL,
+} from '../../lib/genre-lists.js'
+
+export function getStaticPaths() {
+  return genres.map((g, i) => {
+    // Neighbours in the popularity order read as "people who liked this",
+    // without us inventing any relationship the data does not hold.
+    const siblings = genres
+      .filter((other) => other.slug !== g.slug)
+      .slice(Math.max(0, i - 6), Math.max(0, i - 6) + 12)
+    return { params: { slug: g.slug }, props: { genre: g, siblings } }
+  })
+}
+
+const { genre, siblings } = Astro.props
+const lists = genreLists(genre.name)
+const lower = genre.name.toLowerCase()
+const cap = (text) => text.charAt(0).toUpperCase() + text.slice(1)
+const n = (value) => value.toLocaleString('en-US')
+
+const ORIGIN = {
+  manhwa: 'Korean comics',
+  manga: 'Japanese comics',
+  manhua: 'Chinese comics',
+  novel: 'Light and web novels',
+  anime: 'Anime series and films',
+}
+
+const sections = GENRE_KINDS.filter((kind) => lists[kind].length > 0).map((kind) => {
+  const items = lists[kind]
+  const pages = kindPageCount(items)
+  const reach = Math.min(items.length, pages * GENRE_PER_PAGE)
+  return {
+    kind,
+    items,
+    heading: `${genre.name} ${KIND_LABEL[kind]}`,
+    short: cap(KIND_LABEL[kind]),
+    blurb:
+      kind === 'anime'
+        ? `${ORIGIN.anime} tagged ${lower}, most-watched first. Each one links to the services licensed to stream it.`
+        : `${ORIGIN[kind]} tagged ${lower}, most-read first. Each one lists the official apps that carry it.`,
+    base: `/${kind}`,
+    more:
+      pages === 0
+        ? null
+        : reach === items.length
+          ? `See all ${n(items.length)} ${lower} ${KIND_LABEL[kind]}`
+          : `See the ${n(reach)} most-read of ${n(items.length)}`,
+  }
+})
+
+// --- real counts, for the lede and the FAQ ---------------------------------
+const readKinds = ['manhwa', 'manga', 'manhua', 'novel']
+const readAll = readKinds.flatMap((kind) => lists[kind].map((item) => ({ item, kind })))
+const readTotal = readAll.length
+const count = (rows, test) => rows.filter(({ item, kind }) => test(item, kind)).length
+const readOfficial = count(readAll, FILTERS.official.keep)
+const readFree = count(readAll, FILTERS.free.keep)
+const readFinished = count(readAll, FILTERS.completed.keep)
+const animeRows = lists.anime.map((item) => ({ item, kind: 'anime' }))
+const animeOfficial = count(animeRows, FILTERS.official.keep)
+const total = readTotal + lists.anime.length
+
+const kindCounts = sections.map((s) => `${n(s.items.length)} ${KIND_LABEL[s.kind]}`)
+const kindSentence =
+  kindCounts.length > 1 ? `${kindCounts.slice(0, -1).join(', ')} and ${kindCounts[kindCounts.length - 1]}` : kindCounts[0] || ''
+
+// --- picks -----------------------------------------------------------------
+// The first grids already show the most-read titles, so the picks skip them
+// (all but top rated, which is a different order). No cover appears twice.
+const shown = new Set(sections.flatMap((s) => s.items.slice(0, GENRE_SHOWN).map((item) => item.id)))
+const picks = Object.entries(SHELVES)
+  .map(([id, shelf]) => {
+    const all = shelfItems(genre.name, id)
+    const preview = (id === 'top-rated' ? all : all.filter((item) => !shown.has(item.id))).slice(0, 12)
+    return {
+      id,
+      heading: shelf.heading(genre.name, lower),
+      blurb: shelf.blurb(lower),
+      items: preview,
+      link: all.length >= SHELF_MINIMUM ? `/genre/${genre.slug}/only/${id}` : null,
+      size: all.length,
+      badges: id === 'free',
+    }
+  })
+  .filter((pick) => pick.items.length >= 4)
+
+const topRated = shelfItems(genre.name, 'top-rated')[0]
+const topOf = (kind) => lists[kind][0]
+
+// --- FAQ, from the numbers of this genre --------------------------------------
+const bestParts = ['manhwa', 'manga', 'manhua']
+  .filter((kind) => topOf(kind))
+  .map((kind) => `the most-read ${kind} is ${topOf(kind).title}`)
+const faqs = [
+  {
+    q: `What are the best ${lower} manhwa and manga right now?`,
+    a: `Going by readers, ${bestParts.join(', ') || 'this genre has no comics yet'}.${
+      topRated
+        ? ` Going by score, ${topRated.title} leads the most-read ${lower} titles at ${(topRated.score * 0.1).toFixed(1)} out of 10 on AniList.`
+        : ''
+    } The order rebuilds every day, so it follows real readers rather than an opinion.`,
+  },
+  {
+    q: `Where can I read ${lower} titles legally?`,
+    a: `${n(readOfficial)} of the ${n(readTotal)} ${lower} comics and novels here list at least one official platform, and ${n(readFree)} can be started free. Open any title for the full list and the cost of each one: free and ad-supported, a free tier, paid chapters, a subscription, or print. ${config.name} hosts nothing and never links to unlicensed copies.`,
+  },
+  {
+    q: `Is there ${lower} anime as well?`,
+    a:
+      lists.anime.length > 0
+        ? `Yes. ${n(lists.anime.length)} anime carry this genre, and ${n(animeOfficial)} of them list a licensed place to watch.${
+            topOf('anime') ? ` ${topOf('anime').title} is the most-watched one.` : ''
+          }`
+        : 'Not in this index yet. No anime currently carries this genre, so the page lists comics only. It will appear here the morning after one is added.',
+  },
+  {
+    q: `Which ${lower} comics are finished?`,
+    a: `${n(readFinished)} of the ${n(readTotal)} ${lower} comics and novels here are finished, so you can read them to the last chapter.${
+      picks.some((p) => p.id === 'completed') ? ' The completed list on this page starts with the most-read ones.' : ''
+    }`,
+  },
+  {
+    q: 'What is the difference between manhwa, manga and manhua?',
+    a: `Manhwa is Korean, manga is Japanese and manhua is Chinese. In ${lower} this index holds ${kindSentence}. This page keeps them apart so you can stay with the one you prefer.`,
+  },
+  {
+    q: 'How often does this list change?',
+    a: 'Every day. The catalog rebuilds at 02:00 UTC from AniList, so a series that started this week appears in its genre the next morning, and the reader counts move with it.',
+  },
+]
+
+const site = config.siteUrl
+const description = `${n(readTotal)} ${lower} manhwa, manga, manhua and novels and ${n(lists.anime.length)} anime, most-read first, each with its official places to read or watch.`
+
+const collection = listingJsonld({
+  name: `${genre.name} manhwa, manga and anime`,
+  description,
+  path: `/genre/${genre.slug}`,
+  items: sections.flatMap((s) => s.items.slice(0, 8)).slice(0, 40),
+  total,
+})
+delete collection['@context']
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    collection,
+    {
+      '@type': 'FAQPage',
+      '@id': `${site}/genre/${genre.slug}#faq`,
+      mainEntity: faqs.map((row) => ({
+        '@type': 'Question',
+        name: row.q,
+        acceptedAnswer: { '@type': 'Answer', text: row.a },
+      })),
+    },
+  ],
+}
+---
+
+<Base
+  title={`${genre.name} manhwa, manga and anime — where to read and watch`}
+  description={description}
+  canonical={`/genre/${genre.slug}`}
+  jsonld={jsonld}
+  crumbs={[{ name: 'Genres', href: '/genre' }, { name: genre.name }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{genre.name}</h1>
+        <p>
+          {n(total)} titles carry the {lower} genre: {kindSentence}. Every list is
+          sorted by how many people are reading or watching.
+        </p>
+        <p>
+          {readTotal > 0 &&
+            `${n(readOfficial)} of the ${n(readTotal)} comics and novels list an official place to read, and ${n(readFree)} can be started free. `}
+          {lists.anime.length > 0 &&
+            `${n(animeOfficial)} of the ${n(lists.anime.length)} anime list a licensed stream.`}
+        </p>
+      </div>
+
+      <nav class="genre-quick" aria-label="Jump to a section">
+        {sections.map((s) => <a href={`#${s.kind}`}>{s.short}</a>)}
+        {picks.length > 0 && <a href="#picks">Picks</a>}
+        <a href="#about">About</a>
+        <a href="#faq">Questions</a>
+      </nav>
+    </section>
+
+    {
+      sections.map((s, i) => (
+        <section class="section" id={s.kind}>
+          <div class="section__head">
+            <h2>{s.heading}</h2>
+            <p>{s.blurb}</p>
+          </div>
+          <CoverGrid items={s.items.slice(0, GENRE_SHOWN)} base={s.base} eager={i === 0 ? 6 : 0} />
+          {s.more && (
+            <p class="shop-shelf__more">
+              <a href={`/genre/${genre.slug}/${s.kind}`}>{s.more} →</a>
+            </p>
+          )}
+        </section>
+      ))
+    }
+
+    {
+      picks.length > 0 && (
+        <section class="section" id="picks">
+          <div class="section__head">
+            <h2>Picks from {lower}</h2>
+            <p>
+              {picks.length} more ways into the genre. Titles already shown above
+              are left out, except in top rated.
+            </p>
+          </div>
+          {picks.map((pick) => (
+            <div class="genre-pick" id={pick.id}>
+              <div class="section__head">
+                <h3>{pick.heading}</h3>
+                <p>{pick.blurb}</p>
+              </div>
+              <CoverGrid items={pick.items} shelf badges={pick.badges} />
+              {pick.link && (
+                <p class="shop-shelf__more">
+                  <a href={pick.link}>
+                    {pick.size > 12 ? `See the top ${n(pick.size)}` : 'See the list'} →
+                  </a>
+                </p>
+              )}
+            </div>
+          ))}
+        </section>
+      )
+    }
+
+    <section class="section" id="about">
+      <div class="section__head">
+        <h2>About {lower} on {config.name}</h2>
+      </div>
+      <div class="genre-intro">
+        <p>
+          This page holds every title in the index that carries the {lower} tag:
+          {' '}{n(total)} in total. They are split into manhwa, manga, manhua,
+          novels and anime, so you can stay with Korean, Japanese or Chinese work
+          if you already know which one you prefer.
+        </p>
+        <p>
+          Open any cover and the page tells you where that series is licensed,
+          and what each place costs: free and ad-supported, a free tier, paid
+          chapters, a subscription, or print. {config.name} hosts no chapters and
+          no video, and never links to unlicensed copies.
+        </p>
+        <p>
+          Genres come from AniList, the open catalog this index is built on.
+          Nothing is typed in by hand, and the whole list rebuilds every day at
+          02:00 UTC, so the order you see follows real readers.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <div class="qa2">
+        {
+          faqs.map((row) => (
+            <details>
+              <summary>{row.q}</summary>
+              <p class="qa2__a">{row.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Nearby genres</h2>
+        <p>Genres of about the same size, for when this one is not quite it.</p>
+      </div>
+      <nav class="genre-quick" aria-label="Nearby genres">
+        {siblings.map((g) => <a href={`/genre/${g.slug}`}>{g.name}</a>)}
+      </nav>
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href="/genre">All genres →</a>
+      <a href="/where-to-read">Where to read →</a>
+      <a href="/where-to-watch">Where to watch →</a>
+      <a href="/shop">Shop merchandise →</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .genre-pick + .genre-pick {
+    margin-top: 2.25rem;
+  }
+  .genre-pick h3 {
+    margin: 0;
+  }
+</style>

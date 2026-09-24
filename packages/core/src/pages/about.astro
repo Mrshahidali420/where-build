@@ -1,0 +1,89 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+import { comics, anime, charactersWithPages } from '../lib/catalog.js'
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: `About ${config.name}`,
+  url: `${config.siteUrl}/about`,
+  description:
+    `What ${config.name} is, where its data comes from, and why it only ever links to official platforms.`,
+  publisher: {
+    '@type': 'Organization',
+    name: config.name,
+    url: config.siteUrl,
+    email: config.email,
+  },
+}
+---
+
+<Base
+  title={`About ${config.name} — an index of official reading and streaming links`}
+  description={`${config.name} is a free catalog that tells you where a manhwa, manga, manhua or anime is legally available. No hosted chapters, no mirrors, no pirate links.`}
+  canonical="/about"
+  jsonld={jsonld}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>About {config.name}</h1>
+        <p>One question, answered fast: where can I legally read or watch this?</p>
+      </div>
+
+      <div class="prose">
+        <h2>What this site is</h2>
+        <p>
+          {config.name} is a free catalog of {comics.length.toLocaleString()} comics,
+          {anime.length.toLocaleString()} anime and {charactersWithPages.length.toLocaleString()} characters.
+          Each title page lists the official apps and platforms that carry it, what they
+          cost, and whether an adaptation exists.
+        </p>
+        <p class="prose__note">
+          We never host chapters or episodes. Every outbound link goes to a publisher,
+          a licensor or a streaming service that holds the rights.
+        </p>
+
+        <h2>Why it exists</h2>
+        <p>
+          Finding a series is easy. Finding the legal place to read it is not. Rights are
+          split across dozens of apps, they differ by region, and they move. This index
+          keeps that answer in one place so readers do not end up on a scan site by default.
+        </p>
+
+        <h2>Where the data comes from</h2>
+        <p>
+          Titles, synopses, cover art, scores and character profiles come from
+          <a href="https://anilist.co" rel="noopener">AniList</a>, a community-run media
+          database with a public API. Scores are also cross-checked against
+          <a href="https://myanimelist.net" rel="noopener">MyAnimeList</a>. Cover art and
+          artwork belong to their publishers and are shown for identification only.
+        </p>
+        <p>
+          The whole index rebuilds automatically every day at 02:00 UTC. New titles appear
+          on their own, and dead links drop out on their own.
+        </p>
+
+        <h2>How links are chosen</h2>
+        <ul>
+          <li><strong>Official only.</strong> Publishers, licensors and licensed streaming services.</li>
+          <li><strong>Free first.</strong> When a platform has a free or ad-supported tier, we say so.</li>
+          <li><strong>No aggregators.</strong> No scan sites, no mirrors, no unofficial readers, ever.</li>
+        </ul>
+
+        <h2>Corrections</h2>
+        <p>
+          Availability changes constantly. If a link is wrong or a title is missing a
+          platform, tell us at <a class="mailto" href={`mailto:${config.email}`}>{config.email}</a>
+          and we will fix it.
+        </p>
+        <p>
+          {config.name} is independent. It is not affiliated with, endorsed by, or sponsored
+          by AniList, MyAnimeList, or any publisher or streaming service named on this site.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>

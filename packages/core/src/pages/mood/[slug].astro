@@ -1,0 +1,149 @@
+---
+export const prerender = true
+/**
+ * One page per mood.
+ *
+ * A reader who searches "manhwa where the main character is already strong"
+ * is not looking for a genre. They are looking for a feeling. Each of these
+ * pages answers exactly one of those, and every title on it earned its place
+ * by carrying the right tags. See src/lib/moods.mjs for the recipes.
+ */
+import Base from '../../layouts/Base.astro'
+import CoverGrid from '../../components/CoverGrid.astro'
+import { comics, anime } from '../../lib/catalog.js'
+import { MOODS, pickForMood } from '../../lib/moods.mjs'
+import { listingJsonld } from '../../lib/listing-jsonld.js'
+import { faqJsonld, listWords } from '../../lib/answers.mjs'
+import { sectionOf } from '../../lib/section.mjs'
+
+export function getStaticPaths() {
+  return MOODS.map((mood) => ({ params: { slug: mood.slug }, props: { mood } }))
+}
+
+const { mood } = Astro.props
+
+const pickedComics = pickForMood(comics, mood, 48)
+const pickedAnime = pickForMood(anime, mood, 24)
+
+// The grids link by kind, so the comics have to be split up first.
+const buckets = { manhwa: [], manga: [], manhua: [] }
+for (const c of pickedComics) buckets[sectionOf(c)].push(c)
+
+const kinds = Object.entries(buckets).filter(([, items]) => items.length > 0)
+const total = pickedComics.length + pickedAnime.length
+const top = [...pickedComics, ...pickedAnime].slice(0, 3).map((i) => i.title)
+
+const faq = [
+  {
+    q: `What is a good ${mood.title.toLowerCase()} manhwa or manga to start with?`,
+    a: top.length
+      ? `${listWords(top)} ${top.length === 1 ? 'is' : 'are'} the most-read on this page. Each one links to the official platforms that carry it, so you can start reading or watching the same day.`
+      : 'This list is rebuilt every day from the index. Check back tomorrow.',
+  },
+  {
+    q: 'How is this list picked?',
+    a: `We do not vote and we do not guess. Every title here carries at least ${mood.need} of the story tags that define this mood${mood.avoid ? `, and none of the tags that would break it` : ''}. The order puts the closest match first, then the most-read.`,
+  },
+  {
+    q: 'Where can I read or watch these legally?',
+    a: 'Open any title on this page. Its own page lists only platforms that hold a licence for it, such as WEBTOON, Tapas, MANGA Plus, Crunchyroll or Netflix. This site hosts nothing and links to no unofficial copy.',
+  },
+]
+
+const jsonld = [
+  listingJsonld({
+    name: `${mood.title} manhwa, manga and anime`,
+    description: mood.blurb,
+    path: `/mood/${mood.slug}`,
+    items: [...pickedComics, ...pickedAnime].slice(0, 40),
+    total,
+  }),
+  faqJsonld(faq),
+]
+---
+
+<Base
+  title={`${mood.title} manhwa, manga and anime — where to read and watch`}
+  description={`${mood.blurb} ${total} titles in the index match this mood, each with the official platforms that legally carry it.`}
+  canonical={`/mood/${mood.slug}`}
+  jsonld={jsonld}
+  crumbs={[{ name: 'Moods', href: '/mood' }, { name: mood.title }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{mood.title}</h1>
+        <p>{mood.blurb}</p>
+      </div>
+      <p class="overview">
+        {total.toLocaleString()} titles in the index match this mood. The closest fit comes
+        first, then the most-read. Every one of them links only to platforms that hold a
+        licence for it.
+      </p>
+    </section>
+
+    {
+      kinds.map(([kind, items], i) => (
+        <section class="section">
+          <div class="section__head section__head--row">
+            <div>
+              <h2>{`${mood.title} ${kind}`}</h2>
+            </div>
+            <a class="section__more" href={`/${kind}`}>
+              All {kind}
+            </a>
+          </div>
+          <CoverGrid items={items.slice(0, 24)} base={`/${kind}`} eager={i === 0 ? 6 : 0} />
+        </section>
+      ))
+    }
+
+    {
+      pickedAnime.length > 0 && (
+        <section class="section" data-phase="night">
+          <div class="section__head section__head--row">
+            <div>
+              <h2>{mood.title} anime</h2>
+            </div>
+            <a class="section__more" href="/anime">
+              All anime
+            </a>
+          </div>
+          <CoverGrid items={pickedAnime.slice(0, 24)} base="/anime" />
+        </section>
+      )
+    }
+
+    <section class="section" data-phase="dawn">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <dl class="qa">
+        {
+          faq.map((row) => (
+            <div>
+              <dt>{row.q}</dt>
+              <dd>{row.a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>In a different mood?</h2>
+        <p>Pick another feeling and the index rebuilds the list around it.</p>
+      </div>
+      <ul class="moodlist">
+        {
+          MOODS.filter((m) => m.slug !== mood.slug).map((m) => (
+            <li>
+              <a href={`/mood/${m.slug}`}>{m.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Base>

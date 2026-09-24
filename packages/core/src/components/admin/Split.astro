@@ -1,0 +1,31 @@
+---
+/**
+ * One bar split into its parts, with a legend under it: statuses on My list,
+ * which search box was used, how AniList imports ended. The legend says each
+ * part's number and share in words, so no colour has to be decoded.
+ *
+ * parts: [{ name, value, tone }]
+ */
+import { num } from '../../lib/admin.js'
+
+const { parts = [], label = 'Split' } = Astro.props
+const shown = parts.filter((p) => (p.value || 0) > 0)
+const total = shown.reduce((n, p) => n + p.value, 0)
+const pct = (v) => (total ? Math.round((v / total) * 100) : 0)
+const said = shown.map((p) => `${p.name} ${pct(p.value)}%`).join(', ')
+---
+
+{total > 0 && (
+  <div>
+    <div class="split" role="img" aria-label={`${label}: ${said}`}>
+      {shown.map((p) => (
+        <span class={`bg-${p.tone || 'blue'}`} style={`flex:${p.value}`} title={`${p.name}: ${num(p.value)}`}></span>
+      ))}
+    </div>
+    <ul class="legend">
+      {shown.map((p) => (
+        <li><i class={`bg-${p.tone || 'blue'}`}></i>{p.name} <b>{num(p.value)}</b> <span class="t-dim">{pct(p.value)}%</span></li>
+      ))}
+    </ul>
+  </div>
+)}

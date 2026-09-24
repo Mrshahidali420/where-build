@@ -1,0 +1,323 @@
+---
+/**
+ * "Add to my list" on a title page, with a small popover for the status and
+ * the reader's own named lists.
+ *
+ * The page is cached at the edge and served to everybody, so the HTML never
+ * knows whether THIS reader saved the title. It carries only the facts the
+ * list needs, in data attributes, and the script below reads the reader's
+ * list from their own browser (src/lib/my-list.js) and sets the button. The
+ * list itself never leaves the browser; GA4 only counts what happened.
+ */
+import { mediumCover } from '../lib/list-row.js'
+
+const { item, ns } = Astro.props
+
+// Every id is made from the AniList id, so two buttons on one page can never
+// share a popover or a label.
+const uid = `mylist-${item.id}`
+
+// Titles tied to this one that we also hold: its anime or its source comic,
+// sequels and prequels, and the picks AniList readers made after it. The For
+// you feed ranks these first for anyone who saves this title.
+const rel = [
+  ...new Set([
+    ...(item.relations || []).filter((r) => r.hit).map((r) => r.id),
+    ...(item.recs || []).map((r) => r.id),
+  ]),
+]
+  .filter((id) => Number.isInteger(id) && id !== item.id)
+  .slice(0, 8)
+---
+
+<div
+  class="mylist"
+  data-mylist
+  data-id={item.id}
+  data-ns={ns}
+  data-slug={item.slug}
+  data-title={item.title}
+  data-cover={mediumCover(item.cover)}
+  data-genres={JSON.stringify((item.genres || []).slice(0, 4))}
+  data-tags={JSON.stringify((item.tags || []).slice(0, 6))}
+  data-rel={JSON.stringify(rel)}
+>
+  <div class="mylist__bar">
+    <button type="button" class="mylist__add" aria-pressed="false">
+      <svg class="mylist__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path class="mylist__plus" d="M8 3v10M3 8h10" />
+        <path class="mylist__tick" d="M3 8.5l3.2 3L13 4.5" />
+      </svg>
+      <span class="mylist__label">Add to my list</span>
+    </button>
+    <button
+      type="button"
+      class="mylist__more"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls={`${uid}-pop`}
+    >
+      Lists
+      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
+    </button>
+  </div>
+  <div class="mylist__notice">
+    <p class="mylist__note" role="status" aria-live="polite"></p>
+    <button type="button" class="mylist__undo" hidden>Undo</button>
+  </div>
+
+  <div class="mylist__pop" id={`${uid}-pop`} role="dialog" aria-label={`${item.title}: status and lists`} hidden>
+    <label class="mylist__field">
+      <span>Status</span>
+      <select class="mylist__status"></select>
+    </label>
+    <p class="mylist__head" id={`${uid}-lists-head`}>Your lists</p>
+    <ul class="mylist__lists" aria-labelledby={`${uid}-lists-head`}></ul>
+    <form class="mylist__new">
+      <label for={`${uid}-new-name`}>New list</label>
+      <div class="mylist__row">
+        <input id={`${uid}-new-name`} name="name" maxlength="40" autocomplete="off" placeholder="Weekend binge" />
+        <button type="submit">Create</button>
+      </div>
+    </form>
+    <p class="mylist__msg" role="status" aria-live="polite"></p>
+    <a class="mylist__open" href="/my-list">Open my list, rename or delete lists →</a>
+  </div>
+</div>
+
+<script>
+  import { openStore, statusLabel, STATUSES, listsOf, track } from '../lib/my-list.js'
+
+  // How long "Removed. Undo" stays up after one tap takes a title off.
+  const UNDO_MS = 6000
+  const SAVED_NOTE =
+    'Saved. Your list stays in your browser. We are checking how many people make lists. If enough people do, we will add accounts, so your list can sync between devices.'
+
+  const parse = (text) => {
+    try {
+      return JSON.parse(text || '[]')
+    } catch (e) {
+      return []
+    }
+  }
+
+  for (const box of document.querySelectorAll('[data-mylist]')) {
+    const store = openStore()
+    const meta = {
+      id: Number(box.dataset.id),
+      ns: box.dataset.ns,
+      slug: box.dataset.slug,
+      title: box.dataset.title,
+      cover: box.dataset.cover,
+      genres: parse(box.dataset.genres),
+      tags: parse(box.dataset.tags),
+      rel: parse(box.dataset.rel),
+    }
+    const media = meta.ns === 'anime' ? 'ANIME' : 'MANGA'
+    const ga = { title_id: meta.id, section: meta.ns, title: meta.title }
+
+    const addBtn = box.querySelector('.mylist__add')
+    const label = box.querySelector('.mylist__label')
+    const note = box.querySelector('.mylist__note')
+    const undoBtn = box.querySelector('.mylist__undo')
+    const moreBtn = box.querySelector('.mylist__more')
+    const pop = box.querySelector('.mylist__pop')
+    const select = box.querySelector('.mylist__status')
+    const listsEl = box.querySelector('.mylist__lists')
+    const form = box.querySelector('.mylist__new')
+    const nameInput = form.querySelector('input')
+    const msg = box.querySelector('.mylist__msg')
+
+    const say = (el, text) => {
+      el.textContent = text || ''
+    }
+    // A change that could not be written to storage still works on this page.
+    const warnIfUnsaved = (result) => {
+      if (result && result.saved === false) {
+        say(note, 'Your browser is blocking storage, so this list will be gone when you close the tab.')
+      }
+    }
+
+    // --- Undo: one tap removes, so the exact entry and its lists are kept
+    // for a few seconds and can be put back as they were.
+    let undo = null
+    function clearUndo() {
+      if (undo) clearTimeout(undo.timer)
+      undo = null
+      undoBtn.hidden = true
+    }
+    undoBtn.addEventListener('click', () => {
+      if (!undo) return
+      const result = store.restore(undo.entry, undo.lists)
+      clearUndo()
+      if (result && result.error) return say(note, result.error)
+      warnIfUnsaved(result)
+      track('list_add', { ...ga, status: result.state.titles[meta.id].status, undo: 1 })
+      say(note, 'Put back, with its lists.')
+      addBtn.focus()
+    })
+
+    function drawStatus(entry) {
+      // Only rebuild the options when they change shape (the "not on my list"
+      // row comes and goes), so a keyboard user arrowing through a closed
+      // select keeps their place.
+      const wantsNone = !entry
+      const hasNone = select.options.length > 0 && select.options[0].value === ''
+      if (!select.options.length || wantsNone !== hasNone) {
+        select.replaceChildren()
+        if (wantsNone) select.add(new Option('Not on my list', ''))
+        for (const status of STATUSES) select.add(new Option(statusLabel(status, media), status))
+      }
+      select.value = entry ? entry.status : ''
+    }
+
+    function drawLists(state) {
+      // Remember which checkbox had focus, so a redraw hands it straight back.
+      const focusKey = listsEl.contains(document.activeElement) ? document.activeElement.dataset.key : null
+      listsEl.replaceChildren()
+      const inLists = new Set(listsOf(state, meta.id))
+      if (!state.lists.length) {
+        const li = document.createElement('li')
+        li.className = 'mylist__empty'
+        li.textContent = 'No lists yet. Make one below.'
+        listsEl.append(li)
+        return
+      }
+      for (const list of state.lists) {
+        const li = document.createElement('li')
+        const lab = document.createElement('label')
+        const check = document.createElement('input')
+        check.type = 'checkbox'
+        check.dataset.key = list.id
+        check.checked = inLists.has(list.id)
+        check.addEventListener('change', () => {
+          const result = store.toggleInList(list.id, meta)
+          if (result && result.error) {
+            say(msg, result.error)
+            check.checked = !check.checked
+            return
+          }
+          warnIfUnsaved(result)
+          track('list_toggle', { ...ga, in_list: result.inList ? 1 : 0 })
+          say(msg, result.inList ? `Added to "${list.name}".` : `Taken out of "${list.name}".`)
+        })
+        const name = document.createElement('span')
+        name.textContent = `${list.name} (${list.ids.length})`
+        lab.append(check, name)
+        // Rename and delete live on the list's own tab on /my-list, where the
+        // reader can see what is in it first. This link opens that tab.
+        const edit = document.createElement('a')
+        edit.className = 'mylist__edit'
+        edit.href = `/my-list?list=${encodeURIComponent(list.id)}`
+        edit.textContent = 'Edit'
+        edit.setAttribute('aria-label', `Rename or delete "${list.name}"`)
+        li.append(lab, edit)
+        listsEl.append(li)
+      }
+      if (focusKey) listsEl.querySelector(`input[data-key="${CSS.escape(focusKey)}"]`)?.focus()
+    }
+
+    function draw(state) {
+      const entry = state.titles[meta.id] || null
+      addBtn.setAttribute('aria-pressed', entry ? 'true' : 'false')
+      box.classList.toggle('mylist--on', Boolean(entry))
+      // Saved: the tick and the lit button say "on my list", so the visible
+      // text is only the status and the pair still fits one row in the rail.
+      // Screen readers still hear the whole phrase.
+      if (entry) {
+        const hidden = document.createElement('span')
+        hidden.className = 'sr-only'
+        hidden.textContent = 'On my list: '
+        label.replaceChildren(hidden, statusLabel(entry.status, media))
+      } else {
+        label.textContent = 'Add to my list'
+      }
+      drawStatus(entry)
+      drawLists(state)
+    }
+
+    addBtn.addEventListener('click', () => {
+      if (store.has(meta.id)) {
+        const state = store.get()
+        const kept = { entry: state.titles[meta.id], lists: listsOf(state, meta.id) }
+        const result = store.remove(meta.id)
+        warnIfUnsaved(result)
+        track('list_remove', ga)
+        clearUndo()
+        undo = { ...kept, timer: setTimeout(clearUndo, UNDO_MS) }
+        undoBtn.hidden = false
+        say(note, 'Removed.')
+        return
+      }
+      clearUndo()
+      const result = store.add(meta, 'PLANNING')
+      if (result && result.error) {
+        say(note, result.error)
+        return
+      }
+      track('list_add', { ...ga, status: 'PLANNING' })
+      say(note, SAVED_NOTE)
+      warnIfUnsaved(result)
+    })
+
+    select.addEventListener('change', () => {
+      const status = select.value
+      if (!status) return
+      if (!store.has(meta.id)) {
+        const result = store.add(meta, status)
+        if (result && result.error) return say(msg, result.error)
+        warnIfUnsaved(result)
+        track('list_add', { ...ga, status })
+        return
+      }
+      warnIfUnsaved(store.setStatus(meta.id, status))
+      track('list_status', { ...ga, status })
+    })
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      const result = store.createList(nameInput.value)
+      if (result && result.error) return say(msg, result.error)
+      warnIfUnsaved(result)
+      track('list_create', { lists: store.get().lists.length })
+      // A list made from a title page is made FOR this title.
+      const put = store.toggleInList(result.list.id, meta)
+      if (put && !put.error) track('list_toggle', { ...ga, in_list: 1 })
+      nameInput.value = ''
+      say(msg, `Made "${result.list.name}" and added this title.`)
+    })
+
+    // The popover: opens under the Lists button, closes on Escape, on a tap
+    // anywhere else or when Tab moves focus out of it, and hands focus back
+    // to the button that opened it when it was closed from inside.
+    const isOpen = () => !pop.hidden
+    function open() {
+      pop.hidden = false
+      moreBtn.setAttribute('aria-expanded', 'true')
+      say(msg, '')
+      select.focus()
+    }
+    function close(returnFocus) {
+      if (!isOpen()) return
+      pop.hidden = true
+      moreBtn.setAttribute('aria-expanded', 'false')
+      if (returnFocus) moreBtn.focus()
+    }
+    moreBtn.addEventListener('click', () => (isOpen() ? close(false) : open()))
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) close(true)
+    })
+    document.addEventListener('click', (event) => {
+      if (isOpen() && !box.contains(event.target)) close(pop.contains(document.activeElement))
+    })
+    // Focus moving to something outside the popover (Tab, Shift+Tab). A null
+    // target is a click on nothing focusable, which the click handler covers.
+    pop.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget
+      if (next && !pop.contains(next) && next !== moreBtn) close(false)
+    })
+
+    store.subscribe(draw)
+    draw(store.get())
+  }
+</script>

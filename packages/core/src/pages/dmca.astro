@@ -1,0 +1,110 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+
+const updated = 'September 13, 2026'
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Copyright and takedown policy',
+  url: `${config.siteUrl}/dmca`,
+  description:
+    `How to send a copyright takedown notice to ${config.name}, and what the site does and does not host.`,
+  dateModified: '2026-09-13',
+}
+---
+
+<Base
+  title={`Copyright and DMCA takedown policy — ${config.name}`}
+  description={`${config.name} hosts no chapters and no episodes, and links only to official platforms. This page explains how a rights holder can request removal of a cover image or description.`}
+  canonical="/dmca"
+  jsonld={jsonld}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Copyright and takedowns</h1>
+        <p>We host nothing. If something here still needs to come down, here is how.</p>
+      </div>
+
+      <div class="prose">
+        <p class="prose__updated">Last updated {updated}</p>
+
+        <h2>What this site hosts</h2>
+        <p>
+          {config.name} is a catalog. It stores titles, release dates, genres, short
+          synopses, scores, character profiles and thumbnail cover art, all supplied by the
+          public <a href="https://anilist.co" rel="noopener">AniList</a> API.
+        </p>
+        <p class="prose__note">
+          There are no chapters, no scans, no episodes and no video on this site. Every
+          reading or streaming link points at a publisher, a licensor or a licensed
+          streaming service. We do not link to scan sites, aggregators or mirrors, and we
+          refuse requests to add them.
+        </p>
+
+        <h2>Cover art and synopses</h2>
+        <p>
+          Cover images are shown small, beside factual information about the work they
+          identify, and each one points the reader towards a legal place to buy or read it.
+          We believe this is fair use. If you hold the rights and disagree, we will remove
+          the material rather than argue about it.
+        </p>
+
+        <h2>How to send a notice</h2>
+        <p>
+          Email <a class="mailto" href={`mailto:${config.dmcaEmail}`}>{config.dmcaEmail}</a>.
+          Under the Digital Millennium Copyright Act, 17 U.S.C. section 512(c)(3), a valid
+          notice must include all of the following:
+        </p>
+        <ol>
+          <li>Your physical or electronic signature.</li>
+          <li>Identification of the copyrighted work you say is infringed.</li>
+          <li>The exact page address on {config.host} where the material appears.</li>
+          <li>Your name, postal address, telephone number and email address.</li>
+          <li>
+            A statement that you believe in good faith that the use is not authorised by
+            the copyright owner, its agent, or the law.
+          </li>
+          <li>
+            A statement that the information in the notice is accurate, and, under penalty
+            of perjury, that you are the owner or are authorised to act for the owner.
+          </li>
+        </ol>
+
+        <h2>What happens next</h2>
+        <ul>
+          <li>We acknowledge every complete notice within 3 business days.</li>
+          <li>Valid notices are actioned within 10 business days, usually much sooner.</li>
+          <li>
+            Because the site rebuilds from AniList every night, we also add the item to a
+            permanent exclusion list so it does not come back on the next build.
+          </li>
+        </ul>
+
+        <h2>Counter-notice</h2>
+        <p>
+          If your material was removed by mistake, send a counter-notice to the same
+          address with your signature, the material removed and where it was, your contact
+          details, and a statement under penalty of perjury that the removal was a mistake
+          or a misidentification.
+        </p>
+
+        <h2>Repeat infringers</h2>
+        <p>
+          This site has no user accounts and accepts no uploads, so there is nothing for a
+          third party to post here. Any platform we link to that turns out to be unlicensed
+          is removed from the index permanently.
+        </p>
+
+        <h2>Wrong address?</h2>
+        <p>
+          If your complaint is about a scan site, we are not it, and we do not link to it.
+          Please send your notice to the host of that site instead.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>

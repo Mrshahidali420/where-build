@@ -1,0 +1,27 @@
+---
+/**
+ * A tiny trend line with a soft area under it, drawn as inline SVG on the
+ * server. `values` is one number per day, oldest first. The last point gets a
+ * dot, because "today" is the one the eye looks for.
+ */
+import { sparkPath } from '../../lib/admin-chart.js'
+
+const { values = [], tone = 'blue', height = 28, label = '' } = Astro.props
+const W = 120
+const path = sparkPath(values, W, height, 3)
+const last = path.points[path.points.length - 1]
+---
+
+{path.line && (
+  <div class={`spark t-${tone}`}>
+    <svg viewBox={`0 0 ${W} ${height}`} height={height} preserveAspectRatio="none" role="img" aria-label={label || 'Trend'}>
+      <path d={path.area} fill="currentColor" fill-opacity="0.14" stroke="none" />
+      <path d={path.line} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+      {/* A zero-length round stroke, not a circle: the chart is stretched to
+          the card's width, and a circle would be stretched into an oval. */}
+      {last && (
+        <path d={`M${last.x} ${last.y} l0 0`} stroke="currentColor" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+      )}
+    </svg>
+  </div>
+)}

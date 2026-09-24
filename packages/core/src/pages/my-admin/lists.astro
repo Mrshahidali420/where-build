@@ -1,0 +1,209 @@
+---
+/**
+ * Lists. What readers do with My list and the For you feed.
+ *
+ * Every row here is a count. List names and AniList usernames never reach the
+ * database (see src/lib/own-count.js and src/lib/beacon-rows.js), so they can
+ * never show up here either.
+ */
+import Admin from '../../layouts/Admin.astro'
+import Hint from '../../components/admin/Hint.astro'
+import BarList from '../../components/admin/BarList.astro'
+import Columns from '../../components/admin/Columns.astro'
+import Kpi from '../../components/admin/Kpi.astro'
+import Split from '../../components/admin/Split.astro'
+import { envOf } from '../../lib/runtime.js'
+import { gate, rangeOf, num } from '../../lib/admin.js'
+import { actionsFor, closedDaysFor, tally } from '../../lib/admin-more.js'
+import { shortDay, withToday } from '../../lib/admin-chart.js'
+import { droppedHint, feedHint, importHint, savedHint } from '../../lib/admin-hints.js'
+
+export const prerender = false
+
+const env = envOf(Astro)
+const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
+if (secret && !signedIn && Astro.request.method !== 'POST') {
+  return Astro.redirect('/my-admin')
+}
+
+const range = rangeOf(Astro.url, '7d')
+
+const NAMES = [
+  'list_add', 'list_remove', 'list_status', 'list_toggle', 'list_create', 'list_rename',
+  'list_delete', 'anilist_import', 'my_list_view', 'feed_view', 'feed_click',
+]
+
+let rows = []
+let closedDays = []
+if (signedIn) {
+  ;[rows, closedDays] = await Promise.all([actionsFor(db, range, NAMES, 2000), closedDaysFor(db, range)])
+}
+
+const of = (name) => rows.filter((row) => row.name === name)
+const count = (name) => of(name).reduce((n, row) => n + (row.n || 0), 0)
+const people = (name) => of(name).reduce((n, row) => n + (row.people || 0), 0)
+
+// A status said the way the reader saw it on the button.
+const STATUS_TONE = { CURRENT: 'blue', PLANNING: 'violet', COMPLETED: 'good', REPEATING: 'accent', PAUSED: 'amber', DROPPED: 'bad' }
+const STATUS = {
+  CURRENT: 'Reading or watching',
+  PLANNING: 'Plan to read or watch',
+  COMPLETED: 'Finished',
+  REPEATING: 'Again',
+  PAUSED: 'Paused',
+  DROPPED: 'Dropped',
+}
+
+// --- What did people save most?
+const saved = tally(of('list_add'), (row) => row.item).slice(0, 10)
+const savedRows = saved.map((row) => ({ name: row.label || `AniList #${row.key}`, value: row.n, unit: 'saves' }))
+
+// Saves day by day. Today is the range's total minus the closed days.
+const savesTrend = range.mode === 'mixed' ? withToday(closedDays, { saves: count('list_add') }, range.toDay, ['saves']) : closedDays
+const saveColumns = savesTrend.map((row) => ({ label: shortDay(row.day), parts: [row.saves || 0] }))
+const savedTop = saved[0]
+const savedHintFor = savedTop && savedHint(savedTop.n)
+
+// --- Finished and dropped. A status is set when a title is added or changed.
+const statusRows = [...of('list_status'), ...of('list_add')]
+const byStatus = tally(statusRows, (row) => row.detail).filter((row) => STATUS[row.key])
+const statusParts = byStatus.map((row) => ({ name: STATUS[row.key], value: row.n, tone: STATUS_TONE[row.key] }))
+const dropped = tally(of('list_status').filter((row) => row.detail === 'DROPPED'), (row) => row.item).slice(0, 5)
+const perTitle = tally(statusRows, (row) => row.item)
+const droppedTop = dropped[0]
+const droppedAll = droppedTop ? perTitle.find((row) => row.key === droppedTop.key)?.n || 0 : 0
+const droppedRows = dropped.map((row) => ({ name: row.label || `AniList #${row.key}`, value: row.n, unit: 'dropped' }))
+
+// --- AniList import.
+const imports = tally(of('anilist_import'), (row) => row.detail)
+const importOk = imports.find((row) => row.key === 'ok')?.n || 0
+const importEmpty = imports.find((row) => row.key === 'empty')?.n || 0
+const importErrors = imports.filter((row) => row.key !== 'ok' && row.key !== 'empty').reduce((n, row) => n + row.n, 0)
+const IMPORT_WORDS = {
+  ok: 'Worked',
+  empty: 'List was empty',
+  private: 'List is private',
+  not_found: 'No such AniList user',
+  rate_limited: 'AniList said too many requests',
+  network: 'Could not reach AniList',
+  bad_name: 'Name was not valid',
+  failed: 'AniList answered badly',
+  error: 'Something else broke',
+}
+const importRows = imports.map((row) => ({
+  name: IMPORT_WORDS[row.key] || row.key,
+  value: row.n,
+  tone: row.key === 'ok' ? 'good' : row.key === 'empty' ? 'blue' : 'bad',
+}))
+const importParts = [
+  { name: 'Worked', value: importOk, tone: 'good' },
+  { name: 'Empty list', value: importEmpty, tone: 'blue' },
+  { name: 'Failed', value: importErrors, tone: 'bad' },
+]
+
+// --- For you feed.
+const feedViews = count('feed_view')
+const feedClicks = count('feed_click')
+const ctr = feedViews ? Math.round((feedClicks / feedViews) * 1000) / 10 : 0
+const positions = tally(of('feed_click'), (row) => row.detail)
+  .sort((a, b) => Number(a.key) - Number(b.key))
+  .slice(0, 12)
+const positionColumns = positions.map((row) => ({ label: `#${row.key}`, parts: [row.n], title: `Position ${row.key}: ${num(row.n)} clicks` }))
+
+const usage = [
+  { name: 'Titles saved', value: count('list_add') },
+  { name: 'Titles removed', value: count('list_remove') },
+  { name: 'Status changed', value: count('list_status') },
+  { name: 'My list opened', sub: `by ${num(people('my_list_view'))} people, once per visit`, value: count('my_list_view') },
+  { name: 'Own lists made', value: count('list_create') },
+  { name: 'Own lists renamed or deleted', value: count('list_rename') + count('list_delete') },
+]
+const anyUse = usage.some((row) => row.value > 0)
+---
+
+
+<Admin
+  title="Lists"
+  here="/my-admin/lists"
+  range={range}
+  signedIn={signedIn}
+  secret={secret}
+  wrongWord={wrongWord}
+  note={`${range.label}. What readers do with My list and the For you feed. Counts only: list names and AniList usernames are never sent.`}
+>
+  <section class="kpis" aria-label="My list at a glance">
+    <Kpi label="Titles saved" value={count('list_add')} spark={savesTrend.map((d) => d.saves)} tone="violet" hero />
+    <Kpi label="People who saved" value={people('list_add')} />
+    <Kpi label="My list opened" value={count('my_list_view')} />
+    <Kpi label="For you click rate" value={feedViews ? `${ctr}%` : '—'} />
+  </section>
+
+  {saveColumns.length > 1 && (
+    <div class="panel wide">
+      <h2>Titles saved, day by day</h2>
+      <Columns columns={saveColumns} tones={['violet']} height={60} peakWord="best day" label="Titles saved per day" />
+    </div>
+  )}
+
+  <div class="panel">
+    <h2>What did people save most?</h2>
+    <BarList rows={savedRows} tone="violet" empty="No list saves yet in this window." />
+    <Hint hint={savedHintFor && { ...savedHintFor, text: `${savedTop.label || 'The top title'}: ${savedHintFor.text}` }} />
+  </div>
+
+  <div class="panel">
+    <h2>Which titles get finished, and which get dropped?</h2>
+    <p class="say">Every status set, when a title is saved or changed.</p>
+    {statusParts.length === 0 ? <p class="empty">No statuses set yet.</p> : <Split parts={statusParts} label="Statuses" />}
+    {droppedRows.length > 0 && (
+      <>
+        <h3>Dropped most</h3>
+        <BarList rows={droppedRows} tone="bad" />
+      </>
+    )}
+    <Hint hint={droppedTop && droppedHint(droppedTop.n, droppedAll) && {
+      ...droppedHint(droppedTop.n, droppedAll),
+      text: `${droppedTop.label || 'The top title'}: ${droppedHint(droppedTop.n, droppedAll).text}`,
+    }} />
+  </div>
+
+  <div class="panel">
+    <h2>How many people use the list at all?</h2>
+    {!anyUse && <p class="empty">Nobody has used My list in this window yet.</p>}
+    {anyUse && <BarList rows={usage} />}
+  </div>
+
+  <div class="panel">
+    <h2>Does the AniList import work?</h2>
+    {importRows.length === 0 ? (
+      <p class="empty">Nobody tried an import yet.</p>
+    ) : (
+      <>
+        <Split parts={importParts} label="AniList imports" />
+        <h3>How they ended</h3>
+        <BarList rows={importRows} />
+      </>
+    )}
+    <Hint hint={importHint(importOk, importEmpty, importErrors)} />
+  </div>
+
+  <div class="panel wide">
+    <h2>Does "For you" get clicked?</h2>
+    <p class="say">The feed shows on the homepage to people with titles saved. It is counted once per visit.</p>
+    {feedViews === 0 && <p class="empty">Nobody has seen the feed yet.</p>}
+    {feedViews > 0 && (
+      <>
+        <div class="big">{ctr}%<small>{num(feedClicks)} clicks from {num(feedViews)} showings</small></div>
+        {positionColumns.length > 0 ? (
+          <>
+            <h3>Clicks by place in the feed</h3>
+            <Columns columns={positionColumns} tones={['violet']} height={56} peakWord="most" label="Clicks by feed position" />
+          </>
+        ) : (
+          <p class="empty">No clicks yet.</p>
+        )}
+      </>
+    )}
+    <Hint hint={feedHint(feedViews, feedClicks)} />
+  </div>
+</Admin>

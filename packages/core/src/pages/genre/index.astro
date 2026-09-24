@@ -1,0 +1,213 @@
+---
+/**
+ * The genre wall.
+ *
+ * This page is a doorway, not a destination, and on a phone it is reached from
+ * the dock, so it has to answer "what is here" in one screen. A row of plain
+ * text links did that badly: every row looked the same, and nothing told a
+ * reader what a genre actually contains.
+ *
+ * So each genre now carries the three most-read covers inside it. The cover is
+ * the only part of this catalog a reader recognises at a glance, and three of
+ * them say more about "Isekai" than any sentence we could write.
+ *
+ * The covers are picked in one pass over the catalog, not one pass per genre,
+ * because there are tens of thousands of titles and forty-odd genres.
+ */
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import config from '../../lib/site.mjs'
+import { genres, comics, anime } from '../../lib/catalog.js'
+import { genreLists, GENRE_KINDS, KIND_LABEL } from '../../lib/genre-lists.js'
+
+// The biggest genres get named in the copy, so the page says something
+// real instead of only carrying a wall of links.
+const top = genres.slice(0, 6).map((g) => g.name)
+
+/* How many covers sit on one genre card. Three fills the width of a phone
+   card without making the card taller than its own label. */
+const FACES = 3
+
+/* One pass, not one per genre. For each genre keep only the few most popular
+   titles seen so far, so memory stays flat however big the catalog grows. */
+const faces = new Map()
+for (const item of [...comics, ...anime]) {
+  if (!item.cover) continue
+  for (const name of item.genres || []) {
+    const row = faces.get(name) || []
+    row.push(item)
+    row.sort((a, b) => b.popularity - a.popularity)
+    if (row.length > FACES) row.length = FACES
+    faces.set(name, row)
+  }
+}
+
+/* The genres a reader is most likely to want, as a tap row above the wall.
+   On a phone this saves scrolling past thirty cards to reach Romance. */
+const quick = genres.slice(0, 10)
+
+/* The count line on each card, split by kind, so a reader sees at a glance
+   which kind a genre leans toward. Kinds with no titles are left off. */
+const countLine = (g) => {
+  const lists = genreLists(g.name)
+  return GENRE_KINDS.filter((kind) => lists[kind].length > 0)
+    .map((kind) => `${lists[kind].length.toLocaleString('en-US')} ${KIND_LABEL[kind]}`)
+    .join(' · ')
+}
+
+const faqs = [
+  {
+    q: 'What is the difference between manhwa, manga and manhua?',
+    a: 'Manhwa is Korean, manga is Japanese and manhua is Chinese. Every genre page splits its titles into those three, plus novels and anime, so you can stay in the one you prefer.',
+  },
+  {
+    q: 'Where do these genres come from?',
+    a: 'Genres come from AniList, the open catalog this index is built on. Nothing is typed in by hand, and the counts rebuild every day at 02:00 UTC.',
+  },
+  {
+    q: 'Are the reading and watching links free?',
+    a: `Every title lists the official platforms licensed to carry it, and says what each one costs: free and ad-supported, a free tier, paid chapters, a subscription, or print. ${config.name} hosts nothing and never links to unlicensed copies.`,
+  },
+  {
+    q: 'How are the lists ordered?',
+    a: 'By how many people are reading or watching, most popular first. That is the same order on every genre page, so the top of a list is always the safest place to start.',
+  },
+]
+
+const site = config.siteUrl
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${site}/genre#collection`,
+      url: `${site}/genre`,
+      name: 'Every manhwa, manga, manhua and anime genre',
+      dateModified: new Date().toISOString().slice(0, 10),
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: genres.length,
+        itemListElement: genres.map((g, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: g.name,
+          url: `${site}/genre/${g.slug}`,
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${site}/genre#faq`,
+      mainEntity: faqs.map((row) => ({
+        '@type': 'Question',
+        name: row.q,
+        acceptedAnswer: { '@type': 'Answer', text: row.a },
+      })),
+    },
+  ],
+}
+---
+
+<Base
+  title="Browse by genre — every manhwa, manga and anime genre"
+  description="Pick a genre and see every manhwa, manga, manhua and anime in it, each with the official places to read or watch it, free or paid."
+  canonical="/genre"
+  jsonld={jsonld}
+  crumbs={[{ name: 'Genres' }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Genres</h1>
+        <p>
+          {genres.length} genres across {comics.length.toLocaleString()} comics and
+          {' '}{anime.length.toLocaleString()} anime. Every list is sorted by how many
+          people are reading or watching.
+        </p>
+      </div>
+
+      <nav class="genre-quick" aria-label="Popular genres">
+        {quick.map((g) => <a href={`/genre/${g.slug}`}>{g.name}</a>)}
+      </nav>
+
+      <ul class="genre-wall">
+        {
+          genres.map((g, i) => {
+            const covers = faces.get(g.name) || []
+            return (
+              <li>
+                <a href={`/genre/${g.slug}`}>
+                  <span class="genre-wall__faces" aria-hidden="true">
+                    {covers.map((item) => (
+                      <img
+                        src={item.cover}
+                        alt=""
+                        width="60"
+                        height="90"
+                        loading={i < 8 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                    ))}
+                  </span>
+                  <span class="genre-wall__text">
+                    <b>{g.name}</b>
+                    <span>{countLine(g)}</span>
+                  </span>
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>How genre pages work</h2>
+      </div>
+      <div class="genre-intro">
+        <p>
+          A genre page is the fastest way to find your next series when you know
+          the feeling you want but not the title. Each one holds every title in
+          this index that carries that tag, split into manhwa, manga, manhua and
+          anime, and sorted so the most-read titles come first.
+        </p>
+        <p>
+          Every title in every list shows the official platforms that are
+          licensed to carry it, and what each one costs: free and ad-supported,
+          a free tier, paid chapters, a subscription, or print. Open a title and
+          the links go straight to the publisher or the streaming service.
+          {config.name} hosts nothing itself and never links to unlicensed copies.
+        </p>
+        <p>
+          The largest genres here are {top.slice(0, -1).join(', ')} and {top[top.length - 1]}.
+          Genres come from AniList, and the counts above rebuild every day, so a
+          series that started this week appears in its genre the next morning.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <div class="qa2">
+        {
+          faqs.map((row) => (
+            <details>
+              <summary>{row.q}</summary>
+              <p class="qa2__a">{row.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href="/where-to-read">Where to read →</a>
+      <a href="/where-to-watch">Where to watch →</a>
+      <a href="/mood">Browse by mood →</a>
+      <a href="/shop">Shop merchandise →</a>
+    </nav>
+  </div>
+</Base>

@@ -1,0 +1,181 @@
+---
+/**
+ * "All characters in X."
+ *
+ * Search Console says people ask for a whole cast by the story name: "all
+ * members of the black bulls", "attack on titan characters". The title page
+ * only shows the first twelve faces, so that search had nowhere to land. This
+ * page lists every face we hold, leads first, and each one links to its own
+ * page. Every word on it comes from the record, so a title added tomorrow gets
+ * the same page for free.
+ */
+import Base from '../../../layouts/Base.astro'
+import config from '../../../lib/site.mjs'
+import AlsoLookFor from '../../../components/AlsoLookFor.astro'
+import { loadTitle, envOf, notFound, unavailable } from '../../../lib/runtime.js'
+import { sectionOf, SECTIONS } from '../../../lib/section.mjs'
+import { verbOf, wordOf } from '../../../lib/answers.mjs'
+import { charactersOf } from '../../../lib/format.js'
+import { hasCastPage } from '../../../lib/gates.mjs'
+
+const KINDS = new Set(SECTIONS)
+
+const { kind, slug } = Astro.params
+if (!KINDS.has(kind)) return notFound(Astro)
+
+let item
+try {
+  item = await loadTitle(envOf(Astro), kind, slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+if (!item) return notFound(Astro)
+
+const isComic = item.kind !== 'anime'
+if (sectionOf(item) !== kind) return notFound(Astro)
+
+const cast = charactersOf(item)
+if (cast.length === 0) return notFound(Astro)
+// Under six faces the title page already shows the whole cast, so this page
+// would say nothing new. The same gate keeps it out of the sitemap.
+if (!hasCastPage(item)) return notFound(Astro)
+
+const verb = verbOf(kind)
+const word = wordOf(kind)
+const home = `/${kind}/${item.slug}`
+const kindLabel = word.charAt(0).toUpperCase() + word.slice(1)
+
+const leads = cast.filter((c) => c.role === 'MAIN')
+const rest = cast.filter((c) => c.role !== 'MAIN')
+const leadNames = leads.slice(0, 3).map((c) => c.name)
+
+const heading = `All characters in ${item.title}`
+const pageTitle = `All Characters in ${item.title} - Full ${kindLabel} Cast List`
+const description =
+  `Every named character in ${item.title}: ${cast.length} in all` +
+  (leadNames.length ? `, led by ${leadNames.join(', ')}` : '') +
+  `. Each one has a page with age, height and every other story they turn up in.`
+
+// The voices are only worth naming on an anime page. A comic has none.
+const voices = kind === 'anime' ? cast.filter((c) => c.voice).length : 0
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': `${config.siteUrl}${home}/characters#page`,
+    url: `${config.siteUrl}${home}/characters`,
+    name: heading,
+    inLanguage: 'en',
+    dateModified: new Date().toISOString().slice(0, 10),
+    about: { '@id': `${config.siteUrl}${home}#item` },
+  },
+  {
+    '@type': 'ItemList',
+    name: heading,
+    numberOfItems: cast.length,
+    itemListElement: cast.slice(0, 100).map((person, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${config.siteUrl}/character/${person.slug}`,
+      name: person.name,
+    })),
+  },
+]
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  image={item.cover}
+  jsonld={jsonld}
+  crumbs={[{ name: kindLabel, href: `/${kind}` }, { name: item.title, href: home }, { name: 'Characters' }]}
+>
+  <div class="shell title-page">
+    <div class="cover-rail">
+      <div class="cover-wrap">
+        <img class="cover" src={item.cover} alt={`Cover of ${item.title}`} width="460" height="651" />
+      </div>
+    </div>
+
+    <header class="title-head">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <a href={`/${kind}`}>{kindLabel}</a>
+        <a href={home}>{item.title}</a>
+      </nav>
+      <h1>{heading}</h1>
+      <ul class="title-head__meta">
+        <li>{cast.length} characters</li>
+        {leads.length > 0 && <li>{leads.length} main</li>}
+        {voices > 0 && <li>{voices} with a voice actor</li>}
+      </ul>
+    </header>
+
+    <div class="title-body">
+      <p class="title-answer">
+        {item.title} has {cast.length} named characters on record
+        {leadNames.length === 1 && <>, and {leadNames[0]} leads it</>}
+        {leadNames.length > 1 && <>, led by {leadNames.join(', ')}</>}. Tap any face
+        for that character's own page: age, height, birthday, and every other
+        story they turn up in.
+      </p>
+
+      {
+        leads.length > 0 && (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>The main characters</h2>
+              <p>The people the story is about.</p>
+            </div>
+            <ul class="people people--wall">
+              {leads.map((person) => (
+                <li>
+                  <a href={`/character/${person.slug}`}>
+                    <img src={person.image} alt={`${person.name} portrait`} width="220" height="293" loading="lazy" decoding="async" />
+                    <b>{person.name}</b>
+                    <span>{person.voice ? person.voice : 'Main'}</span>
+                    {kind === 'anime' && person.voiceEn && <span class="people__voice">English: {person.voiceEn}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        rest.length > 0 && (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>The rest of the cast</h2>
+              <p>Supporting and background faces, in the order AniList lists them.</p>
+            </div>
+            <ul class="people people--wall">
+              {rest.map((person) => (
+                <li>
+                  <a href={`/character/${person.slug}`}>
+                    <img src={person.image} alt={`${person.name} portrait`} width="220" height="293" loading="lazy" decoding="async" />
+                    <b>{person.name}</b>
+                    <span>{person.voice ? person.voice : 'Supporting'}</span>
+                    {kind === 'anime' && person.voiceEn && <span class="people__voice">English: {person.voiceEn}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <AlsoLookFor path={Astro.url.pathname} frame="answer" />
+
+      <a class="crosslink" href={home}>
+        <div>
+          <span class="crosslink__lead">Back to the title</span>
+          <span class="crosslink__title">{item.title}</span>
+          <span class="crosslink__lead">Where to {verb} it legally, and the facts</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,200 @@
+---
+/**
+ * One page per official platform.
+ *
+ * A title page answers "where can I read THIS". This page answers the other
+ * half of the same question: "what can I read on THAT, and what does it cost".
+ * Nothing on it is copied from AniList. The list is our index, the order is our
+ * ranking, and the cost lines are written from the facts we keep ourselves.
+ */
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import CoverGrid from '../../components/CoverGrid.astro'
+import Mark from '../../components/Mark.astro'
+import { platformHubs, platform, genreSlug } from '../../lib/catalog.js'
+import { factsFor } from '../../lib/platform-facts.js'
+import { sectionOf } from '../../lib/section.mjs'
+import { platformHow, platformFaq, faqJsonld } from '../../lib/answers.mjs'
+import { listingJsonld } from '../../lib/listing-jsonld.js'
+
+export function getStaticPaths() {
+  return platformHubs.map((hub) => ({ params: { slug: hub.slug }, props: { hub } }))
+}
+
+const { hub } = Astro.props
+const facts = factsFor(hub.name)
+const brand = platform(hub.name)
+
+// A platform is a place to read, a place to watch, or both. Every word on the
+// page follows from that, so it is settled once, here.
+const reads = hub.comics.length + (hub.novels || []).length > 0
+const watches = hub.anime.length > 0
+const verb = reads ? 'read' : 'watch'
+const verbs = reads && watches ? 'read and watch' : verb
+const unit = reads ? 'chapters' : 'episodes'
+
+const how = platformHow(hub.name, facts, unit)
+const faq = platformFaq(hub.name, facts, unit, verb, { total: hub.total })
+
+// The grids link by kind, so the comics are split the way the URLs are.
+const buckets = { manhwa: [], manga: [], manhua: [], novel: [] }
+for (const c of hub.comics) buckets[sectionOf(c)].push(c)
+for (const n of hub.novels || []) buckets.novel.push(n)
+const BUCKET_LABEL = { manhwa: 'Manhwa', manga: 'Manga', manhua: 'Manhua', novel: 'Novels' }
+
+// What this platform actually leans on. It is a true fact about the platform,
+// and every chip is a door further into the index.
+const genreTally = new Map()
+for (const item of [...hub.comics, ...(hub.novels || []), ...hub.anime]) {
+  for (const g of item.genres || []) genreTally.set(g, (genreTally.get(g) || 0) + 1)
+}
+const topGenres = [...genreTally.entries()]
+  .filter(([, n]) => n >= 3)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10)
+  .map(([name, n]) => ({ name, slug: genreSlug(name), count: n }))
+
+// A hub with no way out is a dead end, for a reader and for a crawler alike.
+const others = platformHubs.filter((p) => p.slug !== hub.slug).slice(0, 12)
+
+const factRows = [
+  ['How you pay', facts.pay],
+  [`Free to ${verb}`, facts.free],
+  ['Works in', facts.region],
+  ['Account needed', facts.account === null ? null : facts.account ? 'Yes' : 'No'],
+  ['Titles here', hub.total.toLocaleString()],
+].filter(([, value]) => value)
+
+const headline = `What you can ${verbs} on ${hub.name}`
+const summary = `${hub.total.toLocaleString()} ${
+  hub.total === 1 ? 'title' : 'titles'
+} in this index are officially on ${hub.name}.`
+
+const jsonld = [
+  listingJsonld({
+    name: headline,
+    description: summary,
+    path: `/platform/${hub.slug}`,
+    items: [...hub.comics, ...hub.anime].slice(0, 40),
+    total: hub.total,
+  }),
+]
+if (faq.length) jsonld.push(faqJsonld(faq))
+---
+
+<Base
+  title={`${hub.name} — what you can ${verbs}, and what it costs`}
+  description={`${summary} What is free, how you pay, and where ${hub.name} works — in plain words.`}
+  canonical={`/platform/${hub.slug}`}
+  jsonld={jsonld}
+  crumbs={[{ name: 'Where to read', href: '/where-to-read' }, { name: hub.name }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head section__head--mark">
+        <Mark site={hub.name} size="3.2rem" />
+        <h1>{headline}</h1>
+        <p>{summary} Sorted by readers, most read first.</p>
+      </div>
+
+      {how && <p class="verdict" style={`--rose:${brand.color}`}>{how}</p>}
+
+      <dl class="facts">
+        {
+          factRows.map(([label, value]) => (
+            <div>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    {
+      Object.entries(buckets)
+        .filter(([, items]) => items.length > 0)
+        .map(([kind, items], i) => (
+          <section class="section">
+            <div class="section__head">
+              <h2>
+                {BUCKET_LABEL[kind]} on {hub.name}
+              </h2>
+              <p>
+                {items.length.toLocaleString()} in the index.
+                {items.length > 24 ? ' The 24 most read are here.' : ''}
+              </p>
+            </div>
+            <CoverGrid items={items.slice(0, 24)} base={`/${kind}`} eager={i === 0 ? 6 : 0} />
+          </section>
+        ))
+    }
+
+    {
+      watches && (
+        <section class="section">
+          <div class="section__head">
+            <h2>Anime on {hub.name}</h2>
+            <p>
+              {hub.anime.length.toLocaleString()} in the index.
+              {hub.anime.length > 24 ? ' The 24 most watched are here.' : ''}
+            </p>
+          </div>
+          <CoverGrid items={hub.anime.slice(0, 24)} base="/anime" eager={reads ? 0 : 6} />
+        </section>
+      )
+    }
+
+    {
+      topGenres.length > 0 && (
+        <section class="section">
+          <div class="section__head">
+            <h2>What {hub.name} is strongest at</h2>
+            <p>The genres it carries most of, biggest first.</p>
+          </div>
+          <ul class="chips">
+            {topGenres.map((g) => (
+              <li>
+                <a href={`/genre/${g.slug}`}>
+                  {g.name} · {g.count.toLocaleString()} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <section class="section">
+          <div class="section__head">
+            <h2>Common questions about {hub.name}</h2>
+            <p>Answered from the facts in the table above, not from guesswork.</p>
+          </div>
+          <dl class="qa">
+            {faq.map((row) => (
+              <div>
+                <dt>{row.q}</dt>
+                <dd>{row.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Other official places</h2>
+        <p>Every one of these is a rights holder. We host nothing ourselves.</p>
+      </div>
+      <ul class="chips">
+        {others.map((p) => (
+          <li><a href={`/platform/${p.slug}`}>{p.name} →</a></li>
+        ))}
+        <li><a href="/where-to-read">All platforms →</a></li>
+      </ul>
+    </section>
+  </div>
+</Base>

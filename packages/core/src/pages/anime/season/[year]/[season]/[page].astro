@@ -1,0 +1,13 @@
+---
+export const prerender = true
+import SeasonList from '../../../../../components/SeasonList.astro'
+import { seasonDeeperPaths } from '../../../../../lib/seasons.mjs'
+
+export function getStaticPaths() {
+  return seasonDeeperPaths()
+}
+
+const { hub, current } = Astro.props
+---
+
+<SeasonList hub={hub} current={current} />

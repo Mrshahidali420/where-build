@@ -1,0 +1,26 @@
+node_modules/
+.astro/
+.wrangler/
+*.log
+
+# Per-site build output and state. The catalog and every file the build writes
+# live under each site's data/ and public/d/, never in git: the catalog is
+# pulled from R2 (packages/core/scripts/catalog-snapshot.mjs) or unpacked from
+# packages/core/seed on each build. The two files a site keeps by hand stay.
+sites/*/dist/
+sites/*/data/*
+!sites/*/data/manual-redirects.json
+!sites/*/data/character-slug-keep.json
+sites/*/public/d/
+regress/*/dist/
+regress/*/data/
+regress/*/public/
+regress/*/wrangler.jsonc
+
+# The regression baseline: manhwaindex exported at a fixed commit, its build
+# and the page diff. Filled by regress/prepare.mjs, regress/fetch-pages.mjs
+# and the builds, never committed.
+.regress/
+
+# Local secrets for `wrangler dev`. Never committed.
+.dev.vars

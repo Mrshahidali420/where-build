@@ -1,0 +1,573 @@
+---
+import '../styles/app.css'
+import config from '../lib/site.mjs'
+import { hasRoute, isDevHost } from '../lib/define-site.mjs'
+import { DOCK_ICONS } from '../lib/dock-icons.js'
+// The page counter and Google Analytics, sent inside every page as they are.
+// Only the site's own ids are filled in. Without a GA4 id Google's script is
+// never fetched: miGoogleLoaded then starts out true.
+import counterRaw from './counter-script.js?raw'
+// The shell shows only three numbers and eight genre names, so it reads a
+// tiny file instead of the catalog. That keeps the Worker bundle small.
+import stats from '@site/data/site-stats.json'
+
+const {
+  title,
+  description,
+  canonical = Astro.url.pathname,
+  image,
+  jsonld,
+  crumbs = [],
+  preloadImage,
+  noindex = false,
+  // Set only by the 404 page. It makes the counter record the address that
+  // was asked for, so a broken link can be found and fixed.
+  missing = false,
+} = Astro.props
+
+const site = config.siteUrl
+// build.format 'file' leaves '.html' on Astro.url.pathname; public URLs never carry it.
+const cleanPath = canonical.replace(/\.html$/, '').replace(/^\/index$/, '/') || '/'
+const canonicalUrl = new URL(cleanPath, site).href
+// The main menu, from the config (the reader's own saved titles are the
+// last link on a site that builds src/pages/my-list.astro).
+const nav = config.nav
+const here = Astro.url.pathname
+const footGenres = stats.genres
+
+// A Workers dev address is never indexed (src/lib/dev-guard.js). A page built
+// as a file reads the site's address at build time, which is the dev host
+// until the site has a domain, so it carries the tag too.
+const devHost = isDevHost(Astro.url.hostname)
+
+// The legal pages in the footer, each only when the site builds it.
+const legal = [
+  ['about', '/about', 'About'],
+  ['contact', '/contact', 'Contact'],
+  ['privacy', '/privacy', 'Privacy'],
+  ['dmca', '/dmca', 'Copyright / DMCA'],
+].filter(([key]) => hasRoute(config, key))
+
+const counterScript = counterRaw
+  .replaceAll('__GA4_ID__', config.ga4Id || '')
+  .replace('__NO_GA4__', config.ga4Id ? 'false' : 'true')
+  .replace('__TURNSTILE_SITEKEY__', config.turnstileSiteKey || '')
+
+// The search box says how much there is to search. It used to say a number
+// typed in by hand, which went stale the day after it was typed. This one
+// comes from the build, rounded down to a round thousand so it reads as a
+// claim and not as a false precision.
+const searchable = Math.floor((stats.comics + stats.anime) / 1000) * 1000
+const searchLabel = `Search ${searchable.toLocaleString()}+ titles…`
+const year = new Date().getUTCFullYear()
+
+// One brand entity, on every page, so each page is a self-contained
+// answer for a search engine that only ever reads this one URL.
+const organization = {
+  '@type': 'Organization',
+  '@id': `${site}/#organization`,
+  name: config.name,
+  url: site,
+  logo: `${site}/logo.svg`,
+  description: config.description,
+  ...(config.email ? { email: config.email } : {}),
+}
+
+// Breadcrumbs. Home is always the first step, so pages pass only the
+// steps after it. The last step is the page itself and carries no link.
+const breadcrumbs =
+  crumbs.length > 0
+    ? {
+        '@type': 'BreadcrumbList',
+        itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((step, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: step.name,
+          ...(step.href ? { item: new URL(step.href, site).href } : {}),
+        })),
+      }
+    : null
+
+// Everything the page declares travels in one @graph, so the parts can
+// reference each other by @id.
+const nodes = [
+  organization,
+  ...(jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : []).map(({ '@context': _c, ...node }) => ({
+    ...node,
+    isPartOf: { '@id': `${site}/#website` },
+  })),
+  {
+    '@type': 'WebSite',
+    '@id': `${site}/#website`,
+    url: site,
+    name: config.name,
+    publisher: { '@id': organization['@id'] },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: `${site}/search?q={search_term_string}` },
+      'query-input': 'required name=search_term_string',
+    },
+  },
+  ...(breadcrumbs ? [breadcrumbs] : []),
+]
+const graph = nodes.length > 0 ? { '@context': 'https://schema.org', '@graph': nodes } : null
+---
+
+<!doctype html>
+<html lang="en" data-missing={missing ? '1' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="theme-color" content={config.colors.night} />
+    {devHost ? <meta name="robots" content="noindex,nofollow" /> : noindex && <meta name="robots" content="noindex,follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={config.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={image || `${site}/og-image.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href={config.fonts.stylesheet}
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href={config.fonts.stylesheet}
+    /></noscript>
+    <link rel="preconnect" href="https://s4.anilist.co" />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    {graph && <script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g, '\\u003c')} />}
+
+
+    <!-- Google Analytics 4. Declared in /privacy. Google's own script is not
+         here: it is fetched further down, and only once a real browser has
+         been proved. Until then every gtag call simply waits in dataLayer,
+         which is what dataLayer is for. -->
+    <script is:inline set:html={counterScript}></script>
+
+    <!-- Google AdSense. Declared in /privacy. The tag is loaded on every page,
+         but nothing is shown until Google approves the site, and no ad slot is
+         placed in the markup yet. `async` keeps it off the critical path. -->
+    {config.adsensePub && <meta name="google-adsense-account" content={config.adsensePub} />}
+    {config.adsensePub && (
+      <script
+        is:inline
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.adsensePub}`}
+        crossorigin="anonymous"></script>
+    )}
+  </head>
+
+  <body>
+    <!--
+    DIRECTION CONTRACT — Cyclorama Dawn
+    THESIS: Every page is a lit stage at dawn: depthless cyc black, a cobalt
+    horizon, rose light gathering above it; cover art stands on the horizon
+    band like actors against a Shinkai sky.
+    OWN-WORLD: stagecraft-theater-lighting-cyclorama-dawn — cyc black ground,
+    cobalt horizon structure, rose gather, white-day reserved for the active
+    state; lighting-plot stencil caps for cue names with tabular numerals;
+    content stacked in horizon bands from dark to light; phases named in text
+    (night, first light, dawn, hold, day) so colour is never the sole signal.
+    STORY: a visitor walks in during the night cue and the answer is already
+    standing lit at the horizon.
+    FIRST VIEWPORT: black sky, cobalt-to-rose horizon glow, the headline above
+    the line, a skyline of covers standing on it.
+    FORM: horizon-band index; list position challenger-cyclorama; seed 0a16551e.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the
+    finish review, the verdict, DESIGN.md, and every shipping raster carrying
+    its provenance.
+    -->
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="masthead">
+      <div class="shell masthead__inner">
+        <div class="masthead__brand">
+        <a class="wordmark" href="/" aria-label={`${config.shortName} home`}>
+          <svg class="wordmark__mark" width="22" height="22" viewBox="0 0 32 32" aria-hidden="true" set:html={config.mark}></svg>
+          {config.wordmark[0]}<span>{config.wordmark[1]}</span>
+        </a>
+          <span class="masthead__tag">{config.tagline}</span>
+        </div>
+
+        <button
+          class="menu-btn"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="site-menu"
+        >
+          <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+            <path class="menu-btn__bars" d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path class="menu-btn__x" d="M5 5l12 12M17 5L5 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <div class="masthead__menu" id="site-menu">
+          <form class="finder" id="finder" role="search" action="/search" method="get">
+            <svg class="finder__icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.6-3.6" />
+            </svg>
+            <input
+              id="finder-input"
+              name="q"
+              type="search"
+              placeholder={searchLabel}
+              autocomplete="off"
+              aria-label="Search titles"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="finder-results"
+              aria-autocomplete="list"
+            />
+            <ul id="finder-results" role="listbox" hidden></ul>
+            <span id="finder-status" class="sr-only" aria-live="polite"></span>
+          </form>
+
+          <nav aria-label="Browse">
+            <a href="/" class="nav-home">Home</a>
+            {
+              nav.map((item) => (
+                <a href={item.href} aria-current={here.startsWith(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="colophon">
+      <div class="shell colophon__grid">
+        <div class="colophon__brand">
+          <a class="wordmark" href="/">{config.wordmark[0]}<span>{config.wordmark[1]}</span></a>
+          <p>
+            {config.footer.blurb}
+          </p>
+          <p class="colophon__count">Refreshed every day.</p>
+        </div>
+        {config.footer.browse.length > 0 && (
+          <div>
+            <h3>Browse</h3>
+            <ul>
+              {config.footer.browse.map((link) => (
+                <li><a href={link.href}>{link.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {hasRoute(config, 'genres') && (
+          <div>
+            <h3>Genres</h3>
+            <ul>
+              {footGenres.map((g) => (
+                <li><a href={`/genre/${g.slug}`}>{g.name}</a></li>
+              ))}
+              <li><a href="/genre">All genres</a></li>
+            </ul>
+          </div>
+        )}
+        <div>
+          <h3>About the data</h3>
+          <p>
+            Title data, scores and cover art come from
+            <a href="https://anilist.co" rel="noopener">AniList</a>. Cover art belongs to
+            its publishers. Availability changes often — when a link looks wrong, check
+            the platform directly. The index rebuilds itself every day at {config.rebuildUtc} UTC, so
+            broken links fix themselves.
+          </p>
+          <p>
+            {config.name} is not affiliated with any publisher or streaming service.
+          </p>
+          {config.amazon.stores.us && (
+            <p>
+              Some links to shops are affiliate links. They cost you nothing extra. As an
+              Amazon Associate we earn from qualifying purchases.
+            </p>
+          )}
+          {legal.length > 0 && (
+            <ul class="colophon__legal">
+              {legal.map(([, href, label]) => (
+                <li><a href={href}>{label}</a></li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+      <div class="shell colophon__bar">
+        <span>© {year} {config.name}</span>
+        <span>{config.footer.bar}</span>
+      </div>
+    </footer>
+
+    {config.dock.length > 0 && (
+      <nav class="dock" aria-label="Quick links">
+        {config.dock.map((item) => (
+          <a href={item.href} class={here === item.href ? 'dock__on' : undefined}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" set:html={DOCK_ICONS[item.icon]}></svg>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    )}
+
+    <script>
+      // Header search. The index is cut into slices, so typing "to" downloads
+      // one small file and nothing else. One slice is a few hundred
+      // kilobytes; the whole index would be tens of megabytes. A slice stays
+      // in memory once it has been fetched. The matching/ranking/fetching
+      // logic itself lives in src/lib/finder-core.js, shared with the full
+      // results page at /search — see that module for what each piece does
+      // and why it must agree with the build side.
+      import {
+        fold,
+        escapeHtml,
+        coverUrl,
+        loadManifest,
+        isManifestLoaded,
+        loadSlice,
+        isSliceLoaded,
+        longestWord,
+        slicePathFor,
+        rankMatches,
+      } from '../lib/finder-core.js'
+      import { noneWatcher, searchPickRow, sendOwn } from '../lib/own-count.js'
+
+      const input = document.getElementById('finder-input')
+      const list = document.getElementById('finder-results')
+      const status = document.getElementById('finder-status')
+
+      let active = -1
+
+      // Our own counter hears which result was picked, and the words of a
+      // search that found nothing (cleaned first; see normalizeQuery in
+      // src/lib/finder-core.js and /privacy). Nothing else typed here leaves
+      // the browser.
+      const misses = noneWatcher('dropdown')
+      function countPick(link) {
+        const rows = [...list.querySelectorAll('li[role="option"] a')]
+        const name = link.querySelector('b')
+        sendOwn(searchPickRow(link.getAttribute('href'), 'dropdown', rows.indexOf(link) + 1, name ? name.textContent : ''))
+      }
+
+      const optionId = (i) => `finder-option-${i}`
+
+      function announce(text) {
+        status.textContent = text
+      }
+
+      // Nothing to show: hides the box entirely (empty input, or a query
+      // too short to search on). Distinct from renderEmpty(), which shows a
+      // "no match" row for a real, completed search.
+      function clearResults() {
+        active = -1
+        list.hidden = true
+        list.innerHTML = ''
+        input.setAttribute('aria-expanded', 'false')
+        input.removeAttribute('aria-activedescendant')
+        announce('')
+      }
+
+      // A record is [ title, url, cover file, year, alternate names ]. `total`
+      // is how many rows matched before this was cut down to 8 — the "See
+      // all" row at the bottom always links to the full /search page, using
+      // that count, so a query with more matches than the dropdown shows has
+      // somewhere to go.
+      function renderResults(matches, query, total) {
+        active = -1
+        input.removeAttribute('aria-activedescendant')
+        const rows = matches
+          .map(([title, url, cover, year], i) => {
+            const kind = url.split('/')[1]
+            const src = coverUrl(kind, cover)
+            return `<li id="${optionId(i)}" role="option" aria-selected="false"><a href="${escapeHtml(url)}"><img src="${escapeHtml(src)}" alt="Cover of ${escapeHtml(title)}" loading="lazy" width="34" height="48" /><span><b>${escapeHtml(title)}</b><em>${escapeHtml(kind)}${year ? ' · ' + year : ''}</em></span></a></li>`
+          })
+          .join('')
+        const seeAll = total > 0
+          ? `<li class="finder-seeall" role="presentation"><a href="/search?q=${encodeURIComponent(query)}">See all ${total} result${total === 1 ? '' : 's'} for “${escapeHtml(query)}”</a></li>`
+          : ''
+        list.innerHTML = rows + seeAll
+        list.hidden = false
+        input.setAttribute('aria-expanded', 'true')
+        announce(matches.length === 1 ? '1 result' : `${matches.length} results`)
+      }
+
+      // No rows matched a real, completed search. A dead end with no way
+      // out reads as a broken box, so point at the browse pages instead.
+      // Which pages is the site's own choice (search.emptyLinks in its
+      // config), filled in at build time by integration.mjs.
+      function renderEmpty(query) {
+        active = -1
+        input.removeAttribute('aria-activedescendant')
+        list.innerHTML =
+          `<li class="finder-empty" role="presentation">No match for “${escapeHtml(query)}”. ` +
+          `${import.meta.env.SITE_SEARCH_EMPTY}</li>`
+        list.hidden = false
+        input.setAttribute('aria-expanded', 'true')
+        announce('No results')
+      }
+
+      // The slice fetch failed outright (not a 404 — a real network error).
+      function renderError() {
+        active = -1
+        input.removeAttribute('aria-activedescendant')
+        list.innerHTML =
+          '<li class="finder-error" role="presentation">Search did not load. ' +
+          '<button type="button" class="finder-retry">Try again</button></li>'
+        list.hidden = false
+        input.setAttribute('aria-expanded', 'true')
+        announce('Search did not load')
+        // stopPropagation: search() replaces this button, and the page-wide
+        // click handler would then see a detached target and close the box.
+        list.querySelector('.finder-retry').addEventListener('click', (e) => {
+          e.stopPropagation()
+          search(input.value.trim())
+        })
+      }
+
+      // Ranking and slice lookup are shared with /search — see
+      // src/lib/finder-core.js. This wraps that with the dropdown's own
+      // loading/error UI and its 8-row cap.
+      //
+      // `turn` guards against a slow slice landing after the person has typed
+      // on. Only the newest search is allowed to draw.
+      let turn = 0
+
+      async function search(q) {
+        const needle = fold(q)
+        // Bump `turn` unconditionally, before any early return below.
+        // Otherwise a short query that bails out immediately never
+        // invalidates a slower fetch already in flight for a previous,
+        // longer query — and that stale slice can render under this short
+        // query once it lands.
+        const mine = ++turn
+
+        if (needle.length < 2) return clearResults()
+
+        const word = longestWord(needle)
+        if (!word) return renderEmpty(q)
+
+        // The manifest and the first search for a slice both download
+        // something. On a phone that is a few hundred milliseconds of
+        // nothing, which reads as a broken box. Say what is happening
+        // instead, whichever of the two is still in flight.
+        if (!isManifestLoaded()) {
+          list.innerHTML = '<li class="finder-wait" role="presentation">Searching…</li>'
+          list.hidden = false
+          input.setAttribute('aria-expanded', 'true')
+        }
+
+        let splitPrefixes
+        try {
+          splitPrefixes = await loadManifest()
+        } catch {
+          if (mine !== turn) return
+          return renderError()
+        }
+        if (mine !== turn) return
+
+        const prefix = slicePathFor(needle, splitPrefixes)
+        if (!isSliceLoaded(prefix)) {
+          list.innerHTML = '<li class="finder-wait" role="presentation">Searching…</li>'
+          list.hidden = false
+          input.setAttribute('aria-expanded', 'true')
+        }
+
+        let rows
+        try {
+          rows = await loadSlice(prefix)
+        } catch {
+          if (mine !== turn) return
+          return renderError()
+        }
+        if (mine !== turn) return
+
+        const matched = rankMatches(rows, needle)
+        misses.saw(q, matched.length > 0)
+        if (!matched.length) renderEmpty(q)
+        else renderResults(matched.slice(0, 8), q, matched.length)
+      }
+
+      function highlight(delta) {
+        const rows = list.querySelectorAll('li[role="option"]')
+        if (!rows.length) return
+        if (active >= 0) rows[active].setAttribute('aria-selected', 'false')
+        active = (active + delta + rows.length) % rows.length
+        rows.forEach((row, i) => row.classList.toggle('is-active', i === active))
+        rows[active].setAttribute('aria-selected', 'true')
+        input.setAttribute('aria-activedescendant', rows[active].id)
+        rows[active].scrollIntoView({ block: 'nearest' })
+      }
+
+      input.addEventListener('input', () => search(input.value.trim()))
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault()
+          highlight(1)
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault()
+          highlight(-1)
+        }
+        if (e.key === 'Enter') {
+          // A highlighted row (arrowed to, by hand): open it, same as a
+          // click. Nothing highlighted: let the surrounding <form
+          // role="search"> submit natively to /search?q=... — that also
+          // makes the phone keyboard's Go/search key work with no JS at
+          // all. Guard only the too-short case, so Enter on an empty or
+          // 1-letter box does not send the reader to a query-less page.
+          const rows = list.querySelectorAll('li[role="option"] a')
+          const pick = active >= 0 ? rows[active] : null
+          if (pick) {
+            e.preventDefault()
+            countPick(pick)
+            location.href = pick.href
+            return
+          }
+          if (fold(input.value.trim()).length < 2) e.preventDefault()
+        }
+        if (e.key === 'Escape') clearResults()
+      })
+      input.addEventListener('blur', () => misses.flush())
+      list.addEventListener('click', (e) => {
+        const link = e.target.closest && e.target.closest('li[role="option"] a')
+        if (link) countPick(link)
+      })
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('finder').contains(e.target)) clearResults()
+      })
+
+      // Mobile menu: the button shows and hides the search + nav panel.
+      const menuBtn = document.querySelector('.menu-btn')
+      menuBtn.addEventListener('click', () => {
+        const open = document.body.classList.toggle('menu-open')
+        menuBtn.setAttribute('aria-expanded', String(open))
+        menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+        if (open) document.getElementById('finder-input').focus()
+      })
+    </script>
+  </body>
+</html>

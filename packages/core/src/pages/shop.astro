@@ -1,0 +1,542 @@
+---
+/**
+ * The shop shelf.
+ *
+ * Every title page already says where to buy that one series. This page is the
+ * other direction: a reader who wants merch but has not picked a series yet.
+ *
+ * It is built from the same catalog as everything else, so the daily ingest
+ * refreshes the shelf with no extra step. A title that climbs in popularity
+ * appears here the next morning, and one that fades drops off.
+ *
+ * We stock nothing and we hold no product data. Every link opens Amazon.
+ *
+ * The page is read mostly on a phone, reached from the dock, so it is built
+ * top-down for a thumb: a jump row first, then shelves, and every outbound
+ * button is a real 44 px target instead of a thin pill.
+ */
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+import {
+  comicsOfCountry,
+  animeByPopularity,
+  genres,
+  novelsByPopularity,
+  charactersWithPages,
+  inIndex,
+} from '../lib/catalog.js'
+import { pathOfTitle } from '../lib/section.mjs'
+import {
+  picksForTitle,
+  picksForCharacter,
+  pickedTitleIds,
+  pickedCharacterIds,
+  pickUrl,
+  PICK_LABELS,
+} from '../lib/picks.js'
+import { shelfLinks, characterShopLinks, shopUrl, AMAZON_DISCLOSURE, BOOKS, TOYS, ALL } from '../lib/shop-links.js'
+import { hasCharacterBuyPage } from '../lib/gates.mjs'
+import { displayName } from '../lib/names.mjs'
+
+// How many covers a shelf shows. Enough to browse, few enough that the page
+// still loads fast on a phone.
+const PER_SHELF = 18
+
+// The novel and character shelves are narrower doors, so a shorter row is
+// enough to browse without the page growing much longer.
+const PER_SHOP_ROW = 12
+
+// Chinese titles come from two places, and a reader does not care which.
+const manhua = [...comicsOfCountry('CN'), ...comicsOfCountry('TW')].sort(
+  (a, b) => b.popularity - a.popularity
+)
+
+const shelves = [
+  {
+    id: 'manhwa',
+    short: 'Manhwa',
+    heading: 'Manhwa merchandise',
+    blurb:
+      'Korean webtoons. Most run as digital-first, so the printed volumes are the thing collectors hunt for.',
+    base: '/manhwa',
+    items: comicsOfCountry('KR').slice(0, PER_SHELF),
+    more: '/manhwa',
+  },
+  {
+    id: 'manga',
+    short: 'Manga',
+    heading: 'Manga merchandise',
+    blurb:
+      'Japanese comics. These have the deepest print runs, the box sets and the widest figure lines.',
+    base: '/manga',
+    items: comicsOfCountry('JP').slice(0, PER_SHELF),
+    more: '/manga',
+  },
+  {
+    id: 'manhua',
+    short: 'Manhua',
+    heading: 'Manhua merchandise',
+    blurb:
+      'Chinese comics. English print is thinner here, so the merch shelf is often better stocked than the book shelf.',
+    base: '/manhua',
+    items: manhua.slice(0, PER_SHELF),
+    more: '/manhua',
+  },
+  {
+    id: 'anime',
+    short: 'Anime',
+    heading: 'Anime discs and figures',
+    blurb:
+      'Series with a disc release, a soundtrack, or a figure line. Start here if you want something on a shelf.',
+    base: '/anime',
+    items: animeByPopularity.slice(0, PER_SHELF),
+    more: '/anime',
+  },
+].filter((shelf) => shelf.items.length > 0)
+
+// Light novels: the prose originals, ranked the same way as every other
+// shelf. A novel is only ever sold as a book, so it gets one button, not two.
+const novelItems = novelsByPopularity.slice(0, PER_SHOP_ROW).map((item) => ({
+  item,
+  url: shelfLinks(item).find((row) => row.kind === 'books')?.url,
+}))
+
+// Characters worth a merch button: the same gate the character's own buy
+// page is built on (hasCharacterBuyPage), so a link here never opens a page
+// that redirects away. characterShopLinks always returns a 'figures' row
+// once that gate has passed, because the fallback-to-books branch it can
+// return instead needs the gate to have failed.
+const characterItems = charactersWithPages
+  .filter(hasCharacterBuyPage)
+  .slice(0, PER_SHOP_ROW)
+  .map((person) => ({
+    person,
+    name: displayName(person).primary,
+    url: characterShopLinks(person).find((row) => row.kind === 'figures')?.url,
+  }))
+  .filter((row) => row.url)
+
+// Top picks: real products picked by hand for the biggest series and faces
+// (see src/lib/picks.js). This page is built ahead of time with no reader
+// country, like the rest of it, so it stays on the US store. A card shows our
+// own cover and the first few picks; the title page holds the rest.
+const PICK_SERIES = 24
+const PICK_FACES = 12
+const PICKS_PER_CARD = 3
+const pickedSeries = pickedTitleIds()
+  .map((id) => inIndex(id)?.item)
+  .filter(Boolean)
+  .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
+  .slice(0, PICK_SERIES)
+  .map((item) => ({
+    item,
+    href: pathOfTitle(item),
+    picks: picksForTitle(item).picks.slice(0, PICKS_PER_CARD),
+  }))
+const pickedIds = new Set(pickedCharacterIds())
+const pickedFaces = charactersWithPages
+  .filter((person) => pickedIds.has(person.id))
+  .slice(0, PICK_FACES)
+  .map((person) => ({
+    person,
+    name: displayName(person).primary,
+    picks: picksForCharacter(person).slice(0, PICKS_PER_CARD),
+  }))
+
+// Genre doors. The catalog decides which genres are big enough to show, so
+// this row keeps itself honest without anybody editing a list. The genre name
+// links inward to its own page; only the two shop words link out.
+const genreRows = genres.slice(0, 14).map((g) => ({
+  name: g.name,
+  page: `/genre/${g.slug}`,
+  books: shopUrl(`${g.name} manga`, BOOKS),
+  merch: shopUrl(`${g.name} anime`, TOYS),
+}))
+
+// Broad doors for a reader with no series in mind yet.
+const starters = [
+  { kind: 'books', label: 'Manga box sets', url: shopUrl('manga box set', BOOKS) },
+  { kind: 'books', label: 'Manhwa in print', url: shopUrl('manhwa', BOOKS) },
+  { kind: 'books', label: 'Light novels', url: shopUrl('light novel', BOOKS) },
+  { kind: 'books', label: 'Art books', url: shopUrl('anime art book', BOOKS) },
+  { kind: 'figures', label: 'Anime figures', url: shopUrl('anime figure', TOYS) },
+  // Posters and shirts are not toys, so they search the whole store.
+  { kind: 'prints', label: 'Wall scrolls and posters', url: shopUrl('anime poster', ALL) },
+  { kind: 'merch', label: 'Plushies', url: shopUrl('anime plush', TOYS) },
+  { kind: 'apparel', label: 'Apparel', url: shopUrl('anime shirt', ALL) },
+]
+
+/* The questions a first-time visitor actually asks before they tap a buy
+   link. They are also the questions search engines quote back. */
+const faqs = [
+  {
+    q: 'Do you sell manhwa and anime merchandise yourself?',
+    a: `No. ${config.name} is an index, not a shop. We hold no stock, take no payment and ship nothing. Every buy link opens Amazon, where the price, the stock and the edition are Amazon’s own.`,
+  },
+  {
+    q: 'Where can I buy manhwa in print in English?',
+    a: 'Most Korean webtoons start digital-first, so only the bigger series reach print. The manhwa shelf on this page links straight to an Amazon search for each series, which is the fastest way to see whether an English volume exists today.',
+  },
+  {
+    q: 'Why is a shelf empty for some series?',
+    a: 'A series that was never printed or released in English will show an empty Amazon shelf. That is the honest answer, not a fault. Import editions sometimes exist under the original title instead.',
+  },
+  {
+    q: 'Does it cost me more to use these links?',
+    a: `No. The price is the same for you. ${config.name} earns a small commission from qualifying purchases, which pays for the servers that keep this index free.`,
+  },
+  {
+    q: 'How do you pick which series appear here?',
+    a: 'By how many people are reading or watching them, most popular first. The list rebuilds every day at 02:00 UTC from the same catalog as the rest of the site, so nothing here is hand-picked.',
+  },
+]
+
+const site = config.siteUrl
+const description =
+  'Where to buy manhwa, manga and anime merchandise: printed volumes, box sets, Blu-ray, figures, art books and posters, sorted by what readers here actually read.'
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${site}/shop#collection`,
+      url: `${site}/shop`,
+      name: 'Shop manhwa, manga and anime merchandise',
+      description,
+      dateModified: new Date().toISOString().slice(0, 10),
+      mainEntity: {
+        '@type': 'ItemList',
+        name: 'Merchandise shelves',
+        numberOfItems: shelves.length,
+        itemListElement: shelves.map((shelf, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: shelf.heading,
+          url: `${site}/shop#${shelf.id}`,
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${site}/shop#faq`,
+      mainEntity: faqs.map((row) => ({
+        '@type': 'Question',
+        name: row.q,
+        acceptedAnswer: { '@type': 'Answer', text: row.a },
+      })),
+    },
+  ],
+}
+---
+
+<Base
+  title="Shop manhwa, manga and anime merchandise"
+  description={description}
+  canonical="/shop"
+  jsonld={jsonld}
+  crumbs={[{ name: 'Shop' }]}
+>
+  <div class="shell">
+    <header class="section__head">
+      <h1>Shop manhwa, manga and anime merchandise</h1>
+      <p>
+        Books, box sets, discs and figures for the series in this index. We hold no
+        stock and ship nothing. Every link opens Amazon, so you see what is really
+        in print today. {AMAZON_DISCLOSURE}
+      </p>
+    </header>
+
+    <nav class="shop-jump" aria-label="Jump to a shelf">
+      {pickedSeries.length > 0 && <a href="#picks">Top picks</a>}
+      {shelves.map((shelf) => <a href={`#${shelf.id}`}>{shelf.short}</a>)}
+      <a href="#novels">Novels</a>
+      <a href="#characters">Characters</a>
+      <a href="#genres">By genre</a>
+    </nav>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Start here</h2>
+        <p>Broad shelves, for when you want to browse rather than hunt one series.</p>
+      </div>
+      <ul class="chips">
+        {
+          starters.map((row) => (
+            <li>
+              <a href={row.url} rel="noopener nofollow sponsored" target="_blank" data-aff={row.kind} data-aff-src="shop">
+                {row.label} →
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      pickedSeries.length > 0 && (
+        <section class="section" id="picks">
+          <div class="section__head">
+            <h2>Top picks</h2>
+            <p>
+              Real products for the most-read series and the best-loved faces, picked
+              by hand on Amazon: the first volume, a box set, a figure. Tap a series
+              for the rest. {AMAZON_DISCLOSURE}
+            </p>
+          </div>
+          <h3 class="picks-sub">Series</h3>
+          <ul class="pick-shelf">
+            {pickedSeries.map(({ item, href, picks }) => (
+              <li>
+                {/* A 72 px thumbnail: AniList's medium cover (230 px) is plenty. */}
+                <img src={item.cover.replace('/cover/large/', '/cover/medium/')} alt={`Cover of ${item.title}`} width="72" height="102" loading="lazy" decoding="async" />
+                <p class="pick-shelf__name"><a href={href}>{item.title}</a></p>
+                <ul>
+                  {picks.map((pick) => (
+                    <li>
+                      <a href={pickUrl(pick.a)} rel="noopener nofollow sponsored" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="shop">
+                        <b>{PICK_LABELS[pick.t]}</b>{pick.n}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          {pickedFaces.length > 0 && (
+            <Fragment>
+              <h3 class="picks-sub">Characters</h3>
+              <ul class="pick-shelf">
+                {pickedFaces.map(({ person, name, picks }) => (
+                  <li>
+                    <img src={person.image} alt={`${name} portrait`} width="72" height="102" loading="lazy" decoding="async" />
+                    <p class="pick-shelf__name"><a href={`/character/${person.slug}`}>{name}</a></p>
+                    <ul>
+                      {picks.map((pick) => (
+                        <li>
+                          <a href={pickUrl(pick.a)} rel="noopener nofollow sponsored" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="shop">
+                            <b>{PICK_LABELS[pick.t]}</b>{pick.n}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </Fragment>
+          )}
+        </section>
+      )
+    }
+
+    {
+      shelves.map((shelf) => (
+        <section class="section" id={shelf.id}>
+          <div class="section__head">
+            <h2>{shelf.heading}</h2>
+            <p>{shelf.blurb}</p>
+          </div>
+          <ul class="shop-shelf">
+            {shelf.items.map((item, i) => (
+              <li class="shop-card">
+                <a class="shop-card__cover" href={`${shelf.base}/${item.slug}`}>
+                  <img
+                    src={item.cover}
+                    alt={`Cover of ${item.title}`}
+                    width="230"
+                    height="345"
+                    loading={i < 6 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                  <span class="shop-card__title">{item.title}</span>
+                </a>
+                <p class="shop-card__buy">
+                  {shelfLinks(item).map((row) => (
+                    <a
+                      href={row.url}
+                      rel="noopener nofollow sponsored"
+                      target="_blank"
+                      data-aff={row.kind} data-aff-src="shop"
+                      aria-label={`${row.label} for ${item.title} on Amazon`}
+                    >
+                      {row.label}
+                    </a>
+                  ))}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p class="shop-shelf__more">
+            <a href={shelf.more}>See every title in this shelf →</a>
+          </p>
+        </section>
+      ))
+    }
+
+    <section class="section" id="novels">
+      <div class="section__head">
+        <h2>Light novels</h2>
+        <p>
+          The prose originals and spin-offs behind these series, most read first.
+          {AMAZON_DISCLOSURE}
+        </p>
+      </div>
+      <ul class="shop-shelf">
+        {
+          novelItems.map(({ item, url }, i) => (
+            <li class="shop-card">
+              <a class="shop-card__cover" href={`/novel/${item.slug}`}>
+                <img
+                  src={item.cover}
+                  alt={`Cover of ${item.title}`}
+                  width="230"
+                  height="345"
+                  loading={i < 6 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <span class="shop-card__title">{item.title}</span>
+              </a>
+              {url && (
+                <p class="shop-card__buy">
+                  <a
+                    href={url}
+                    rel="noopener nofollow sponsored"
+                    target="_blank"
+                    data-aff="books" data-aff-src="shop"
+                    aria-label={`Buy the novel for ${item.title} on Amazon`}
+                  >
+                    Buy the novel
+                  </a>
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="shop-shelf__more">
+        <a href="/novel">See every light novel in this shelf →</a>
+      </p>
+    </section>
+
+    <section class="section" id="characters">
+      <div class="section__head">
+        <h2>Characters</h2>
+        <p>
+          Fan-favourite faces from stories big enough that figures of them are
+          really made. Each link opens Amazon's live search for that character.
+          {AMAZON_DISCLOSURE}
+        </p>
+      </div>
+      <ul class="shop-shelf">
+        {
+          characterItems.map(({ person, name, url }, i) => (
+            <li class="shop-card">
+              <a class="shop-card__cover" href={`/character/${person.slug}`}>
+                <img
+                  src={person.image}
+                  alt={`${name} portrait`}
+                  width="230"
+                  height="345"
+                  loading={i < 6 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <span class="shop-card__title">{name}</span>
+              </a>
+              <p class="shop-card__buy">
+                <a
+                  href={url}
+                  rel="noopener nofollow sponsored"
+                  target="_blank"
+                  data-aff="figures" data-aff-src="shop"
+                  aria-label={`Buy figurines of ${name} on Amazon`}
+                >
+                  Buy figurines
+                </a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="shop-shelf__more">
+        <a href="/character">See more characters →</a>
+      </p>
+    </section>
+
+    <section class="section" id="genres">
+      <div class="section__head">
+        <h2>Shop by genre</h2>
+        <p>
+          Tap a genre to read the full list on this site, or go straight to books
+          and merch on Amazon.
+        </p>
+      </div>
+      <ul class="shop-genres">
+        {
+          genreRows.map((row) => (
+            <li>
+              <a class="shop-genres__name" href={row.page}>
+                {row.name}
+              </a>
+              <a
+                href={row.books}
+                rel="noopener nofollow sponsored"
+                target="_blank"
+                data-aff="books" data-aff-src="shop"
+                aria-label={`${row.name} books on Amazon`}
+              >
+                Books
+              </a>
+              <a
+                href={row.merch}
+                rel="noopener nofollow sponsored"
+                target="_blank"
+                data-aff="merch" data-aff-src="shop"
+                aria-label={`${row.name} merch on Amazon`}
+              >
+                Merch
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <div class="qa2">
+        {
+          faqs.map((row) => (
+            <details>
+              <summary>{row.q}</summary>
+              <p class="qa2__a">{row.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>How this page works</h2>
+      </div>
+      <p class="shop-note">
+        We are an index, not a shop. We hold no stock, take no payment and ship
+        nothing. Each link opens Amazon with the title already filled in, so the
+        price, the stock and the edition you see are Amazon's own and are correct
+        at the moment you look. A series that was never printed in English will
+        show an empty shelf, and that is the honest answer.
+        {' '}{AMAZON_DISCLOSURE}
+      </p>
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href="/genre">Browse by genre →</a>
+      <a href="/where-to-read">Where to read →</a>
+      <a href="/where-to-watch">Where to watch →</a>
+      <a href="/mood">Browse by mood →</a>
+    </nav>
+  </div>
+</Base>

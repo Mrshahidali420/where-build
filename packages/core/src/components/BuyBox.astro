@@ -1,0 +1,57 @@
+---
+/**
+ * The buy box.
+ *
+ * One component so the title page and the character page can never drift into
+ * two different offers. It is the only place on the site that asks the reader
+ * for money, so it is allowed to look like an offer: a lit edge, an icon that
+ * names the goods, and a filled button on the row most people want.
+ *
+ * What it does NOT do is fake scarcity, invent a price, or pretend to hold
+ * stock. The pull comes from the row being specific — "Shop figures" beats
+ * "Shop" because the reader knows what is behind it before they spend a tap.
+ */
+import { AMAZON_DISCLOSURE } from '../lib/shop-links.js'
+import { BUY_ICONS } from '../lib/buy-icons.js'
+
+// `id` is optional. The character page sets it so the Merch door on the
+// character wall can jump straight to this box.
+const { heading, sub, rows = [], id } = Astro.props
+
+const ICONS = BUY_ICONS
+---
+
+<section class="buybox" id={id}>
+  <div class="buybox__head">
+    <h2>{heading}</h2>
+    <p>{sub}</p>
+  </div>
+
+  {/* The disclosure goes before the links, not after them. Amazon wants a
+      reader to know we are paid before they tap, and a note under the
+      buttons is read by nobody who has already left for the shop. */}
+  <p class="buys__note">
+    {AMAZON_DISCLOSURE}{' '}We hold no stock and ship nothing. Each link opens
+    Amazon's own search, so the price and the stock you see are theirs and are
+    right at the moment you look.
+  </p>
+
+  <ul class="buys">
+    {
+      rows.map((row, at) => (
+        <li class={at === 0 ? 'buy buy--lead' : 'buy'}>
+          <a href={row.url} rel="noopener nofollow sponsored" target="_blank" data-aff={row.kind} data-aff-src="buybox">
+            <span class="buy__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d={ICONS[row.icon] || ICONS.figure} />
+              </svg>
+            </span>
+            <span class="buy__label">{row.label}</span>
+            <span class="buy__note">{row.note}</span>
+            <span class="buy__go">{row.cta || 'Shop'}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

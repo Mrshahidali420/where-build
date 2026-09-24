@@ -1,0 +1,325 @@
+---
+/**
+ * "Where to read X free and legal."
+ *
+ * The question a pirate site normally wins. We answer it straight: yes and
+ * where, or no and what it costs instead. Every word is written at request
+ * time from the same record the title page uses, so this page can never
+ * disagree with it. See src/lib/answers.mjs.
+ */
+import Base from '../../../layouts/Base.astro'
+import config from '../../../lib/site.mjs'
+import AlsoLookFor from '../../../components/AlsoLookFor.astro'
+import Platforms from '../../../components/Platforms.astro'
+import { loadTitle, envOf, countryOf, notFound, unavailable } from '../../../lib/runtime.js'
+import { sectionOf, SECTIONS } from '../../../lib/section.mjs'
+import { freeAnswer, verbOf, wordOf, faqJsonld, listWords } from '../../../lib/answers.mjs'
+import { shopLinks } from '../../../lib/shop-links.js'
+import { hasFreePage, hasLikePage, hasBuyPage } from '../../../lib/gates.mjs'
+import BuyBox from '../../../components/BuyBox.astro'
+import { statusWord, charactersOf, genreSlug } from '../../../lib/format.js'
+
+const KINDS = new Set(SECTIONS)
+
+const { kind, slug } = Astro.params
+if (!KINDS.has(kind)) return notFound(Astro)
+
+let item
+try {
+  item = await loadTitle(envOf(Astro), kind, slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+if (!item) return notFound(Astro)
+
+const isComic = item.kind !== 'anime'
+if (sectionOf(item) !== kind) return notFound(Astro)
+// No platform gives any of it away, so there is no free answer to give. The
+// same gate keeps the page out of the sitemap.
+if (!hasFreePage(item)) return notFound(Astro)
+
+const verb = verbOf(kind)
+const word = wordOf(kind)
+const answer = freeAnswer(item, kind)
+const home = `/${kind}/${item.slug}`
+const paidRows = [...answer.paid, ...answer.unknown]
+
+// This page outranks the title page for the question people actually type, so
+// it is where most readers land -- and until now it was the only title page
+// with no way to buy anything. A reader who just learned a story is worth
+// reading is the readiest buyer we ever get, and we were sending them away.
+const buys = shopLinks(item, countryOf(Astro))
+
+// Most readers now land here instead of the title page, so this page has to
+// answer the second question too: "fine, but what IS it?". Everything below is
+// read from the same record the title page uses, so the two can never disagree.
+const genres = (item.genres || []).slice(0, 4)
+const cast = charactersOf(item).slice(0, 12)
+
+const rawSynopsis = (item.description || '').replace(/\n{2,}/g, '\n\n').trim()
+const creditMatch = rawSynopsis.match(/\(Source:\s*([^)]+)\)/i)
+const synopsisCredit = creditMatch ? creditMatch[1].trim() : null
+const synopsis = rawSynopsis.replace(/\(Source:[^)]*\)/gi, '').trim()
+
+const facts = [
+  ['Status', statusWord(item.status)],
+  isComic ? ['Chapters', item.chapters ?? 'Not counted'] : ['Episodes', item.episodes ?? 'Not counted'],
+  ...(isComic && item.volumes ? [['Volumes', item.volumes]] : []),
+  ...(!isComic && item.studios?.[0] ? [['Studio', item.studios[0]]] : []),
+  ...(item.startYear ? [['First released', item.startYear]] : []),
+  ...({ KR: 'South Korea', JP: 'Japan', CN: 'China', TW: 'Taiwan' }[item.country]
+    ? [['Country', { KR: 'South Korea', JP: 'Japan', CN: 'China', TW: 'Taiwan' }[item.country]]]
+    : []),
+  ['Format', word],
+  ...(item.authors?.length ? [['Author', item.authors.map((a) => a.name).join(', ')]] : []),
+]
+
+const kindLabel = word.charAt(0).toUpperCase() + word.slice(1)
+const faq = [
+  {
+    q: `Is ${item.title} free to ${verb}?`,
+    a: answer.free.length
+      ? `Partly. ${listWords(answer.free.map((r) => r.link.site))} ${
+          answer.free.length === 1 ? 'gives' : 'give'
+        } you part of it without paying, and ${answer.free.length === 1 ? 'it holds' : 'they hold'} a licence to do it.`
+      : `No. Every official platform that carries ${item.title} asks for money before you start.`,
+  },
+  {
+    q: `Is it legal to ${verb} ${item.title} for free?`,
+    a: answer.free.length
+      ? `Yes, on the platforms listed here. They pay the rights holder and give part of the work away to bring readers in. A scan site does neither.`
+      : `Only if a platform gives it away itself, and none does for ${item.title} today. We link to licensed platforms only.`,
+  },
+]
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': `${config.siteUrl}${home}/free#page`,
+    url: `${config.siteUrl}${home}/free`,
+    name: answer.heading,
+    inLanguage: 'en',
+    dateModified: new Date().toISOString().slice(0, 10),
+    about: { '@id': `${config.siteUrl}${home}#item` },
+  },
+  faqJsonld(faq),
+]
+---
+
+<Base
+  title={answer.pageTitle}
+  description={answer.description}
+  image={item.cover}
+  jsonld={jsonld}
+  crumbs={[{ name: kindLabel, href: `/${kind}` }, { name: item.title, href: home }, { name: 'Free' }]}
+>
+  <div class="shell title-page">
+    <div class="cover-rail">
+      <div class="cover-wrap">
+        <img class="cover" src={item.cover} alt={`Cover of ${item.title}`} width="460" height="651" loading="eager" fetchpriority="high" decoding="async" />
+      </div>
+    </div>
+
+    <header class="title-head">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <a href={`/${kind}`}>{kindLabel}</a>
+        <a href={home}>{item.title}</a>
+      </nav>
+      <h1>{answer.heading}</h1>
+      <ul class="title-head__meta">
+        <li>{answer.status}</li>
+        {item.startYear && <li>{item.startYear}</li>}
+        {isComic && item.chapters && <li>{item.chapters} chapters</li>}
+        {!isComic && item.episodes && <li>{item.episodes} episodes</li>}
+        {genres.map((genre) => (
+          <li class="title-head__genre">
+            <a href={`/genre/${genreSlug(genre)}`}>{genre}</a>
+          </li>
+        ))}
+      </ul>
+    </header>
+
+    <div class="title-body">
+      <p class="title-answer">{answer.lede}</p>
+
+      {/* The answer comes first, the door to the full page comes straight after.
+          Most readers arrive here from search and never see the title page, so
+          the way back to it has to be the loudest thing under the answer. */}
+      <a class="jump" href={home}>
+        <img src={item.cover} alt="" width="46" height="65" loading="lazy" decoding="async" />
+        <span class="jump__text">
+          <span class="jump__lead">Full page</span>
+          <span class="jump__title">{item.title}</span>
+          <span class="jump__lead">Every platform, the facts, the cast and what to read next</span>
+        </span>
+        <svg class="jump__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+
+      {
+        answer.free.length > 0 && (
+          <Platforms
+            heading={`Free and official`}
+            links={answer.free.map((r) => r.link)}
+            count={`${answer.free.length} ${answer.free.length === 1 ? 'platform gives' : 'platforms give'} part of it away`}
+            verb={verb}
+          >
+            <Fragment slot="empty">
+              <p>Nothing free here.</p>
+            </Fragment>
+          </Platforms>
+        )
+      }
+
+      {
+        answer.paragraphs.map((block) => (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>{block.heading}</h2>
+            </div>
+            <p class="overview">{block.text}</p>
+          </section>
+        ))
+      }
+
+      {
+        paidRows.length > 0 && (
+          <Platforms
+            heading={answer.free.length > 0 ? 'Paid, and worth it for the newest parts' : 'The official platforms'}
+            links={paidRows.map((r) => r.link)}
+            count={`${paidRows.length} official ${paidRows.length === 1 ? 'place' : 'places'}`}
+            verb={verb}
+          >
+            <Fragment slot="empty">
+              <p>None listed.</p>
+            </Fragment>
+          </Platforms>
+        )
+      }
+
+      {
+        buys.length > 0 && (
+          <BuyBox
+            heading={`Own ${item.title}`}
+            sub={
+              answer.free.length > 0
+                ? 'Free is for reading it. This is for keeping it.'
+                : 'No platform gives it away, so here is where to buy a copy.'
+            }
+            rows={buys}
+          />
+        )
+      }
+
+      {
+        synopsis && (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>What {item.title} is about</h2>
+              {synopsisCredit && <p>Told by {synopsisCredit}.</p>}
+            </div>
+            <p class="overview">{synopsis}</p>
+          </section>
+        )
+      }
+
+      <section class="answer">
+        <div class="answer__head">
+          <h2>The facts</h2>
+        </div>
+        <dl class="facts">
+          {
+            facts.map(([label, value]) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      {
+        cast.length > 0 && (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>Who is in it</h2>
+              <p>Tap a face to see every other story that character turns up in.</p>
+            </div>
+            <ul class="people">
+              {cast.map((person) => (
+                <li>
+                  <a href={`/character/${person.slug}`}>
+                    <img src={person.image} alt={`${person.name} portrait`} width="220" height="293" loading="lazy" decoding="async" />
+                    <b>{person.name}</b>
+                    <span>{person.role === 'MAIN' ? 'Main' : 'Supporting'}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <AlsoLookFor path={Astro.url.pathname} frame="answer" />
+
+      <section class="answer">
+        <div class="answer__head">
+          <h2>Common questions</h2>
+        </div>
+        <dl class="qa">
+          {
+            faq.map((row) => (
+              <div>
+                <dt>{row.q}</dt>
+                <dd>{row.a}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      {
+        /* Only when the page exists. An empty "similar" page is a worse
+           click than no click, so it answers 404. */
+        hasLikePage(item) && (
+          <a class="crosslink" href={`${home}/like`}>
+            <div>
+              <span class="crosslink__lead">Finished it already?</span>
+              <span class="crosslink__title">Stories like {item.title}</span>
+              <span class="crosslink__lead">Picks you can {verb} legally too</span>
+            </div>
+          </a>
+        )
+      }
+
+      {
+        /* A reader who just learned a story is worth reading is the readiest
+           buyer we ever get. The buy page only exists for stories people
+           search for, so the link is gated the same way. */
+        hasBuyPage(item) && (
+          <a class="crosslink" href={`${home}/buy`}>
+            <div>
+              <span class="crosslink__lead">Want to own it?</span>
+              <span class="crosslink__title">Where to buy {item.title}</span>
+              <span class="crosslink__lead">Printed volumes, figures and posters, in your own store</span>
+            </div>
+          </a>
+        )
+      }
+
+      <a class="crosslink" href={home}>
+        <div>
+          <span class="crosslink__lead">Everything we know about it</span>
+          <span class="crosslink__title">{item.title}</span>
+          <span class="crosslink__lead">
+            Full platform table, the facts, the cast and the family tree
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+</Base>

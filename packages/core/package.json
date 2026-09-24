@@ -1,0 +1,26 @@
+{
+  "name": "@sister/core",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./integration": "./integration.mjs",
+    "./worker": "./src/worker.js",
+    "./site": "./src/lib/define-site.mjs",
+    "./routes": "./src/lib/routes.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node --import ./tests/fixtures/use-fixture-site.mjs --test \"tests/*.test.js\""
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.13",
+    "astro": "^5.6.1",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.20.0"
+  },
+  "license": "UNLICENSED",
+  "author": "Shahid Ali"
+}

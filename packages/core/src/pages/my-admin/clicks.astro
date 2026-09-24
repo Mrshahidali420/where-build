@@ -1,0 +1,8 @@
+---
+/**
+ * Clicks became Money (src/pages/my-admin/money.astro). This keeps an old
+ * bookmark working, with its range.
+ */
+export const prerender = false
+return Astro.redirect(`/my-admin/money${Astro.url.search}`)
+---

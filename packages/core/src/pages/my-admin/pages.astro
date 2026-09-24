@@ -1,0 +1,260 @@
+---
+/**
+ * Pages. Which page does its job, and which page only collects visitors.
+ *
+ * The job of a page here is the hand-off: the reader arrives, and leaves
+ * through a read, watch or buy link. So the ranking is by hand-off rate, not
+ * by views. Journeys and Sections hang under this tab.
+ */
+import Admin from '../../layouts/Admin.astro'
+import Hint from '../../components/admin/Hint.astro'
+import BarList from '../../components/admin/BarList.astro'
+import Kpi from '../../components/admin/Kpi.astro'
+import Trend from '../../components/admin/Trend.astro'
+import { envOf } from '../../lib/runtime.js'
+import { gate, rangeOf, fmtDwell, handOff, humanize, num, sectionName, withRange } from '../../lib/admin.js'
+import { edgesFor, pagesFor, totalsFor } from '../../lib/admin-data.js'
+import { closedDaysFor, quickExitsFor } from '../../lib/admin-more.js'
+import { withToday } from '../../lib/admin-chart.js'
+import { entryPageHint, quickExitHint, MIN_ENTRIES } from '../../lib/admin-hints.js'
+
+export const prerender = false
+
+const env = envOf(Astro)
+const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
+if (secret && !signedIn && Astro.request.method !== 'POST') {
+  return Astro.redirect('/my-admin')
+}
+
+const range = rangeOf(Astro.url)
+
+// A page needs this many views before its hand-off rate means anything. One
+// visitor who clicked is 100 percent, and that number says nothing.
+const FLOOR = 20
+
+let rows = []
+let totals = {}
+let quick = new Map()
+let edges = []
+let closedDays = []
+
+if (signedIn) {
+  ;[rows, totals, quick, edges, closedDays] = await Promise.all([
+    pagesFor(db, range),
+    totalsFor(db, range),
+    quickExitsFor(db, range),
+    edgesFor(db, range, 8),
+    closedDaysFor(db, range),
+  ])
+}
+
+// The day-by-day line. A 7 or 30 day range ends with today, worked out from
+// the totals this page already has; All time shows the last closed days.
+const trend = range.mode === 'mixed' ? withToday(closedDays, totals, range.toDay, ['views', 'clicks']) : closedDays
+
+const withRate = rows.map((row) => ({
+  ...row,
+  rate: handOff(row.clicks, row.views),
+  avg: row.dwell_n ? row.dwell_sum / row.dwell_n : 0,
+  quick_exits: quick.get(row.path) || 0,
+}))
+
+const best = withRate
+  .filter((row) => (row.views || 0) >= FLOOR && row.clicks > 0)
+  .sort((a, b) => b.rate - a.rate)
+  .slice(0, 25)
+
+const most = withRate.slice(0, 25)
+const siteRate = handOff(totals.clicks, totals.views)
+
+// All time keeps no per-page arrivals (only the daily tables do), so the
+// entry questions are answered for the shorter ranges.
+const hasEntries = range.mode !== 'all'
+
+// --- Which pages bring people in
+const entries = [...withRate]
+  .filter((row) => (row.entries || 0) > 0)
+  .sort((a, b) => b.entries - a.entries)
+  .slice(0, 10)
+const entryRows = entries.map((row) => ({
+  name: humanize(row.path, row.label),
+  href: row.path,
+  sub: `${sectionName(row.page_type)} · ${row.rate}% click out`,
+  value: row.entries,
+  unit: 'arrived',
+  tone: entryPageHint(row) ? 'bad' : 'blue',
+}))
+const entryWorst = entries.find((row) => entryPageHint(row))
+
+// --- Which pages make people leave right away
+const leavers = withRate
+  .filter((row) => (row.entries || 0) >= MIN_ENTRIES)
+  .map((row) => ({ ...row, share: Math.round(((row.quick_exits || 0) / row.entries) * 100) }))
+  .sort((a, b) => b.share - a.share)
+  .slice(0, 10)
+const leaverRows = leavers.map((row) => ({
+  name: humanize(row.path, row.label),
+  href: row.path,
+  sub: `${num(row.quick_exits)} of ${num(row.entries)} arrivals left at once`,
+  value: `${row.share}%`,
+  bar: row.share,
+}))
+const leaverWorst = leavers.find((row) => quickExitHint(row))
+
+// --- Which answer pages work: /manhwa/solo-leveling/free is a "free" page.
+const KINDS = { '': 'Title pages', free: 'Free to read', like: 'Similar titles', buy: 'Buy', characters: 'Characters' }
+const TITLE_SECTIONS = new Set(['manhwa', 'manga', 'manhua', 'novel', 'anime', 'character'])
+const byKind = new Map()
+for (const row of withRate) {
+  const parts = String(row.path || '').split('/').filter(Boolean)
+  if (!TITLE_SECTIONS.has(parts[0]) || parts.length < 2) continue
+  const kind = parts.length === 3 && KINDS[parts[2]] ? parts[2] : parts.length === 2 ? '' : null
+  if (kind === null) continue
+  const found = byKind.get(kind) || { views: 0, clicks: 0 }
+  found.views += row.views || 0
+  found.clicks += row.clicks || 0
+  byKind.set(kind, found)
+}
+const answerBase = Object.keys(KINDS)
+  .filter((kind) => byKind.has(kind))
+  .map((kind) => {
+    const row = byKind.get(kind)
+    return {
+      name: KINDS[kind],
+      sub: `${num(row.views)} views · ${num(row.clicks)} clicks out`,
+      value: `${handOff(row.clicks, row.views)}%`,
+      rate: handOff(row.clicks, row.views),
+    }
+  })
+const answerTop = Math.max(0, ...answerBase.map((row) => row.rate))
+const answerRows = answerBase.map((row) => ({ ...row, bar: answerTop ? (row.rate / answerTop) * 100 : 0 }))
+
+const bestTop = best[0]?.rate || 0
+const bestRows = best.map((row) => ({
+  name: humanize(row.path, row.label),
+  href: row.path,
+  sub: `${sectionName(row.page_type)} · ${num(row.views)} views · ${num(row.clicks)} clicks · ${fmtDwell(row.avg)}`,
+  value: `${row.rate}%`,
+  bar: bestTop ? (row.rate / bestTop) * 100 : 0,
+  tone: 'good',
+}))
+const mostRows = most.map((row) => ({
+  name: humanize(row.path, row.label),
+  href: row.path,
+  sub: [
+    sectionName(row.page_type),
+    hasEntries ? `${num(row.entries)} arrived first` : '',
+    `${num(row.clicks)} clicks · ${row.rate}%`,
+    fmtDwell(row.avg),
+  ].filter(Boolean).join(' · '),
+  value: row.views || 0,
+  unit: 'views',
+}))
+const avgDwell = totals.dwell_n ? totals.dwell_sum / totals.dwell_n : 0
+
+const edgeRows = edges.map((row) => ({
+  name: `${sectionName(row.from_type)} → ${sectionName(row.to_type)}`,
+  value: row.moves,
+  unit: 'moves',
+}))
+
+const named = (row, hint) => hint && { ...hint, text: `${humanize(row.path, row.label)}: ${hint.text}` }
+---
+
+
+<Admin
+  title="Pages"
+  here="/my-admin/pages"
+  range={range}
+  signedIn={signedIn}
+  secret={secret}
+  wrongWord={wrongWord}
+  note={`${range.label}. Which page hands readers on, and which only collects them.`}
+>
+  <section class="kpis" aria-label="All pages together">
+    <Kpi label="Page views" value={totals.views || 0} spark={trend.map((d) => d.views)} hero />
+    <Kpi label="Clicks out" value={totals.clicks || 0} spark={trend.map((d) => d.clicks)} tone="amber" />
+    <Kpi label="Hand-off rate" value={`${siteRate}%`} />
+    <Kpi label="Time on a page" value={fmtDwell(avgDwell)} />
+  </section>
+
+  {trend.length > 1 && (
+    <div class="panel wide">
+      <h2>Views and clicks out, day by day</h2>
+      <p class="say">{range.mode === 'all' ? 'The last 60 closed days.' : 'Today is counted so far, so it looks low until tonight.'}</p>
+      <Trend
+        series={trend}
+        lines={[
+          { field: 'views', name: 'Page views', tone: 'blue' },
+          { field: 'clicks', name: 'Clicks out', tone: 'amber' },
+        ]}
+        label="Page views and clicks out by day"
+      />
+    </div>
+  )}
+
+  <div class="panel">
+    <h2>Which pages bring people in?</h2>
+    <p class="say">The pages visits start on, and how many of their views end in a click out. A rose bar needs a better link.</p>
+    {hasEntries ? (
+      <BarList rows={entryRows} empty="No visits started in this window yet." />
+    ) : (
+      <p class="empty">All time keeps totals only. Pick 7 or 30 days to see where visits start.</p>
+    )}
+    <Hint hint={entryWorst && named(entryWorst, entryPageHint(entryWorst))} />
+  </div>
+
+  <div class="panel">
+    <h2>Which pages make people leave right away?</h2>
+    <p class="say">
+      Of the visits that started on a page, the share that opened nothing else
+      and clicked nothing. Pages with fewer than {MIN_ENTRIES} arrivals are left out.
+    </p>
+    {hasEntries ? (
+      <BarList rows={leaverRows} tone="bad" empty={`No page has ${MIN_ENTRIES} arrivals in this window yet.`} />
+    ) : (
+      <p class="empty">Pick 7 or 30 days: this needs the arrivals, which All time does not keep.</p>
+    )}
+    <Hint hint={leaverWorst && named(leaverWorst, quickExitHint(leaverWorst))} />
+  </div>
+
+  <div class="panel">
+    <h2>Which answer pages work?</h2>
+    <p class="say">
+      Every title has answer pages under it: free to read, similar titles, buy,
+      characters. The number is clicks out for every 100 views.
+    </p>
+    <BarList rows={answerRows} tone="violet" empty="No title page views in this window yet." />
+  </div>
+
+  <div class="panel">
+    <h2>How do people move around the site?</h2>
+    <p class="say">"Arrived from outside" means the visit started there.</p>
+    <BarList rows={edgeRows} empty="No moves yet." />
+    <p class="more">
+      <a href={withRange('/my-admin/journeys', range)}>Recent visits, step by step →</a>
+      <a href={withRange('/my-admin/sections', range)}>Sections, countries and sources →</a>
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Best pages</h2>
+    <p class="say">
+      Ranked by hand-off: the share of views that ended in a read, watch or buy
+      click. Pages under {FLOOR} views are left out, because a small number
+      swings too much.
+    </p>
+    <BarList rows={bestRows} empty="Not enough clicks yet." />
+  </div>
+
+  <div class="panel">
+    <h2>Most viewed</h2>
+    <p class="say">The busiest pages. A busy page with a low hand-off is the best place to add a better link.</p>
+    <BarList rows={mostRows} empty="Nothing yet." />
+  </div>
+
+  <p class="say">
+    Time on page is measured on half of readers, and only when a page was on
+    screen for 5 seconds or more. Treat it as a guide, not a stopwatch.
+  </p>
+</Admin>

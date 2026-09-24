@@ -1,0 +1,119 @@
+---
+/**
+ * Every anime season that has its own page, grouped by year, newest first.
+ *
+ * A season earns a page only with enough titles in the index (see
+ * SEASON_MIN_TITLES in lib/season-core.mjs), so every link here leads to a
+ * real list. The season we are in now is marked, when it has a page.
+ */
+export const prerender = true
+import Base from '../../../layouts/Base.astro'
+import config from '../../../lib/site.mjs'
+import { seasonHubs, seasonYears } from '../../../lib/seasons.mjs'
+import { currentSeason, seasonKey } from '../../../lib/season-core.mjs'
+
+const now = currentSeason()
+const nowKey = seasonKey(now.year, now.season)
+const thisSeason = seasonHubs.find((hub) => hub.key === nowKey) || null
+const titles = seasonHubs.reduce((sum, hub) => sum + hub.items.length, 0)
+const oldest = seasonYears[seasonYears.length - 1]
+const newest = seasonYears[0]
+
+const site = config.siteUrl
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': `${site}/anime/season#collection`,
+  url: `${site}/anime/season`,
+  name: 'Anime by season',
+  dateModified: new Date().toISOString().slice(0, 10),
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: seasonHubs.length,
+    itemListElement: seasonHubs.map((hub, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `${hub.label} anime`,
+      url: `${site}${hub.path}`,
+    })),
+  },
+}
+---
+
+<Base
+  title="Anime by Season — Every Season and Where to Watch It"
+  description="Every anime season in the index, winter, spring, summer and fall, newest first. Each season lists its anime and the official places to watch them."
+  canonical="/anime/season"
+  jsonld={jsonld}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Seasons' }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Anime by season</h1>
+        {
+          seasonHubs.length > 0 ? (
+            <p>
+              {seasonHubs.length} seasons with {titles.toLocaleString()} anime, from {oldest.year} to
+              {' '}{newest.year}. Each season lists the anime AniList files under it, most
+              popular first, with the official places to watch where there are any.
+            </p>
+          ) : (
+            <p>No season has enough anime in the index for its own page yet.</p>
+          )
+        }
+        {thisSeason && (
+          <p>
+            This season is <a href={thisSeason.path}>{thisSeason.label}</a>, with{' '}
+            {thisSeason.items.length} anime.
+          </p>
+        )}
+      </div>
+
+      {
+        seasonYears.map(({ year, hubs }) => (
+          <div class="season-year">
+            <h2>{year}</h2>
+            <ul class="chips">
+              {hubs.map((hub) => (
+                <li>
+                  <a href={hub.path} aria-current={hub.key === nowKey ? 'date' : undefined}>
+                    {hub.label} · {hub.items.length}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href="/anime">Every anime →</a>
+      <a href="/schedule">Airing this week →</a>
+      <a href="/where-to-watch">Where to watch →</a>
+      <a href="/genre">All genres →</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .season-year {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1.2rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--cobalt-line);
+  }
+  .season-year h2 {
+    margin: 0;
+    min-width: 4ch;
+    font-size: 1.1rem;
+  }
+  .season-year .chips a[aria-current='date'] {
+    color: var(--night);
+    background: var(--day);
+    border-color: var(--day);
+  }
+</style>

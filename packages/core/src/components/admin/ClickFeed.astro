@@ -1,0 +1,78 @@
+---
+/**
+ * The newest clicks out, one line each: a dot for the kind (read, watch,
+ * buy), the time, the platform's logo, then "Platform · Title" cut with "…",
+ * and a small line with the section and the country.
+ *
+ * The same link tapped twice in the same minute from the same page is one
+ * line with "×2" (groupRepeats in src/lib/admin-chart.js).
+ *
+ * An Amazon click says what it was for and where it sat: "Amazon · Buy
+ * Figures", then "on Solo Leveling · Top picks · Manhwa · United States". Its
+ * `label` is only the button's words ("Printed volumes"), so it is never used
+ * as the page name.
+ */
+import PlatformIcon from './PlatformIcon.astro'
+import { SPOTS, clock, countryName, humanize, sectionName, shopName, words } from '../../lib/admin.js'
+import { clickKey, flagOf, groupRepeats } from '../../lib/admin-chart.js'
+
+const { rows = [], empty = 'No clicks yet.' } = Astro.props
+const TONE = { read: 'blue', watch: 'violet', buy: 'amber' }
+const WORD = { read: 'Read', watch: 'Watch', buy: 'Buy', other: 'Other link' }
+const lines = groupRepeats(rows, clickKey).map((row) => {
+  const isBuy = row.kind === 'buy'
+  const page = humanize(row.path, '')
+  const flag = flagOf(row.country)
+  const where = row.country ? `${flag ? `${flag} ` : ''}${countryName(row.country)}` : ''
+  return {
+    ...row,
+    who: row.platform || row.label || words(row.name),
+    // Read and watch: the page the reader was on. Buy: what they went to buy.
+    what: isBuy ? `Buy ${shopName(row.shop_kind)}` : page,
+    meta: [
+      isBuy ? `on ${page}` : '',
+      isBuy ? SPOTS[row.detail] || '' : '',
+      sectionName(row.page_type),
+      where,
+    ].filter(Boolean).join(' · '),
+  }
+})
+---
+
+{lines.length === 0 && <p class="empty">{empty}</p>}
+{lines.length > 0 && (
+  <>
+    <div class="kinds" aria-hidden="true">
+      <span><i class="bg-blue"></i>read</span>
+      <span><i class="bg-violet"></i>watch</span>
+      <span><i class="bg-amber"></i>buy on Amazon</span>
+      <span>×2 = same link twice in a minute</span>
+    </div>
+    <ul class="feed">
+      {lines.map((row) => (
+        <li>
+          <span class={`dot bg-${TONE[row.kind] || 'dim'}`} title={WORD[row.kind] || row.kind}></span>
+          <time datetime={new Date(row.ts).toISOString()}>{clock(row.ts).replace(' UTC', '')}</time>
+          <PlatformIcon name={row.who} />
+          <span class="what">
+            <span class="line1" title={`${row.who} · ${row.what}`}>
+              <span class="sr-only">{WORD[row.kind] || row.kind}: </span>
+              {row.target ? (
+                <a href={row.target} rel="noopener nofollow" target="_blank">{row.who}</a>
+              ) : (
+                <strong>{row.who}</strong>
+              )}
+              {' · '}{row.what}
+            </span>
+            <span class="meta" title={row.meta}>{row.meta}</span>
+          </span>
+          {row.count > 1 ? (
+            <span class="count" title={`${row.count} clicks in the same minute`}>×{row.count}</span>
+          ) : (
+            <span></span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </>
+)}

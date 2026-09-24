@@ -1,0 +1,110 @@
+---
+/**
+ * Opening and ending songs of one anime, as plain text: OP1 "Title" by Artist,
+ * episodes 1–13. Rows come from item.themes (data/themes.json, folded in by
+ * make-shards). Draws nothing when the record has none.
+ *
+ * We never embed or link the sources' audio or video: those files are copies
+ * of the studios' footage, and neither source can license them. Each row
+ * instead opens a SEARCH for the song on YouTube, Spotify and Amazon, where
+ * the official uploads and releases live. A search link claims nothing about
+ * what it will find, so none of them is called "official".
+ */
+import { themeLabel, songWords, episodesWords } from '../lib/answers.mjs'
+import { shopUrl, ALL, AMAZON_DISCLOSURE } from '../lib/shop-links.js'
+
+const { themes = [], title, country } = Astro.props
+const rows = Array.isArray(themes) ? themes : []
+
+// The words a person would type to find this song: its title and first artist.
+const searchTerms = (row) =>
+  [row.title, (row.artists || [])[0]].filter(Boolean).join(' ').trim()
+
+const listenLinks = (row) => {
+  const terms = searchTerms(row)
+  if (!terms) return []
+  const q = encodeURIComponent(terms)
+  return [
+    { label: 'YouTube', url: `https://www.youtube.com/results?search_query=${q}`, rel: 'nofollow noopener' },
+    { label: 'Spotify', url: `https://open.spotify.com/search/${q}`, rel: 'nofollow noopener' },
+    // The whole store, not a department: each store files music under its
+    // own id, and a guessed one would hide the CD or download asked for.
+    { label: 'Amazon', url: shopUrl(terms, ALL, country), rel: 'nofollow sponsored noopener', aff: 'music' },
+  ]
+}
+const hasAmazon = rows.some((row) => searchTerms(row))
+---
+
+{
+  rows.length > 0 && (
+    <section class="answer">
+      <div class="answer__head">
+        <h2>Opening and ending songs</h2>
+        <p>
+          Every opening (OP) and ending (ED) of {title} we have on record. Each
+          song opens a search on YouTube, Spotify or Amazon.
+        </p>
+        {hasAmazon && <p class="songs__note">{AMAZON_DISCLOSURE}</p>}
+      </div>
+      <dl class="facts">
+        {rows.map((row) => {
+          const when = episodesWords(row)
+          const links = listenLinks(row)
+          return (
+            <div>
+              <dt>{themeLabel(row)}</dt>
+              <dd>
+                {songWords(row)}
+                {when && `, ${when}`}
+                {row.version && ` (${row.version})`}
+                {links.length > 0 && (
+                  <span class="songs__listen">
+                    {links.map((link) => (
+                      <a
+                        href={link.url}
+                        rel={link.rel}
+                        target="_blank"
+                        data-aff={link.aff}
+                        data-aff-src="themes"
+                        aria-label={`Search ${link.label} for ${searchTerms(row)}`}
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </span>
+                )}
+              </dd>
+            </div>
+          )
+        })}
+      </dl>
+    </section>
+  )
+}
+
+<style>
+  .songs__note {
+    font-size: 0.8rem;
+    color: var(--dawn-faint);
+  }
+  .songs__listen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+  .songs__listen a {
+    font-size: 0.78rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--cobalt-line);
+    border-radius: 999px;
+    color: var(--dawn);
+    text-decoration: none;
+    transition: border-color 160ms var(--ease-dawn), color 160ms var(--ease-dawn);
+  }
+  .songs__listen a:hover,
+  .songs__listen a:focus-visible {
+    border-color: var(--rose);
+    color: var(--rose-soft);
+  }
+</style>

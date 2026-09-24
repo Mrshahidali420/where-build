@@ -1,0 +1,7 @@
+# WhereManga
+
+> The mangaka behind every series, how long each one ran and in how many volumes, whether it is finished, and every spin-off and adaptation.
+
+Data source: AniList. The site rebuilds every day.
+
+Status: in development. It lives on a preview address that is not indexed, and has no pages of its own yet.

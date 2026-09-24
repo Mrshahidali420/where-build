@@ -1,0 +1,39 @@
+---
+/**
+ * A compact list of announced anime: cover, title, format, start date.
+ *
+ * Rows come from upcomingRow() in lib/schedule.mjs, which already cut the
+ * date down to what AniList actually announced ("12 Jan 2027", "January
+ * 2027", "2027"). A title with an exact day also gets the live countdown.
+ */
+import Countdown from './Countdown.astro'
+
+const { rows = [] } = Astro.props
+---
+
+<ul class="airing">
+  {
+    rows.map((r) => (
+      <li>
+        <a href={`/anime/${r.slug}`}>
+          {r.cover && (
+            <img src={r.cover} alt={`Cover of ${r.title}`} width="52" height="74" loading="lazy" decoding="async" />
+          )}
+          <span>
+            <b>{r.title}</b>
+            <em>
+              {[r.format, r.when || 'No date announced yet'].filter(Boolean).join(' · ')}
+              {r.at && (
+                <>
+                  {' · '}
+                  <Countdown at={r.at} />
+                </>
+              )}
+              {r.lists && ` · on ${r.lists} AniList lists`}
+            </em>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,335 @@
+---
+/**
+ * The full search results page. The header box's dropdown only ever shows 8
+ * rows and a "See all" link; this is where "all" goes.
+ *
+ * The page itself is one prerendered file, identical for every query — the
+ * Worker caches HTML by path only (see src/worker.js), and a query string
+ * is not part of the path, so every /search?q=... hit serves this same
+ * cached file regardless of what was typed. The query is read out of
+ * location.search and the results are fetched and rendered entirely in the
+ * browser, the same way the header dropdown already works. That is also
+ * why this can never be indexed: the same URL answers every query, so a
+ * search engine must not treat any one of them as this page's canonical
+ * content. See the noindex prop below.
+ */
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+---
+
+<Base
+  title={`Search — ${config.name}`}
+  description={`Search manhwa, manga, manhua, novels and anime on ${config.name}.`}
+  canonical="/search"
+  noindex={true}
+>
+  <div class="shell search-page">
+    <header class="search-page__head">
+      <h1>Search</h1>
+      <form id="search-form" role="search" action="/search" method="get">
+        <label for="search-input" class="sr-only">Search titles</label>
+        <input
+          id="search-input"
+          name="q"
+          type="search"
+          autocomplete="off"
+          placeholder="Search titles…"
+        />
+        <button type="submit">Search</button>
+      </form>
+      <p id="search-summary" role="status" aria-live="polite"></p>
+    </header>
+
+    <div id="search-results"></div>
+  </div>
+</Base>
+
+<script>
+  // Everything that decides WHAT matches — folding, slice lookup, ranking —
+  // is shared with the header dropdown. See src/lib/finder-core.js. This
+  // script only owns how the full page is drawn: the query box, the states
+  // (hint / loading / empty / error / results), and the grid.
+  import { runSearch, escapeHtml, coverUrl } from '../lib/finder-core.js'
+  import { searchNoneRow, searchPickRow, sendOwn } from '../lib/own-count.js'
+
+  const MAX_SHOWN = 200
+
+  const input = document.getElementById('search-input')
+  const summary = document.getElementById('search-summary')
+  const results = document.getElementById('search-results')
+
+  const BROWSE_LINKS =
+    '<a href="/manhwa">manhwa</a> / <a href="/manga">manga</a> / ' +
+    '<a href="/manhua">manhua</a> / <a href="/novel">novels</a> / ' +
+    '<a href="/anime">anime</a> / <a href="/character">characters</a>'
+
+  function setSummary(text) {
+    summary.textContent = text
+  }
+
+  function showHint() {
+    setSummary('')
+    results.innerHTML =
+      '<div class="search-state">Type at least 2 letters to search.</div>'
+  }
+
+  function showLoading() {
+    setSummary('Searching…')
+    results.innerHTML = '<div class="search-state">Searching…</div>'
+  }
+
+  function showEmpty(query) {
+    setSummary(`0 results for “${query}”`)
+    results.innerHTML =
+      `<div class="search-state">No match for “${escapeHtml(query)}”.<br />` +
+      `Browse all ${BROWSE_LINKS}.</div>`
+  }
+
+  function showError(query) {
+    setSummary('Search did not load')
+    results.innerHTML =
+      '<div class="search-state search-state--error">Search did not load. ' +
+      '<button type="button" id="search-retry">Try again</button></div>'
+    document.getElementById('search-retry').addEventListener('click', () => run(query))
+  }
+
+  // A record is [ title, url, cover file, year, alternate names ].
+  function cardHtml([title, url, cover, year]) {
+    const kind = url.split('/')[1]
+    const src = coverUrl(kind, cover, 'medium')
+    return (
+      `<li class="search-card"><a href="${escapeHtml(url)}">` +
+      `<img src="${escapeHtml(src)}" alt="Cover of ${escapeHtml(title)}" loading="lazy" width="230" height="325" decoding="async" />` +
+      `<span><b>${escapeHtml(title)}</b><em>${escapeHtml(kind)}${year ? ' · ' + year : ''}</em></span>` +
+      `</a></li>`
+    )
+  }
+
+  // `partial`: the query only reached a capped file (a very short word such as
+  // "dr"), so the count is the file's size, not the catalog's. Say that.
+  function showResults(matches, query, partial) {
+    const total = matches.length
+    setSummary(
+      partial
+        ? `The most popular matches for “${query}”. Type more letters to narrow it down.`
+        : `${total} result${total === 1 ? '' : 's'} for “${query}”`,
+    )
+    const shown = matches.slice(0, MAX_SHOWN)
+    const note =
+      total > MAX_SHOWN && !partial
+        ? `<p class="search-note">Showing the first ${MAX_SHOWN} of ${total} results.</p>`
+        : ''
+    results.innerHTML = `<ul class="search-grid">${shown.map(cardHtml).join('')}</ul>${note}`
+  }
+
+  // `turn` guards against a slow, retried fetch landing after the person has
+  // already typed a new query and reloaded — same guard the header box uses.
+  let turn = 0
+
+  async function run(q) {
+    const mine = ++turn
+    const query = q.trim()
+    if (!query) return showHint()
+
+    showLoading()
+    let outcome
+    try {
+      outcome = await runSearch(query)
+    } catch {
+      if (mine !== turn) return
+      return showError(query)
+    }
+    if (mine !== turn) return
+
+    const { needle, matches, partial } = outcome
+    if (needle.length < 2) return showHint()
+    if (!matches.length) {
+      // This page only runs a search that was submitted, so a miss here is a
+      // settled one. The words are cleaned before they leave (see /privacy),
+      // and one query is counted once however often "Try again" is pressed.
+      if (!countedMiss.has(query)) {
+        countedMiss.add(query)
+        sendOwn(searchNoneRow(query, 'page'))
+      }
+      return showEmpty(query)
+    }
+    showResults(matches, query, partial)
+  }
+
+  const countedMiss = new Set()
+
+  // Which result was picked, and how far down the grid it sat.
+  results.addEventListener('click', (event) => {
+    const link = event.target.closest && event.target.closest('.search-card a')
+    if (!link) return
+    const cards = [...results.querySelectorAll('.search-card a')]
+    const name = link.querySelector('b')
+    sendOwn(searchPickRow(link.getAttribute('href'), 'page', cards.indexOf(link) + 1, name ? name.textContent : ''))
+  })
+
+  const params = new URLSearchParams(location.search)
+  const q = params.get('q') || ''
+  input.value = q
+  if (q.trim()) run(q)
+  else showHint()
+</script>
+
+<style is:global>
+  /* is:global, not Astro's default per-component scoping: everything under
+     #search-results is built by the <script> above via innerHTML, so those
+     elements never get the data-astro-cid attribute Astro's scoping relies
+     on — a scoped rule would silently never match them. This still never
+     touches src/styles/app.css; it is a <style> block private to this page,
+     just an unscoped one. Class names are kept specific to this page
+     (search-page, search-card, search-grid, search-state, search-note) to
+     avoid colliding with anything in app.css. Reuses the site's existing
+     custom properties (--night, --cobalt, --rose, --dawn, --shell,
+     --stencil, --grotesque, --ease-dawn) from there instead of inventing
+     new ones. */
+
+  .search-page {
+    padding-block: 2rem 4rem;
+  }
+
+  .search-page__head h1 {
+    font-family: var(--stencil);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.2rem);
+    color: var(--dawn);
+    margin: 0 0 1rem;
+  }
+
+  #search-form {
+    display: flex;
+    gap: 0.6rem;
+    max-width: 32rem;
+  }
+
+  #search-input {
+    flex: 1;
+    min-width: 0;
+    background: var(--night-raised);
+    border: 1px solid var(--cobalt-line);
+    border-radius: 8px;
+    color: var(--dawn);
+    font: inherit;
+    font-size: 1rem;
+    padding: 0.65rem 0.85rem;
+  }
+  #search-input:focus {
+    outline: none;
+    border-color: var(--rose);
+  }
+  #search-input::placeholder {
+    color: var(--dawn-faint);
+  }
+
+  #search-form button {
+    background: var(--cobalt);
+    border: 1px solid var(--cobalt-line);
+    border-radius: 8px;
+    color: var(--dawn);
+    font: inherit;
+    font-weight: 600;
+    padding: 0.65rem 1.1rem;
+    cursor: pointer;
+    transition: background 160ms var(--ease-dawn);
+  }
+  #search-form button:hover,
+  #search-form button:focus-visible {
+    background: var(--cobalt-bright);
+    color: var(--day);
+  }
+
+  #search-summary {
+    margin: 0.9rem 0 0;
+    color: var(--dawn-dim);
+    font-size: 0.95rem;
+  }
+
+  .search-state {
+    margin-top: 1.5rem;
+    padding: 1rem 1.15rem;
+    border: 1px dashed var(--cobalt-line);
+    border-radius: 10px;
+    color: var(--dawn-dim);
+    line-height: 1.65;
+    max-width: 40rem;
+  }
+  .search-state a {
+    color: var(--rose-soft);
+  }
+  .search-state a:hover {
+    color: var(--rose);
+  }
+  .search-state--error button {
+    margin-top: 0.6rem;
+    display: inline-block;
+    background: var(--cobalt);
+    border: 1px solid var(--cobalt-line);
+    border-radius: 6px;
+    color: var(--dawn);
+    font: inherit;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+  }
+  .search-state--error button:hover {
+    background: var(--cobalt-bright);
+  }
+
+  .search-grid {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem 0.85rem;
+  }
+
+  .search-card a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: var(--dawn);
+  }
+  .search-card img {
+    width: 100%;
+    height: auto; /* the height attribute must not beat the aspect-ratio */
+    aspect-ratio: 460 / 651; /* AniList's own cover ratio, as on every other grid */
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--cobalt-line);
+    background: var(--night-sunk);
+  }
+  .search-card a:hover img,
+  .search-card a:focus-visible img {
+    border-color: var(--rose);
+  }
+  .search-card b {
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .search-card a:hover b,
+  .search-card a:focus-visible b {
+    color: var(--rose-soft);
+  }
+  .search-card em {
+    font-style: normal;
+    color: var(--dawn-faint);
+    font-size: 0.78rem;
+    text-transform: capitalize;
+  }
+
+  .search-note {
+    margin-top: 1.25rem;
+    color: var(--dawn-faint);
+    font-size: 0.85rem;
+  }
+</style>

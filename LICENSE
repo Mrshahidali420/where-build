@@ -1,0 +1,37 @@
+Copyright (c) 2026 Shahid Ali. All rights reserved.
+
+The "Where" sites (WhereAnime, WhereManga, WhereManhua, WhereNovel) and
+this source code are proprietary work.
+
+The code in this repository is published so a continuous integration
+service can build it. Publishing it is not a grant of any licence.
+
+You may NOT, without prior written permission from the copyright holder:
+
+  - copy, reproduce or redistribute this code, in whole or in part;
+  - run, host, deploy or operate this code, or any work derived from it;
+  - modify, adapt, translate or create derivative works from it;
+  - use it, or any part of it, in any product, service or website,
+    commercial or otherwise;
+  - use the names "manhwaindex", "WhereAnime", "WhereManga", "WhereManhua"
+    or "WhereNovel", their domains, the site design, the layout, the
+    written copy, or the visual identity.
+
+Viewing this repository, and the forking that the GitHub Terms of Service
+permit for that purpose, is the only use allowed. Any other use is
+copyright infringement.
+
+THE DATA IS NOT COVERED BY THIS NOTICE. Catalog records shown on these
+sites come from AniList and other third parties and remain the
+property of their own owners, under their own terms. This notice covers
+the software, the design and the written content of this project only.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Permission requests: hello@manhwaindex.com

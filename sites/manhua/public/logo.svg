@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 32" width="220" height="32">
+  <!-- Full wordmark (placeholder): the mark plus the name. -->
+  <g color="#f2f9f0"><path d="M16 3a9 9 0 0 0-9 9c0 6.6 9 17 9 17s9-10.4 9-17a9 9 0 0 0-9-9Z" fill="none" stroke="currentColor" stroke-width="2.5"></path> <path d="M16 7.5 20.5 12 16 16.5 11.5 12Z" fill="currentColor"></path></g>
+  <text x="38" y="22.5" font-family="Saira, 'Segoe UI', sans-serif" font-size="17" font-weight="800" letter-spacing="0.5" fill="#f2f9f0">where<tspan fill="#ebbd33">manhua</tspan></text>
+</svg>

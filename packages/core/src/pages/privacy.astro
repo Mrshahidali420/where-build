@@ -1,0 +1,227 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+// The same sentence the buy links carry, so the two can never say different things.
+import { AMAZON_DISCLOSURE } from '../lib/shop-links.js'
+
+const updated = 'September 24, 2026'
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Privacy policy',
+  url: `${config.siteUrl}/privacy`,
+  description: `What ${config.name} collects, what it does not collect, and the third parties involved.`,
+  dateModified: '2026-09-24',
+}
+---
+
+<Base
+  title={`Privacy policy — ${config.name}`}
+  description={`${config.name} has no accounts and no logins. This page explains the analytics, advertising and Amazon affiliate cookies involved, and how to opt out of them.`}
+  canonical="/privacy"
+  jsonld={jsonld}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Privacy policy</h1>
+        <p>Short version: no accounts, no logins, and nothing you type is stored by us, except the words of a search that found nothing (see below). Your saved list stays in your own browser.</p>
+      </div>
+
+      <div class="prose">
+        <p class="prose__updated">Last updated {updated}</p>
+
+        <h2>Who we are</h2>
+        <p>
+          {config.name} is an independent catalog at
+          <a href={config.siteUrl}>{config.host}</a>. Questions about this
+          policy go to <a class="mailto" href={`mailto:${config.email}`}>{config.email}</a>.
+        </p>
+
+        <h2>What we do not collect</h2>
+        <ul>
+          <li>No accounts, sign-ups, passwords or profiles exist on this site.</li>
+          <li>We never ask for your name, address, phone number or payment details.</li>
+          <li>
+            Search runs on a static file inside your own device. What you type is not sent to
+            us, with one exception: if a search finds nothing, the words are sent to our own
+            counter so we can add the missing title. Words that look like an e-mail address,
+            a link or a phone number are never sent. When you pick a result, we count which
+            result you picked, not what you typed.
+          </li>
+        </ul>
+
+        <h2 id="your-list">Your list</h2>
+        <p>
+          The titles you save with <strong>Add to my list</strong>, their statuses and any
+          lists you name are kept in your own browser storage, under the key
+          <code>mi_list_v1</code>. The "For you" picks on the homepage are worked out in
+          your browser from that same list.
+        </p>
+        <p>
+          Your list stays in your browser. Using the list is counted: which title was added,
+          removed or given a status, and whether an AniList import worked. Your list names
+          and your AniList username are never sent to us or to Google Analytics.
+        </p>
+        <ul>
+          <li>
+            <strong>AniList import</strong> sends the username you type straight from your
+            browser to AniList (graphql.anilist.co), never through us. Only public lists can
+            be read, and AniList's own
+            <a href="https://anilist.co/terms" rel="noopener nofollow">terms and privacy policy</a>
+            apply to that request. We do not keep the username anywhere but in your browser.
+          </li>
+          <li>
+            To delete it, use <strong>Clear my whole list</strong> on <a href="/my-list">My
+            list</a>, or delete site data for {config.host} in your browser settings.
+          </li>
+        </ul>
+
+        <h2>Analytics</h2>
+        <p>
+          We use <strong>Google Analytics 4</strong> to count visits and see which pages
+          are useful. It sets cookies and records a shortened version of your IP address,
+          your approximate country, your device type and the pages you open. It does not
+          tell us who you are.
+        </p>
+        <p>
+          You can block it with the
+          <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener nofollow">Google Analytics opt-out add-on</a>,
+          a tracker blocker, or your browser cookie controls.
+        </p>
+
+        <h2>Our own visit counter</h2>
+        <p>
+          We also run a small counter of our own, so we can see which pages are useful
+          without opening Google Analytics. It records the page address, the page title,
+          your approximate country, whether you are on a phone or a computer, how long a
+          page was on screen, and which link you clicked to leave, which titles are added
+          to or removed from a list, which search result you picked, and the words of
+          searches that found nothing.
+        </p>
+        <ul>
+          <li>
+            It sets <strong>no cookie</strong>. It saves one random number in your browser
+            storage, so we can tell a returning reader from a new one. That number is not
+            a name, and it is not linked to anything else.
+          </li>
+          <li>
+            We do not keep your IP address. Only the country that Cloudflare reports is
+            stored.
+          </li>
+          <li>
+            Step-by-step records are deleted after 30 days. Only daily totals are kept. The
+            words of a search that found nothing are kept past 30 days only if at least two
+            different people searched for them.
+          </li>
+          <li>
+            To clear it, delete site data for {config.host} in your browser settings.
+            A tracker blocker also stops it, and it never runs if your browser blocks
+            scripts.
+          </li>
+        </ul>
+
+        <h2>Advertising</h2>
+        <p>
+          This site may display ads served by <strong>Google AdSense</strong> and other
+          third-party vendors.
+        </p>
+        <ul>
+          <li>
+            Third-party vendors, including Google, use cookies to serve ads based on a
+            prior visit to this website or other websites.
+          </li>
+          <li>
+            Google advertising cookies let Google and its partners serve ads based on your
+            visit to this site or other sites on the internet.
+          </li>
+          <li>
+            You may turn off personalised advertising at
+            <a href="https://www.google.com/settings/ads" rel="noopener nofollow">Google Ads Settings</a>,
+            or opt out of third-party vendor cookies at
+            <a href="https://www.aboutads.info/choices/" rel="noopener nofollow">aboutads.info</a>.
+          </li>
+        </ul>
+
+        <h2>Amazon affiliate links</h2>
+        <p>
+          {config.name} is a participant in the Amazon Services LLC Associates Program, an
+          affiliate advertising program designed to provide a means for sites to earn
+          advertising fees by advertising and linking to Amazon.com. We also take part in
+          Amazon's Associates programmes for its stores in the United Kingdom, Germany,
+          France, Italy, Spain, Canada and Japan. {AMAZON_DISCLOSURE}
+        </p>
+        <ul>
+          <li>
+            The buy and shop links on this site open Amazon, and each one carries our
+            Associate tag so Amazon knows the visit came from us.
+          </li>
+          <li>
+            When you follow one of those links, Amazon and other third parties may place
+            and read cookies in your browser, use web beacons, and collect information
+            about your visit and any purchase, so the sale can be credited and ads can be
+            shown or measured. That happens on Amazon's side, under the
+            <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496" rel="noopener nofollow">Amazon privacy notice</a>.
+          </li>
+          <li>
+            Amazon tells us which products sold through our links, as totals. It never
+            tells us who bought them, and we never see your name, address or account.
+          </li>
+          <li>
+            You can avoid these cookies by not using the buy links, or by blocking or
+            clearing third-party cookies in your browser.
+          </li>
+        </ul>
+
+        <h2>Hosting and security logs</h2>
+        <p>
+          The site is served by <a href="https://www.cloudflare.com" rel="noopener nofollow">Cloudflare</a>.
+          Cloudflare keeps short-lived request logs, including IP addresses, to block
+          attacks and abuse. We do not read or use those logs for marketing. See the
+          <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener nofollow">Cloudflare privacy policy</a>.
+        </p>
+        <p>
+          We also use <strong>Cloudflare Turnstile</strong> to check that a real browser is
+          here before anything is counted. You never see it and you never have to click
+          anything. It sets no advertising cookie and is not used to profile you. It exists
+          because automated traffic was filling our own visit counts, and it runs once every
+          thirty minutes rather than on every page.
+        </p>
+
+        <h2>External links and images</h2>
+        <p>
+          Cover art is loaded from AniList image servers, so your browser contacts them
+          when a page opens. Every reading and watching link sends you to a third-party
+          platform with its own privacy policy. Once you leave this site, we have no
+          control over and no visibility into what happens.
+        </p>
+
+        <h2>Email</h2>
+        <p>
+          Mail sent to our addresses is routed by Cloudflare Email Routing to a private
+          inbox. We keep your message only as long as it takes to answer it, and we never
+          add you to a mailing list.
+        </p>
+
+        <h2>Children</h2>
+        <p>
+          This site is not directed at children under 13, and we do not knowingly collect
+          personal information from them.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          Because we hold no personal accounts, there is usually nothing for us to delete.
+          If you believe we hold data about you, write to
+          <a class="mailto" href={`mailto:${config.email}`}>{config.email}</a> and
+          we will respond within 30 days.
+        </p>
+
+        <h2>Changes</h2>
+        <p>If this policy changes, the date at the top of the page changes with it.</p>
+      </div>
+    </section>
+  </div>
+</Base>

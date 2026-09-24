@@ -1,0 +1,76 @@
+---
+/**
+ * One pick from a genre: /genre/action/only/top-rated, /completed, /ongoing
+ * or /free. A single page of up to 60 comics and novels, mixed across
+ * manhwa, manga, manhua and novels. It is a pick, not a full list, so it
+ * has no pagination and the copy says how the 60 were chosen.
+ */
+export const prerender = true
+import Base from '../../../../layouts/Base.astro'
+import CoverGrid from '../../../../components/CoverGrid.astro'
+import { genres } from '../../../../lib/catalog.js'
+import { listingJsonld } from '../../../../lib/listing-jsonld.js'
+import { shelfItems, SHELVES, SHELF_MINIMUM } from '../../../../lib/genre-lists.js'
+
+export function getStaticPaths() {
+  const paths = []
+  for (const genre of genres) {
+    for (const shelf of Object.keys(SHELVES)) {
+      if (shelfItems(genre.name, shelf).length >= SHELF_MINIMUM) {
+        paths.push({ params: { slug: genre.slug, shelf }, props: { genre } })
+      }
+    }
+  }
+  return paths
+}
+
+const { shelf } = Astro.params
+const { genre } = Astro.props
+const def = SHELVES[shelf]
+const items = shelfItems(genre.name, shelf)
+const lower = genre.name.toLowerCase()
+const heading = def.heading(genre.name, lower)
+const blurb = def.blurb(lower)
+const path = `/genre/${genre.slug}/only/${shelf}`
+const description = `${items.length} ${lower} comics and novels. ${blurb} Each one shows where to read it legally.`
+const jsonld = listingJsonld({ name: heading, description, path, items })
+
+const others = Object.entries(SHELVES)
+  .filter(([id]) => id !== shelf && shelfItems(genre.name, id).length >= SHELF_MINIMUM)
+  .map(([id, other]) => ({ href: `/genre/${genre.slug}/only/${id}`, label: other.label }))
+---
+
+<Base
+  title={`${heading} — ${items.length} picks with official links`}
+  description={description}
+  canonical={path}
+  jsonld={jsonld}
+  crumbs={[
+    { name: 'Genres', href: '/genre' },
+    { name: genre.name, href: `/genre/${genre.slug}` },
+    { name: def.label },
+  ]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{heading}</h1>
+        <p>{blurb}</p>
+        <p class="answer__count">{items.length} titles</p>
+      </div>
+
+      <nav class="genre-quick" aria-label={`Other picks from ${lower}`}>
+        <a href={`/genre/${genre.slug}`}>All {lower}</a>
+        {others.map((o) => <a href={o.href}>{o.label}</a>)}
+      </nav>
+
+      <CoverGrid items={items} eager={6} badges={shelf === 'free'} />
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href={`/genre/${genre.slug}`}>Back to {genre.name} →</a>
+      <a href="/genre">All genres →</a>
+      <a href="/where-to-read">Where to read →</a>
+    </nav>
+  </div>
+</Base>

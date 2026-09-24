@@ -1,0 +1,23 @@
+---
+import { filtersFor } from '../lib/filters.js'
+
+// One row of filter links for a browse shelf. `active` is a FILTERS key,
+// or undefined on the unfiltered page. Only filters that apply to this
+// kind are shown (see FILTERS[key].kinds in lib/filters.js).
+const { kind, active } = Astro.props
+---
+
+<ul class="chips chips--filters" aria-label="Filters">
+  <li>
+    <a href={`/${kind}`} aria-current={active ? undefined : 'page'}>All</a>
+  </li>
+  {
+    filtersFor(kind).map(([key, def]) => (
+      <li>
+        <a href={`/${kind}/only/${key}`} aria-current={active === key ? 'page' : undefined}>
+          {def.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>

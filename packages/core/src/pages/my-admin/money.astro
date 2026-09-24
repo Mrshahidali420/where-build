@@ -1,0 +1,246 @@
+---
+/**
+ * Money. Every link that hands a reader to an official platform or a shop,
+ * and where the Amazon clicks come from.
+ *
+ * Only clicks live here. Sales are in the Amazon Associates dashboard; this
+ * page says which pages and which boxes send the people who buy.
+ */
+import Admin from '../../layouts/Admin.astro'
+import Hint from '../../components/admin/Hint.astro'
+import BarList from '../../components/admin/BarList.astro'
+import Columns from '../../components/admin/Columns.astro'
+import Kpi from '../../components/admin/Kpi.astro'
+import { envOf } from '../../lib/runtime.js'
+import { gate, ask, rangeOf, countryName, handOff, humanize, num, sectionName, shopName } from '../../lib/admin.js'
+import { clicksFor, rawWhere, totalsFor } from '../../lib/admin-data.js'
+import { actionsFor, closedDaysFor, tally, weekPlatforms } from '../../lib/admin-more.js'
+import { platformHint } from '../../lib/admin-hints.js'
+import { deltaOf, flagOf, shortDay, withToday } from '../../lib/admin-chart.js'
+
+export const prerender = false
+
+const env = envOf(Astro)
+const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
+if (secret && !signedIn && Astro.request.method !== 'POST') {
+  return Astro.redirect('/my-admin')
+}
+
+const range = rangeOf(Astro.url)
+
+/** Where an Amazon link sat, with the longer words this tab has room for. */
+const SPOTS = {
+  pick: 'Top picks (hand-picked)',
+  buybox: 'BuyBox on a title page',
+  shop: 'The /shop page',
+  themes: 'Theme songs box',
+  '': 'Not marked (clicks before 24 Sep 2026)',
+}
+
+let rows = []
+let totals = {}
+let buys = []
+let fromPages = []
+let stores = []
+let week = { now: [], before: [] }
+let closedDays = []
+
+if (signedIn) {
+  ;[rows, totals, buys, week, closedDays] = await Promise.all([
+    clicksFor(db, range),
+    totalsFor(db, range),
+    actionsFor(db, range, ['buy'], 1000),
+    weekPlatforms(db),
+    closedDaysFor(db, range),
+  ])
+
+  // The raw table only keeps 30 days, so these exact lists are only offered
+  // for the short ranges.
+  if (range.mode !== 'all') {
+    const where = rawWhere(range)
+    ;[fromPages, stores] = await Promise.all([
+      // `label` is the word on the button that was clicked, not the page, so
+      // it is not asked for here. `page_type` says which section it was.
+      ask(
+        db,
+        `SELECT path, page_type, platform, kind, COUNT(*) AS clicks
+         FROM events
+         WHERE ${where.sql} AND kind IN ('read','watch','buy')
+         GROUP BY path, page_type, platform, kind
+         ORDER BY clicks DESC LIMIT 40`,
+        ...where.args
+      ),
+      // A buy link opens the reader's own Amazon store, picked by country.
+      ask(
+        db,
+        `SELECT country, COUNT(*) AS clicks FROM events
+         WHERE ${where.sql} AND kind = 'buy'
+         GROUP BY country ORDER BY clicks DESC LIMIT 10`,
+        ...where.args
+      ),
+    ])
+  }
+}
+
+const sum = (list, pick) => list.reduce((n, row) => n + (pick(row) ? row.clicks || 0 : 0), 0)
+const reads = sum(rows, (r) => r.kind === 'read')
+const watches = sum(rows, (r) => r.kind === 'watch')
+const buyClicks = sum(rows, (r) => r.kind === 'buy')
+
+// --- Amazon: which box, which kind, which page.
+const spotRows = tally(buys, (row) => row.detail || '').map((row) => ({ name: SPOTS[row.key] || row.key, value: row.n, unit: 'clicks' }))
+
+// Clicks out day by day, read, watch and buy stacked.
+const CLICK_FIELDS = ['reads', 'watches', 'buys']
+const trend = range.mode === 'mixed' ? withToday(closedDays, totals, range.toDay, CLICK_FIELDS) : closedDays
+const clickColumns = trend.map((row) => ({
+  label: shortDay(row.day),
+  parts: CLICK_FIELDS.map((f) => row[f] || 0),
+  title: `${shortDay(row.day)}: ${num(row.reads)} read, ${num(row.watches)} watch, ${num(row.buys)} Amazon`,
+}))
+const kindMap = new Map()
+for (const row of rows) {
+  if (row.kind !== 'buy') continue
+  const name = shopName(row.shop_kind)
+  kindMap.set(name, (kindMap.get(name) || 0) + (row.clicks || 0))
+}
+const kindRows = [...kindMap.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .map(([name, clicks]) => ({ name, value: clicks, unit: 'clicks' }))
+const buyPages = tally(buys, (row) => row.item)
+  .slice(0, 10)
+  .map((row) => ({ name: humanize(row.key, ''), href: row.key, value: row.n, unit: 'clicks' }))
+const storeRows = stores.map((row) => ({
+  name: `${flagOf(row.country) ? `${flagOf(row.country)}  ` : ''}${countryName(row.country)}`,
+  value: row.clicks,
+  unit: 'clicks',
+}))
+
+// --- Platforms, split into read and watch.
+const platformMap = new Map()
+for (const row of rows) {
+  if (row.kind !== 'read' && row.kind !== 'watch') continue
+  const name = row.platform || 'unknown'
+  const found = platformMap.get(name) || { name, read: 0, watch: 0, total: 0 }
+  found[row.kind] += row.clicks || 0
+  found.total += row.clicks || 0
+  platformMap.set(name, found)
+}
+const platforms = [...platformMap.values()].sort((a, b) => b.total - a.total).slice(0, 20)
+const beforeBy = new Map(week.before.map((row) => [row.platform, row.clicks || 0]))
+const nowBy = new Map(week.now.map((row) => [row.platform, row.clicks || 0]))
+const platformRows = platforms.map((row) => {
+  const d = deltaOf(nowBy.get(row.name), beforeBy.get(row.name))
+  return {
+    name: row.name,
+    icon: row.name,
+    parts: [{ n: row.read, tone: 'blue' }, { n: row.watch, tone: 'violet' }],
+    delta: d.words ? { ...d, words: `${d.words} vs last week` } : null,
+    sub: [row.read && `${num(row.read)} read`, row.watch && `${num(row.watch)} watch`].filter(Boolean).join(' · '),
+    value: row.total,
+    unit: 'clicks',
+  }
+})
+
+// --- Which section sends the clicks.
+const typeMap = new Map()
+for (const row of rows) {
+  const name = row.page_type || 'other'
+  const found = typeMap.get(name) || { name, read: 0, watch: 0, buy: 0, total: 0 }
+  if (found[row.kind] != null) found[row.kind] += row.clicks || 0
+  found.total += row.clicks || 0
+  typeMap.set(name, found)
+}
+const byType = [...typeMap.values()].sort((a, b) => b.total - a.total)
+const typeRows = byType.map((row) => ({
+  name: sectionName(row.name),
+  parts: [{ n: row.read, tone: 'blue' }, { n: row.watch, tone: 'violet' }, { n: row.buy, tone: 'amber' }],
+  sub: `${num(row.read)} read · ${num(row.watch)} watch · ${num(row.buy)} Amazon`,
+  value: row.total,
+  unit: 'clicks',
+}))
+const KIND_WORD = { read: 'read', watch: 'watch', buy: 'Amazon' }
+const titleRows = fromPages.map((row) => ({
+  name: humanize(row.path, ''),
+  href: row.path,
+  icon: row.platform || 'Amazon',
+  sub: `${row.platform || 'Amazon'} · ${KIND_WORD[row.kind] || row.kind} · ${sectionName(row.page_type)}`,
+  value: row.clicks,
+  tone: row.kind === 'buy' ? 'amber' : row.kind === 'watch' ? 'violet' : 'blue',
+}))
+---
+
+
+<Admin
+  title="Money"
+  here="/my-admin/money"
+  range={range}
+  signedIn={signedIn}
+  secret={secret}
+  wrongWord={wrongWord}
+  note={`${range.label}. Every link that hands a reader over to an official platform or a shop.`}
+>
+  <section class="kpis" aria-label="Clicks out at a glance">
+    <Kpi label="Read clicks" value={reads} spark={trend.map((d) => d.reads)} tone="blue" />
+    <Kpi label="Watch clicks" value={watches} spark={trend.map((d) => d.watches)} tone="violet" />
+    <Kpi label="Amazon clicks" value={buyClicks} spark={trend.map((d) => d.buys)} tone="amber" />
+    <Kpi label="Clicks per 100 views" value={`${handOff(reads + watches + buyClicks, totals.views)}`} unit={`of ${num(totals.views)} views`} />
+  </section>
+
+  {clickColumns.length > 1 && (
+    <div class="panel wide">
+      <h2>Clicks out, day by day</h2>
+      <p class="say">{range.mode === 'all' ? 'The last 60 closed days.' : 'Today is counted so far.'}</p>
+      <Columns
+        columns={clickColumns}
+        tones={['blue', 'violet', 'amber']}
+        names={['Read', 'Watch', 'Amazon']}
+        height={72}
+        peakWord="best day"
+        label="Clicks out per day, read, watch and Amazon"
+      />
+    </div>
+  )}
+
+  <div class="panel">
+    <h2>Which platforms do people pick?</h2>
+    <p class="say">Blue is read, violet is watch. The arrow is the last 7 full days against the 7 before.</p>
+    <BarList rows={platformRows} empty="No read or watch clicks yet." />
+    <Hint hint={platforms[0] && platformHint(platforms[0])} />
+  </div>
+
+  <div class="panel">
+    <h2>Where do the Amazon clicks come from?</h2>
+    <p class="say">Which box on the page the click came from.</p>
+    <BarList rows={spotRows} tone="amber" empty="No Amazon clicks yet." />
+    <h3>What kind of thing?</h3>
+    <BarList rows={kindRows} tone="amber" empty="No Amazon clicks yet." />
+    <h3>From which pages?</h3>
+    <BarList rows={buyPages} tone="amber" empty="No Amazon clicks yet." />
+    {range.mode !== 'all' && (
+      <>
+        <h3>Which country's Amazon store?</h3>
+        <BarList rows={storeRows} tone="amber" empty="No Amazon clicks yet." />
+      </>
+    )}
+    <Hint level="act">
+      Sales are only in the
+      <a href="https://affiliate-program.amazon.com/home/reports" rel="noopener" target="_blank">Associates reports</a>.
+      Compare them with these clicks: a box with many clicks and no sales needs other products.
+    </Hint>
+  </div>
+
+  <div class="panel">
+    <h2>Which part of the site sends the clicks?</h2>
+    <p class="say">A section with many views but few clicks needs better links.</p>
+    <BarList rows={typeRows} empty="No clicks yet." />
+  </div>
+
+  {range.mode !== 'all' && (
+    <div class="panel">
+      <h2>Which titles send the most clicks out?</h2>
+      <p class="say">The exact page, and where it sent them. Only the last 30 days, because that is how long the step-by-step record is kept.</p>
+      <BarList rows={titleRows} empty="No clicks yet." />
+    </div>
+  )}
+</Admin>

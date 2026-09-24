@@ -1,0 +1,11 @@
+-- 0003: take the 404 hits back out of the click table.
+--
+-- Until this release the night job filed every row that was not a view or a
+-- leave as a click, so an address that was not found (kind 'missing') landed
+-- in daily_clicks. Checked on 24 Sep 2026: 5 rows holding 17 false clicks. The other daily
+-- tables always counted clicks as buy, read, watch and other only, so they
+-- are already right.
+--
+-- Safe to run any number of times, before or after the Worker deploy:
+--   npx wrangler d1 execute <d1.name> --remote --file ../../packages/core/db/migrations/0003-drop-404-clicks.sql
+DELETE FROM daily_clicks WHERE kind NOT IN ('buy', 'read', 'watch', 'other');

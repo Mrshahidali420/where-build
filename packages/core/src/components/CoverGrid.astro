@@ -1,0 +1,89 @@
+---
+import { platform, formatWord, statusWord, pathOf } from '../lib/format.js'
+
+const { items, base, shelf = false, eager = 0, badges = false } = Astro.props
+
+// One grid can hold both comics and anime, so a single `base` is not always
+// enough. Leave `base` off and each card works out its own address from what
+// the record already says it is. pathOf, not formatWord: a comic from outside
+// Korea, Japan, China and Taiwan is filed under /manga, and "/comic" is no page.
+const hrefOf = (item) => (base ? `${base}/${item.slug}` : pathOf(item, item.kind))
+
+// The first covers of the first grid on a page are the largest thing the
+// visitor sees, so they must not wait for the lazy loader.
+
+/** Which marks to show under a cover: read links for comics, watch for anime. */
+const marksOf = (item) =>
+  (base ? base === '/anime' : item.kind === 'anime') ? item.watchLinks : item.readLinks
+
+/**
+ * Does this title have a free and legal place to read or watch it? The note
+ * on the platform is the only source, so the mark is never invented.
+ */
+const isFree = (item) =>
+  (marksOf(item) || []).some((link) =>
+    (platform(link.site).note || '').toLowerCase().includes('free'),
+  )
+
+/**
+ * One quiet line of facts under the title: Manhwa · Finished.
+ * The score used to sit here. It now rides on the cover itself, where the eye
+ * already is. See .card__score in src/styles/app.css.
+ */
+const metaOf = (item) => {
+  const kind = item.kind === 'anime' ? 'Anime' : formatWord(item)
+  const bits = [kind.charAt(0).toUpperCase() + kind.slice(1), statusWord(item.status)]
+  return bits.join(' · ')
+}
+/**
+ * AniList keeps three sizes of every cover. Only the folder in the address
+ * changes; the file name stays the same. The "medium" folder holds a copy
+ * 230 pixels wide, about three times lighter than the one we store. An
+ * ordinary phone takes that one. A very sharp screen still takes the big one.
+ */
+const smallCover = (url) =>
+  url && url.includes('/cover/large/') ? url.replace('/cover/large/', '/cover/medium/') : null
+---
+
+<ul class={shelf ? 'grid grid--shelf' : 'grid'}>
+  {
+    items.map((item, i) => {
+      const marks = marksOf(item) || []
+      const shown = marks.slice(0, 4)
+      const extra = marks.length - shown.length
+      const small = smallCover(item.cover)
+      return (
+        <li class="card">
+          <a href={hrefOf(item)}>
+            <span class="card__art">
+              <img
+                src={item.cover}
+                srcset={small ? `${small} 230w, ${item.cover} 460w` : undefined}
+                sizes={small ? '(max-width: 700px) 110px, 160px' : undefined}
+                alt={`Cover of ${item.title}`}
+                width="230"
+                height="345"
+                loading={i < eager ? 'eager' : 'lazy'}
+                fetchpriority={i < eager ? 'high' : undefined}
+                decoding="async"
+              />
+              {item.score ? <b class="card__score">{(item.score / 10).toFixed(1)}</b> : null}
+              {badges && isFree(item) ? <span class="card__free">Free</span> : null}
+            </span>
+            <p class="card__title">{item.title}</p>
+            <p class="card__meta">
+              <span>{metaOf(item)}</span>
+            </p>
+            <p class="card__marks">
+              {shown.map((link) => (
+                <i style={`--mark:${platform(link.site).color}`} title={link.site} />
+              ))}
+              {extra > 0 && <em>+{extra}</em>}
+              {marks.length === 0 && <em>no official link yet</em>}
+            </p>
+          </a>
+        </li>
+      )
+    })
+  }
+</ul>

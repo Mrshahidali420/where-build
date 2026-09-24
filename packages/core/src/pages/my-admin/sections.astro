@@ -1,0 +1,170 @@
+---
+/**
+ * Sections. Manhwa, manga, manhua, anime, characters and the shop, side by
+ * side, so it is clear which part of the site earns its keep.
+ */
+import Admin from '../../layouts/Admin.astro'
+import BarList from '../../components/admin/BarList.astro'
+import { flagOf } from '../../lib/admin-chart.js'
+import { envOf } from '../../lib/runtime.js'
+import { gate, rangeOf, countryName, fmtDwell, handOff, num, sectionName, sourceName } from '../../lib/admin.js'
+import { typesFor, countriesFor, sourcesFor, clicksFor } from '../../lib/admin-data.js'
+
+export const prerender = false
+
+const env = envOf(Astro)
+const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
+if (secret && !signedIn && Astro.request.method !== 'POST') {
+  return Astro.redirect('/my-admin')
+}
+
+const range = rangeOf(Astro.url)
+
+// The four libraries first, then the pages that support them.
+const MAIN = ['manhwa', 'manga', 'manhua', 'novel', 'anime']
+const EXTRA = ['character', 'shop', 'home', 'browse']
+
+let types = []
+let countries = []
+let sources = []
+let clickRows = []
+
+if (signedIn) {
+  ;[types, countries, sources, clickRows] = await Promise.all([
+    typesFor(db, range),
+    countriesFor(db, range),
+    sourcesFor(db, range),
+    clicksFor(db, range),
+  ])
+}
+
+/** Top platforms for one section. */
+function platformsOf(type) {
+  const map = new Map()
+  for (const row of clickRows) {
+    if (row.page_type !== type) continue
+    const name = row.platform || row.shop_kind || 'shop'
+    map.set(name, (map.get(name) || 0) + (row.clicks || 0))
+  }
+  return [...map.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([name, clicks]) => `${name} (${num(clicks)})`)
+}
+
+const byType = new Map(types.map((row) => [row.page_type, row]))
+
+function cardFor(type) {
+  const row = byType.get(type) || {}
+  return {
+    type,
+    views: row.views || 0,
+    entries: row.entries || 0,
+    clicks: row.clicks || 0,
+    rate: handOff(row.clicks, row.views),
+    avg: row.dwell_n ? row.dwell_sum / row.dwell_n : 0,
+    platforms: platformsOf(type),
+  }
+}
+
+const main = MAIN.map(cardFor)
+const extra = EXTRA.map(cardFor).filter((card) => card.views > 0)
+
+const seen = main.filter((card) => card.views > 0)
+const bestSeen = [...seen].sort((a, b) => b.views - a.views)[0]
+const bestRate = [...seen].filter((c) => c.views >= 20).sort((a, b) => b.rate - a.rate)[0]
+
+let headline = 'There is not enough traffic yet to name a winner.'
+if (bestSeen) {
+  headline = `${sectionName(bestSeen.type)} brings the most readers.`
+  if (bestRate && bestRate.type !== bestSeen.type) {
+    headline += ` But ${sectionName(bestRate.type)} turns them into clicks best, at ${bestRate.rate} in every 100.`
+  } else if (bestRate) {
+    headline += ` It also turns them into clicks best, at ${bestRate.rate} in every 100.`
+  }
+}
+
+const utms = sources.filter((row) => String(row.source || '').startsWith('utm:'))
+
+const sectionRows = main.concat(extra).map((card) => ({
+  name: sectionName(card.type),
+  sub: [
+    `${num(card.clicks)} clicks · ${card.rate}% hand-off`,
+    range.mode === 'all' ? '' : `${num(card.entries)} arrived first`,
+    fmtDwell(card.avg),
+    card.platforms.join(', '),
+  ].filter((part) => part && part !== '—').join(' · '),
+  value: card.views,
+  unit: 'views',
+}))
+const countryRows = countries.map((row) => ({
+  name: `${flagOf(row.country) ? `${flagOf(row.country)}  ` : ''}${countryName(row.country)}`,
+  value: row.views || 0,
+  unit: 'views',
+}))
+const sourceRows = sources.map((row) => ({
+  name: sourceName(row.source),
+  sub: `${num(row.entries)} visits started here`,
+  value: row.views || 0,
+  unit: 'views',
+}))
+const utmRows = utms.map((row) => ({
+  name: sourceName(row.source),
+  sub: `${num(row.entries)} visits started here`,
+  value: row.views || 0,
+  unit: 'views',
+  tone: 'violet',
+}))
+---
+
+
+<Admin
+  title="Sections"
+  here="/my-admin/sections"
+  tab="/my-admin/pages"
+  range={range}
+  signedIn={signedIn}
+  secret={secret}
+  wrongWord={wrongWord}
+  note={`${range.label}. ${headline}`}
+>
+  <div class="panel wide">
+    <h2>The libraries, side by side</h2>
+    <p class="say">
+      Hand-off is clicks for every 100 views. "Arrived first" is how many
+      visits started in this part of the site. The names at the end are its
+      top platforms.
+    </p>
+    <BarList rows={sectionRows} empty="Nothing yet." />
+  </div>
+
+  <div class="panel">
+    <h2>Countries</h2>
+    <p class="say">Where your readers are. This decides which Amazon shop to show.</p>
+    <BarList rows={countryRows} empty="Nothing yet." />
+  </div>
+
+  <div class="panel">
+    <h2>Where visitors come from</h2>
+    <p class="say">The site that sent them, or your own tagged link.</p>
+    <BarList rows={sourceRows} empty="Nothing yet." />
+  </div>
+
+  <div class="panel wide">
+    <h2>Search words</h2>
+    <p class="say">
+      What people search for on this site, and what they could not find, is on
+      the <a href="/my-admin/search">Search tab</a>. The words people typed into
+      Google are only in
+      <a href="https://search.google.com/search-console" rel="noopener" target="_blank">Search Console</a>:
+      Google never tells a website.
+    </p>
+    <h3>Your own tagged links</h3>
+    <p class="say">
+      You can label any link you post yourself. Add
+      <code>?utm_source=reddit&amp;utm_campaign=sololeveling</code> to the end of
+      the address. Every visit from that link then shows below.
+    </p>
+    <BarList rows={utmRows} empty="No tagged links used yet." />
+  </div>
+</Admin>

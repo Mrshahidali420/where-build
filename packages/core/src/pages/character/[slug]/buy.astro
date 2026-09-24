@@ -1,0 +1,252 @@
+---
+/**
+ * "Where to buy X merch."
+ *
+ * A character is what a figure is actually made of, so this is the page that
+ * answers a merch search honestly. Only a fan favourite, or a character from a
+ * story big enough to have merch made of it, gets one: see isFigureWorthy in
+ * shop-links.js and hasCharacterBuyPage in gates.mjs.
+ */
+import Base from '../../../layouts/Base.astro'
+import config from '../../../lib/site.mjs'
+import AlsoLookFor from '../../../components/AlsoLookFor.astro'
+import BuyBox from '../../../components/BuyBox.astro'
+import TopPicks from '../../../components/TopPicks.astro'
+import { picksForPerson, picksShowFor } from '../../../lib/picks.js'
+import { loadCharacter, loadTitle, envOf, countryOf, notFound, unavailable } from '../../../lib/runtime.js'
+import { faqJsonld } from '../../../lib/answers.mjs'
+import { kindOfAppearance } from '../../../lib/format.js'
+import { characterShopLinks } from '../../../lib/shop-links.js'
+import { characterBuyAnswer } from '../../../lib/buy.mjs'
+import { displayName } from '../../../lib/names.mjs'
+import { hasCharacterBuyPage, hasBuyPage } from '../../../lib/gates.mjs'
+import { ageOf } from '../../../lib/age.mjs'
+
+let person
+try {
+  person = await loadCharacter(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+if (!person || !person.image || !person.appearsIn?.length) return notFound(Astro)
+
+// The same lead the profile page picks: a comic wins over its own anime.
+const best = (rows) => rows.find((a) => a.kind !== 'anime') || rows[0]
+const main = person.appearsIn.filter((a) => a.role === 'MAIN')
+const lead = best(main.length ? main : person.appearsIn)
+const leadKind = kindOfAppearance(lead)
+
+// The sitemap's own gate, and the only one, so the two can never disagree
+// about this page. It judges the biggest story the person is in, not the lead
+// title above: the lead is often a spin-off far smaller than the story itself.
+// A real character with no merch page of their own is sent to their profile,
+// whose Amazon box (#buy) offers what there is. A 301, not a 404: some of these
+// addresses were in the sitemap before the merch rule changed on 23 Sep 2026.
+if (!hasCharacterBuyPage(person)) return Astro.redirect(`/character/${person.slug}#buy`, 301)
+
+let series
+try {
+  series = await loadTitle(envOf(Astro), leadKind, lead.slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+const buys = characterShopLinks(person, series || lead, countryOf(Astro))
+// Hand-picked products, for readers on amazon.com only (see src/lib/picks.js).
+const picked = picksShowFor(countryOf(Astro)) ? picksForPerson(person, series || lead) : null
+if (buys.length === 0) return notFound(Astro)
+const merchIsCharacter = buys.some((row) => row.kind === 'figures')
+
+// The fan spelling leads here too, the same as on the profile page. The buy
+// text is written from `person.name` and treats `aliases` as the other names,
+// so it is handed a copy with the lead name swapped in and the AniList name
+// first among the others. The shop rows above still search the record as it is.
+// When nothing is swapped, the record goes in untouched.
+const { primary, formal } = displayName(person)
+const named = formal
+  ? { ...person, name: primary, formalName: formal, aliases: [formal, ...(person.aliases || [])] }
+  : person
+const answer = characterBuyAnswer(named, lead, series, leadKind, merchIsCharacter)
+const profile = `/character/${person.slug}`
+const seriesHome = `/${leadKind}/${lead.slug}`
+
+const siblings = (series?.characters || [])
+  .filter((c) => c.image && c.slug !== person.slug)
+  .slice(0, 11)
+
+const facts = [
+  ['From', lead.title],
+  ['Role', lead.role === 'MAIN' ? 'Main character' : 'Supporting character'],
+  ...(ageOf(person.age) ? [['Age', ageOf(person.age).text]] : []),
+  ...(person.gender ? [['Gender', person.gender]] : []),
+  ...(series?.startYear ? [['Story started', String(series.startYear)]] : []),
+  [
+    'Appears in',
+    `${person.appearsIn.length} ${person.appearsIn.length === 1 ? 'title' : 'titles'}`,
+  ],
+  ...(person.favourites ? [['AniList favourites', person.favourites.toLocaleString()]] : []),
+]
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': `${config.siteUrl}${profile}/buy#page`,
+    url: `${config.siteUrl}${profile}/buy`,
+    name: answer.heading,
+    inLanguage: 'en',
+    dateModified: new Date().toISOString().slice(0, 10),
+    about: { '@id': `${config.siteUrl}${profile}#person` },
+    alternateName: [person.native, ...answer.names].filter(Boolean),
+  },
+  faqJsonld(answer.faq),
+]
+---
+
+<Base
+  title={answer.pageTitle}
+  description={answer.description}
+  image={person.image}
+  jsonld={jsonld}
+  crumbs={[
+    { name: 'Characters', href: '/character' },
+    { name: primary, href: profile },
+    { name: 'Merch' },
+  ]}
+>
+  <div class="shell title-page">
+    <div class="cover-rail">
+      <div class="cover-wrap">
+        <img class="cover" src={person.image} alt={`${primary} portrait`} width="440" height="587" loading="eager" fetchpriority="high" decoding="async" />
+      </div>
+    </div>
+
+    <header class="title-head">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <a href="/character">Characters</a>
+        <a href={profile}>{primary}</a>
+      </nav>
+      <h1>{answer.heading}</h1>
+      {person.native && <p class="title-head__native">{person.native}</p>}
+      {answer.names.length > 0 && (
+        <p class="title-head__aka">Also written as {answer.names.join(' · ')}</p>
+      )}
+      <ul class="title-head__meta">
+        <li>{lead.role === 'MAIN' ? 'Main character' : 'Supporting character'}</li>
+        <li><a href={seriesHome}>{lead.title}</a></li>
+        {series?.startYear && <li>{series.startYear}</li>}
+      </ul>
+    </header>
+
+    <div class="title-body">
+      <p class="title-answer">{answer.lede}</p>
+
+      {/* The reader came here to buy. The shelves go first. */}
+      <BuyBox
+        heading={merchIsCharacter ? `Own a piece of ${primary}` : `Own ${lead.title}`}
+        sub="Amazon, in your own country's store."
+        rows={buys}
+      />
+
+      {picked && (
+        <TopPicks
+          heading={`Top picks for ${picked.from || primary}`}
+          sub="Real products on Amazon, picked by hand."
+          picks={picked.picks}
+          max={8}
+        />
+      )}
+
+      {
+        answer.paragraphs.map((block) => (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>{block.heading}</h2>
+            </div>
+            <p class="overview">{block.text}</p>
+          </section>
+        ))
+      }
+
+      <section class="answer">
+        <div class="answer__head">
+          <h2>The facts</h2>
+        </div>
+        <dl class="facts">
+          {
+            facts.map(([label, value]) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      {
+        siblings.length > 0 && (
+          <section class="answer">
+            <div class="answer__head">
+              <h2>The rest of the cast</h2>
+              <p>Tap a face to see that character, and the merch made of them.</p>
+            </div>
+            <ul class="people">
+              {siblings.map((mate) => (
+                <li>
+                  <a href={`/character/${mate.slug}`}>
+                    <img src={mate.image} alt={`${mate.name} portrait`} width="220" height="293" loading="lazy" decoding="async" />
+                    <b>{mate.name}</b>
+                    <span>{mate.role === 'MAIN' ? 'Main' : 'Supporting'}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <AlsoLookFor path={Astro.url.pathname} frame="answer" />
+
+      <section class="answer">
+        <div class="answer__head">
+          <h2>Common questions</h2>
+        </div>
+        <dl class="qa">
+          {
+            answer.faq.map((row) => (
+              <div>
+                <dt>{row.q}</dt>
+                <dd>{row.a}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      {
+        /* Only when the story's own buy page exists, or this is a door to a 404. */
+        series && hasBuyPage(series) && (
+          <a class="crosslink" href={`${seriesHome}/buy`}>
+            <div>
+              <span class="crosslink__lead">The story itself</span>
+              <span class="crosslink__title">Where to buy {lead.title}</span>
+              <span class="crosslink__lead">Printed volumes, discs, art books and posters</span>
+            </div>
+          </a>
+        )
+      }
+
+      <a class="crosslink" href={profile}>
+        <div>
+          <span class="crosslink__lead">Everything we know about them</span>
+          <span class="crosslink__title">{primary}</span>
+          <span class="crosslink__lead">
+            Every title they appear in, and where to read or watch it legally
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+</Base>

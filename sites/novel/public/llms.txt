@@ -1,0 +1,7 @@
+# WhereNovel
+
+> The authors and illustrators of light and web novels, their volume counts, and how each web novel, light novel, manga and anime version of a story relate.
+
+Data source: AniList. The site rebuilds every day.
+
+Status: in development. It lives on a preview address that is not indexed, and has no pages of its own yet.

@@ -1,0 +1,127 @@
+---
+/**
+ * The pager that made the catalogue reachable.
+ *
+ * What was here before was a Previous/Next chain and a cap of 100 pages, and
+ * together those two things hid most of this site from Google. Search Console
+ * was asked about sixty pages on 22 Sep 2026 and gave the same answer for
+ * fifty-five of them: never fetched. Not "crawled and dropped". Never fetched.
+ *
+ *   /manhwa                     indexed
+ *   /manhwa/page/2 .. page/67   unknown to Google
+ *   15 of 15 manhwa titles      unknown to Google
+ *   24 of 25 character pages    never crawled
+ *
+ * Two reasons, and this file is the fix for both.
+ *
+ * 1. Depth. With only a Next link, page 50 sits fifty clicks from the front
+ *    door. A crawler spends its budget near the top of a site and stops long
+ *    before that, so everything past the first few pages was out of reach.
+ *
+ * 2. The cap. Building only 100 pages left roughly 322,000 title and
+ *    character pages with no link anywhere on the site. A sitemap is a hint,
+ *    not an instruction: a page nothing links to does not get crawled.
+ *
+ * So the pager now prints three rings of numbers, and the rings are what keep
+ * the whole range within about three clicks of any other page:
+ *
+ *   near  current-4 .. current+4      steps of 1
+ *   mid   the round tens around here  steps of 10   (reaches 50 either way)
+ *   far   every 100th page, or every  steps of 100  (reaches the whole list)
+ *         25th or 10th on short lists
+ *
+ * Page 1 to page 1,453 of 2,157: jump to 1,400, then 1,450, then 1,453.
+ * Three clicks, from a list that used to need one thousand four hundred.
+ *
+ * It is a real pager for a reader too. Someone halfway down a list of 2,157
+ * pages could not get back to the start before, and now the first page and
+ * the last page are always one click away.
+ */
+
+const { current, count, base, label = 'pages', segment = 'page' } = Astro.props
+
+/**
+ * Page 1 is the section's own front door; it has no /page/1 twin.
+ *
+ * The listings live at `/manhwa/page/2`, the filtered ones at
+ * `/manhwa/only/free/2`, so `segment` is the word in the middle and an empty
+ * string means there is no word.
+ */
+const href = (page) =>
+  page === 1 ? base : segment ? `${base}/${segment}/${page}` : `${base}/${page}`
+
+/**
+ * The far ring is coarse on a long list and fine on a short one, so the link
+ * count per page stays near forty however many pages there are.
+ */
+const farStep = count > 250 ? 100 : count > 60 ? 25 : 10
+
+const numbers = (() => {
+  const seen = new Set([1, count, current])
+  for (let step = 1; step <= 4; step++) {
+    seen.add(current - step)
+    seen.add(current + step)
+  }
+  const nearestTen = Math.round(current / 10) * 10
+  for (let step = -5; step <= 5; step++) seen.add(nearestTen + step * 10)
+  for (let page = farStep; page < count; page += farStep) seen.add(page)
+  return [...seen].filter((page) => page >= 1 && page <= count).sort((a, b) => a - b)
+})()
+
+// Flattened before render so the template stays one loop: a gap cell marks
+// every jump in the run of numbers, which is what tells a reader that the
+// next link is a leap and not the next page along.
+const cells = []
+numbers.forEach((page, i) => {
+  if (i > 0 && numbers[i - 1] !== page - 1) cells.push({ gap: true, page })
+  cells.push({ gap: false, page })
+})
+---
+
+{
+  count > 1 && (
+    <nav class="pager" aria-label={`Pagination, ${label}`}>
+      <p class="pager__where">
+        Page {current.toLocaleString()} of {count.toLocaleString()}
+      </p>
+
+      <ul class="pager__list">
+        {current > 1 && (
+          <li>
+            <a href={href(current - 1)} rel="prev" class="pager__step">
+              Previous
+            </a>
+          </li>
+        )}
+
+        {cells.map((cell) =>
+          cell.gap ? (
+            <li class="pager__gap" aria-hidden="true">
+              &hellip;
+            </li>
+          ) : cell.page === current ? (
+            <li>
+              <span class="pager__now" aria-current="page">
+                {cell.page.toLocaleString()}
+              </span>
+            </li>
+          ) : (
+            <li>
+              <a href={href(cell.page)} aria-label={`Page ${cell.page.toLocaleString()}`}>
+                {cell.page.toLocaleString()}
+              </a>
+            </li>
+          )
+        )}
+
+        {current < count && (
+          <li>
+            <a href={href(current + 1)} rel="next" class="pager__step">
+              Next
+            </a>
+          </li>
+        )}
+      </ul>
+    </nav>
+  )
+}

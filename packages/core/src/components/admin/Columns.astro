@@ -1,0 +1,60 @@
+---
+/**
+ * A small column chart, one column per day or hour, optionally stacked (read,
+ * watch and buy on top of each other). Inline SVG, drawn on the server. Each
+ * column carries a <title>, so a desktop mouse shows its numbers.
+ *
+ * columns: [{ label, parts: [numbers], title? }]
+ * tones: one tone per part, e.g. ['blue', 'violet', 'amber'].
+ * names: one name per part, for the legend.
+ * mark: the index of a column to light up (the current hour).
+ */
+import { num } from '../../lib/admin.js'
+import { stackRects } from '../../lib/admin-chart.js'
+
+const {
+  columns = [],
+  tones = ['blue'],
+  names = [],
+  height = 72,
+  mark = -1,
+  peakWord = 'peak',
+  label = 'Column chart',
+} = Astro.props
+const W = 300
+const gap = columns.length > 20 ? 2 : 4
+const { max, columns: rects } = stackRects(columns.map((c) => c.parts), W, height, gap)
+const totals = tones.map((_, part) => columns.reduce((n, c) => n + (Number(c.parts[part]) || 0), 0))
+const firstLabel = columns[0]?.label || ''
+const midLabel = columns[Math.floor((columns.length - 1) / 2)]?.label || ''
+const lastLabel = columns[columns.length - 1]?.label || ''
+const titleOf = (c) => c.title || `${c.label}: ${c.parts.map((n) => num(n)).join(' + ')}`
+---
+
+{columns.length > 0 && (
+  <figure class="chart">
+    <span class="peak">{`${peakWord} ${num(max)}`}</span>
+    <svg viewBox={`0 0 ${W} ${height}`} height={height} preserveAspectRatio="none" role="img" aria-label={`${label}. Highest ${num(max)}.`}>
+      <line class="grid-line" x1="0" x2={W} y1={height / 2} y2={height / 2} vector-effect="non-scaling-stroke" />
+      {rects.map((parts, i) => (
+        <g opacity={mark >= 0 && i !== mark ? 0.7 : 1}>
+          <title>{titleOf(columns[i])}</title>
+          {parts.map((r) => r.h > 0 && (
+            <rect x={r.x} y={r.y} width={r.w} height={r.h} class={`t-${tones[r.part] || 'blue'}`} fill="currentColor" />
+          ))}
+          {parts.every((r) => r.h === 0) && parts[0] && (
+            <rect x={parts[0].x} y={height - 1} width={parts[0].w} height="1" class="t-dim" fill="currentColor" opacity="0.6" />
+          )}
+        </g>
+      ))}
+    </svg>
+    <div class="axis"><span>{firstLabel}</span><span>{midLabel}</span><span>{lastLabel}</span></div>
+    {names.length > 0 && (
+      <ul class="legend">
+        {names.map((name, i) => (
+          <li><i class={`bg-${tones[i] || 'blue'}`}></i>{name} <b>{num(totals[i])}</b></li>
+        ))}
+      </ul>
+    )}
+  </figure>
+)}

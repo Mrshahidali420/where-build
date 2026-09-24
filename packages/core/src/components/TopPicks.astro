@@ -1,0 +1,52 @@
+---
+/**
+ * Top picks: real Amazon products chosen by hand for one series or character.
+ *
+ * The buy box above it opens Amazon's search. This box goes one step further
+ * and names the exact product: volume 1, the box set, the figure. It shows a
+ * name, a type and a button, nothing more. No price and no product photo,
+ * because those are Amazon's data (see src/lib/picks.js).
+ *
+ * The caller decides whether the reader should see picks at all (US store
+ * only) and passes nothing when not, so this box never has to know.
+ */
+import { AMAZON_DISCLOSURE } from '../lib/shop-links.js'
+import { BUY_ICONS } from '../lib/buy-icons.js'
+import { PICK_LABELS, pickUrl } from '../lib/picks.js'
+
+const { heading, sub, picks = [], max = 6 } = Astro.props
+
+const ICON_OF = { book: 'book', figure: 'figure', plush: 'plush', poster: 'poster', apparel: 'shirt', merch: 'tag' }
+const shown = picks.slice(0, max)
+---
+
+{
+  shown.length > 0 && (
+    <section class="buybox picks">
+      <div class="buybox__head">
+        <h2>{heading}</h2>
+        {sub && <p>{sub}</p>}
+      </div>
+      <p class="buys__note">
+        Chosen by hand on Amazon. {AMAZON_DISCLOSURE} The price and the stock are
+        Amazon's, and are right at the moment you look.
+      </p>
+      <ul class="picks__list">
+        {shown.map((pick) => (
+          <li>
+            <a href={pickUrl(pick.a)} rel="noopener nofollow sponsored" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="pick">
+              <span class="buy__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={BUY_ICONS[ICON_OF[pick.t]] || BUY_ICONS.tag} />
+                </svg>
+              </span>
+              <span class="picks__type">{PICK_LABELS[pick.t] || 'Merch'}</span>
+              <span class="buy__label">{pick.n}</span>
+              <span class="picks__go">View on Amazon</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

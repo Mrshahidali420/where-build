@@ -1,0 +1,45 @@
+---
+/**
+ * The newest pages opened, one line each: a dot (rose = the visit started
+ * here), the time, the page name cut with "…", and a small line with where
+ * the reader came from, the country, the page number inside the visit and
+ * the device.
+ *
+ * rows: [{ ts, href, name, section, from, country, step, device }]
+ */
+import { clock, countryName } from '../../lib/admin.js'
+import { flagOf } from '../../lib/admin-chart.js'
+
+const { rows = [], empty = 'Nothing yet.' } = Astro.props
+const lines = rows.map((row) => ({
+  ...row,
+  where: row.country ? `${flagOf(row.country) ? `${flagOf(row.country)} ` : ''}${countryName(row.country)}` : '',
+}))
+---
+
+{lines.length === 0 && <p class="empty">{empty}</p>}
+{lines.length > 0 && (
+  <ul class="feed no-icon">
+    {lines.map((row) => (
+      <li>
+        <span
+          class={`dot ${(row.step || 1) > 1 ? 'bg-dim' : 'bg-accent'}`}
+          title={(row.step || 1) > 1 ? 'Moved on from another page' : 'The visit started here'}
+        ></span>
+        <time datetime={new Date(row.ts).toISOString()}>{clock(row.ts).replace(' UTC', '')}</time>
+        <span class="what">
+          <span class="line1" title={row.name}>
+            <a href={row.href}>{row.name}</a>{row.section !== row.name && ` · ${row.section}`}
+          </span>
+          <span class="meta">
+            <span class="src">{row.from}</span>
+            {row.where && ` · ${row.where}`}
+            {` · page ${row.step || 1}`}
+            {row.device && ` · ${row.device}`}
+          </span>
+        </span>
+        <span></span>
+      </li>
+    ))}
+  </ul>
+)}

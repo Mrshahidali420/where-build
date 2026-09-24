@@ -1,0 +1,5338 @@
+/*
+  Cyclorama Dawn
+
+  The whole site is one lit stage. The page ground is depthless cyc
+  black, structure is a low cobalt horizon, rose light gathers above
+  it, and pure white-day is reserved for the fully active state
+  (hover, focus, current). Cover art stands ON the horizon band like
+  actors against a Shinkai sky. Sections are lighting cues, named and
+  numbered, so the phase is always spelled out in text — colour is
+  never the only signal. Platform brand colours ride as lighting gels:
+  the one place foreign colour is allowed, because it is information.
+*/
+
+:root {
+  /* the cyclorama. Every site brings its own twelve colours and two faces:
+     each site() slot is filled in from site.config.mjs by integration.mjs. */
+  --night: site(colors.night); /* depthless ground */
+  --night-raised: site(colors.night-raised);
+  --night-sunk: site(colors.night-sunk);
+  --cobalt: site(colors.cobalt); /* the horizon band */
+  --cobalt-line: site(colors.cobalt-line);
+  --cobalt-bright: site(colors.cobalt-bright);
+  --rose: site(colors.rose); /* light gathering */
+  --rose-soft: site(colors.rose-soft);
+  --dawn: site(colors.dawn); /* primary text: warm first light */
+  --dawn-dim: site(colors.dawn-dim); /* secondary, tinted violet from the sky */
+  --dawn-faint: site(colors.dawn-faint);
+  --day: site(colors.day); /* reserved: the fully active state */
+
+  --shell: min(1180px, 100% - 2.5rem);
+
+  --stencil: site(fonts.display);
+  --grotesque: site(fonts.text);
+
+  --ease-dawn: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: dark;
+  accent-color: var(--rose);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--cobalt) var(--night-sunk);
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--dawn);
+  font-family: var(--grotesque);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-synthesis-weight: none;
+  caret-color: var(--rose);
+}
+
+/* the browser surfaces carry the sky too */
+::selection {
+  background: var(--rose);
+  color: var(--night);
+}
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--night-sunk);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cobalt);
+  border: 3px solid var(--night-sunk);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cobalt-bright);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+h1 {
+  font-family: var(--grotesque);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.4rem);
+}
+
+/* Section names speak in the lighting-plot stencil voice. */
+h2 {
+  font-family: var(--stencil);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+}
+
+h3 {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0 0 1em;
+  max-width: 70ch;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--cobalt-bright);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.shell {
+  width: var(--shell);
+  margin-inline: auto;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 10;
+  background: var(--dawn);
+  color: var(--night);
+  padding: 0.6rem 1rem;
+}
+
+/* numbers read like a cue sheet everywhere they appear */
+.tnum,
+.facts dd,
+.cue,
+.cover-rail__score b {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- cue tags: stencil annotations riding the horizon rules ------- */
+
+.cue {
+  font-family: var(--stencil);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cobalt-bright);
+  white-space: nowrap;
+}
+.cue--rose {
+  color: var(--rose-soft);
+}
+
+/* ---------- masthead: the control booth ---------------------------------- */
+
+.masthead {
+  border-bottom: 1px solid var(--cobalt);
+  background: linear-gradient(to bottom, var(--night-sunk), rgb(7 10 22 / 0.92));
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+/* A dawn line under the whole header: rose where the brand is, fading out to
+ * the right. It is the one coloured edge on the page and it says the header is
+ * finished, not merely stacked. */
+.masthead::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(site(rgb.rose) / 0.55), rgb(site(rgb.cobalt-line) / 0.3) 42%, rgb(site(rgb.cobalt-line) / 0));
+}
+
+/* Two rows, on purpose.
+ *
+ * This was one flex row set to wrap. The brand, the search box and ten nav
+ * links need more room than the 1180px page gives them, so the nav fell to a
+ * second line on its own and left a hole beside the brand and a hole beside
+ * the links. The rows are now declared, so the header holds the same shape at
+ * every desktop width and every item starts on the same left edge.
+ */
+.masthead__inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 440px);
+  align-items: center;
+  column-gap: 1.5rem;
+  padding-block: 1rem 0;
+}
+.masthead__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+.masthead__tag {
+  padding-left: 0.85rem;
+  border-left: 1px solid rgb(site(rgb.cobalt-line) / 0.55);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--dawn-faint);
+  white-space: nowrap;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--stencil);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  color: var(--dawn);
+}
+.wordmark span {
+  color: var(--rose);
+}
+.wordmark__mark {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  color: var(--rose);
+}
+
+/* Desktop: the menu wrapper is invisible; its children sit in the header row. */
+.masthead__menu {
+  display: contents;
+}
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: none;
+  border: 1px solid var(--cobalt);
+  border-radius: 4px;
+  color: var(--dawn);
+  cursor: pointer;
+}
+.menu-btn__x {
+  display: none;
+}
+.nav-home {
+  display: none;
+}
+
+.masthead nav {
+  display: flex;
+  position: relative;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem 1.6rem;
+  font-size: 0.875rem;
+  margin-top: 0.9rem;
+  padding-block: 0.65rem;
+}
+/* The rule over the browse row starts strong at the left edge and fades out,
+ * so the eye is pulled to the first link instead of to a full width box. */
+.masthead nav::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(site(rgb.cobalt-line) / 0), rgb(site(rgb.cobalt-line) / 0.8) 50%, rgb(site(rgb.cobalt-line) / 0));
+}
+.masthead nav a {
+  position: relative;
+  color: var(--dawn-dim);
+  text-decoration: none;
+  padding-block: 0.45rem;
+  letter-spacing: 0.01em;
+  transition: color 150ms var(--ease-dawn);
+}
+/* The mark under a link grows out of the left, so moving along the row feels
+ * like one motion instead of ten separate blinks. */
+.masthead nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.1rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--rose);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms var(--ease-dawn);
+}
+.masthead nav a:hover {
+  color: var(--day);
+}
+.masthead nav a:hover::after {
+  transform: scaleX(1);
+}
+.masthead nav a[aria-current='page'] {
+  color: var(--day);
+}
+.masthead nav a[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+/* ---------- header search: the console ----------------------------------- */
+
+.finder {
+  position: relative;
+  grid-column: 2;
+  justify-self: end;
+  width: 100%;
+  max-width: 440px;
+}
+.finder__icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dawn-faint);
+  pointer-events: none;
+  transition: color 140ms var(--ease-dawn);
+}
+.finder:focus-within .finder__icon {
+  color: var(--rose);
+}
+.finder input {
+  width: 100%;
+  background: rgb(10 15 36 / 0.85);
+  border: 1px solid rgb(site(rgb.cobalt-line) / 0.7);
+  color: var(--dawn);
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.6rem 0.9rem 0.6rem 2.45rem;
+  border-radius: 999px;
+  transition: border-color 140ms var(--ease-dawn), background 140ms var(--ease-dawn),
+    box-shadow 140ms var(--ease-dawn);
+}
+.finder input:hover {
+  border-color: rgb(site(rgb.cobalt-line) / 1);
+}
+.finder input::placeholder {
+  color: var(--dawn-faint);
+}
+.finder input:focus {
+  border-color: var(--rose);
+  background: var(--night-raised);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(site(rgb.rose) / 0.14), 0 10px 30px -12px rgb(site(rgb.rose) / 0.5);
+}
+.finder ul {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  background: var(--night-sunk);
+  border: 1px solid var(--cobalt-line);
+  border-radius: 6px;
+  box-shadow: 0 24px 48px -12px rgb(0 0 0 / 0.7), 0 8px 30px -12px rgb(site(rgb.cobalt) / 0.5);
+  z-index: 20;
+  max-height: 70vh;
+  overflow: auto;
+}
+/* shown while the first slice for a prefix is still downloading */
+.finder-wait {
+  padding: 0.7rem 0.9rem;
+  color: var(--dawn-dim);
+  font-size: 0.9rem;
+}
+.finder ul a {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.4rem 0.5rem;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.finder ul a:hover,
+.finder ul li.is-active a {
+  background: var(--night-raised);
+}
+.finder ul img {
+  width: 34px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--night-raised);
+  flex: none;
+}
+.finder ul b {
+  display: block;
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+.finder ul em {
+  font-style: normal;
+  color: var(--dawn-faint);
+  font-size: 0.76rem;
+  text-transform: capitalize;
+}
+
+/* ---------- home hero: the cyclorama itself ------------------------------- */
+
+.hero--home {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--cobalt);
+  background:
+    linear-gradient(
+      to bottom,
+      var(--night) 0%,
+      #070a16 34%,
+      #0d1d4a 62%,
+      var(--cobalt) 76%,
+      #7a4a7d calc(100% - 112px),
+      var(--rose) calc(100% - 70px),
+      #f2b58f calc(100% - 44px),
+      #241019 calc(100% - 40px),
+      var(--night) 100%
+    );
+}
+
+/* fine grain so the cyc reads as a lit surface, not a flat gradient */
+.hero--home::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+/* real banner art behind the copy, dissolving into the cyc gradient */
+.hero__banner {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 74%;
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: 0.42;
+  filter: saturate(1.05);
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.9) 0%, rgb(0 0 0 / 0.75) 40%, transparent 96%);
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.9) 0%, rgb(0 0 0 / 0.75) 40%, transparent 96%);
+}
+
+/* the light gathers once, on arrival — the page's one authored moment */
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 55% at 50% 100%,
+    rgb(site(rgb.rose-soft) / 0.5),
+    rgb(site(rgb.rose) / 0.22) 40%,
+    transparent 70%
+  );
+  animation: dawn-raise 2.4s var(--ease-dawn) both;
+}
+@keyframes dawn-raise {
+  from {
+    opacity: 0;
+    transform: translateY(6%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero__inner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem 2.5rem;
+  flex-wrap: wrap;
+}
+.hero__content {
+  position: relative;
+  flex: 1 1 28rem;
+  min-width: 0;
+  padding-block: 3.75rem 3.4rem;
+}
+.hero__content h1 {
+  max-width: 15ch;
+  text-shadow: 0 2px 24px rgb(site(rgb.night) / 0.55);
+}
+.hero__content > p {
+  color: var(--dawn-dim);
+  font-size: 1.08rem;
+  margin-top: 1.1rem;
+  max-width: 52ch;
+  text-shadow: 0 1px 14px rgb(site(rgb.night) / 0.6);
+}
+
+/* the skyline: covers standing on the horizon band like actors */
+.skyline {
+  position: relative;
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-top: 2.4rem;
+  /* the covers stand on the horizon line, above the stage floor */
+  padding-bottom: 42px;
+}
+.skyline img {
+  width: clamp(60px, 6.5vw, 96px);
+  /* tall cropped strips, deliberately — the covers read as a city skyline */
+  height: clamp(220px, 24vw, 345px);
+  object-fit: cover;
+  border: 1px solid rgb(site(rgb.dawn) / 0.28);
+  border-bottom: 0;
+  box-shadow: 0 -14px 44px -12px rgb(site(rgb.night) / 0.85);
+}
+.skyline img:nth-child(even) {
+  translate: 0 10px;
+}
+.skyline img:nth-child(4),
+.skyline img:nth-child(5) {
+  width: clamp(76px, 10vw, 122px);
+}
+
+/* ---------- sections: horizon bands, stacked dark to light --------------- */
+
+.section {
+  position: relative;
+  padding-block: 2.75rem;
+  border-top: 1px solid var(--cobalt);
+}
+.section:first-of-type {
+  border-top: 0;
+}
+
+/* the cue tag sits ON the horizon rule, like a plot annotation on a pipe */
+.section__cue {
+  position: absolute;
+  top: 0;
+  right: 0;
+  translate: 0 -50%;
+  background: var(--night);
+  padding-left: 0.8rem;
+}
+/* each band is its own lighting state, always also named in text */
+.section[data-phase] {
+  border-top: 1px solid var(--cobalt);
+  background: linear-gradient(to top, var(--band) 0%, transparent 55%);
+}
+.section[data-phase='night'] {
+  --band: rgb(site(rgb.cobalt) / 0.26);
+}
+.section[data-phase='first'] {
+  --band: rgb(95 74 140 / 0.24);
+}
+.section[data-phase='dawn'] {
+  --band: rgb(site(rgb.rose) / 0.16);
+}
+.section[data-phase='hold'] {
+  --band: rgb(site(rgb.rose-soft) / 0.12);
+}
+.section[data-phase='day'] {
+  --band: rgb(site(rgb.dawn) / 0.1);
+}
+
+.section__head {
+  margin-bottom: 1.25rem;
+}
+.section__head p {
+  color: var(--dawn-dim);
+  margin: 0.45rem 0 0;
+  font-size: 0.95rem;
+}
+.section__head--row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.section__more {
+  color: var(--dawn-dim);
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.section__more:hover {
+  color: var(--day);
+  text-decoration: underline;
+}
+.section__more--cta {
+  color: var(--day);
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  background: color-mix(in srgb, var(--rose) 14%, transparent);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.section__more--cta:hover {
+  background: color-mix(in srgb, var(--rose) 28%, transparent);
+  border-color: var(--day);
+  text-decoration: none;
+}
+
+
+/* ---------- trending tabs -------------------------------------------------- */
+
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.tabs [role='tab'] {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--dawn-dim);
+  background: none;
+  border: 1px solid var(--cobalt);
+  border-radius: 4px;
+  padding: 0.4rem 0.95rem;
+  cursor: pointer;
+  transition: color 140ms var(--ease-dawn), border-color 140ms var(--ease-dawn),
+    background-color 140ms var(--ease-dawn);
+}
+.tabs [role='tab']:hover {
+  color: var(--day);
+  border-color: var(--cobalt-bright);
+}
+.tabs [role='tab'][aria-selected='true'] {
+  color: var(--day);
+  border-color: var(--rose);
+  background: rgb(site(rgb.rose) / 0.12);
+}
+.tab-panel__more {
+  margin: 0.35rem 0 0;
+  text-align: right;
+}
+@media (max-width: 640px) {
+  .section__head--row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ---------- the four doors: one tile per kind ------------------------------ */
+
+.kinds {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.9rem;
+  margin-block: 0.5rem 0.75rem;
+}
+.kinds a {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--cobalt-line);
+  background: linear-gradient(to top, rgb(site(rgb.cobalt) / 0.22), transparent 80%);
+  text-decoration: none;
+  transition: border-color 140ms var(--ease-dawn), box-shadow 140ms var(--ease-dawn);
+}
+/* five doors on a four-wide (or two-wide) grid: the last one takes the whole row */
+.kinds a:last-child {
+  grid-column: 1 / -1;
+}
+.kinds a:hover {
+  border-color: var(--rose);
+  box-shadow: 0 12px 30px -14px rgb(site(rgb.rose) / 0.4);
+}
+.kinds b {
+  font-family: var(--stencil);
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--day);
+}
+.kinds span {
+  font-size: 0.8rem;
+  color: var(--dawn-faint);
+}
+
+/* ---------- airing this week ----------------------------------------------- */
+
+.airing {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: 0.6rem;
+}
+.airing a {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  text-decoration: none;
+  border: 1px solid var(--cobalt-line);
+  padding: 0.6rem 0.8rem;
+  transition: border-color 140ms var(--ease-dawn);
+}
+.airing a:hover {
+  border-color: var(--rose);
+}
+.airing img {
+  width: 40px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  flex: none;
+}
+.airing b {
+  display: block;
+  color: var(--day);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.airing em {
+  display: block;
+  font-style: normal;
+  color: var(--dawn-faint);
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}
+
+/* ---------- platform legend ------------------------------------------------ */
+
+.legend {
+  padding-block: 0;
+}
+.legend__lead {
+  margin: 0 0 0.55rem;
+  font-size: 0.85rem;
+  color: var(--dawn-dim);
+}
+.legend__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.4rem;
+  font-size: 0.85rem;
+  color: var(--dawn);
+}
+.legend__list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.legend__list i {
+  width: 15px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--mark);
+  box-shadow: 0 3px 8px -1px color-mix(in srgb, var(--mark) 55%, transparent);
+}
+.legend__note {
+  color: var(--dawn-faint);
+}
+
+/* ---------- cover grid: actors standing on the band ----------------------- */
+
+/* Rows of covers, centred.
+ *
+ * This was a grid of stretchy columns. When a list held one more cover than a
+ * row could hold, that last cover sat alone against the left edge with a wide
+ * empty space beside it, and the page read as broken. Cards now keep one width
+ * and each row is centred, so a short last row looks meant.
+ */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  --card: 158px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.9rem 1.25rem;
+}
+.grid > .card {
+  flex: 0 1 var(--card);
+  min-width: 0;
+}
+
+.card a {
+  text-decoration: none;
+  display: block;
+}
+.card__art {
+  position: relative;
+  display: block;
+}
+/* The score, read straight off the art.
+   It is the one number that answers "is this any good", so it sits on the
+   cover where the eye already is, not three lines below it. It rides the
+   same lift as the cover on hover, so the two never come apart. */
+.card__score {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--dawn);
+  background: rgb(site(rgb.night) / 0.78);
+  border: 1px solid var(--cobalt-line);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  transition: translate 180ms var(--ease-dawn), border-color 180ms var(--ease-dawn),
+    color 180ms var(--ease-dawn);
+}
+.card__score::before {
+  content: '\2605';
+  color: var(--rose);
+  font-size: 0.82em;
+}
+.card a:hover .card__score,
+.card a:focus-visible .card__score {
+  translate: 0 -4px;
+  border-color: var(--dawn);
+  color: var(--day);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card a:hover .card__score,
+  .card a:focus-visible .card__score {
+    translate: none;
+  }
+}
+.card img {
+  width: 100%;
+  height: auto; /* the height attribute must not beat the aspect-ratio */
+  /* AniList covers are 460x651 — a 2/3 box would shave the sides */
+  aspect-ratio: 460 / 651;
+  object-fit: contain;
+  background: var(--night-raised);
+  border: 1px solid var(--cobalt-line);
+  box-shadow:
+    0 18px 30px -16px rgb(site(rgb.night-sunk) / 0.9),
+    0 10px 28px -14px rgb(site(rgb.rose) / 0.18);
+  transition: translate 180ms var(--ease-dawn), box-shadow 180ms var(--ease-dawn),
+    border-color 180ms var(--ease-dawn), filter 180ms var(--ease-dawn);
+}
+/* raise to day */
+.card a:hover img,
+.card a:focus-visible img {
+  translate: 0 -4px;
+  border-color: var(--dawn);
+  filter: brightness(1.07);
+  box-shadow:
+    0 24px 36px -16px rgb(site(rgb.night-sunk) / 0.9),
+    0 14px 34px -12px rgb(site(rgb.rose) / 0.4);
+}
+.card__title {
+  margin: 0.65rem 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card a:hover .card__title {
+  color: var(--day);
+}
+
+/* one quiet fact line: score, kind, status */
+.card__meta {
+  margin: 0.3rem 0 0;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  color: var(--dawn-faint);
+  display: flex;
+  gap: 0.45rem;
+  align-items: baseline;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card__meta b {
+  color: var(--rose);
+  font-weight: 600;
+}
+
+/* the gel strip: platform brand colours as scannable light */
+.card__marks {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.5rem;
+  height: 7px;
+  align-items: center;
+}
+.card__marks i {
+  width: 15px;
+  height: 5px;
+  background: var(--mark);
+  border-radius: 1px;
+  box-shadow: 0 3px 8px -1px color-mix(in srgb, var(--mark) 55%, transparent);
+}
+.card__marks em {
+  color: var(--dawn-faint);
+  font-style: normal;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+/* shelf variant scrolls sideways like a batten of instruments */
+.grid--shelf {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  gap: 1.1rem;
+  padding-block: 0.35rem 0.9rem;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cobalt) transparent;
+}
+.grid--shelf {
+  --shelf-cols: 7;
+}
+.grid--shelf .card {
+  flex: 0 0 calc((100% - (var(--shelf-cols) - 1) * 1.1rem) / var(--shelf-cols));
+  min-width: 0; /* long titles must not widen a card past its exact-fit share */
+  scroll-snap-align: start;
+}
+@media (max-width: 1240px) {
+  .grid--shelf {
+    --shelf-cols: 6;
+  }
+}
+@media (max-width: 1020px) {
+  .grid--shelf {
+    --shelf-cols: 5;
+  }
+}
+@media (max-width: 840px) {
+  .grid--shelf {
+    --shelf-cols: 4;
+  }
+}
+@media (max-width: 660px) {
+  .grid--shelf {
+    --shelf-cols: 3.3; /* a sliver of the next card says "there is more" */
+  }
+}
+@media (max-width: 480px) {
+  .grid--shelf {
+    --shelf-cols: 2.4;
+  }
+}
+
+.shelf-wrap {
+  position: relative;
+}
+.shelf-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 36%; /* vertical centre of the cover part of a card */
+  translate: 0 -50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--cobalt);
+  background: rgb(7 10 22 / 0.92);
+  color: var(--day);
+  font-size: 1.45rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 22px -8px rgb(site(rgb.night-sunk) / 0.9);
+  transition: border-color 160ms var(--ease-dawn), color 160ms var(--ease-dawn), opacity 160ms var(--ease-dawn);
+}
+.shelf-arrow--left {
+  left: -0.75rem;
+}
+.shelf-arrow--right {
+  right: -0.75rem;
+}
+.shelf-arrow:hover:not(:disabled),
+.shelf-arrow:focus-visible {
+  border-color: var(--rose);
+  color: var(--rose);
+}
+.shelf-arrow:disabled {
+  opacity: 0.22;
+  cursor: default;
+}
+@media (hover: none) {
+  /* touch screens swipe; the arrows only add clutter there */
+  .shelf-arrow {
+    display: none;
+  }
+}
+
+/* ---------- title pages ---------------------------------------------------- */
+
+/* the page opens inside its own small sky */
+.title-page {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  grid-template-areas:
+    'cover head'
+    'cover body';
+  gap: 0 2.5rem;
+  padding-block: 2.5rem 4rem;
+  align-items: start;
+}
+.cover-rail {
+  grid-area: cover;
+}
+.title-head {
+  grid-area: head;
+}
+.title-body {
+  grid-area: body;
+  min-width: 0;
+}
+/* breadcrumb: the way back to the shelf */
+.crumbs {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--dawn-faint);
+  margin-bottom: 0.7rem;
+}
+.crumbs a {
+  color: var(--dawn-dim);
+  text-decoration: none;
+}
+.crumbs a:hover {
+  color: var(--day);
+}
+.crumbs a + a::before {
+  content: '/';
+  color: var(--cobalt-bright);
+  margin-right: 0.5rem;
+}
+/* the title page opens on its own horizon: light gathers down to a cobalt
+   line at cover height, and the cover stands on it like an actor */
+main:has(.title-page) {
+  background:
+    linear-gradient(
+      to bottom,
+      #070a16 0px,
+      #0d1d4a 120px,
+      rgb(122 74 125 / 0.34) 160px,
+      rgb(site(rgb.rose) / 0.26) 190px,
+      rgb(242 181 143 / 0.16) 215px,
+      var(--night) 219px
+    );
+}
+
+.cover-rail {
+  position: relative;
+  align-self: start;
+}
+/* Sticky only where the whole rail (cover, scores, My list buttons and the
+   saved note) fits on screen. On a short laptop screen a stuck rail hides
+   its own bottom, and the buttons with it. */
+@media (min-height: 820px) {
+  .cover-rail {
+    position: sticky;
+    top: 5rem;
+  }
+}
+
+/* the lit actor: rose backlight behind the cover */
+.cover-wrap {
+  position: relative;
+}
+.cover-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -6%;
+  background: radial-gradient(
+    60% 55% at 50% 45%,
+    rgb(site(rgb.rose) / 0.5),
+    rgb(site(rgb.cobalt) / 0.28) 55%,
+    transparent 75%
+  );
+  filter: blur(10px);
+}
+.cover {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto; /* the height attribute must not beat the aspect-ratio */
+  aspect-ratio: 460 / 651; /* AniList's own cover ratio, so nothing is cropped */
+  object-fit: contain;
+  background: var(--night-raised);
+  border: 1px solid rgb(site(rgb.dawn) / 0.3);
+  box-shadow: 0 26px 48px -18px rgb(site(rgb.night-sunk) / 0.95);
+}
+
+.scores {
+  margin-top: 0.9rem;
+  border-top: 1px solid var(--cobalt);
+  padding-top: 0.7rem;
+  display: grid;
+  gap: 0.4rem;
+}
+.cover-rail__score {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.cover-rail__score b {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.cover-rail__score span {
+  color: var(--dawn-faint);
+  font-size: 0.82rem;
+}
+.cover-rail__score--alt b {
+  font-size: 1.15rem;
+}
+
+.title-head__native {
+  color: var(--dawn-dim);
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+}
+
+/* The other names this title goes by. A reader often knows only the fan name,
+   so the page says it out loud instead of hiding it in the markup. */
+/* Own a copy. These are search links, not products, so each row reads as a
+   door and not as a price tag. Same shape as the platform rows above, because
+   a reader has already learned to read that shape by the time they get here. */
+/* The shop shelf. A cover here is still a door into the index, so the image
+   and the title link inward and only the two small words link out. That keeps
+   the page a catalog page and not a storefront pretending to hold stock. */
+.shop-shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.25rem 1rem;
+}
+.shop-card__cover {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.shop-card__cover img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--cobalt-line);
+  background: var(--night-sunk);
+  transition: border-color 160ms ease;
+}
+.shop-card__cover:hover img,
+.shop-card__cover:focus-visible img {
+  border-color: var(--rose);
+}
+.shop-card__title {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.shop-card__buy {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.45rem 0 0;
+}
+.shop-card__buy a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  text-align: center;
+  padding: 0.35rem 0.3rem;
+  border: 1px solid var(--rose-soft);
+  border-radius: 999px;
+  color: var(--rose);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 160ms ease;
+}
+.shop-card__buy a:hover,
+.shop-card__buy a:focus-visible {
+  background: var(--night-raised);
+}
+.shop-shelf__more {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+}
+
+/* The jump row. On a phone this page is four long shelves, so the reader gets
+   a way to reach the right one without scrolling past the other three. */
+.shop-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1.6rem;
+}
+.shop-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.3rem 0.95rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 999px;
+  background: var(--night-raised);
+  color: var(--dawn-dim);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 140ms var(--ease-dawn),
+    border-color 140ms var(--ease-dawn);
+}
+.shop-jump a:hover,
+.shop-jump a:focus-visible {
+  color: var(--rose);
+  border-color: var(--rose-soft);
+}
+
+@media (max-width: 640px) {
+  .shop-jump {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 1.2rem;
+  }
+  .shop-jump::-webkit-scrollbar {
+    display: none;
+  }
+  .shop-shelf {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem 0.7rem;
+  }
+}
+
+/* Genre doors: one row per genre, the two shops sitting at the end of it. */
+.shop-genres {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.5rem;
+}
+.shop-genres li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 12px;
+  background: var(--night-sunk);
+}
+.shop-genres a.shop-genres__name {
+  flex: 1;
+  min-width: 0;
+  color: var(--dawn);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.shop-genres a.shop-genres__name:hover,
+.shop-genres a.shop-genres__name:focus-visible {
+  color: var(--rose);
+}
+.shop-genres a {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 0.15rem;
+  color: var(--rose);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.shop-genres a:hover,
+.shop-genres a:focus-visible {
+  text-decoration: underline;
+}
+.shop-note {
+  color: var(--dawn-dim);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 68ch;
+}
+/* The buy box.
+
+   It sits above the read table, so it has to read as a real offer and not as
+   an advert bolted on. Three things do the work: a lit rose edge, an icon
+   that names the goods, and a filled button on the row most people want.
+   Everything else stays quiet so the offer is the only bright thing. */
+.buybox {
+  position: relative;
+  border: 1px solid var(--rose-soft);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(244, 114, 182, 0.14), transparent 60%),
+    var(--night-raised);
+  padding: 1.15rem 1.15rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.buybox__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin: 0 0 0.9rem;
+}
+.buybox__head h2 {
+  font-size: 1.15rem;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.buybox__head p {
+  color: var(--dawn-dim);
+  font-size: 0.87rem;
+  margin: 0;
+}
+.buys {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+.buy a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.15rem 0.9rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 14px;
+  background: var(--night-sunk);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 160ms var(--ease-dawn), background 160ms var(--ease-dawn),
+    transform 160ms var(--ease-dawn);
+}
+.buy a:hover,
+.buy a:focus-visible {
+  border-color: var(--rose);
+  background: var(--night-raised);
+  transform: translateY(-2px);
+}
+.buy__icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--cobalt-line);
+  background: rgba(244, 114, 182, 0.08);
+  color: var(--rose);
+}
+.buy__label {
+  grid-column: 2;
+  font-weight: 600;
+}
+.buy__note {
+  grid-column: 2;
+  color: var(--dawn-dim);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+/* The button words say what is behind the tap, so they are allowed to look
+   like a button. The first row is the one most readers want, so it gets the
+   filled treatment and the rest stay outlined. */
+.buy__go {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--rose-soft);
+  border-radius: 999px;
+  color: var(--rose);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 160ms var(--ease-dawn), color 160ms var(--ease-dawn);
+}
+.buy--lead .buy__go {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: var(--night);
+}
+.buy--lead a {
+  border-color: var(--rose-soft);
+}
+.buy a:hover .buy__go {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: var(--night);
+}
+.buy a:hover .buy__icon {
+  border-color: var(--rose-soft);
+}
+.buys__note {
+  color: var(--dawn-dim);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  /* The note sits above the links now, so its gap goes below it. */
+  margin: 0 0 0.85rem;
+}
+@media (max-width: 480px) {
+  .buy a {
+    grid-template-columns: auto 1fr;
+    row-gap: 0.55rem;
+  }
+  .buy__icon {
+    grid-row: 1 / span 2;
+  }
+  .buy__go {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    text-align: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .buy a:hover,
+  .buy a:focus-visible {
+    transform: none;
+  }
+}
+.title-head__aka {
+  color: var(--dawn-dim);
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.title-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 1.1rem;
+  margin: 0.9rem 0 1.4rem;
+  padding: 0;
+  list-style: none;
+  color: var(--dawn-dim);
+  font-size: 0.9rem;
+}
+/* genres are the only meta you can act on, so they alone look like buttons */
+.title-head__genre a {
+  display: inline-block;
+  padding: 0.22rem 0.7rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 999px;
+  color: var(--dawn);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: border-color 140ms var(--ease-dawn), color 140ms var(--ease-dawn);
+}
+.title-head__genre a:hover {
+  border-color: var(--rose);
+  color: var(--day);
+}
+
+/* ---------- the answer block: platform rows ------------------------------- */
+
+.answer {
+  margin-block: 1.75rem 2.75rem;
+}
+
+.answer__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--cobalt);
+  margin-bottom: 0.25rem;
+}
+.answer__head h2 {
+  color: var(--rose-soft);
+}
+.answer__head p {
+  margin: 0;
+}
+/* the phase tag rides the answer rule, right where the line runs */
+.answer__head .cue {
+  margin-left: auto;
+  align-self: flex-end;
+  translate: 0 calc(50% + 0.6rem);
+  background: var(--night);
+  padding-left: 0.8rem;
+}
+.answer__count {
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.platforms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.platform {
+  border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+}
+
+.platform a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0 1rem;
+  padding: 0.85rem 0.5rem;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 140ms var(--ease-dawn);
+}
+
+/* ---------- the comparison: how you pay, what is free, where it works ------ */
+
+/* On a phone the header row is useless, so each cell carries its own label.
+   From 760px up the labels hide and the header row lines the columns up. */
+.compare__head {
+  display: none;
+}
+
+.platform__fact {
+  grid-column: 2;
+  display: flex;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--dawn);
+  margin-top: 0.3rem;
+}
+.platform__fact b {
+  font-weight: 600;
+  color: var(--dawn-faint);
+  min-width: 7.5rem;
+}
+
+/* the one line that says which door is open without paying */
+.verdict {
+  margin: 0 0 0.9rem;
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid var(--rose);
+  border-radius: 0 8px 8px 0;
+  background: color-mix(in srgb, var(--rose) 10%, transparent);
+  color: var(--dawn);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* marks the top row, which is the one the ranking is for */
+.platform__best {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.42rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rose) 22%, transparent);
+  color: var(--day);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+}
+
+.compare__checked {
+  margin: 0.9rem 0 0;
+  color: var(--dawn-faint);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 760px) {
+  .compare__head {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 0 1rem;
+    padding: 0 0.5rem 0.5rem;
+    border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+    font-family: var(--stencil);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dawn-faint);
+  }
+  .compare__head span:first-child {
+    grid-column: 2;
+  }
+
+  .platform a {
+    grid-template-columns: 18px minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  }
+  .platform__fact {
+    margin-top: 0;
+    align-self: center;
+    grid-row: 1 / span 2;
+  }
+  .platform__fact--pay {
+    grid-column: 3;
+  }
+  .platform__fact--free {
+    grid-column: 4;
+  }
+  .platform__fact--region {
+    grid-column: 5;
+  }
+  .platform__fact b {
+    display: none;
+  }
+  /* .platform__go is defined further down the file, so it needs the extra
+     specificity to be moved into the last column. */
+  .platform a .platform__go {
+    grid-column: 6;
+  }
+}
+.platform a:hover {
+  background: var(--night-raised);
+}
+
+/* the gel: this platform's tile, mounted like a lighting filter */
+.platform__edge {
+  grid-row: 1 / span 2;
+}
+
+.platform__name {
+  grid-column: 2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.platform__sub {
+  grid-column: 2;
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+}
+
+.platform__go {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  color: var(--dawn);
+  text-shadow: 0 0 18px rgb(site(rgb.rose) / 0.45);
+  font-family: var(--stencil);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.platform a:hover .platform__go {
+  color: var(--day);
+}
+
+/* ---------- honest empties: the ghost light -------------------------------- */
+
+.empty {
+  border: 1px dashed var(--cobalt-line);
+  padding: 1.1rem 1.2rem;
+  color: var(--dawn-dim);
+  font-size: 0.95rem;
+  background: linear-gradient(to top, rgb(site(rgb.cobalt) / 0.12), transparent 70%);
+}
+.empty strong {
+  color: var(--dawn);
+  font-weight: 600;
+}
+.empty p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- facts ---------------------------------------------------------- */
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2.5rem;
+  margin: 0;
+}
+.facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.55rem;
+  border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+}
+.facts dt {
+  color: var(--dawn-faint);
+}
+.facts dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+/* ---------- crosslink: read side <-> watch side ---------------------------- */
+
+.crosslink {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  text-decoration: none;
+  border: 1px solid var(--cobalt-line);
+  padding: 1rem 1.1rem;
+  background: linear-gradient(to top, rgb(site(rgb.cobalt) / 0.18), transparent 75%);
+  transition: border-color 140ms var(--ease-dawn), box-shadow 140ms var(--ease-dawn);
+}
+/* Two of these can stack. Without a gap their borders touch and the pair
+   reads as one box, so the second link is never seen. */
+.crosslink + .crosslink {
+  margin-top: 0.8rem;
+}
+.crosslink:hover {
+  border-color: var(--rose);
+  box-shadow: 0 10px 30px -12px rgb(site(rgb.rose) / 0.35);
+}
+.crosslink img {
+  width: 46px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  flex: none;
+}
+.crosslink__lead {
+  color: var(--dawn-faint);
+  font-size: 0.82rem;
+  display: block;
+}
+.crosslink__title {
+  font-weight: 700;
+}
+
+/* ---------- track on AniList ----------------------------------------------- */
+
+.track-line {
+  margin: 0.7rem 0 0;
+  font-size: 0.85rem;
+  color: var(--dawn-faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
+  align-items: baseline;
+}
+.track-line a {
+  color: var(--rose);
+  font-weight: 600;
+  text-decoration: none;
+}
+.track-line a:hover {
+  text-decoration: underline;
+}
+
+/* "Also listed on" — neutral info databases, never reading sources. */
+.also-on {
+  margin: 0.55rem 0 0;
+  font-size: 0.85rem;
+  color: var(--dawn-faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
+  align-items: baseline;
+}
+.also-on a {
+  color: var(--dawn-dim);
+  text-decoration: underline;
+  text-decoration-color: var(--cobalt);
+  text-underline-offset: 3px;
+}
+.also-on a:hover {
+  color: var(--day);
+}
+
+/* ---------- family: prequels, sequels, spin-offs --------------------------- */
+
+.family {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.family a {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr auto;
+  gap: 0.3rem 1rem;
+  align-items: baseline;
+  text-decoration: none;
+  border: 1px solid var(--cobalt-line);
+  padding: 0.7rem 1.1rem;
+  transition: border-color 140ms var(--ease-dawn);
+}
+.family a:hover {
+  border-color: var(--rose);
+}
+.family b {
+  color: var(--dawn-faint);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.family__title {
+  color: var(--day);
+  font-weight: 600;
+}
+.family__kind {
+  color: var(--dawn-faint);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .family a {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+  .family__kind {
+    white-space: normal;
+  }
+}
+
+/* ---------- description ---------------------------------------------------- */
+
+.synopsis {
+  color: var(--dawn-dim);
+  white-space: pre-line;
+}
+
+/* Our own overview. It is the main text of a title page, so it reads a step
+   brighter and looser than the publisher blurb below it. */
+.overview {
+  color: var(--dawn);
+  line-height: 1.7;
+  max-width: 68ch;
+}
+.overview + .overview {
+  margin-top: 0.85rem;
+}
+
+.synopsis__credit {
+  margin-top: 0.6rem;
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+}
+
+/* ---------- hero (plain, e.g. 404) ----------------------------------------- */
+
+.hero {
+  padding-block: 3.5rem 2.5rem;
+}
+.hero h1 {
+  max-width: 18ch;
+}
+.hero p {
+  color: var(--dawn-dim);
+  font-size: 1.1rem;
+  margin-top: 1.1rem;
+  max-width: 54ch;
+}
+
+/* ---------- pagination ------------------------------------------------------ */
+
+.pager {
+  padding-block: 2rem;
+  border-top: 1px solid var(--cobalt);
+  font-size: 0.95rem;
+}
+.pager__where {
+  margin: 0 0 0.85rem;
+  color: var(--dawn-faint);
+}
+.pager__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* 2.75rem is 44px: the smallest target a thumb hits reliably. */
+.pager__list a,
+.pager__now {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--cobalt);
+  color: var(--dawn);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+.pager__list a:hover,
+.pager__list a:focus-visible {
+  border-color: var(--dawn);
+}
+.pager__now {
+  border-color: var(--dawn);
+  font-weight: 600;
+}
+.pager__step {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.pager__gap {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding-inline: 0.2rem;
+  color: var(--dawn-faint);
+}
+
+/* ---------- genre chips and wall -------------------------------------------- */
+
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.chips a {
+  display: block;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 3px;
+  padding: 0.35rem 0.95rem;
+  font-family: var(--stencil);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: var(--dawn-dim);
+  transition: color 140ms var(--ease-dawn), border-color 140ms var(--ease-dawn),
+    background-color 140ms var(--ease-dawn);
+}
+.chips a:hover {
+  color: var(--night);
+  background: var(--dawn);
+  border-color: var(--dawn);
+}
+
+/* Filter chips: the active filter reads as the lit state. */
+.chips--filters {
+  margin-bottom: 1.4rem;
+}
+.chips a[aria-current='page'] {
+  color: var(--night);
+  background: var(--day);
+  border-color: var(--day);
+}
+
+/* Where to Read: three steps, then a ledger of platforms. */
+.how {
+  list-style: none;
+  counter-reset: step;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.how li {
+  counter-increment: step;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 4px;
+  padding: 1rem 1.1rem 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.how li::before {
+  content: 'Step ' counter(step);
+  font-family: var(--stencil);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rose);
+}
+.how b {
+  color: var(--day);
+  font-size: 1rem;
+}
+.how span {
+  color: var(--dawn-faint);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+/* The platform tile. One shape for every platform on the site: the brand
+   colour, and inside it that platform's own logo, served from our /brand/
+   folder. Same size, same weight, so a row of them reads as a set and not as
+   a pile of loose logos. A logo drawn in a dark colour gets a pale plate, or
+   it would vanish into the tile; scripts/make-brand.mjs decides which. */
+.mark {
+  --mark: var(--cobalt-line);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--mark-size, 2.1rem);
+  block-size: var(--mark-size, 2.1rem);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--mark) 15%, var(--night-sunk));
+  border: 1px solid color-mix(in srgb, var(--mark) 45%, transparent);
+  box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--mark) 70%, transparent);
+}
+.mark img {
+  inline-size: 62%;
+  block-size: 62%;
+  object-fit: contain;
+}
+/* A mark drawn in black or near-black. The plate is warm white, not pure, so
+   it sits in the same night as everything else instead of glaring out of it. */
+.mark--plate {
+  background: #f3f1ee;
+  border-color: color-mix(in srgb, var(--mark) 30%, transparent);
+}
+.mark--plate img {
+  inline-size: 70%;
+  block-size: 70%;
+}
+.mark b {
+  font-family: var(--stencil);
+  font-size: calc(var(--mark-size, 2.1rem) * 0.36);
+  line-height: 1;
+  color: var(--mark);
+}
+
+/* Hub page header: the tile sits beside the headline, not above it. */
+.section__head--mark {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1rem;
+  align-items: center;
+}
+.section__head--mark > h1 {
+  margin: 0;
+}
+.section__head--mark > p {
+  grid-column: 2;
+}
+
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: 0.5rem;
+}
+.ledger li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'mark name count' 'mark note count';
+  column-gap: 0.7rem;
+  align-items: center;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 4px;
+  padding: 0.6rem 0.85rem;
+}
+.ledger .mark {
+  grid-area: mark;
+}
+.ledger b {
+  grid-area: name;
+  color: var(--day);
+  font-size: 0.95rem;
+}
+.ledger span {
+  grid-area: note;
+  color: var(--dawn-faint);
+  font-size: 0.8rem;
+}
+.ledger em {
+  grid-area: count;
+  font-style: normal;
+  font-family: var(--stencil);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dawn-dim);
+  white-space: nowrap;
+}
+/* Free-platforms callout above the links list. */
+.free-call {
+  margin: 0 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.7rem;
+  border: 1px solid var(--rose);
+  border-radius: 4px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.88rem;
+}
+.free-call b {
+  color: var(--rose);
+  font-family: var(--stencil);
+  font-weight: 400;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.free-call a {
+  color: var(--day);
+  text-decoration: none;
+  border-bottom: 1px solid var(--cobalt-line);
+}
+.free-call a:hover {
+  color: var(--rose);
+  border-bottom-color: var(--rose);
+}
+
+/* Language availability under the read-links list. */
+.langs {
+  margin: 0.9rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+}
+.langs b {
+  color: var(--day);
+  font-weight: 600;
+}
+.langs span {
+  color: var(--dawn-faint);
+}
+
+/* Hub cards with three covers on top, the same idea as the genre wall: a
+   reader recognises a cover long before a platform name. */
+.ledger--faces li {
+  grid-template-areas: 'faces faces faces' 'mark name count' 'mark note count';
+  align-content: start;
+}
+.ledger__faces {
+  grid-area: faces;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  margin-bottom: 0.6rem;
+}
+.ledger__faces img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--night-sunk);
+}
+.ledger__faces img:only-child {
+  max-width: 34%;
+}
+.ledger__rest {
+  margin: 0.9rem 0 0;
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+}
+
+/* A tap row of the biggest genres, above the wall. On a phone it scrolls
+   sideways so the ten most wanted doors fit in one thumb sweep. */
+.genre-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1.4rem;
+}
+.genre-quick a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 999px;
+  background: var(--night-raised);
+  color: var(--dawn-dim);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 140ms var(--ease-dawn),
+    border-color 140ms var(--ease-dawn);
+}
+.genre-quick a:hover,
+.genre-quick a:focus-visible {
+  color: var(--rose);
+  border-color: var(--rose-soft);
+}
+
+/* The wall itself. Each card carries three real covers, because a cover says
+   what a genre holds faster than any label we could write. */
+.genre-wall {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
+  gap: 1px;
+  background: rgb(site(rgb.cobalt-line) / 0.45);
+  border: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+}
+.genre-wall a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  height: 100%;
+  background: var(--night);
+  padding: 0.7rem 0.75rem 0.85rem;
+  text-decoration: none;
+  transition: background-color 140ms var(--ease-dawn);
+}
+.genre-wall a:hover,
+.genre-wall a:focus-visible {
+  background: var(--night-raised);
+}
+
+.genre-wall__faces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+.genre-wall__faces img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--night-sunk);
+}
+/* One cover must not stretch across all three columns. */
+.genre-wall__faces img:only-child {
+  max-width: 34%;
+}
+
+.genre-wall__text {
+  display: block;
+  margin-top: auto;
+}
+.genre-wall__text b {
+  display: block;
+  color: var(--dawn);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.genre-wall__text span {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--dawn-faint);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+.genre-wall a:hover .genre-wall__text b {
+  color: var(--rose);
+}
+
+/* Where to go after the wall. Four plain doors, each a full thumb target. */
+.genre-next {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1px;
+  margin: 0 0 2.5rem;
+  background: rgb(site(rgb.cobalt-line) / 0.45);
+  border: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+}
+.genre-next a {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0.75rem 1rem;
+  background: var(--night);
+  color: var(--dawn-dim);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 140ms var(--ease-dawn),
+    color 140ms var(--ease-dawn);
+}
+.genre-next a:hover,
+.genre-next a:focus-visible {
+  background: var(--night-raised);
+  color: var(--rose);
+}
+
+/* Phones: two genre cards per row, and the quick row scrolls sideways
+   instead of wrapping into a tall block. */
+@media (max-width: 640px) {
+  .genre-quick {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.2rem;
+    margin-bottom: 1.1rem;
+  }
+  .genre-quick::-webkit-scrollbar {
+    display: none;
+  }
+  .genre-wall {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .genre-wall a {
+    padding: 0.55rem 0.55rem 0.7rem;
+  }
+  .genre-wall__text b {
+    font-size: 0.92rem;
+  }
+  .genre-wall__text span {
+    font-size: 0.72rem;
+  }
+  .genre-next {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- character pages -------------------------------------------------- */
+
+.person {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+  padding-block: 2.5rem 1.75rem;
+  border-bottom: 1px solid var(--cobalt);
+}
+.person__portrait {
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--night-sunk);
+  border: 1px solid var(--cobalt-line);
+  box-shadow: 0 22px 44px -18px rgb(site(rgb.night-sunk) / 0.95);
+}
+.person__portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.person h1 {
+  margin: 0 0 0.35rem;
+}
+.person__native {
+  color: var(--dawn-dim);
+  font-size: 1.05rem;
+  margin: 0 0 0.9rem;
+}
+.person__alias {
+  color: var(--dawn-faint);
+  font-size: 0.9rem;
+  margin: 0 0 1.1rem;
+}
+.appears {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+}
+.appears li {
+  background: rgb(site(rgb.cobalt-line) / 0.45);
+}
+.appears a {
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.7rem 0.9rem;
+  background: var(--night-raised);
+  text-decoration: none;
+  color: inherit;
+}
+.appears a:hover {
+  background: var(--night);
+}
+.appears img {
+  display: block;
+  width: 46px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.appears b {
+  display: block;
+  font-weight: 600;
+}
+.appears span {
+  color: var(--dawn-faint);
+  font-size: 0.82rem;
+}
+.appears em {
+  font-style: normal;
+  color: var(--rose-soft);
+  font-family: var(--stencil);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.people {
+  --face: 108px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.1rem 0.9rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.people > li {
+  flex: 0 1 var(--face);
+  min-width: 0;
+}
+.people a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.people img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 3px;
+  background: var(--night-sunk);
+  border: 1px solid var(--cobalt-line);
+  transition: border-color 140ms var(--ease-dawn), filter 140ms var(--ease-dawn);
+}
+.people a:hover img {
+  border-color: var(--dawn);
+  filter: brightness(1.08);
+}
+.people b {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin-top: 0.45rem;
+}
+.people span {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--dawn-faint);
+}
+/* Two doors under a face on the character wall: the profile, and the merch
+   page when one exists. Small, flat, and the same height on every tile so the
+   rows stay level whether or not a tile has a merch door. */
+.people--doors > li {
+  display: flex;
+  flex-direction: column;
+}
+.people .tile__doors {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.45rem;
+}
+.people .tile__doors a {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 28px;
+  padding: 0 0.4rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 3px;
+  font-family: var(--stencil);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dawn-faint);
+  text-decoration: none;
+  transition: border-color 140ms var(--ease-dawn), color 140ms var(--ease-dawn), background 140ms var(--ease-dawn);
+}
+.people .tile__doors a:hover {
+  border-color: var(--dawn);
+  color: var(--day);
+}
+.people .tile__doors .tile__merch {
+  color: var(--rose-soft);
+  border-color: color-mix(in srgb, var(--rose) 55%, var(--cobalt-line));
+}
+.people .tile__doors .tile__merch:hover {
+  color: var(--day);
+  border-color: var(--rose);
+  background: color-mix(in srgb, var(--rose) 16%, transparent);
+}
+.wall__note {
+  margin: 1rem 0 0;
+  font-size: 0.74rem;
+  color: var(--dawn-faint);
+  text-align: center;
+}
+
+/* The voice actor, on an anime page only. It sits under the role and is dimmer
+   than it, so the eye still reads name first, role second, voice third. */
+.people .people__voice {
+  font-size: 0.72rem;
+  color: var(--dawn-faint);
+  opacity: 0.82;
+  margin-top: 0.1rem;
+}
+
+/* ---------- character pages, narrow screens --------------------------------- */
+
+/* The portrait column was a fixed 220px at every width, and the fact list was
+   two fixed columns at every width. On a tablet that left a small picture
+   beside a very long line of text, and a long value such as a whole series
+   name wrapped inside its half, so the lines under the two halves stopped
+   matching. These rules give the page a middle size and a stacked size. */
+
+.person .facts {
+  align-items: stretch;
+  margin-bottom: 1.35rem;
+}
+.person > div > p {
+  max-width: 62ch;
+}
+
+@media (max-width: 1000px) {
+  .person {
+    grid-template-columns: 200px 1fr;
+    gap: 1.75rem;
+  }
+  /* One column: a value can now be as long as it likes without pushing its
+     neighbour out of line. */
+  .facts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .person {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding-block: 1.75rem 1.25rem;
+  }
+  .person__portrait {
+    max-width: 190px;
+  }
+  .person h1 {
+    font-size: 1.9rem;
+  }
+  /* The role word moves under the title instead of fighting it for width. */
+  .appears a {
+    grid-template-columns: 46px 1fr;
+    gap: 0.15rem 0.8rem;
+  }
+  .appears em {
+    grid-column: 2;
+  }
+}
+
+/* ---------- trailer ----------------------------------------------------------- */
+
+.trailer {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--night-sunk);
+  border: 1px solid var(--cobalt-line);
+  overflow: hidden;
+}
+.trailer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.75;
+}
+.trailer button {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--dawn);
+  font: inherit;
+}
+.trailer button span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgb(site(rgb.night-sunk) / 0.7);
+  border: 1px solid var(--rose);
+  border-radius: 3px;
+  padding: 0.6rem 1.3rem;
+  font-family: var(--stencil);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: background-color 140ms var(--ease-dawn), color 140ms var(--ease-dawn);
+}
+.trailer button:hover span {
+  background: var(--rose);
+  color: var(--night);
+}
+.trailer iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- footer: blackout --------------------------------------------------- */
+
+.colophon {
+  border-top: 1px solid var(--cobalt);
+  background: linear-gradient(to bottom, rgb(site(rgb.cobalt) / 0.14), transparent 40%),
+    var(--night-sunk);
+  padding-block: 3rem 2rem;
+  color: var(--dawn-faint);
+  font-size: 0.88rem;
+}
+.colophon a {
+  color: var(--dawn-dim);
+  text-decoration: none;
+}
+.colophon a:hover {
+  color: var(--day);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.colophon p {
+  max-width: 44ch;
+  margin: 0 0 0.8rem;
+  line-height: 1.6;
+}
+.colophon__grid {
+  display: grid;
+  grid-template-columns: 1.6fr 0.8fr 0.8fr 1.4fr;
+  gap: 2.5rem 3rem;
+}
+.colophon__grid h3 {
+  font-family: var(--stencil);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dawn);
+  font-size: 0.82rem;
+  margin: 0 0 0.8rem;
+}
+.colophon__grid ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.colophon__grid ul a {
+  display: inline-block;
+  padding-block: 0.1rem; /* a comfortable thumb target on phones */
+}
+.colophon__grid .wordmark {
+  display: inline-block;
+  margin-bottom: 0.9rem;
+}
+.colophon__count {
+  color: var(--cobalt-bright);
+  font-family: var(--stencil);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.colophon__bar {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.8rem;
+}
+
+/* ---------- narrow screens ------------------------------------------------------ */
+
+@media (max-width: 760px) {
+  :root {
+    --shell: min(1180px, 100% - 2rem);
+  }
+  /* phone: the cover stands beside the title, scores under both, body below */
+  .title-page {
+    grid-template-columns: 108px minmax(0, 1fr);
+    grid-template-areas:
+      'cover head'
+      'mylist mylist'
+      'scores scores'
+      'body body';
+    gap: 0 1.1rem;
+    padding-block: 1.5rem 3rem;
+  }
+  .cover-rail {
+    display: contents;
+  }
+  .cover-wrap {
+    grid-area: cover;
+    align-self: start;
+  }
+  .title-head {
+    align-self: end;
+    padding-bottom: 0.2rem;
+  }
+  .title-head h1 {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    line-height: 1.1;
+  }
+  .title-head__native {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+  }
+  .title-head__meta {
+    margin: 0.7rem 0 0;
+    gap: 0.4rem 0.8rem;
+    font-size: 0.84rem;
+  }
+  .crumbs {
+    margin-bottom: 0.4rem;
+  }
+  .scores {
+    grid-area: scores;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.4rem;
+    margin: 1rem 0 0;
+    padding-top: 0.7rem;
+  }
+  .cover-rail__score b,
+  .cover-rail__score--alt b {
+    font-size: 1.25rem;
+  }
+  .title-body {
+    margin-top: 1.4rem;
+  }
+  .answer {
+    margin-block: 1.5rem 2.25rem;
+  }
+  .answer__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  .answer__head p {
+    font-size: 0.88rem;
+    color: var(--dawn-faint);
+  }
+  .free-call {
+    font-size: 0.84rem;
+  }
+  .platform a {
+    padding: 0.8rem 0.4rem;
+    gap: 0 0.8rem;
+  }
+  .platform__go {
+    font-size: 0.72rem;
+  }
+  /* cast scrolls sideways so the section stays one screen tall */
+  .people {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 0.7rem;
+    padding-bottom: 0.5rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cobalt) transparent;
+  }
+  .people li {
+    flex: 0 0 92px;
+    scroll-snap-align: start;
+  }
+  .people b {
+    font-size: 0.78rem;
+  }
+  /* The character wall and a full cast page wrap into rows of three. The
+     sideways strip above is only for the short cast row on a title page. */
+  .people--wall {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    gap: 0.9rem 0.6rem;
+  }
+  .people--wall li {
+    flex: 0 1 calc((100% - 1.2rem) / 3);
+    scroll-snap-align: none;
+  }
+  /* A phone tile is too narrow for two doors in a row, so they stack. */
+  .people--wall .tile__doors {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .people--wall .tile__doors a {
+    min-height: 30px;
+  }
+  .crosslink {
+    padding: 0.85rem 0.9rem;
+  }
+  .section {
+    padding-block: 2rem;
+  }
+  .kinds {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .colophon {
+    padding-block: 2.25rem 1.5rem;
+  }
+  .colophon__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem 1.5rem;
+  }
+  .colophon__brand,
+  .colophon__grid > div:last-child {
+    grid-column: 1 / -1;
+  }
+  .colophon__bar {
+    margin-top: 1.75rem;
+    flex-direction: column;
+  }
+  .facts {
+    grid-template-columns: 1fr;
+  }
+  .grid {
+    --card: 108px;
+    gap: 1.4rem 0.9rem;
+  }
+  .person {
+    grid-template-columns: 132px 1fr;
+    gap: 1.25rem;
+  }
+  /* Mobile header: [logo] ........ [menu button]. The panel opens below. */
+  .masthead__inner {
+    grid-template-columns: 1fr auto;
+    column-gap: 1rem;
+    padding-block: 0.65rem;
+  }
+  .menu-btn {
+    display: inline-flex;
+    justify-self: end;
+  }
+  .masthead__menu {
+    display: none;
+  }
+  body.menu-open .masthead__menu {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    padding-block: 0.85rem 0.35rem;
+    border-top: 1px solid rgb(site(rgb.cobalt-line) / 0.45);
+    /* Room for the bottom bar (.dock), so the last rows can scroll clear of it. */
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+  /* The open menu is taller than a phone screen. The header is sticky, so a
+     tall header never scrolls and its last rows (Characters, My list) were
+     out of reach. It scrolls inside itself instead, on a solid background so
+     the page does not show through. */
+  body.menu-open .masthead {
+    max-height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--night-sunk);
+  }
+  body.menu-open .menu-btn__bars {
+    display: none;
+  }
+  body.menu-open .menu-btn__x {
+    display: block;
+  }
+  .masthead__tag {
+    display: none;
+  }
+  .masthead nav {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    margin-top: 0.85rem;
+    padding-block: 0;
+  }
+  .masthead nav::before {
+    display: none;
+  }
+  .masthead nav a::after {
+    display: none;
+  }
+  .masthead nav a {
+    display: block;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.25);
+    font-size: 1rem;
+  }
+  .masthead nav a[aria-current='page'] {
+    border-bottom-color: var(--rose);
+  }
+  .nav-home {
+    display: block;
+  }
+  .finder {
+    max-width: none;
+  }
+  .hero--home {
+    overflow-x: clip;
+    background: linear-gradient(to bottom, #070a16 0%, #0d1d4a 55%, var(--night) 100%);
+  }
+  .hero--home::after {
+    display: none;
+  }
+  main:has(.title-page) {
+    background: none;
+  }
+  .hero__content {
+    padding-block: 2.6rem 0;
+  }
+  .skyline {
+    gap: 0.55rem;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.4rem;
+  }
+  .skyline img {
+    height: 170px;
+  }
+  .skyline img:nth-child(n + 6) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- prose pages: about, privacy, contact, dmca -------------------- */
+
+.prose {
+  max-width: 68ch;
+  color: var(--dawn);
+  line-height: 1.75;
+}
+.prose h2 {
+  font-family: var(--stencil);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 1.05rem;
+  color: var(--day);
+  margin: 2.5rem 0 0.75rem;
+}
+.prose h2:first-child {
+  margin-top: 0;
+}
+.prose h3 {
+  font-size: 1rem;
+  color: var(--day);
+  margin: 1.75rem 0 0.5rem;
+}
+.prose p,
+.prose li {
+  margin: 0 0 1rem;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.2rem;
+  margin: 0 0 1rem;
+}
+.prose li {
+  margin-bottom: 0.5rem;
+}
+.prose a {
+  color: var(--rose);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  color: var(--day);
+}
+.prose strong {
+  color: var(--day);
+}
+.prose__note {
+  border-left: 2px solid var(--cobalt-bright);
+  padding: 0.1rem 0 0.1rem 1rem;
+  color: var(--dawn-dim);
+}
+.prose__updated {
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+.mailto {
+  font-family: var(--stencil);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+/* legal links sit under the brand blurb, one row, comfortable tap targets */
+.colophon__legal {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.1rem;
+  font-size: 0.84rem;
+}
+.colophon__legal a {
+  display: inline-block;
+  padding-block: 0.25rem;
+}
+
+/* ---------- the answer sentence: one quotable line near the top ----------- */
+
+.title-answer {
+  margin: 1.25rem 0 0;
+  max-width: 62ch;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  line-height: 1.65;
+  color: var(--dawn);
+  border-left: 2px solid var(--cobalt-line);
+  padding-left: 1rem;
+}
+
+.title-answer__stamp {
+  color: var(--dawn-faint);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+/* ---------- genre index: the copy above the wall ------------------------- */
+
+.genre-intro {
+  max-width: 68ch;
+  margin-bottom: 2rem;
+  color: var(--dawn-dim);
+  line-height: 1.7;
+}
+
+.genre-intro p + p {
+  margin-top: 0.9rem;
+}
+
+/* ---------- answer pages: the Q&A list and the "like" picks --------------- */
+
+/* A question is a cue line; the answer is the light under it. The rose rule
+   on the left is the same horizon device the platform rows use. */
+.qa {
+  margin: 0;
+  display: grid;
+  gap: 1.1rem;
+}
+.qa > div {
+  border-left: 2px solid var(--cobalt);
+  padding-left: 0.95rem;
+}
+.qa > div:first-child {
+  border-left-color: var(--rose);
+}
+.qa dt {
+  font-weight: 700;
+  color: var(--dawn);
+  margin-bottom: 0.25rem;
+}
+.qa dd {
+  margin: 0;
+  color: var(--dawn-dim);
+  line-height: 1.65;
+  max-width: 68ch;
+}
+
+/* the crosslinks that point at the answer pages */
+.more-answers {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1.5rem 2.5rem;
+}
+
+/* the "like" picks: cover on the horizon, reason and platforms beside it */
+.picks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+.pick {
+  display: flex;
+  gap: 0.95rem;
+  align-items: flex-start;
+  border: 1px solid var(--cobalt-line);
+  background: linear-gradient(to top, rgb(site(rgb.cobalt) / 0.18), transparent 75%);
+  padding: 0.85rem 1rem;
+  transition: border-color 140ms var(--ease-dawn), box-shadow 140ms var(--ease-dawn);
+}
+.pick:hover,
+.pick:focus-within {
+  border-color: var(--rose);
+  box-shadow: 0 10px 30px -12px rgb(site(rgb.rose) / 0.35);
+}
+.pick__art {
+  flex: none;
+  display: block;
+  line-height: 0;
+}
+.pick__art img {
+  width: 64px;
+  height: auto; /* the height attribute must not beat the aspect-ratio */
+  aspect-ratio: 460 / 651;
+  object-fit: cover;
+  background: var(--night-raised);
+}
+.pick__body {
+  min-width: 0;
+}
+.pick__body h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+.pick__body h3 a {
+  color: var(--dawn);
+  text-decoration: none;
+}
+.pick__body h3 a:hover,
+.pick__body h3 a:focus-visible {
+  color: var(--day);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pick__why {
+  margin: 0 0 0.3rem;
+  color: var(--dawn-faint);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+.pick__where {
+  margin: 0;
+  color: var(--dawn-dim);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.pick__where b {
+  color: var(--rose-soft);
+  font-weight: 600;
+}
+.pick__where--none {
+  color: var(--dawn-faint) !important;
+  font-weight: 400 !important;
+  font-style: italic;
+}
+
+/* Phone: the cover shrinks, the words keep the width they need. */
+@media (max-width: 560px) {
+  .pick {
+    gap: 0.75rem;
+    padding: 0.75rem 0.8rem;
+  }
+  .pick__art img {
+    width: 52px;
+  }
+  .pick__body h3 {
+    font-size: 0.98rem;
+  }
+  .qa > div {
+    padding-left: 0.8rem;
+  }
+}
+
+/* ---------- computed facts: the coverage strip and the reading order ------ */
+
+/* Four numbers the site works out for itself. They read as a dawn horizon:
+   the value bright, the label dim under it. */
+.reach {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--cobalt-line);
+  border: 1px solid var(--cobalt-line);
+}
+.reach__cell {
+  background: var(--night-raised);
+  padding: 0.85rem 0.95rem;
+  display: grid;
+  gap: 0.15rem;
+}
+.reach__value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--dawn);
+  font-variant-numeric: tabular-nums;
+}
+.reach__cell--good .reach__value { color: var(--rose-soft); }
+.reach__label {
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: var(--dawn-faint);
+}
+
+/* The order to read a series in. The rose rule marks where you stand. */
+.order {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: order;
+  display: grid;
+  gap: 0.5rem;
+}
+.order__step {
+  counter-increment: order;
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.6rem 0.9rem 0.6rem 2.6rem;
+  position: relative;
+  border-left: 2px solid var(--cobalt);
+  background: linear-gradient(to right, rgb(site(rgb.cobalt) / 0.16), transparent 70%);
+}
+.order__step::before {
+  content: counter(order);
+  position: absolute;
+  left: 0.9rem;
+  top: 0.6rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--cobalt-bright);
+}
+.order__step--self {
+  border-left-color: var(--rose);
+  background: linear-gradient(to right, rgb(site(rgb.rose) / 0.14), transparent 70%);
+}
+.order__step--self::before { color: var(--rose-soft); }
+.order__name { color: var(--dawn); font-weight: 600; line-height: 1.35; }
+.order__name a { color: var(--dawn); text-decoration: none; }
+.order__name a:hover,
+.order__name a:focus-visible {
+  color: var(--day);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.order__meta { font-size: 0.84rem; color: var(--dawn-faint); }
+
+/* Wide screens fit every number on one line. A comic has five cells (it
+   also counts languages), an anime four, so the track count is not fixed. */
+@media (min-width: 720px) {
+  .reach { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+
+/* ---------- the airing clock: countdown, next-episode strip, schedule ----- */
+.countdown {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.countdown--soon {
+  color: var(--rose-soft);
+}
+
+.next-ep {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.7rem;
+  margin: 0 0 1.25rem;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--cobalt-line);
+  border-left: 3px solid var(--rose);
+  background: linear-gradient(to right, rgb(site(rgb.rose) / 0.12), transparent 70%);
+  font-size: 0.95rem;
+  color: var(--dawn-dim);
+}
+.next-ep__tag {
+  font-family: var(--stencil);
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rose-soft);
+}
+.next-ep__num {
+  font-weight: 700;
+  color: var(--dawn);
+}
+.next-ep__all {
+  margin-left: auto;
+  color: var(--cobalt-bright);
+  text-decoration: none;
+}
+.next-ep__all:hover,
+.next-ep__all:focus-visible {
+  color: var(--day);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sched {
+  margin: 0 0 1.75rem;
+}
+.sched__day {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.7rem;
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--cobalt-line);
+  font-size: 1.05rem;
+}
+.sched__label {
+  font-family: var(--stencil);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dawn);
+}
+.sched__date {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--dawn-faint);
+}
+.sched__count {
+  margin-left: auto;
+  font-size: 0.82rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--dawn-faint);
+}
+
+.sched__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--cobalt-line);
+  border: 1px solid var(--cobalt-line);
+}
+.sched__row {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 0.85rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--night-raised);
+}
+.sched__art img {
+  display: block;
+  width: 60px;
+  height: auto;
+  aspect-ratio: 60 / 85;
+  object-fit: cover;
+  background: var(--night-sunk);
+}
+.sched__body {
+  display: grid;
+  gap: 0.2rem;
+  align-content: center;
+}
+.sched__name {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+.sched__name a {
+  color: var(--dawn);
+  text-decoration: none;
+}
+.sched__name a:hover,
+.sched__name a:focus-visible {
+  color: var(--day);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sched__ep,
+.sched__where {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--dawn-dim);
+}
+.sched__where b {
+  color: var(--dawn-faint);
+  font-weight: 600;
+}
+.sched__where--none {
+  color: var(--dawn-faint);
+  font-weight: 400;
+}
+
+/* Wider screens can carry two shows side by side without crowding. */
+@media (min-width: 780px) {
+  .sched__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- moods: the "what are you in the mood for" hub ----------------- */
+
+.moods {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--cobalt-line);
+  border: 1px solid var(--cobalt-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mood__link {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background: var(--night-raised);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.18s var(--ease-dawn);
+}
+
+.mood__link:hover,
+.mood__link:focus-visible {
+  background: var(--cobalt);
+}
+
+/* The three covers overlap like a hand of cards: it reads as "a stack of
+   stories", and it costs no extra request because they are already loaded. */
+.mood__art {
+  display: flex;
+}
+
+.mood__art img {
+  width: 40px;
+  aspect-ratio: 40 / 57;
+  height: auto;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--night-sunk);
+}
+
+.mood__art img + img {
+  margin-left: -14px;
+}
+
+.mood__body {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.mood__ask {
+  font-family: var(--grotesque);
+  font-size: 1.02rem;
+  color: var(--dawn);
+}
+
+.mood__blurb {
+  font-style: normal;
+  font-size: 0.86rem;
+  color: var(--dawn-dim);
+  line-height: 1.45;
+}
+
+.mood__count {
+  font-family: var(--stencil);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rose-soft);
+}
+
+/* The "in a different mood?" strip at the foot of each mood page. */
+.moodlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.moodlist a {
+  display: block;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 999px;
+  background: var(--night-raised);
+  color: var(--dawn-dim);
+  font-size: 0.84rem;
+  text-decoration: none;
+  transition: color 0.18s var(--ease-dawn), border-color 0.18s var(--ease-dawn);
+}
+
+.moodlist a:hover,
+.moodlist a:focus-visible {
+  color: var(--dawn);
+  border-color: var(--cobalt-bright);
+}
+
+@media (min-width: 860px) {
+  .moods {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* The way back to the full title page. Most readers land on an answer page
+   from search, so this is the loudest thing under the answer itself. */
+.jump {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.9rem 1rem;
+  margin: 1.4rem 0 1.8rem;
+  border: 1px solid var(--rose);
+  background: linear-gradient(to right, rgb(site(rgb.rose) / 0.14), rgb(site(rgb.cobalt) / 0.14));
+  transition: border-color 140ms var(--ease-dawn), box-shadow 140ms var(--ease-dawn), transform 140ms var(--ease-dawn);
+}
+.jump:hover,
+.jump:focus-visible {
+  border-color: var(--rose-soft);
+  box-shadow: 0 12px 34px -14px rgb(site(rgb.rose) / 0.5);
+}
+.jump img { width: 46px; aspect-ratio: 2 / 3; object-fit: cover; flex: none; }
+.jump__text { display: block; min-width: 0; flex: 1; }
+.jump__lead { display: block; color: var(--dawn-dim); font-size: 0.8rem; }
+.jump__title { display: block; font-weight: 700; font-size: 1.05rem; color: var(--dawn); }
+.jump__arrow { flex: none; color: var(--rose-soft); transition: transform 140ms var(--ease-dawn); }
+.jump:hover .jump__arrow { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) {
+  .jump, .jump__arrow { transition: none; }
+  .jump:hover .jump__arrow { transform: none; }
+}
+
+/* ------------------------------------------------------------------ *
+ * The quick answer block under the title: status pills and the number
+ * strip. Both only appear on a title page.
+ * ------------------------------------------------------------------ */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  list-style: none;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--dawn-dim);
+}
+.pill::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--cobalt-bright);
+}
+.pill--live::before {
+  background: var(--rose);
+  box-shadow: 0 0 0 3px rgb(site(rgb.rose) / 0.22);
+  animation: pill-pulse 2s var(--ease-dawn) infinite;
+}
+@keyframes pill-pulse {
+  50% { box-shadow: 0 0 0 7px rgb(site(rgb.rose) / 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pill--live::before { animation: none; }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 1px;
+  background: var(--cobalt);
+  border: 1px solid var(--cobalt);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 0 1.6rem;
+}
+.stats__cell {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  background: var(--night-raised);
+}
+.stats__cell dt {
+  margin: 0 0 0.25rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dawn-faint);
+}
+.stats__cell dd {
+  margin: 0;
+  font-family: var(--stencil);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--dawn);
+}
+.stats__cell--hot dd { color: var(--rose); }
+/* Two columns on a phone. A fifth cell would leave a hole, so it is cut. */
+@media (max-width: 560px) {
+  .stats__cell:nth-child(n + 5) { display: none; }
+}
+
+/* ------------------------------------------------------------------ *
+ * The common questions, folded. The answers stay in the page, so the
+ * search engine still reads every one of them.
+ * ------------------------------------------------------------------ */
+.qa2 details { border-bottom: 1px solid var(--cobalt); }
+.qa2 details:first-child { border-top: 1px solid var(--cobalt); }
+.qa2 summary {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 0.2rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--dawn);
+  font-weight: 600;
+}
+.qa2 summary::-webkit-details-marker { display: none; }
+.qa2 summary::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  flex: none;
+  border-right: 2px solid var(--rose);
+  border-bottom: 2px solid var(--rose);
+  rotate: -45deg;
+  transition: rotate 0.18s var(--ease-dawn);
+}
+.qa2 details[open] summary::before { rotate: 45deg; }
+.qa2 summary:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+.qa2__a {
+  margin: 0;
+  padding: 0 0 1rem 1.55rem;
+  color: var(--dawn-dim);
+  line-height: 1.65;
+}
+@media (prefers-reduced-motion: reduce) {
+  .qa2 summary::before { transition: none; }
+}
+
+/* ------------------------------------------------------------------ *
+ * The reading order, drawn as one line through the story. The numbers
+ * stay; a rose thread now joins them.
+ * ------------------------------------------------------------------ */
+.order--tl { position: relative; }
+.order--tl::before {
+  content: '';
+  position: absolute;
+  left: 1.32rem;
+  top: 1.1rem;
+  bottom: 1.1rem;
+  width: 2px;
+  background: linear-gradient(var(--cobalt-bright), var(--rose));
+  opacity: 0.55;
+}
+.order--tl .order__step { border-left-color: transparent; }
+.order--tl .order__step::before {
+  display: grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  left: 0.68rem;
+  top: 0.55rem;
+  border-radius: 50%;
+  background: var(--night-raised);
+  border: 2px solid var(--cobalt-bright);
+  font-size: 0.72rem;
+}
+.order--tl .order__step--self::before {
+  border-color: var(--rose);
+  color: var(--day);
+  background: var(--rose);
+  box-shadow: 0 0 0 4px rgb(site(rgb.rose) / 0.2);
+}
+
+/* ------------------------------------------------------------------ *
+ * The free mark on a cover. It is only drawn when the platform itself
+ * says the title is free, so it never lies.
+ * ------------------------------------------------------------------ */
+.card__free {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 2;
+  padding: 0.15rem 0.48rem;
+  border-radius: 5px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--night);
+  background: var(--rose);
+}
+
+/* ------------------------------------------------------------------ *
+ * The bar at the bottom of a phone screen. It is hidden on a computer.
+ * ------------------------------------------------------------------ */
+.dock { display: none; }
+@media (max-width: 640px) {
+  .dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: var(--night-raised);
+    border-top: 1px solid var(--cobalt-line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .dock a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 46px;
+    padding: 0.5rem 0.1rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.01em;
+    color: var(--dawn-faint);
+    text-decoration: none;
+  }
+  .dock__on {
+    color: var(--rose);
+    box-shadow: inset 0 2px 0 var(--rose);
+  }
+  .dock svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  body { padding-bottom: 3.6rem; }
+}
+
+/* The not-found page offers the dead slug to the site search. The button is a
+   real thumb target, and it only appears when there is a word worth searching. */
+.miss-search {
+  appearance: none;
+  min-height: 44px;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 999px;
+  background: var(--night-raised);
+  color: var(--dawn);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease-dawn), color 0.2s var(--ease-dawn);
+}
+.miss-search b { color: var(--rose); font-weight: 600; }
+.miss-search:hover,
+.miss-search:focus-visible { border-color: var(--rose); color: var(--dawn); }
+
+/* The not-found page's "where to go next" table: name, what is there, and the
+   address, one row per door. On a phone the three stack. */
+.miss-about {
+  max-width: 62ch;
+  margin: 0 0 1.75rem;
+  color: var(--dawn-dim);
+  line-height: 1.7;
+}
+.miss-next h2 { font-size: 1rem; margin: 0 0 0.75rem; }
+.miss-next ul {
+  list-style: none;
+  margin: 0 0 2.5rem;
+  padding: 0;
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  overflow: hidden;
+}
+.miss-next li + li { border-top: 1px solid var(--sf-line); }
+.miss-next a {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.7fr) 2fr auto;
+  align-items: center;
+  gap: 0.35rem 1.25rem;
+  min-height: 44px;
+  padding: 0.85rem 1.1rem;
+  color: inherit;
+  text-decoration: none;
+  transition: background 160ms var(--ease-dawn);
+}
+.miss-next a:hover,
+.miss-next a:focus-visible { background: rgb(site(rgb.rose) / 0.08); }
+.miss-next__name { font-weight: 700; color: var(--dawn); }
+.miss-next__what { color: var(--dawn-dim); font-size: 0.9rem; line-height: 1.5; }
+.miss-next__path {
+  color: var(--rose-soft);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.miss-next a:hover .miss-next__path { color: var(--rose); }
+@media (max-width: 640px) {
+  .miss-next a { grid-template-columns: 1fr auto; }
+  .miss-next__what { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .miss-next a { transition: none; }
+}
+
+/* ======================================================================== *
+ * Title and character page refresh, 22 Sep 2026.
+ *
+ * Same words, same sections, same order. What changed is the frame around
+ * them: one surface, one radius, one spacing scale, one heading device, and
+ * a fixed reading measure. Everything below overrides the older rules
+ * above it by coming later in the file at the same specificity.
+ * ======================================================================== */
+
+:root {
+  --sf: rgb(site(rgb.night-raised) / 0.72);                 /* the one card surface */
+  --sf-line: rgb(site(rgb.cobalt-line) / 0.55);           /* the one card edge */
+  --sf-line-strong: var(--cobalt-line);
+  --sf-r: 12px;                               /* the one radius */
+  --measure: 68ch;
+  --gap-section: 3rem;
+}
+
+/* ---------- the hero: cover left, words right, one baseline ------------- */
+
+.title-page {
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 0 3rem;
+  padding-block: 2.25rem 4.5rem;
+}
+.cover {
+  border-radius: 10px;
+  border-color: var(--sf-line-strong);
+}
+.cover-wrap::before { border-radius: 14px; }
+.scores {
+  margin-top: 1rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--sf-line);
+  border-top: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  gap: 0.55rem;
+}
+.cover-rail__score b { font-size: 1.7rem; letter-spacing: -0.02em; }
+.cover-rail__score--alt b { font-size: 1.2rem; }
+
+.title-head h1 {
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 22ch;
+}
+.title-head__native { margin-top: 0.55rem; font-size: 1.05rem; }
+.title-head__aka {
+  max-width: var(--measure);
+  line-height: 1.55;
+}
+.title-head__meta {
+  margin-top: 1rem;
+  gap: 0.45rem 0.6rem;
+}
+.title-head__meta li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: 0.15rem 0.7rem;
+  border: 1px solid var(--sf-line);
+  border-radius: 999px;
+  background: var(--sf);
+  font-size: 0.84rem;
+  color: var(--dawn-dim);
+}
+.title-head__meta li.title-head__genre {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.title-head__genre a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgb(site(rgb.rose) / 0.45);
+  background: rgb(site(rgb.rose) / 0.08);
+  color: var(--rose-soft);
+}
+.title-head__genre a:hover,
+.title-head__genre a:focus-visible {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: var(--night);
+}
+
+.title-body { margin-top: 1.75rem; }
+
+/* status pills and the number strip */
+.pills { margin-bottom: 1rem; gap: 0.5rem; }
+.pill {
+  min-height: 2rem;
+  padding: 0.3rem 0.85rem;
+  border-color: var(--sf-line);
+  background: var(--sf);
+}
+.stats {
+  gap: 1px;
+  background: var(--sf-line);
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  margin-bottom: 1.75rem;
+}
+.stats__cell { padding: 0.85rem 1rem; background: rgb(site(rgb.night-raised) / 0.92); }
+.stats__cell dt { font-size: 0.66rem; letter-spacing: 0.1em; }
+.stats__cell dd { font-size: 1.6rem; }
+
+/* the quotable line: a quiet ruled paragraph, no box */
+.title-answer {
+  margin: 0 0 1.35rem;
+  max-width: var(--measure);
+  padding: 0.15rem 0 0.15rem 1.1rem;
+  border-left: 2px solid var(--cobalt-line);
+  border-radius: 0;
+  background: none;
+  font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--dawn);
+}
+.title-answer__stamp { display: inline-block; margin-top: 0.2rem; }
+
+/* the airing strip: a rose wash that fades out, the loudest thing on the page */
+.next-ep {
+  margin: 0 0 1rem;
+  padding: 0.8rem 1.05rem;
+  align-items: center;
+  gap: 0.35rem 0.8rem;
+  border: 1px solid rgb(site(rgb.rose) / 0.35);
+  border-left: 3px solid var(--rose);
+  border-radius: var(--sf-r);
+  background: linear-gradient(to right, rgb(site(rgb.rose) / 0.16), rgb(site(rgb.rose) / 0.03) 65%, transparent);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+.next-ep__tag { font-size: 0.72rem; letter-spacing: 0.1em; }
+.next-ep__num { font-size: 1.02rem; }
+
+/* the free strip: an outlined row of pills, no wash */
+.free-call {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.95rem;
+  gap: 0.5rem 0.6rem;
+  border: 1px dashed rgb(site(rgb.rose-soft) / 0.55);
+  border-left: 1px dashed rgb(site(rgb.rose-soft) / 0.55);
+  border-radius: var(--sf-r);
+  background: transparent;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.free-call b {
+  margin-right: 0.2rem;
+  font-family: var(--stencil);
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rose-soft);
+}
+.free-call a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--sf-line);
+  border-radius: 999px;
+  background: var(--sf);
+  color: var(--dawn);
+  text-decoration: none;
+  transition: border-color 0.2s var(--ease-dawn), color 0.2s var(--ease-dawn);
+}
+.free-call a:hover,
+.free-call a:focus-visible {
+  border-color: var(--rose);
+  border-bottom-color: var(--rose);
+  color: var(--rose-soft);
+}
+
+/* ---------- one section device for the whole page ------------------------- */
+
+.title-body .answer,
+.person ~ .section,
+.person ~ .buybox,
+.person ~ .crosslink,
+.person ~ .answer {
+  margin-block: 0 var(--gap-section);
+}
+.person ~ .section {
+  padding-block: 0;
+  border-top: 0;
+}
+.person ~ .section + .section { margin-top: 0; }
+
+/* the heading: a short rose rule, then the stencil line, then the count */
+.answer__head,
+.section__head {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  padding: 0.85rem 0 0;
+  margin: 0 0 1.1rem;
+  border-bottom: 0;
+}
+.answer__head::before,
+.section__head::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.25rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--rose), var(--rose-soft));
+}
+.answer__head h2,
+.section__head h2 {
+  margin: 0;
+  color: var(--dawn);
+  font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.25rem);
+}
+.answer__head h2 { color: var(--dawn); }
+.answer__head p,
+.section__head p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--dawn-faint);
+  flex-basis: 100%;
+}
+.answer__head .answer__count {
+  flex-basis: auto;
+  margin-left: auto;
+}
+/* the listing pages keep their own head layout */
+.section__head:has(h1) { padding-top: 0; }
+.section__head:has(h1)::before { display: none; }
+
+/* ---------- the reading measure ------------------------------------------ */
+
+.overview,
+.synopsis,
+.synopsis__credit,
+.qa dd,
+.qa2__a,
+.empty p,
+.langs,
+.also-on,
+.track-line,
+.person > div > p {
+  max-width: var(--measure);
+}
+.overview { font-size: 1.02rem; line-height: 1.75; }
+.overview + .overview { margin-top: 1rem; }
+.synopsis { line-height: 1.75; }
+
+/* ---------- surfaces: everything that is a box uses the same box --------- */
+
+.buybox {
+  border: 1px solid rgb(site(rgb.rose-soft) / 0.4);
+  border-radius: var(--sf-r);
+  padding: 1.25rem 1.25rem 1.1rem;
+  margin: 0 0 1.75rem;
+  background:
+    radial-gradient(110% 90% at 0% 0%, rgb(site(rgb.rose) / 0.12), transparent 60%),
+    var(--sf);
+}
+.buybox__head { margin-bottom: 1rem; }
+.buybox__head h2 {
+  position: relative;
+  padding-top: 0.75rem;
+  color: var(--dawn);
+}
+.buybox__head h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.25rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--rose), var(--rose-soft));
+}
+.buy a {
+  border-radius: 10px;
+  border-color: var(--sf-line);
+  background: rgb(site(rgb.night) / 0.55);
+}
+.buy a:hover,
+.buy a:focus-visible { transform: none; border-color: var(--rose-soft); }
+.buy__icon { border-radius: 10px; }
+
+.verdict {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1.05rem;
+  border: 1px solid var(--sf-line);
+  border-left: 3px solid var(--rose);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  max-width: none;
+}
+
+/* the read/watch table */
+.compare__head {
+  border-radius: 8px 8px 0 0;
+  background: rgb(site(rgb.night) / 0.5);
+}
+.platforms {
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  overflow: hidden;
+  background: var(--sf);
+}
+.platforms:has(+ .compare__checked),
+.compare__head + .platforms { border-radius: 0 0 var(--sf-r) var(--sf-r); }
+.platform { border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.35); }
+.platform:last-child { border-bottom: 0; }
+.platform a {
+  border-radius: 0;
+  padding: 0.9rem 1rem;
+}
+.platform a:hover,
+.platform a:focus-visible { background: rgb(site(rgb.cobalt) / 0.22); }
+.platform__go {
+  border-radius: 999px;
+  border: 1px solid var(--sf-line-strong);
+  padding: 0.3rem 0.85rem;
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
+}
+.platform a:hover .platform__go,
+.platform a:focus-visible .platform__go {
+  border-color: var(--rose);
+  color: var(--rose-soft);
+}
+.compare__checked { margin-top: 0.9rem; }
+
+/* the coverage strip */
+.reach {
+  border-radius: var(--sf-r);
+  overflow: hidden;
+  gap: 1px;
+  background: var(--sf-line);
+  border: 1px solid var(--sf-line);
+  margin-bottom: 1.25rem;
+}
+.reach__cell { padding: 0.95rem 1rem; background: rgb(site(rgb.night-raised) / 0.92); }
+.reach__value { font-size: 1.5rem; font-family: var(--stencil); font-weight: 400; }
+
+/* the door cards: two across on a wide screen, each one a real card */
+.more-answers {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 0.85rem;
+  margin-block: 0 var(--gap-section);
+}
+.crosslink {
+  position: relative;
+  padding: 1.05rem 3rem 1.05rem 1.15rem;
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  min-height: 44px;
+  color: inherit;
+}
+.crosslink + .crosslink { margin-top: 0.85rem; }
+.crosslink::after {
+  content: '';
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--rose);
+  border-top: 2px solid var(--rose);
+  translate: 0 -50%;
+  rotate: 45deg;
+  opacity: 0.8;
+}
+.crosslink:hover,
+.crosslink:focus-visible {
+  border-color: var(--rose);
+  box-shadow: 0 12px 30px -14px rgb(site(rgb.rose) / 0.4);
+}
+.crosslink__lead { line-height: 1.45; }
+.crosslink__title {
+  display: block;
+  margin: 0.15rem 0;
+  font-size: 1.02rem;
+  color: var(--dawn);
+}
+.crosslink:hover .crosslink__title { color: var(--day); }
+.crosslink img { border-radius: 6px; }
+
+.empty {
+  border: 1px dashed var(--sf-line-strong);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  padding: 1rem 1.15rem;
+}
+.empty p { margin: 0; line-height: 1.65; }
+
+/* the three quiet lines under the doors */
+.langs,
+.track-line,
+.also-on {
+  padding: 0.55rem 0;
+  border-top: 1px solid rgb(site(rgb.cobalt-line) / 0.35);
+  margin: 0;
+  line-height: 1.6;
+}
+.langs { border-top: 0; }
+
+/* the facts table: label column, value column, a hairline between rows */
+.facts {
+  gap: 0 2.5rem;
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  padding: 0.35rem 1.15rem;
+}
+.facts > div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.55fr) 1fr;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.3);
+}
+.facts > div:last-child { border-bottom: 0; }
+.facts dt {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dawn-faint);
+  margin: 0;
+  padding-top: 0.15rem;
+}
+.facts dd { margin: 0; color: var(--dawn); line-height: 1.5; }
+
+/* questions and answers, folded or open, share one card */
+.qa2 {
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  padding: 0 1.15rem;
+}
+.qa2 details { border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.3); }
+.qa2 details:first-child { border-top: 0; }
+.qa2 details:last-child { border-bottom: 0; }
+.qa2 summary { padding: 0.95rem 0; min-height: 44px; line-height: 1.45; }
+.qa2 summary:hover { color: var(--day); }
+.qa2__a { padding: 0 0 1.1rem 1.55rem; }
+
+.qa {
+  gap: 0;
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+  padding: 0.25rem 1.15rem;
+}
+.qa > div {
+  border-left: 0;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.3);
+}
+.qa > div:last-child { border-bottom: 0; }
+.qa dt { margin-bottom: 0.35rem; line-height: 1.45; }
+
+/* trailer, order, family, cast */
+.trailer { border-radius: var(--sf-r); border: 1px solid var(--sf-line); overflow: hidden; }
+
+.order { gap: 0.6rem; }
+.order__step {
+  border-radius: 0 var(--sf-r) var(--sf-r) 0;
+  border-left-width: 3px;
+  padding: 0.75rem 1rem 0.75rem 2.8rem;
+  background: var(--sf);
+}
+.order__step--self { background: linear-gradient(to right, rgb(site(rgb.rose) / 0.14), var(--sf) 70%); }
+.order--tl .order__step { border-radius: var(--sf-r); }
+.order--tl .order__step::before { top: 0.75rem; }
+
+.family { gap: 0.6rem; }
+.family a {
+  border-radius: var(--sf-r);
+  border-color: var(--sf-line);
+  background: var(--sf);
+  padding: 0.8rem 1.1rem;
+}
+.family a:hover,
+.family a:focus-visible { border-color: var(--rose); }
+
+.people { --face: 118px; justify-content: flex-start; gap: 1.25rem 1rem; }
+.people img { height: auto; border-radius: 8px; border: 1px solid var(--sf-line); }
+.people li > a:hover img,
+.people li > a:focus-visible img { border-color: var(--rose-soft); }
+
+/* ---------- the character page ------------------------------------------- */
+
+.person {
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 2.75rem;
+  padding-block: 2.25rem 2.5rem;
+  margin-bottom: var(--gap-section);
+  border-bottom: 1px solid rgb(site(rgb.cobalt-line) / 0.35);
+}
+.person__portrait {
+  border-radius: 10px;
+  position: sticky;
+  top: 5rem;
+}
+.person h1 { letter-spacing: -0.02em; line-height: 1.05; max-width: 20ch; }
+.person__native { margin-bottom: 0.75rem; }
+.person__alias { max-width: var(--measure); line-height: 1.55; }
+.person > div > p:not(.person__native):not(.person__alias) {
+  margin: 0 0 1.25rem;
+  padding: 0.95rem 1.1rem;
+  border-left: 3px solid var(--rose);
+  border-radius: 0 var(--sf-r) var(--sf-r) 0;
+  background: linear-gradient(to right, rgb(site(rgb.rose) / 0.1), rgb(site(rgb.night-raised) / 0.4) 70%);
+  font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.15rem);
+  line-height: 1.65;
+  color: var(--dawn);
+}
+.person .facts { margin: 0 0 1.25rem; }
+.person .chips a { border-radius: 999px; }
+
+/* the "shows up" list: two columns on a wide screen, one card per row */
+.appears {
+  gap: 0.6rem;
+  background: none;
+}
+.appears li { background: none; }
+.appears a {
+  min-height: 44px;
+  border: 1px solid var(--sf-line);
+  border-radius: 10px;
+  background: var(--sf);
+  padding: 0.6rem 0.9rem;
+  transition: border-color 140ms var(--ease-dawn), background-color 140ms var(--ease-dawn);
+}
+.appears a:hover,
+.appears a:focus-visible { border-color: var(--rose-soft); background: rgb(site(rgb.cobalt) / 0.22); }
+.appears img { border-radius: 4px; }
+@media (min-width: 900px) {
+  .appears { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem 0.85rem; }
+}
+
+/* ---------- narrow screens ------------------------------------------------ */
+
+@media (max-width: 760px) {
+  :root { --gap-section: 2.25rem; }
+  .title-page {
+    grid-template-columns: 116px minmax(0, 1fr);
+    gap: 0 1.1rem;
+    padding-block: 1.25rem 3rem;
+  }
+  .title-head h1 { max-width: none; }
+  .title-head__meta { margin-top: 0.7rem; gap: 0.35rem 0.4rem; }
+  .title-head__meta li,
+  .title-head__genre a { min-height: 1.75rem; font-size: 0.78rem; padding-inline: 0.6rem; }
+  .scores {
+    margin: 1rem 0 0;
+    padding: 0.7rem 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.4rem;
+  }
+  .title-body { margin-top: 1.4rem; }
+  .title-answer,
+  .person > div > p:not(.person__native):not(.person__alias) {
+    padding: 0.8rem 0.9rem;
+    font-size: 1rem;
+  }
+  .next-ep, .free-call { padding: 0.7rem 0.9rem; font-size: 0.88rem; }
+  .answer__head, .section__head { margin-bottom: 0.9rem; }
+  .answer__head .answer__count { margin-left: 0; flex-basis: 100%; }
+  .facts { padding-inline: 0.9rem; }
+  .facts > div { grid-template-columns: minmax(6rem, 0.6fr) 1fr; gap: 0.5rem; padding: 0.6rem 0; }
+  .qa, .qa2 { padding-inline: 0.9rem; }
+  .qa2__a { padding-left: 1.1rem; }
+  .crosslink { padding: 0.9rem 2.6rem 0.9rem 0.95rem; }
+  .buybox { padding: 1rem 0.95rem 0.9rem; }
+  .person {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding-block: 1.25rem 1.75rem;
+  }
+  .person__portrait { position: static; max-width: 200px; }
+  .people { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crosslink, .appears a, .platform a, .buy a { transition: none; }
+}
+
+/* Visually hidden but still readable by a screen reader / announced by
+   aria-live. Used by the header search's result-count live region. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Header search: "no match" and "search failed" rows. */
+.finder-empty,
+.finder-error {
+  padding: 0.7rem 0.9rem;
+  color: var(--dawn-dim);
+  font-size: 0.9rem;
+}
+.finder-empty a,
+.finder-error .finder-retry {
+  color: inherit;
+  text-decoration: underline;
+}
+.finder-error .finder-retry {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---- character names (names.mjs) ------------------------------------------
+   When a character page leads with the fan spelling ("Sung Jin-Woo"), the
+   AniList spelling follows it inside the h1 in brackets. It is the same name,
+   so it reads as a quiet second line, not a second headline. */
+.person__formal {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--dawn-dim);
+  font-size: 0.5em;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* ---- character wall on phones, three a row (23 Sep 2026) ------------------
+   The wall was meant to show three faces a row on a phone, but the later
+   `.people { gap: 1.25rem 1rem }` rule beat the phone gap, so three thirds
+   plus two 1rem gaps no longer fit. The row broke into two cards that kept
+   their one-third width, and a third of the screen sat empty. A grid of three
+   equal columns cannot overflow that way: the columns share whatever width is
+   left after the gaps. The same class is used by the full cast page
+   (/<kind>/<slug>/characters), which was meant to be three a row as well.
+   Desktop keeps its fixed-width flex row; none of this applies above 760px. */
+@media (max-width: 760px) {
+  .people.people--wall {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem 0.5rem;
+    padding-bottom: 0;
+  }
+  .people.people--wall > li {
+    min-width: 0;
+  }
+  /* A card is about 110px wide here. Long names wrap to two lines and stop
+     there, so one long name cannot push its row taller than the rest. */
+  .people.people--wall b {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    font-size: 0.74rem;
+    line-height: 1.25;
+    margin-top: 0.35rem;
+  }
+  .people.people--wall span {
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* The doors sit at the foot of the card, so a one-line name and a two-line
+     name still leave every Details and Merch button on the same line. They
+     stack full width and stay 40px tall, the smallest a thumb hits reliably. */
+  .people--wall.people--doors .tile__doors {
+    flex-direction: column;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 0.4rem;
+  }
+  .people--wall.people--doors .tile__doors a {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 0 0.25rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+  }
+}
+/* A small tablet has room for a fourth face before the desktop row takes over. */
+@media (min-width: 521px) and (max-width: 760px) {
+  .people.people--wall {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+/* The Merch door on the wall jumps to #buy on the profile. Without this the
+   sticky header would land on top of the box's heading. */
+.buybox[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ---------- top picks: hand-picked Amazon products ------------------------ */
+/* Same surface as the buy box, so the two read as one offer. The cards are
+   narrower than buy rows because a product name is longer than "Shop books"
+   and wraps better in a column than across the page. */
+.picks__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.6rem;
+}
+.picks__list a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.2rem 0.8rem;
+  height: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--sf-line, var(--cobalt-line));
+  border-radius: 10px;
+  background: rgb(site(rgb.night) / 0.55);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 160ms var(--ease-dawn);
+}
+.picks__list a:hover,
+.picks__list a:focus-visible { border-color: var(--rose-soft); }
+.picks__list .buy__icon { grid-row: 1 / span 3; width: 38px; height: 38px; border-radius: 10px; }
+.picks__type {
+  color: var(--rose-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.picks__list .buy__label { font-size: 0.92rem; line-height: 1.35; }
+.picks__go {
+  color: var(--rose);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.picks__list a:hover .picks__go { text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) {
+  .picks__list a { transition: none; }
+}
+
+/* The shop page lists many series, each with its own cover and a few picks. */
+.pick-shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 0.9rem;
+}
+.pick-shelf > li {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0.4rem 0.9rem;
+  padding: 0.85rem;
+  border: 1px solid var(--sf-line, var(--cobalt-line));
+  border-radius: 12px;
+  background: var(--sf, var(--night-raised));
+}
+.pick-shelf img {
+  grid-row: 1 / span 2;
+  width: 72px;
+  height: auto;
+  aspect-ratio: 460 / 651;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.pick-shelf__name { margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.3; }
+.pick-shelf__name a { color: inherit; text-decoration: none; }
+.pick-shelf__name a:hover { text-decoration: underline; }
+.picks-sub { margin: 1.25rem 0 0.75rem; font-size: 1.05rem; }
+.pick-shelf ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.pick-shelf ul a {
+  display: block;
+  color: var(--dawn-dim);
+  font-size: 0.84rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+.pick-shelf ul a:hover,
+.pick-shelf ul a:focus-visible { color: var(--rose); }
+.pick-shelf ul b {
+  color: var(--rose-soft);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-right: 0.35rem;
+}
+
+/* ======================================================================== *
+ * My list, 23 Sep 2026: the title-page button and its popover, the
+ * /my-list page and the homepage "For you" block. All of it is drawn by
+ * browser JS from the reader's own storage (src/lib/my-list.js), on the one
+ * surface, edge and radius tokens above. Every control is at least 44px
+ * tall, because most readers tap.
+ * ======================================================================== */
+
+/* ---------- the button on a title page ----------------------------------- */
+
+/* It lives in the cover rail: under the cover and scores on a computer, and
+   its own full-width row under the cover on a phone (see the 760px block).
+   The two buttons always share one row: "Add" takes the room, "Lists" keeps
+   its own width. */
+.mylist {
+  position: relative;
+  margin-top: 0.9rem;
+}
+.mylist__bar {
+  display: flex;
+  gap: 0.4rem;
+}
+.mylist__add,
+.mylist__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 0.8rem;
+  white-space: nowrap;
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rose) 14%, transparent);
+  color: var(--dawn);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms var(--ease-dawn), border-color 150ms var(--ease-dawn), color 150ms var(--ease-dawn);
+}
+.mylist__add:hover,
+.mylist__more:hover {
+  background: color-mix(in srgb, var(--rose) 28%, transparent);
+  color: var(--day);
+}
+.mylist__add:focus-visible,
+.mylist__more:focus-visible,
+.mylist__pop :is(select, input, button, a):focus-visible,
+.ml :is(button, select, input, a):focus-visible,
+.foryou a:focus-visible {
+  outline: 2px solid var(--day);
+  outline-offset: 2px;
+}
+.mylist__add {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.mylist__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mylist__more {
+  flex: 0 0 auto;
+  border-color: var(--sf-line-strong);
+  background: var(--sf);
+  font-weight: 600;
+}
+.mylist__more svg,
+.mylist__icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mylist__more[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+.mylist__tick {
+  display: none;
+}
+/* Saved: the button goes to the lit "day" state and the plus turns to a tick. */
+.mylist--on .mylist__add {
+  background: var(--dawn);
+  border-color: var(--dawn);
+  color: var(--night);
+}
+.mylist--on .mylist__plus {
+  display: none;
+}
+.mylist--on .mylist__tick {
+  display: inline;
+}
+.mylist__note {
+  margin: 0.4rem 0 0;
+  color: var(--dawn-dim);
+  font-size: 0.82rem;
+}
+.mylist__note:empty {
+  margin: 0;
+}
+/* On a computer the panel opens beside the buttons, over the page to the
+   right of the cover rail, and grows upward from the buttons. The rail is
+   sticky, so a panel that grew downward ran off the bottom of the screen
+   where no scroll could reach it. On a phone it opens in the page flow, full
+   width (see the 760px block), so it can never push the page sideways. */
+.mylist__pop {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% + 1rem);
+  z-index: 30;
+  box-sizing: border-box;
+  width: 22rem;
+  padding: 1rem;
+  border: 1px solid var(--sf-line-strong);
+  border-radius: var(--sf-r);
+  background: var(--night-raised);
+  box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.7);
+}
+.mylist__pop[hidden] {
+  display: none;
+}
+/* The rail is sticky, which makes it its own layer. Lift it while the panel
+   is open, so the panel draws over the page beside it and not under it. It
+   stays under the site header (z-index 5). */
+.cover-rail:has(.mylist__pop:not([hidden])) {
+  z-index: 4;
+}
+@media (max-width: 760px) {
+  .mylist {
+    grid-area: mylist;
+    margin-top: 1rem;
+  }
+  .mylist__pop {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    margin-top: 0.6rem;
+  }
+}
+.mylist__field,
+.mylist__new label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--dawn-dim);
+}
+.mylist__head {
+  margin: 0.9rem 0 0.3rem;
+  font-size: 0.82rem;
+  color: var(--dawn-dim);
+}
+.mylist__pop select,
+.mylist__new input,
+.ml select,
+.ml input {
+  min-height: 44px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--sf-line-strong);
+  border-radius: 8px;
+  background: var(--night-sunk);
+  color: var(--dawn);
+  font: inherit;
+  font-size: 0.9rem;
+}
+.mylist__lists {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 13rem;
+  overflow-y: auto;
+}
+.mylist__lists li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.mylist__lists label {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.mylist__edit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.4rem;
+  color: var(--rose);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.mylist__edit:hover,
+.mylist__edit:focus-visible {
+  text-decoration: underline;
+}
+.mylist__lists input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+.mylist__empty {
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+  padding-block: 0.4rem;
+}
+.mylist__new {
+  margin-top: 0.8rem;
+}
+.mylist__row,
+.ml-form__row {
+  display: flex;
+  gap: 0.5rem;
+}
+.mylist__row,
+.ml-form__row {
+  /* On a narrow phone the Create button drops under the box instead of
+     squeezing it or running off the screen. */
+  flex-wrap: wrap;
+}
+.mylist__row input,
+.ml-form__row input {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+.mylist__row button,
+.ml-btn {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--rose);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--rose) 18%, transparent);
+  color: var(--dawn);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms var(--ease-dawn), border-color 150ms var(--ease-dawn);
+}
+.mylist__row button:hover,
+.ml-btn:hover {
+  background: color-mix(in srgb, var(--rose) 32%, transparent);
+}
+.ml-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+.ml-btn--ghost {
+  border-color: var(--sf-line-strong);
+  background: transparent;
+  font-weight: 600;
+}
+.ml-btn--ghost:hover {
+  border-color: var(--rose);
+  background: transparent;
+}
+.ml-btn[hidden] {
+  display: none;
+}
+.mylist__msg {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  color: var(--rose-soft);
+}
+.mylist__msg:empty {
+  display: none;
+}
+.mylist__open {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 0.3rem;
+  color: var(--rose);
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+.mylist__open:hover {
+  text-decoration: underline;
+}
+
+/* ---------- /my-list --------------------------------------------------------- */
+
+.ml h2 {
+  margin-bottom: 0.8rem;
+}
+.ml-blocked {
+  margin-bottom: 1.5rem;
+}
+.ml-blocked[hidden],
+.ml-alerts[hidden],
+.ml-week[hidden],
+.ml-form[hidden],
+.ml-empty[hidden] {
+  display: none;
+}
+.ml-alerts,
+.ml-week {
+  margin-bottom: 2rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-r);
+  background: var(--sf);
+}
+.ml-alerts {
+  border-color: color-mix(in srgb, var(--rose) 60%, transparent);
+}
+.ml-alerts__list,
+.ml-week__list,
+.ml-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ml-alerts__list a,
+.ml-week__list a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.8rem;
+  min-height: 44px;
+  color: var(--dawn);
+  text-decoration: none;
+}
+.ml-alerts__list a:hover,
+.ml-week__list a:hover {
+  color: var(--day);
+  text-decoration: underline;
+}
+.ml-week__list span {
+  color: var(--rose-soft);
+  font-size: 0.88rem;
+}
+.ml-tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--sf-line);
+}
+.ml-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ml-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 0.95rem;
+  border: 1px solid var(--sf-line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--dawn-dim);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 150ms var(--ease-dawn), border-color 150ms var(--ease-dawn), background 150ms var(--ease-dawn);
+}
+.ml-tab em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  color: var(--dawn-faint);
+  font-size: 0.78rem;
+}
+.ml-tab:hover {
+  color: var(--day);
+  border-color: var(--rose);
+}
+.ml-tab[aria-selected='true'] {
+  background: var(--day);
+  border-color: var(--day);
+  color: var(--night);
+  font-weight: 700;
+}
+.ml-tab[aria-selected='true'] em {
+  color: var(--night);
+}
+.ml-form {
+  margin-top: 1rem;
+  max-width: 32rem;
+}
+.ml-form label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--dawn-dim);
+}
+.ml-msg,
+.ml-import__msg {
+  margin: 0.7rem 0 0;
+  color: var(--rose-soft);
+  font-size: 0.9rem;
+}
+.ml-msg:empty,
+.ml-import__msg:empty {
+  display: none;
+}
+.ml-panel {
+  margin-top: 1.2rem;
+}
+.ml-panel:focus {
+  outline: none;
+}
+.ml-listbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ml-listbar[hidden] {
+  display: none;
+}
+.ml-listbar__name {
+  margin: 0 auto 0 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.ml-count {
+  margin: 0.8rem 0 0.4rem;
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+}
+.ml-count:empty {
+  display: none;
+}
+.ml-item {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--sf-line);
+}
+.ml-item img,
+.ml-item__nocover {
+  display: block;
+  width: 46px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 5px;
+  background: var(--night-raised);
+}
+.ml-item__title {
+  font-weight: 700;
+  color: var(--dawn);
+  text-decoration: none;
+}
+a.ml-item__title:hover {
+  color: var(--day);
+  text-decoration: underline;
+}
+.ml-item__facts,
+.ml-item__next {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  color: var(--dawn-dim);
+}
+.ml-item__next {
+  color: var(--rose-soft);
+}
+.ml-item__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.ml-item--gone .ml-item__title {
+  color: var(--dawn-dim);
+}
+.ml-badge {
+  display: inline-block;
+  margin-top: 0.3rem;
+  padding: 0.1rem 0.55rem;
+  border: 1px dashed var(--cobalt-line);
+  border-radius: 999px;
+  color: var(--dawn-faint);
+  font-size: 0.75rem;
+}
+.ml-empty {
+  margin-top: 1rem;
+}
+.ml-import {
+  margin-top: 3rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--sf-line);
+}
+.ml-import > p {
+  color: var(--dawn-dim);
+  font-size: 0.92rem;
+}
+.ml-danger {
+  margin-top: 2.5rem;
+}
+@media (max-width: 640px) {
+  .ml-item {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+  .ml-item__controls {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- homepage: For you ---------------------------------------------- */
+
+.foryou[hidden],
+.foryou__week[hidden] {
+  display: none;
+}
+.foryou__week {
+  margin-bottom: 1.4rem;
+}
+.foryou__week h3 {
+  margin-bottom: 0.6rem;
+  color: var(--dawn-dim);
+  font-size: 0.95rem;
+}
+/* The reason line is the whole point of a pick, so it reads in the rose
+   light, under the quiet facts line. */
+.foryou__why {
+  margin: 0.2rem 0 0;
+  color: var(--rose-soft);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mylist__add,
+  .mylist__more,
+  .ml-tab,
+  .ml-btn {
+    transition: none;
+  }
+}
+
+/* For you, before the picks arrive. A tiny inline script in index.astro marks
+   <html> when the reader has a list, so the section takes its full height at
+   once with grey placeholder cards, and the page below it never jumps. */
+html.mi-has-list .foryou[hidden] {
+  display: block;
+}
+.foryou__ghostart {
+  display: block;
+  aspect-ratio: 460 / 651;
+  border-radius: 6px;
+  background: var(--sf);
+  border: 1px solid var(--sf-line);
+}
+
+/* "Removed. Undo" under the My list button. */
+.mylist__notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.6rem;
+}
+.mylist__undo {
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rose-soft);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mylist__undo:hover {
+  color: var(--day);
+}
+.mylist__undo:focus-visible {
+  outline: 2px solid var(--day);
+  outline-offset: 2px;
+}
+.mylist__undo[hidden] {
+  display: none;
+}
+
+/* ---- namesakes note and "Readers also look for" (24 Sep 2026) -------------
+   Two short lists of plain text links, drawn the same way: a row of rounded
+   pills that wrap, each with a small arrow. The namesakes note sits under a
+   character's title when a better-known character owns the same name
+   (src/components/Namesakes.astro); the "also look for" block sits in the
+   main content of a page Google already ranks well, pointing at a related
+   page it does not (src/components/AlsoLookFor.astro). */
+.link-pills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.link-pills a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--sf-line);
+  border-radius: 999px;
+  background: var(--sf);
+  color: var(--dawn);
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: border-color 140ms var(--ease-dawn), background-color 140ms var(--ease-dawn);
+}
+.link-pills a::after {
+  content: '→';
+  flex: none;
+  color: var(--rose-soft);
+  transition: translate 140ms var(--ease-dawn);
+}
+.link-pills a:hover,
+.link-pills a:focus-visible {
+  border-color: var(--rose-soft);
+  background: rgb(site(rgb.cobalt) / 0.22);
+}
+.link-pills a:hover::after,
+.link-pills a:focus-visible::after {
+  translate: 3px 0;
+}
+.namesakes-note {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid var(--sf-line);
+  border-left: 3px solid var(--cobalt-bright);
+  border-radius: 0 var(--sf-r) var(--sf-r) 0;
+  background: linear-gradient(to right, rgb(site(rgb.cobalt-bright) / 0.1), rgb(site(rgb.night-raised) / 0.4) 70%);
+}
+.namesakes-note__head {
+  margin: 0 0 0.3rem;
+  font-family: var(--stencil);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose-soft);
+}
+.namesakes-note__here {
+  margin: 0 0 0.7rem;
+  font-size: 0.92rem;
+  color: var(--dawn-dim);
+}
+.namesakes-note .link-pills a {
+  padding-block: 0.4rem;
+  font-size: 0.92rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .link-pills a,
+  .link-pills a::after { transition: none; }
+}

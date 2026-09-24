@@ -1,0 +1,29 @@
+---
+/**
+ * Pages 2 to GENRE_MAX_PAGES of a genre listing by kind: /genre/action/manhwa/2.
+ * Page 1 is /genre/action/manhwa itself; there is no /1 twin.
+ */
+export const prerender = true
+import KindListing from '../_KindListing.astro'
+import { genres } from '../../../../lib/catalog.js'
+import { genreLists, kindPageCount, GENRE_KINDS } from '../../../../lib/genre-lists.js'
+
+export function getStaticPaths() {
+  const paths = []
+  for (const genre of genres) {
+    const lists = genreLists(genre.name)
+    for (const kind of GENRE_KINDS) {
+      const count = kindPageCount(lists[kind])
+      for (let page = 2; page <= count; page++) {
+        paths.push({ params: { slug: genre.slug, kind, page: String(page) }, props: { genre } })
+      }
+    }
+  }
+  return paths
+}
+
+const { kind, page } = Astro.params
+const { genre } = Astro.props
+---
+
+<KindListing genre={genre} kind={kind} current={Number(page)} />

@@ -1,0 +1,30 @@
+---
+/**
+ * One "What to do" line under a question card, as a quiet callout with a small
+ * mark for its kind. Nothing is drawn when the rule found nothing worth saying
+ * (see src/lib/admin-hints.js). The message itself is passed as `hint`, or as
+ * slot text for a fixed line.
+ */
+const { hint = null, level = 'watch', title = '' } = Astro.props
+const HEAD = { act: 'What to do', watch: 'Keep an eye on it', good: 'Working' }
+const kind = hint ? hint.level : level
+const show = hint || Astro.slots.has('default')
+---
+
+{show && (
+  <div class={`hint ${kind}`} role="note">
+    <svg class="ico" viewBox="0 0 20 20" aria-hidden="true">
+      {kind === 'good' ? (
+        <path d="M5 10.5l3.2 3.2L15 6.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      ) : kind === 'act' ? (
+        <path d="M10 3.5v8M10 15.2v.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+      ) : (
+        <circle cx="10" cy="10" r="3.5" fill="currentColor" />
+      )}
+    </svg>
+    <div>
+      <b>{title || HEAD[kind] || 'What to do'}</b>
+      {hint ? hint.text : <slot />}
+    </div>
+  </div>
+)}

@@ -1,0 +1,17 @@
+{
+  "name": "where-build",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "sites/*"
+  ],
+  "scripts": {
+    "test": "npm test -w @sister/core && node --test sites/sites.test.js",
+    "wrangler": "node packages/core/scripts/make-wrangler.mjs",
+    "count-pages": "node --max-old-space-size=6000 packages/core/scripts/count-pages.mjs"
+  },
+  "license": "UNLICENSED",
+  "author": "Shahid Ali"
+}

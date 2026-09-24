@@ -1,0 +1,424 @@
+---
+/**
+ * "Where to read manhwa."
+ *
+ * This is a hub page, not a title page. Search Console and keyword research
+ * both say the same thing: people type "where to read manhwa", "manhwa
+ * websites" and "manhwa sites", and almost nobody types the word "legally".
+ * So the page is titled in the words people use, and it earns the trust story
+ * in the body instead of in the title tag.
+ *
+ * Every row on it is built from the catalog and from platform-facts.js, so a
+ * platform added tomorrow appears here with no extra work.
+ *
+ * It is built the same way as a genre page: a jump row under the lede, a named
+ * id on every section, a piece of prose that says how the list is made, a FAQ
+ * that folds on a phone, and real doors out at the bottom.
+ */
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+import { comics, platform, hubSlugOf, genres, comicsOfCountry, novels } from '../lib/catalog.js'
+import { factsFor, PAY, FREE } from '../lib/platform-facts.js'
+import Mark from '../components/Mark.astro'
+
+// One row per platform we link to, with how many titles it carries here.
+const FACES = 3
+function tally(items, key) {
+  const map = new Map()
+  const faces = new Map()
+  for (const item of items) {
+    const seen = new Set()
+    for (const link of item[key] || []) {
+      if (seen.has(link.site)) continue
+      seen.add(link.site)
+      map.set(link.site, (map.get(link.site) || 0) + 1)
+      // Keep only the few most popular covers per platform, in one pass over
+      // the catalog, so memory stays flat however big it grows.
+      if (item.cover) {
+        const row = faces.get(link.site) || []
+        row.push(item)
+        row.sort((a, b) => b.popularity - a.popularity)
+        if (row.length > FACES) row.length = FACES
+        faces.set(link.site, row)
+      }
+    }
+  }
+  return [...map.entries()]
+    // A platform with its own hub page becomes a link. The rest stay plain
+    // text, because a link to a page we do not build is a 404.
+    .map(([name, count]) => ({
+      name,
+      count,
+      faces: faces.get(name) || [],
+      hub: hubSlugOf(name),
+      facts: factsFor(name),
+      ...platform(name),
+    }))
+    .sort((a, b) => b.count - a.count)
+}
+
+const all = tally(comics, 'readLinks')
+const MIN_TITLES = 5
+const listed = all.filter((p) => p.count >= MIN_TITLES)
+const rest = all.length - listed.length
+
+// Three groups, because "is it free" is the only question a reader really asks
+// first. A platform with no facts row falls to the last group rather than
+// getting a guess.
+const isFree = (p) => p.facts.pay === PAY.ADS || p.facts.pay === PAY.LIBRARY
+const isMonthly = (p) => p.facts.pay === PAY.SUB || p.facts.pay === PAY.SUB_FREE
+const free = listed.filter(isFree)
+const monthly = listed.filter(isMonthly)
+const perChapter = listed.filter((p) => !isFree(p) && !isMonthly(p))
+
+const titles = comics.length
+const freeNames = free.map((p) => p.name)
+
+// Genre doors. A reader who arrives on this page has not picked a story yet,
+// and a genre is the fastest way to pick one.
+const genreRows = genres.slice(0, 12)
+
+const groups = [
+  {
+    id: 'free',
+    phase: 'night',
+    short: 'Free',
+    h: 'Free manhwa sites',
+    p: 'No card needed. You pay with an advert, or with a short wait.',
+    rows: free,
+  },
+  {
+    id: 'monthly',
+    phase: 'first',
+    short: 'Monthly',
+    h: 'One price a month, read everything',
+    p: 'Best if you read a lot. Most of these have a free tier or a trial.',
+    rows: monthly,
+  },
+  {
+    id: 'coins',
+    phase: 'dawn',
+    short: 'Per chapter',
+    h: 'Pay for the chapters you want',
+    p: 'You buy coins and spend them chapter by chapter. Early chapters are usually free.',
+    rows: perChapter,
+  },
+]
+
+const shown = groups.filter((g) => g.rows.length > 0)
+
+// This page used to say "manhwa" and mean it, but it lists platforms for
+// manga, manhua and novels too. One section per kind, built the same way as
+// the groups above: tally readLinks for that kind's own items, most-carried
+// platform first. A kind added tomorrow needs no new prose, only a new row
+// here.
+const KIND_SECTIONS = [
+  { id: 'kind-manhwa', slug: 'manhwa', name: 'manhwa', items: comicsOfCountry('KR') },
+  { id: 'kind-manga', slug: 'manga', name: 'manga', items: comicsOfCountry('JP') },
+  { id: 'kind-manhua', slug: 'manhua', name: 'manhua', items: comicsOfCountry('CN') },
+  { id: 'kind-novel', slug: 'novel', name: 'light novels', items: novels },
+]
+  .filter((k) => k.items.length > 0)
+  .map((k) => {
+    const found = tally(k.items, 'readLinks')
+    const big = found.filter((p) => p.count >= MIN_TITLES)
+    const rows = big.length > 0 ? big : found
+    return {
+      ...k,
+      total: k.items.length,
+      rows,
+      more: found.length - rows.length,
+      // /novel/only/free is not a built page when no light-novel platform in
+      // the catalog is actually free — linking to it would 404. This checks
+      // the same thing the page builder checks before it links here.
+      hasFree: found.some((p) => (p.note || '').toLowerCase().includes('free')),
+    }
+  })
+
+const faq = [
+  {
+    q: 'Where can I read manhwa?',
+    a: `On the official apps and sites of the people who make it. This page lists ${all.length} of them. WEBTOON, Tapas and MANGA Plus are free with adverts. Tappytoon, Lezhin and Piccoma sell coins. Manta and Toomics charge once a month.`,
+  },
+  {
+    q: 'Which manhwa sites are free?',
+    a: `${freeNames.slice(0, 6).join(', ')} let you read without paying. Most of them hold back only the newest chapters.`,
+  },
+  {
+    q: 'What is the best site to read manhwa on?',
+    a: 'It depends on how much you read. WEBTOON carries the most titles and costs nothing. Tappytoon and Lezhin hold the licensed mature and romance catalogue. Manta is one price a month for everything it has. Every title page on this site names the ones licensed for that story, so you can pick per story instead of per app.',
+  },
+  {
+    q: 'Do I need a separate app for each platform?',
+    a: 'Usually yes, and that is why this page exists. A series is licensed to one or two platforms, not to all of them. Find the story first, then this index tells you which app you actually need.',
+  },
+  {
+    q: 'What is the difference between manhwa, manga and manhua?',
+    a: 'Manhwa is Korean and scrolls top to bottom on a phone. Manga is Japanese and reads right to left. Manhua is Chinese. This index carries all three.',
+  },
+  {
+    q: 'Where can I read manga legally?',
+    a: 'MANGA Plus and VIZ carry official English manga free or with a subscription, and Yen Press and Seven Seas hold most of the print licences. The "Where to read manga" section above lists every platform in this index, most-titles first.',
+  },
+  {
+    q: 'Where can I read manhua or light novels legally?',
+    a: 'Manhua: Tencent Comics, KuaiKan Manhua and WebComics carry the most titles. Light novels: Yen Press and J-Novel Club hold most of the English licences. Both get their own section above.',
+  },
+  {
+    q: 'Is this a manhwa reading site?',
+    a: 'No. This site holds no chapters. It only tells you which official platform carries a story, so the people who drew it get paid.',
+  },
+  {
+    q: 'How do I find where one story is?',
+    a: `Type its name into the search box at the top. There are ${titles.toLocaleString()} comics in the index, and every title page names the platforms that carry it.`,
+  },
+  {
+    q: 'Are the free manhwa sites safe?',
+    a: 'The ones on this page are, because every one of them is run by the rights holder or their publisher. The scan sites are the risky ones: they change address often, carry heavy advert code, and pay nobody who made the work.',
+  },
+]
+
+const site = config.siteUrl
+const description =
+  'Every official manhwa, manga, manhua and light novel platform this index links to: WEBTOON, Tapas, Tappytoon, Lezhin, VIZ, Yen Press, J-Novel Club and more. Sorted by what each one costs, with how many titles it carries.'
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${site}/where-to-read#page`,
+      url: `${site}/where-to-read`,
+      name: 'Where to read manhwa, manga, manhua and light novels',
+      inLanguage: 'en',
+      dateModified: new Date().toISOString().slice(0, 10),
+      description: `Every official manhwa, manga, manhua and light novel site this index links to: ${all.length} platforms, sorted by what they cost.`,
+      mainEntity: {
+        '@type': 'ItemList',
+        name: 'Official manhwa reading platforms',
+        numberOfItems: listed.length,
+        itemListElement: listed.map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: p.name,
+          url: p.hub ? `${site}/platform/${p.hub}` : undefined,
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${site}/where-to-read#faq`,
+      mainEntity: faq.map((row) => ({
+        '@type': 'Question',
+        name: row.q,
+        acceptedAnswer: { '@type': 'Answer', text: row.a },
+      })),
+    },
+  ],
+}
+---
+
+<Base
+  title="Where to Read Manhwa, Manga & Light Novels — Every Official Site, Free and Paid"
+  description={description}
+  canonical="/where-to-read"
+  jsonld={jsonld}
+  crumbs={[{ name: 'Where to read' }]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>Where to read manhwa, manga, manhua and light novels</h1>
+        <p>
+          Every site below is run by the people who own the story, or by the
+          publisher they sold it to. We hold no chapters here. We only point at
+          the door. {all.length} reading platforms, sorted by what they cost.
+        </p>
+      </div>
+
+      <nav class="genre-quick" aria-label="Jump to a section">
+        {shown.map((g) => <a href={`#${g.id}`}>{g.short}</a>)}
+        <a href="#genres">By genre</a>
+        <a href="#about">About</a>
+        <a href="#faq">Questions</a>
+      </nav>
+
+      <ol class="how">
+        <li>
+          <b>Pick how you want to pay</b>
+          <span>Free with adverts, one price a month, or coins for single chapters.</span>
+        </li>
+        <li>
+          <b>Or search the story by name</b>
+          <span>{titles.toLocaleString()} comics are in the index. Each page names the platforms that carry it.</span>
+        </li>
+        <li>
+          <b>Open the platform</b>
+          <span>The link goes straight to the rights holder. Free tiers come first.</span>
+        </li>
+      </ol>
+    </section>
+
+    {
+      KIND_SECTIONS.map((k) => (
+        <section class="section" id={k.id}>
+          <div class="section__head">
+            <h2>Where to read {k.name}</h2>
+            <p>
+              {k.rows.length} platform{k.rows.length === 1 ? '' : 's'} carry{' '}
+              {k.total.toLocaleString()} {k.name} in this index.{' '}
+              <a href={`/${k.slug}`}>Browse {k.name}</a>
+              {k.hasFree && ' · '}
+              {k.hasFree && <a href={`/${k.slug}/only/free`}>Free {k.name}</a>}
+            </p>
+          </div>
+          <ul class="ledger">
+            {k.rows.map((p) => (
+              <li style={`--mark:${p.color}`}>
+                <Mark site={p.name} />
+                <b>{p.hub ? <a href={`/platform/${p.hub}`}>{p.name}</a> : p.name}</b>
+                <span>{p.note || 'Official'}</span>
+                <em>{p.count.toLocaleString()} titles</em>
+              </li>
+            ))}
+          </ul>
+          {
+            k.more > 0 && (
+              <p class="ledger__rest">…and {k.more} smaller platforms.</p>
+            )
+          }
+        </section>
+      ))
+    }
+
+    {
+      shown.map((g, gi) => (
+        <section class="section" id={g.id} data-phase={g.phase}>
+          <div class="section__head">
+            <h2>{g.h}</h2>
+            <p>{g.p}</p>
+          </div>
+          <ul class="ledger ledger--faces">
+            {g.rows.map((p, ri) => (
+              <li style={`--mark:${p.color}`}>
+                <div class="ledger__faces" aria-hidden="true">
+                  {p.faces.map((item) => (
+                    <img
+                      src={item.cover}
+                      alt=""
+                      width="60"
+                      height="90"
+                      loading={gi === 0 && ri < 4 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  ))}
+                </div>
+                <Mark site={p.name} />
+                <b>{p.hub ? <a href={`/platform/${p.hub}`}>{p.name}</a> : p.name}</b>
+                <span>
+                  {p.facts.free && p.facts.free !== FREE.NONE
+                    ? `Free: ${p.facts.free.toLowerCase()}`
+                    : p.note || 'Official'}
+                  {p.facts.region && p.facts.region !== 'Worldwide' ? ` · ${p.facts.region}` : ''}
+                </span>
+                <em>{p.count.toLocaleString()} titles</em>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    {
+      rest > 0 && (
+        <p class="ledger__rest">
+          …and {rest} smaller platforms with a handful of titles each. They show
+          up on the pages of the titles they carry.
+        </p>
+      )
+    }
+
+    <section class="section" id="genres">
+      <div class="section__head">
+        <h2>Pick something to read</h2>
+        <p>Start from a shelf if you have not picked a story yet.</p>
+      </div>
+      <nav class="genre-quick" aria-label="Popular genres">
+        {genreRows.map((g) => <a href={`/genre/${g.slug}`}>{g.name}</a>)}
+      </nav>
+    </section>
+
+    <section class="section" data-phase="hold">
+      <div class="section__head">
+        <h2>Why not the free reading sites you already know</h2>
+        <p>The honest answer, in three lines.</p>
+      </div>
+      <ol class="how">
+        <li>
+          <b>The artist gets nothing</b>
+          <span>A scan site sells your attention to advert brokers. None of it reaches the person who drew the page.</span>
+        </li>
+        <li>
+          <b>The chapters go missing</b>
+          <span>Those sites change address every few months. An official app keeps your place for years.</span>
+        </li>
+        <li>
+          <b>Most of it is free anyway</b>
+          <span>{freeNames.slice(0, 4).join(', ')} give you the back catalogue for nothing.</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section__head">
+        <h2>How this list is built</h2>
+      </div>
+      <div class="genre-intro">
+        <p>
+          Nothing on this page is hand-picked. Every platform here earned its
+          row because at least {MIN_TITLES} titles in this index name it as an
+          official place to read them. The count beside each one is how many of
+          those {titles.toLocaleString()} comics it carries.
+        </p>
+        <p>
+          The groups answer the first question a reader asks, which is what it
+          costs. Free means adverts or a public library card. Monthly means one
+          price for the whole shelf. Per chapter means you buy coins and spend
+          them, and on most of those apps the early chapters are free anyway.
+        </p>
+        <p>
+          The catalog rebuilds every day at 02:00 UTC, so a platform that picks
+          up a new licence appears here the next morning, and one that loses
+          titles drops down the list on its own. {config.name} holds no chapters
+          and never links to an unlicensed copy.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section__head">
+        <h2>Common questions</h2>
+      </div>
+      <div class="qa2">
+        {
+          faq.map((row) => (
+            <details>
+              <summary>{row.q}</summary>
+              <p class="qa2__a">{row.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      <a href="/manhwa">Browse manhwa →</a>
+      <a href="/manga">Browse manga →</a>
+      <a href="/manhua">Browse manhua →</a>
+      <a href="/genre">Browse by genre →</a>
+      <a href="/where-to-watch">Where to watch anime →</a>
+      <a href="/shop">Shop merchandise →</a>
+    </nav>
+  </div>
+</Base>

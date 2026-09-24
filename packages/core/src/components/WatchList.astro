@@ -1,0 +1,314 @@
+---
+/**
+ * One page of one "with an anime" list: /where-to-watch/manhwa, its /2, /3
+ * pages, and the same for manhua and novels.
+ *
+ * Each row is a comic, the anime made from it, the year that anime first
+ * aired, and the services licensed to stream it. The service names link to
+ * the anime page's "Watch it on" table (#watch), which holds the real links
+ * and what each service costs. Nothing here links out, and nothing is typed
+ * by hand: the rows come from src/lib/watch-lists.mjs.
+ *
+ * Page 1 carries the answer text and the questions. The deeper pages are the
+ * list alone, with a pager, like the season pages.
+ */
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+import Pager from './Pager.astro'
+import { platform } from '../lib/format.js'
+import { factsFor, PAY } from '../lib/platform-facts.js'
+import { faqJsonld, listWords } from '../lib/answers.mjs'
+import {
+  WATCH_LISTS,
+  WATCH_LIST_KEYS,
+  WATCH_PER_PAGE,
+  PLATFORMS_SHOWN,
+  watchListPath,
+  watchPage,
+  watchPageCount,
+  streamingCount,
+  topServices,
+} from '../lib/watch-lists.mjs'
+import { watchLists } from '../lib/watch-list-data.js'
+
+const { listKey, current } = Astro.props
+const list = WATCH_LISTS[listKey]
+const all = watchLists[listKey]
+const total = all.length
+const pages = watchPageCount(all)
+const rows = watchPage(all, current)
+const path = watchListPath(listKey, current)
+const first = current === 1
+
+const streaming = streamingCount(all)
+const top = topServices(all, 3).map((s) => s.name)
+// A service you can watch on without a card: adverts, or a real free tier.
+const costsNothing = (name) => [PAY.ADS, PAY.LIBRARY, PAY.SUB_FREE].includes(factsFor(name).pay)
+const freeRows = all.filter((row) => row.anime.platforms.some(costsNothing)).length
+const freeNames = topServices(all.filter((row) => row.anime.platforms.some(costsNothing)), 12)
+  .map((s) => s.name)
+  .filter(costsNothing)
+  .slice(0, 2)
+const examples = all.slice(0, 3).map((row) => row.title)
+
+const lede = `${total.toLocaleString()} ${list.many} in this index have an anime, and ${streaming.toLocaleString()} of those anime stream on at least one official service${
+  top.length ? `, most often ${listWords(top)}` : ''
+}. Each row names the ${list.one}, the anime made from it, the year it first aired, and the services licensed to show it. Most popular first.`
+
+const faq = [
+  {
+    q: `Which ${list.many} have an anime?`,
+    a: `${total.toLocaleString()} in this index, from ${listWords(examples)} down. The list is sorted by how many AniList users follow each ${list.one}, so the best known come first.`,
+  },
+  {
+    q: `Where can I watch ${list.one} anime legally?`,
+    a: top.length
+      ? `Most of these anime stream on ${listWords(top)}. Each row names the services for that one show, and every one of them is licensed. We list no pirate sites and host no episodes.`
+      : 'Each row names the services licensed to show that one anime. We list no pirate sites and host no episodes.',
+  },
+  {
+    q: `Can I watch them for free?`,
+    a: freeRows
+      ? `${freeRows.toLocaleString()} of them are on at least one service you can watch without a card${
+          freeNames.length ? `, such as ${listWords(freeNames)}` : ''
+        }, paid for by adverts or a free tier. Open the service names on a row to see what each one costs.`
+      : 'None of them are on a free service we track yet. Open the service names on a row to see what each one costs.',
+  },
+  {
+    q: 'Why does a row say there is no official stream?',
+    a: 'The anime exists, but it is not on a streaming service we track. It may be region-locked or not licensed in English yet. The anime page says the same, and it changes the day a service picks it up.',
+  },
+  {
+    q: `Why is a ${list.one} missing from this list?`,
+    a: `A ${list.one} is listed when AniList records an anime of the same story and this index holds that anime. The catalog rebuilds every night, so a newly announced anime shows up the next morning.`,
+  },
+  {
+    q: `Where do I read the ${list.one} itself?`,
+    a: `Open the ${list.one}'s name on its row. That page lists the official apps and stores that carry it, cheapest first.`,
+  },
+]
+
+const site = config.siteUrl
+const description = first
+  ? `${total.toLocaleString()} ${list.many} that got an anime, and the official services streaming each one${
+      top.length ? `: ${top.join(', ')} and more` : ''
+    }. Most popular first. No pirate sites.`
+  : `Page ${current} of ${pages}: more ${list.many} that got an anime, with the official services streaming each one.`
+
+const collection = {
+  '@type': 'CollectionPage',
+  '@id': `${site}${path}#collection`,
+  url: `${site}${path}`,
+  name: first ? `${list.short} with an anime` : `${list.short} with an anime, page ${current}`,
+  description,
+  dateModified: new Date().toISOString().slice(0, 10),
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: total,
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    itemListElement: rows.map((row, i) => ({
+      '@type': 'ListItem',
+      position: (current - 1) * WATCH_PER_PAGE + i + 1,
+      name: row.title,
+      url: `${site}${row.path}`,
+    })),
+  },
+}
+const jsonld = first ? [collection, faqJsonld(faq)] : [collection]
+
+// The small facts after the anime's name: its year, whether it is out yet,
+// and how many more seasons or films the comic has.
+const notes = (row) =>
+  [row.anime.year, row.anime.upcoming ? 'not out yet' : '', row.moreAnime > 0 ? `+${row.moreAnime} more` : '']
+    .filter(Boolean)
+    .map((note) => ` · ${note}`)
+    .join('')
+
+// "Manhwa With an Anime: Where to Watch, page 2 of 3" on the deeper pages.
+const title = first ? list.title : `${list.title.split(':')[0]}: Where to Watch, page ${current} of ${pages}`
+const others = WATCH_LIST_KEYS.filter((key) => key !== listKey)
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={path}
+  jsonld={jsonld}
+  crumbs={[
+    { name: 'Where to watch', href: '/where-to-watch' },
+    first ? { name: `${list.short} with an anime` } : { name: `${list.short} with an anime`, href: watchListPath(listKey) },
+    ...(first ? [] : [{ name: `Page ${current}` }]),
+  ]}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{first ? `${list.short} with an anime, and where to watch each one` : `${list.short} with an anime, page ${current}`}</h1>
+        <p>{lede}</p>
+        {!first && (
+          <p class="answer__count">
+            Showing {(current - 1) * WATCH_PER_PAGE + 1}–{Math.min(current * WATCH_PER_PAGE, total)} of {total}
+          </p>
+        )}
+      </div>
+
+      <ol class="wl">
+        {rows.map((row, i) => {
+          const shown = row.anime.platforms.slice(0, PLATFORMS_SHOWN)
+          const more = row.anime.platforms.length - shown.length
+          return (
+            <li>
+              {/* alt is empty on purpose: the title is the very next thing read. */}
+              <img src={row.cover} alt="" width="46" height="69" loading={first && i < 4 ? 'eager' : 'lazy'} decoding="async" />
+              <div>
+                <a class="wl__comic" href={row.path}>{row.title}</a>
+                <p>Anime: <a href={row.anime.path}>{row.anime.title}</a>{notes(row)}</p>
+                {shown.length > 0 ? (
+                  <a class="wl__on" href={row.anime.watchPath}>Watch on {shown.map((name) => <i style={`--mark:${platform(name).color}`}>{name}</i>)}{more > 0 && <i>+{more}</i>}</a>
+                ) : (
+                  <p class="wl__none">No official stream listed yet</p>
+                )}
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+    </section>
+
+    {pages > 1 && <Pager current={current} count={pages} base={watchListPath(listKey)} segment="" label={`${list.many} with an anime`} />}
+
+    {
+      first && (
+        <section class="section" id="about">
+          <div class="section__head">
+            <h2>How this list is built</h2>
+          </div>
+          <div class="genre-intro">
+            <p>
+              The {list.many} here are {list.origin}. A row appears when AniList
+              records an anime that tells the same story, either adapted from the
+              {' '}{list.one} or adapted with it from the same source, and this index holds
+              that anime's page. Spin-offs, crossovers and side-story films are
+              left out.
+            </p>
+            <p>
+              When a {list.one} has more than one anime, the row leads with the one
+              you can stream, then the one most people have watched, which is
+              usually the first season. "+2 more" means two more seasons or films;
+              the {list.one}'s own page lists them all.
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      first && (
+        <section class="section" id="faq">
+          <div class="section__head">
+            <h2>Common questions</h2>
+          </div>
+          <div class="qa2">
+            {faq.map((row) => (
+              <details>
+                <summary>{row.q}</summary>
+                <p class="qa2__a">{row.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <nav class="genre-next" aria-label="Keep browsing">
+      {others.map((key) => <a href={watchListPath(key)}>{WATCH_LISTS[key].short} with an anime →</a>)}
+      <a href={`/${list.section}`}>All {list.many} →</a>
+      <a href="/where-to-watch">Where to watch anime →</a>
+      <a href="/anime">All anime →</a>
+    </nav>
+  </div>
+</Base>
+
+<style is:global>
+  /* Global on purpose: a scoped style stamps an attribute on every element,
+     and on forty rows that is 7 KB of HTML for nothing. The wl prefix is
+     used nowhere else. */
+  .wl {
+    list-style: none;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 33rem), 1fr));
+    gap: 0.6rem;
+  }
+  .wl > li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--sf-line);
+    border-radius: var(--sf-r);
+    background: var(--sf);
+  }
+  .wl img {
+    width: 46px;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    flex: none;
+  }
+  .wl li > div {
+    min-width: 0;
+    display: grid;
+    gap: 0.3rem;
+  }
+  .wl p {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--dawn-faint);
+    overflow-wrap: anywhere;
+  }
+  .wl p a {
+    color: var(--dawn-dim);
+  }
+  .wl__comic {
+    color: var(--day);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .wl a:hover,
+  .wl a:focus-visible {
+    color: var(--rose-soft);
+  }
+  .wl__on {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.35rem;
+    font-size: 0.78rem;
+    color: var(--dawn-faint);
+    text-decoration: none;
+  }
+  .wl__on i {
+    font-style: normal;
+    color: var(--dawn);
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--sf-line);
+    border-left: 3px solid var(--mark, var(--cobalt-line));
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .wl__on:hover i,
+  .wl__on:focus-visible i {
+    border-color: var(--rose-soft);
+    border-left-color: var(--mark, var(--rose-soft));
+  }
+  .wl .wl__none {
+    font-size: 0.78rem;
+    font-style: italic;
+  }
+</style>

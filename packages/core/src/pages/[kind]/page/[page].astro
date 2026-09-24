@@ -1,0 +1,52 @@
+---
+export const prerender = true
+import Base from '../../../layouts/Base.astro'
+import CoverGrid from '../../../components/CoverGrid.astro'
+import Pager from '../../../components/Pager.astro'
+import { KINDS, PER_PAGE } from '../index.astro'
+
+export function getStaticPaths() {
+  const paths = []
+  for (const [kind, config] of Object.entries(KINDS)) {
+    const all = config.items()
+    const pageCount = Math.ceil(all.length / PER_PAGE)
+    for (let page = 2; page <= pageCount; page++) {
+      paths.push({
+        params: { kind, page: String(page) },
+        props: {
+          config,
+          pageCount,
+          items: all.slice((page - 1) * PER_PAGE, page * PER_PAGE),
+          total: all.length,
+        },
+      })
+    }
+  }
+  return paths
+}
+
+const { kind, page } = Astro.params
+const { config, pageCount, items, total } = Astro.props
+const current = Number(page)
+---
+
+<Base
+  title={`${config.label} — page ${current} of ${pageCount}`}
+  description={config.description}
+  canonical={`/${kind}/page/${current}`}
+>
+  <div class="shell">
+    <section class="section">
+      <div class="section__head">
+        <h1>{config.label}</h1>
+        <p>{config.blurb}</p>
+        <p class="answer__count">
+          Showing {(current - 1) * PER_PAGE + 1}–{Math.min(current * PER_PAGE, total)} of {total}
+        </p>
+      </div>
+      <CoverGrid items={items} base={`/${kind}`} eager={6} />
+    </section>
+
+    <Pager current={current} count={pageCount} base={`/${kind}`} label={config.label} />
+  </div>
+</Base>

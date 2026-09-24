@@ -1,0 +1,52 @@
+---
+/**
+ * A live "in 3 days" clock.
+ *
+ * The page itself is cached at the edge and served to everybody, so the HTML
+ * cannot hold a countdown — it would be wrong the moment it is stored. So the
+ * server writes only the raw timestamp, and the browser turns it into words.
+ * The fallback text is a plain UTC date, which is true even with no script.
+ *
+ * `local` also prints the time in the reader's own clock, which is the one
+ * fact a cached page can never know.
+ */
+const { at, local = false } = Astro.props
+
+const utc = new Date(at * 1000).toLocaleDateString('en-US', {
+  weekday: 'short',
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+})
+---
+
+<span class="countdown" data-airs={at} data-local={local ? '1' : null}>{utc} UTC</span>
+
+<script>
+  // The words live in one shared module, so the My list page and the For you
+  // block count down in exactly the same words as this clock.
+  import { phrase, DAY } from '../lib/countdown-core.js'
+
+  function paint() {
+    const now = Date.now() / 1000
+    for (const node of document.querySelectorAll('.countdown')) {
+      const at = Number(node.dataset.airs)
+      if (!at) continue
+      const when = new Date(at * 1000)
+      const clock = when.toLocaleString(undefined, {
+        weekday: 'short',
+        hour: 'numeric',
+        minute: '2-digit',
+      })
+      node.textContent = node.dataset.local
+        ? `${clock} · ${phrase(at - now)}`
+        : phrase(at - now)
+      node.classList.toggle('countdown--soon', at - now > 0 && at - now < DAY)
+    }
+  }
+
+  paint()
+  // One minute is fine: nothing on this site is timed to the second, and a
+  // slow tick costs the reader's battery nothing.
+  setInterval(paint, 60000)
+</script>

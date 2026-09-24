@@ -1,0 +1,156 @@
+---
+/**
+ * The frame around every /my-admin page.
+ *
+ * It is deliberately NOT Base.astro. Base carries the Google tag, the AdSense
+ * tag and our own counter. The owner reading his own numbers must never appear
+ * in his own numbers.
+ *
+ * It also marks this browser as the owner's, so that every OTHER page on the
+ * site stops counting him from now on.
+ */
+import { RANGES, withRange } from '../lib/admin.js'
+import config from '../lib/site.mjs'
+// The whole look lives in its own file. Only this layout imports it.
+import '../styles/admin.css'
+
+const {
+  title,
+  here = '/my-admin',
+  // Which tab to light up. A page that hangs under a tab (Journeys under
+  // Pages) passes its tab here and keeps its own address in `here`.
+  tab = here,
+  range,
+  signedIn = false,
+  secret = '',
+  wrongWord = false,
+  refresh = 0,
+  note = '',
+} = Astro.props
+
+// Each tab answers one kind of question. Journeys and Sections hang under
+// Pages; Clicks became Money.
+const TABS = [
+  { path: '/my-admin', label: 'Now' },
+  { path: '/my-admin/week', label: 'This week' },
+  { path: '/my-admin/pages', label: 'Pages' },
+  { path: '/my-admin/lists', label: 'Lists' },
+  { path: '/my-admin/search', label: 'Search' },
+  { path: '/my-admin/money', label: 'Money' },
+  { path: '/my-admin/health', label: 'Health' },
+]
+
+// The date switch says each range in one short word, so all five fit on a
+// 360 px phone in one row.
+const SHORT = { today: 'Today', '24h': '24h', '7d': '7 days', '30d': '30 days', all: 'All' }
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content={config.colors.night} />
+    <title>{title} · my admin</title>
+    {signedIn && refresh > 0 && (
+      <meta http-equiv="refresh" content={String(refresh)} />
+    )}
+    <!-- The site's own heading face. Allowed by the CSP (fonts.googleapis.com). -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href={config.fonts.adminStylesheet}
+    />
+    <script is:inline>
+      // From now on this browser is the owner's, and every page on the site
+      // will skip it. It is one flag in this browser only.
+      try { localStorage.setItem('mi_off', '1') } catch (e) {}
+    </script>
+  </head>
+  <body>
+    {signedIn && (
+      <header class="top">
+        <div class="wrap">
+          <span class="brand">{config.name} <b>·</b> my admin</span>
+          <nav class="tabs" aria-label="Dashboard tabs">
+            {TABS.map((item) => (
+              <a
+                href={range ? withRange(item.path, range) : item.path}
+                aria-current={item.path === tab ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </header>
+    )}
+
+    <main class="wrap">
+      {!secret && (
+        <div class="panel door">
+          <h1>Not set up yet</h1>
+          <p class="say">Run this once on your computer, then reload this page:</p>
+          <p><code>npx wrangler secret put ADMIN_SECRET</code></p>
+        </div>
+      )}
+
+      {secret && !signedIn && (
+        <div class="panel door">
+          <h1>Secret word</h1>
+          <p class="say">Type it once. This browser stays open for 30 days.</p>
+          {wrongWord && <p class="bad">That is not the word. Try again.</p>}
+          <form method="POST">
+            <input type="password" name="word" aria-label="Secret word" autocomplete="current-password" autofocus />
+            <button type="submit">Open</button>
+          </form>
+        </div>
+      )}
+
+      {signedIn && (
+        <>
+          <div class="head">
+            <div>
+              <h1>{title}</h1>
+              {note && <p class="note">{note}</p>}
+            </div>
+            {range && (
+              <nav class="ranges" aria-label="Date range">
+                {RANGES.map((r) => (
+                  <a
+                    href={`${here}?range=${r.key}`}
+                    aria-current={r.key === range.key ? 'page' : undefined}
+                    title={r.label}
+                  >
+                    {SHORT[r.key] || r.label}
+                  </a>
+                ))}
+              </nav>
+            )}
+          </div>
+
+          <div class="board">
+            <slot />
+          </div>
+
+          <footer>
+            Times are UTC. Numbers before today are closed at 00:10 UTC each
+            night. Nothing is counted until the visitor moves on the page and
+            Cloudflare Turnstile has checked the browser, so robots are kept
+            out. Your own visits are not counted.
+          </footer>
+        </>
+      )}
+    </main>
+    {signedIn && (
+      <script is:inline>
+        // On a phone the tab strip scrolls sideways. Bring the open tab into
+        // view, so "Health" is not hidden off the right edge when it is open.
+        try {
+          var on = document.querySelector('nav.tabs [aria-current]')
+          if (on) on.scrollIntoView({ block: 'nearest', inline: 'center' })
+        } catch (e) {}
+      </script>
+    )}
+  </body>
+</html>

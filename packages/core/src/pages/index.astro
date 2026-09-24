@@ -1,0 +1,414 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import config from '../lib/site.mjs'
+import Countdown from '../components/Countdown.astro'
+import CoverGrid from '../components/CoverGrid.astro'
+import UpcomingList from '../components/UpcomingList.astro'
+import PopularNow from '../components/PopularNow.astro'
+import { animeByPopularity, novelsByPopularity, comics, comicsOfCountry, anime, genres, platform, airingThisWeek } from '../lib/catalog.js'
+import { upcomingAnime, upcomingRow } from '../lib/schedule.mjs'
+
+const manhwa = comicsOfCountry('KR')
+const manga = comicsOfCountry('JP')
+const manhua = comicsOfCountry('CN')
+
+// The most-read covers stand on the horizon line, right of the copy.
+const skyline = manhwa.slice(0, 6)
+
+// The legend names the platforms whose colours appear most under the covers.
+const legendNames = [
+  'WEBTOON',
+  'Tappytoon',
+  'Tapas',
+  'Lezhin',
+  'Manta',
+  'Crunchyroll',
+  'Netflix',
+  'Hulu',
+]
+const legend = legendNames.map((name) => ({ name, color: platform(name).color }))
+
+// Airing schedule. The countdown itself is drawn in the reader's browser, so
+// the list carries only the raw timestamp. See components/Countdown.astro.
+const airing = airingThisWeek.slice(0, 8)
+
+// Two short teasers for what is coming, worked out at build time like the
+// rest of the page. The full lists live on /schedule.
+const coming = upcomingAnime(anime)
+const anticipated = coming.anticipated.slice(0, 6).map(upcomingRow)
+const comingSoon = coming.dated.slice(0, 6).map(upcomingRow)
+// /schedule splits the dated list in two; land on whichever half comes first.
+const comingSoonHref = coming.big.length ? '/schedule#big-releases' : '/schedule#coming-soon'
+
+// One shelf per catalog, all visible at once. Arrows scroll each shelf.
+const rows = [
+  { id: 'manhwa', label: 'Trending manhwa', items: manhwa.slice(0, 18), base: '/manhwa', all: manhwa.length, note: 'The colour bars under each cover show which platforms carry it.' },
+  { id: 'anime', label: 'Trending anime', items: animeByPopularity.slice(0, 18), base: '/anime', all: anime.length, note: 'Each one links back to the manga or manhwa it came from.' },
+  { id: 'manga', label: 'Trending manga', items: manga.slice(0, 18), base: '/manga', all: manga.length, note: '' },
+  { id: 'manhua', label: 'Trending manhua', items: manhua.slice(0, 18), base: '/manhua', all: manhua.length, note: '' },
+  { id: 'novel', label: 'Trending novels', items: novelsByPopularity.slice(0, 18), base: '/novel', all: novelsByPopularity.length, note: 'Light novels and web novels, with the stores that sell them in English.' },
+]
+
+// The hero stands in front of a real banner: the most popular manhwa
+// that ships wide art. Masked so it dissolves into the cyc gradient.
+const heroBanner = manhwa.find((m) => m.banner)?.banner
+
+// The WebSite and Organization nodes live in the layout, on every page.
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: config.name,
+  url: config.siteUrl,
+  description:
+    'Find the official place to read any manhwa, manga or manhua, and the official place to watch the anime.',
+}
+/**
+ * These tiles, and the cover strips behind the headline, are never wider than
+ * 122 pixels on a screen. AniList keeps a copy 230
+ * pixels wide in its "medium" folder, with the same file name. That copy is
+ * still more than twice the size we show, and about five times lighter.
+ */
+const tinyCover = (url) =>
+  url && url.includes('/cover/large/') ? url.replace('/cover/large/', '/cover/medium/') : url
+
+---
+
+<Base
+  title={`Where to Read Manhwa and Watch Anime Legally | ${config.name}`}
+  description="Find any manhwa, manga, manhua or anime and see the official apps that carry it. No pirate mirrors — only licensed publishers and streaming platforms."
+  jsonld={jsonld}
+  preloadImage={heroBanner}
+>
+  <section class="hero hero--home">
+    {heroBanner && (
+      <img class="hero__banner" src={heroBanner} alt="" width="1900" height="760" loading="eager" fetchpriority="high" decoding="async" />
+    )}
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="shell hero__inner">
+      <div class="hero__content">
+        <h1>You found the series. Now find where it is.</h1>
+        <p>
+          Find where to read your favorite manhwa, manga and manhua — and where to watch
+          the anime. Compare the official platforms, what each one costs, and whether
+          there is an adaptation yet. All in one place.
+        </p>
+      </div>
+      <div class="skyline" aria-hidden="true">
+      {
+        skyline.map((item, i) => (
+          <img
+            src={tinyCover(item.cover)}
+            alt={`Cover of ${item.title}`}
+            width="230"
+            height="345"
+            loading={i < 5 ? 'eager' : 'lazy'}
+            decoding="async"
+            fetchpriority={i < 5 ? 'low' : undefined}
+          />
+        ))
+      }
+      </div>
+    </div>
+  </section>
+
+
+  <nav class="shell kinds" aria-label="Browse by type">
+    <a href="/manhwa"><b>Manhwa</b><span>Korean comics · {comicsOfCountry('KR').length.toLocaleString()} titles</span></a>
+    <a href="/manga"><b>Manga</b><span>Japanese comics · {comicsOfCountry('JP').length.toLocaleString()} titles</span></a>
+    <a href="/manhua"><b>Manhua</b><span>Chinese comics · {(comicsOfCountry('CN').length + comicsOfCountry('TW').length).toLocaleString()} titles</span></a>
+    <a href="/novel"><b>Novels</b><span>Light and web novels · {novelsByPopularity.length.toLocaleString()} titles</span></a>
+    <a href="/anime"><b>Anime</b><span>Series and films · {anime.length.toLocaleString()} titles</span></a>
+  </nav>
+
+  <div class="shell">
+    {/*
+      For you. This page is one file served to everybody, so the section ships
+      empty and hidden, and only a reader who has saved something ever sees it:
+      the script below reads their list from their own browser, loads the pool
+      (/d/feed.v1.json) and fills it. Nobody else downloads anything extra.
+    */}
+    <script is:inline>
+      // Runs before the For you section is drawn, so a reader who has a list
+      // gets the section's full height at once (as grey placeholder cards)
+      // instead of the page jumping when the picks arrive. A plain text test,
+      // not a JSON parse: it only has to know the list is not empty. Blocked
+      // storage throws, and then nothing changes.
+      try {
+        if (/"titles":\{"/.test(localStorage.getItem('mi_list_v1') || '')) {
+          document.documentElement.classList.add('mi-has-list')
+        }
+      } catch (e) {}
+    </script>
+    <section class="section foryou" id="for-you" data-phase="night" aria-labelledby="foryou-h" hidden>
+      <div class="section__head section__head--row">
+        <div>
+          <h2 id="foryou-h">For you</h2>
+          <p>Picked in your browser from the titles you saved. Your list stays in your browser.</p>
+        </div>
+        <a class="section__more section__more--cta" href="/my-list">My list →</a>
+      </div>
+      <div class="foryou__week" hidden>
+        <h3>Your list this week</h3>
+        <ul class="airing foryou__weeklist"></ul>
+      </div>
+      <ul class="grid foryou__grid">
+        {Array.from({ length: 12 }, () => (
+          <li class="card foryou__ghost" aria-hidden="true">
+            <span class="card__art"><span class="foryou__ghostart" /></span>
+            <p class="card__title">&nbsp;</p>
+            <p class="card__meta">&nbsp;</p>
+            <p class="foryou__why">&nbsp;<br />&nbsp;</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+    <script>
+      import { openStore, track } from '../lib/my-list.js'
+      import { loadFeed } from '../lib/list-data.js'
+      import { pickFeed, thisWeek } from '../lib/feed-core.js'
+      import { coverFrom } from '../lib/list-row.js'
+      import { phrase } from '../lib/countdown-core.js'
+
+      const SECTION_WORD = { manhwa: 'Manhwa', manga: 'Manga', manhua: 'Manhua', novel: 'Novel', anime: 'Anime' }
+
+      // textContent only: titles come from data, never run as markup.
+      function el(tag, props = {}, ...children) {
+        const node = document.createElement(tag)
+        for (const [key, value] of Object.entries(props)) {
+          if (value === undefined || value === null) continue
+          if (key === 'text') node.textContent = value
+          else if (key === 'class') node.className = value
+          else node.setAttribute(key, String(value))
+        }
+        for (const child of children) if (child) node.append(child)
+        return node
+      }
+
+      // Nothing to show after all: take the placeholder away again.
+      const giveUp = () => document.documentElement.classList.remove('mi-has-list')
+
+      async function fillForYou() {
+        const store = openStore()
+        const entries = Object.values(store.get().titles)
+        if (!entries.length) return giveUp()
+        let pool
+        try {
+          pool = await loadFeed()
+        } catch (e) {
+          return giveUp() // No pool, no section: the page is exactly as before.
+        }
+        const now = Math.floor(Date.now() / 1000)
+        const picks = pickFeed(entries, pool)
+        const week = thisWeek(entries, pool.airing, now)
+        if (!picks.length && !week.length) return giveUp()
+
+        const section = document.getElementById('for-you')
+        const weekBox = section.querySelector('.foryou__week')
+        section.querySelector('.foryou__weeklist').replaceChildren(
+          ...week.map(({ entry, at, num }) =>
+            el(
+              'li',
+              {},
+              el(
+                'a',
+                { href: `/${entry.ns}/${entry.slug}` },
+                entry.cover ? el('img', { src: entry.cover, alt: '', width: '52', height: '74', loading: 'lazy', decoding: 'async' }) : null,
+                el('span', {}, el('b', { text: entry.title }), el('em', { text: `${num ? `Episode ${num}` : 'New episode'} · ${phrase(at - now)}` }))
+              )
+            )
+          )
+        )
+        weekBox.hidden = week.length === 0
+
+        const grid = section.querySelector('.foryou__grid')
+        grid.replaceChildren(
+          ...picks.map((item, i) =>
+            el(
+              'li',
+              { class: 'card' },
+              el(
+                'a',
+                { href: `/${item.ns}/${item.slug}`, 'data-pos': i + 1, 'data-id': item.id, 'data-ns': item.ns, 'data-rel': item.related ? '1' : '0', 'data-title': item.title },
+                el(
+                  'span',
+                  { class: 'card__art' },
+                  el('img', { src: coverFrom(item.ns, item.cover), alt: `Cover of ${item.title}`, width: '230', height: '345', loading: 'lazy', decoding: 'async' }),
+                  item.score ? el('b', { class: 'card__score', text: (item.score / 10).toFixed(1) }) : null
+                ),
+                el('p', { class: 'card__title', text: item.title }),
+                el('p', { class: 'card__meta' }, el('span', { text: SECTION_WORD[item.ns] || item.ns })),
+                el('p', { class: 'foryou__why', text: item.reason })
+              )
+            )
+          )
+        )
+        grid.addEventListener('click', (event) => {
+          const link = event.target.closest && event.target.closest('a[data-pos]')
+          if (!link) return
+          track('feed_click', {
+            position: Number(link.dataset.pos),
+            title_id: Number(link.dataset.id),
+            section: link.dataset.ns,
+            related: Number(link.dataset.rel),
+            title: link.dataset.title,
+          })
+        })
+        section.hidden = false
+        track('feed_view', { picks: picks.length, this_week: week.length, titles: entries.length })
+      }
+
+      fillForYou()
+    </script>
+
+    {
+      rows.map((row) => (
+        <section class="section" data-phase="night">
+          <div class="section__head section__head--row">
+            <div>
+              <h2>{row.label}</h2>
+              {row.note && <p>{row.note}</p>}
+            </div>
+            <a class="section__more" href={row.base}>
+              All {row.all.toLocaleString()} →
+            </a>
+          </div>
+          <div class="shelf-wrap">
+            <button type="button" class="shelf-arrow shelf-arrow--left" aria-label={`Scroll ${row.id} left`}>
+              ‹
+            </button>
+            <CoverGrid items={row.items} base={row.base} shelf />
+            <button type="button" class="shelf-arrow shelf-arrow--right" aria-label={`Scroll ${row.id} right`}>
+              ›
+            </button>
+          </div>
+        </section>
+      ))
+    }
+    <script>
+      for (const wrap of document.querySelectorAll('.shelf-wrap')) {
+        const shelf = wrap.querySelector('.grid--shelf')
+        const arrows = [wrap.querySelector('.shelf-arrow--left'), wrap.querySelector('.shelf-arrow--right')]
+        const stride = () => {
+          const cards = shelf.querySelectorAll('.card')
+          return cards.length > 1
+            ? cards[1].offsetLeft - cards[0].offsetLeft
+            : shelf.clientWidth * 0.8
+        }
+        const page = (dir) => {
+          const step = stride()
+          const cardsPerView = Math.max(1, Math.floor(shelf.clientWidth / step))
+          shelf.scrollBy({ left: dir * cardsPerView * step, behavior: 'smooth' })
+        }
+        arrows[0].addEventListener('click', () => page(-1))
+        arrows[1].addEventListener('click', () => page(1))
+        const update = () => {
+          arrows[0].disabled = shelf.scrollLeft < 4
+          arrows[1].disabled = shelf.scrollLeft > shelf.scrollWidth - shelf.clientWidth - 4
+        }
+        shelf.addEventListener('scroll', update, { passive: true })
+        update()
+      }
+    </script>
+
+    <PopularNow />
+
+    {
+      airing.length > 0 && (
+        <section class="section" data-phase="night">
+          <div class="section__head section__head--row">
+            <div>
+              <h2>Anime airing this week</h2>
+              <p>The next episode of each ongoing show, and where it legally streams.</p>
+            </div>
+            <a class="section__more section__more--cta" href="/schedule">
+              See the full week →
+            </a>
+          </div>
+          <ul class="airing">
+            {airing.map((a) => (
+              <li>
+                <a href={`/anime/${a.slug}`}>
+                  <img src={tinyCover(a.cover)} alt={`Cover of ${a.title}`} width="52" height="74" loading="lazy" decoding="async" />
+                  <span>
+                    <b>{a.title}</b>
+                    <em>
+                      Episode {a.nextEpisode.number} · <Countdown at={a.nextEpisode.at} />
+                      {a.watchLinks.length ? ` · on ${a.watchLinks.length} platforms` : ''}
+                    </em>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      anticipated.length > 0 && (
+        <section class="section" data-phase="night">
+          <div class="section__head section__head--row">
+            <div>
+              <h2>Most anticipated anime</h2>
+              <p>Not out yet, ranked by how many AniList users have them on a list.</p>
+            </div>
+            <a class="section__more section__more--cta" href="/schedule#anticipated">
+              See the full schedule →
+            </a>
+          </div>
+          <UpcomingList rows={anticipated} />
+        </section>
+      )
+    }
+
+    {
+      comingSoon.length > 0 && (
+        <section class="section" data-phase="night">
+          <div class="section__head section__head--row">
+            <div>
+              <h2>Anime coming soon</h2>
+              <p>Announced with an exact premiere date, soonest first.</p>
+            </div>
+            <a class="section__more section__more--cta" href={comingSoonHref}>
+              See the full schedule →
+            </a>
+          </div>
+          <UpcomingList rows={comingSoon} />
+        </section>
+      )
+    }
+
+
+    <section class="section legend" data-phase="first" aria-label="Platform colour legend">
+      <p class="legend__lead">Every colour is one official platform:</p>
+      <ul class="legend__list">
+        {
+          legend.map((l) => (
+            <li>
+              <i style={`--mark:${l.color}`} aria-hidden="true" />
+              {l.name}
+            </li>
+          ))
+        }
+        <li class="legend__note">…and more. Open a title to see its full list.</li>
+      </ul>
+    </section>
+
+    <section class="section" data-phase="day">
+      <div class="section__head">
+        <h2>Browse by genre</h2>
+      </div>
+      <ul class="chips">
+        {
+          genres.slice(0, 18).map((g) => (
+            <li>
+              <a href={`/genre/${g.slug}`}>{g.name}</a>
+            </li>
+          ))
+        }
+        <li><a href="/genre">All genres →</a></li>
+      </ul>
+    </section>
+  </div>
+</Base>

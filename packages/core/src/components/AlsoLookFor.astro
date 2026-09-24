@@ -1,0 +1,38 @@
+---
+/**
+ * "Readers also look for": one to three plain links to related pages that
+ * Google nearly ranks (src/lib/boost-links.js). Renders nothing on a page
+ * with no links, which is almost every page.
+ *
+ * `frame` matches the page it sits in: character pages build their blocks as
+ * `section`, title and answer pages as `answer`.
+ *
+ * `data-boost` marks the block, so scripts/build-boost-links.mjs can cut it
+ * out before it checks whether a page already links a target. Without that,
+ * next month's run would count this block's own links as "already linked" and
+ * drop every pair it added.
+ */
+import { boostLinksFor } from '../lib/boost-links.js'
+
+const { path, frame = 'section' } = Astro.props
+const links = boostLinksFor(path)
+const head = frame === 'answer' ? 'answer__head' : 'section__head'
+---
+
+{
+  links.length > 0 && (
+    <section class={frame} data-boost aria-labelledby="also-look-for">
+      <div class={head}>
+        <h2 id="also-look-for">Readers also look for</h2>
+        <p>Pages from the same story that people search for next.</p>
+      </div>
+      <ul class="link-pills">
+        {links.map((link) => (
+          <li>
+            <a href={link.path}>{link.anchor}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
