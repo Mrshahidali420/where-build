@@ -1,0 +1,82 @@
+---
+/**
+ * An animation studio: every show it animated that is on this site, newest
+ * first, and the directors and composers it keeps working with.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { loadStudio } from '@sister/core/src/where/runtime.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { formatWord, statusWord, plural } from '@sister/core/src/where/words.mjs'
+import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+import NameList from '@sister/core/src/components/where/NameList.astro'
+
+let s
+try {
+  s = await loadStudio(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  return unavailable(Astro, e)
+}
+if (!s) return notFound(Astro)
+
+const years = s.works.map((w) => w.year).filter(Boolean)
+const span = years.length ? `${Math.min(...years)} to ${Math.max(...years)}` : ''
+const known = s.works.slice(0, 3).map((w) => w.title)
+---
+
+<Where
+  title={`Anime by ${s.name}: All ${s.works.length} Shows | ${config.name}`}
+  description={`Every anime animated by ${s.name}${span ? `, ${span}` : ''}${known.length ? `, including ${known.join(', ')}` : ''}, with episode counts and its regular directors.`}
+  canonical={`/studio/${s.slug}`}
+  jsonld={[{ '@type': 'Organization', name: s.name, url: `${config.siteUrl}/studio/${s.slug}` }, listJsonld(`Anime by ${s.name}`, s.works, config.siteUrl)]}
+  crumbs={[{ name: 'Studios', href: '/directory/studios' }, { name: s.name }]}
+>
+  <header class="w-head" style="grid-template-columns:1fr">
+    <div>
+      <span class="w-kicker">Animation studio</span>
+      <h1>{s.name}</h1>
+      <p class="w-head__lede">{plural(s.works.length, 'anime', 'anime')} on this site{span ? `, from ${span}` : ''}.</p>
+    </div>
+  </header>
+
+  <section class="w-sec" aria-labelledby="works">
+    <h2 id="works">Anime by {s.name}</h2>
+    <div class="w-table-wrap">
+      <table class="w-table">
+        <thead>
+          <tr><th scope="col">Anime</th><th scope="col">Format</th><th scope="col">Episodes</th><th scope="col">Status</th></tr>
+        </thead>
+        <tbody>
+          {
+            s.works.map((w) => (
+              <tr>
+                <td><ShowCell show={w} /></td>
+                <td class="w-muted">{formatWord(w.format)}</td>
+                <td class="w-num">{w.episodes || '—'}</td>
+                <td class="w-muted">{statusWord(w.status)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {
+    s.directors.length > 0 && (
+      <section class="w-sec" aria-labelledby="dir">
+        <h2 id="dir">Its regular directors</h2>
+        <NameList rows={s.directors} noun="show" />
+      </section>
+    )
+  }
+  {
+    s.composers.length > 0 && (
+      <section class="w-sec" aria-labelledby="music">
+        <h2 id="music">Its regular composers</h2>
+        <NameList rows={s.composers} noun="show" />
+      </section>
+    )
+  }
+</Where>

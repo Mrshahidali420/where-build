@@ -13,6 +13,8 @@ import { RANGES, withRange } from '../lib/admin.js'
 import config from '../lib/site.mjs'
 // The whole look lives in its own file. Only this layout imports it.
 import '../styles/admin.css'
+// The site's own admin weights, when its config self-hosts its type.
+import 'virtual:site-fonts-admin'
 
 const {
   title,
@@ -55,12 +57,16 @@ const SHORT = { today: 'Today', '24h': '24h', '7d': '7 days', '30d': '30 days', 
     {signedIn && refresh > 0 && (
       <meta http-equiv="refresh" content={String(refresh)} />
     )}
-    <!-- The site's own heading face. Allowed by the CSP (fonts.googleapis.com). -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href={config.fonts.adminStylesheet}
-    />
+    <!-- The site's own heading face: a font service stylesheet (allowed by the
+         CSP), or the self-hosted weights the virtual:site-fonts-admin import
+         above bundles, with no request to another host. -->
+    {config.fonts.adminStylesheet && <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />}
+    {config.fonts.adminStylesheet && (
+      <link
+        rel="stylesheet"
+        href={config.fonts.adminStylesheet}
+      />
+    )}
     <script is:inline>
       // From now on this browser is the owner's, and every page on the site
       // will skip it. It is one flag in this browser only.

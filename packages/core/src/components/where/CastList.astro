@@ -1,0 +1,44 @@
+---
+/**
+ * The cast: each character's face and name with their Japanese and English
+ * voices. A voice links to its voice actor page here; a face links to the
+ * character's own page on the home site, the family's canonical character
+ * pages (docs/PLAN.md section 3), only when that page exists.
+ */
+import { castRoleWord } from '../../where/words.mjs'
+
+const { cast = [] } = Astro.props
+const SHORT = { Japanese: 'JP', English: 'EN' }
+---
+
+<ul class="w-cast">
+  {
+    cast.map((c) => (
+      <li>
+        {c.face ? (
+          <a href={c.face} rel="noopener" aria-label={`${c.name}, character profile`}>
+            {c.image ? <img class="w-face" src={c.image} alt={c.name} width="56" height="56" loading="lazy" /> : <span class="w-face" />}
+          </a>
+        ) : c.image ? (
+          <img class="w-face" src={c.image} alt={c.name} width="56" height="56" loading="lazy" />
+        ) : (
+          <span class="w-face" />
+        )}
+        <div>
+          <span class="w-cast__name">{c.name}</span>
+          {castRoleWord(c.role) && <span class="w-cast__role">{castRoleWord(c.role)}</span>}
+          {c.voices.length > 0 && (
+            <ul class="w-voices">
+              {c.voices.map((v) => (
+                <li>
+                  <abbr class="w-lang" title={v.language}>{SHORT[v.language] || v.language}</abbr>
+                  {v.href ? <a href={v.href}>{v.name}</a> : v.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ul>

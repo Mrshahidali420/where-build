@@ -1,0 +1,25 @@
+---
+/**
+ * A person's AniList biography, rendered by the same safe mini-markdown the
+ * core uses for character bios (bioHtml: bold, italic, spoilers dropped,
+ * links as plain text), with its source named.
+ */
+import { bioHtml } from '../../lib/format.js'
+
+const { text = '', source = '', heading = 'Biography' } = Astro.props
+const html = text ? bioHtml(text) : ''
+---
+
+{
+  html && (
+    <section class="w-sec">
+      <h2>{heading}</h2>
+      <div class="w-prose" set:html={html} />
+      {source && (
+        <p class="w-source">
+          From <a href={source} rel="noopener">AniList</a>.
+        </p>
+      )}
+    </section>
+  )
+}

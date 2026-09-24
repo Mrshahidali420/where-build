@@ -1,0 +1,133 @@
+---
+/**
+ * An anime: when each episode airs, who made it, who voices it, its songs and
+ * where it sits in its franchise. Rendered by the Worker from one shard
+ * record (packages/core/src/where/record-title.mjs); every link in it was
+ * resolved at build time to a page that exists.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { truncate } from '@sister/core/src/lib/format.js'
+import { loadAnime } from '@sister/core/src/where/runtime.mjs'
+import { animeJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { formatWord, paragraphs, plural } from '@sister/core/src/where/words.mjs'
+import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
+import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
+import Credits from '@sister/core/src/components/where/Credits.astro'
+import CastList from '@sister/core/src/components/where/CastList.astro'
+import SongList from '@sister/core/src/components/where/SongList.astro'
+import WatchBlock from '@sister/core/src/components/where/WatchBlock.astro'
+import CrossCards from '@sister/core/src/components/where/CrossCards.astro'
+
+let r
+try {
+  r = await loadAnime(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  // The shard did not read: 503, not 404. The page still exists.
+  return unavailable(Astro, e)
+}
+if (!r) return notFound(Astro)
+
+// The title page lists the first twelve; the rest are on /episodes.
+const FIRST = 12
+const shown = r.rows.slice(0, FIRST)
+const story = paragraphs(r.description)
+const voiced = r.cast.some((c) => c.voices.length > 0)
+const what = formatWord(r.format).toLowerCase()
+const description = truncate(
+  `${r.title} (${what}${r.startYear ? `, ${r.startYear}` : ''}): ` +
+    [
+      r.dated ? `air dates for ${plural(r.dated, 'episode')}` : r.episodes ? plural(r.episodes, 'episode') : '',
+      voiced ? 'the Japanese and English voice cast' : '',
+      r.key.length ? 'who directed and wrote it' : '',
+      r.songs.length ? 'its opening and ending songs' : '',
+    ]
+      .filter(Boolean)
+      .join(', ') +
+    '.',
+  158,
+)
+---
+
+<Where
+  title={`${r.title}: Episodes, Cast and Staff | ${config.name}`}
+  description={description}
+  canonical={`/anime/${r.slug}`}
+  image={r.cover}
+  preloadImage={r.cover}
+  jsonld={animeJsonld(r, config.siteUrl)}
+  crumbs={[{ name: 'By year', href: '/year' }, ...(r.startYear ? [{ name: String(r.startYear), href: `/year/${r.startYear}` }] : []), { name: r.title }]}
+>
+  <TitleHead record={r} kicker={[formatWord(r.format), r.startYear].filter(Boolean).join(' · ')} />
+
+  {
+    shown.length > 0 && (
+      <section class="w-sec" aria-labelledby="eps">
+        <h2 id="eps">Episodes</h2>
+        {r.rows.length > FIRST && (
+          <p class="w-sec__note">
+            The first {FIRST} of {plural(r.rows.length, 'episode')}{r.dated ? `, ${r.dated} with an air date` : ''}.
+          </p>
+        )}
+        <EpisodeTable rows={shown} caption={`${r.title} episodes and air dates`} />
+        {r.episodesPage && <a class="w-more" href={`/anime/${r.slug}/episodes`}>Every episode of {r.title} with its air date →</a>}
+      </section>
+    )
+  }
+
+  {
+    (r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0) && (
+      <section class="w-sec" aria-labelledby="made">
+        <h2 id="made">Made by</h2>
+        <Credits studios={r.studios} keyCredits={r.key} crew={r.crew} />
+      </section>
+    )
+  }
+
+  {
+    r.cast.length > 0 && (
+      <section class="w-sec" aria-labelledby="cast">
+        <h2 id="cast">Cast and voice actors</h2>
+        {voiced && <p class="w-sec__note">Japanese and English voices. Each voice actor's name opens every role they have played.</p>}
+        <CastList cast={r.cast} />
+      </section>
+    )
+  }
+
+  {
+    r.songs.length > 0 && (
+      <section class="w-sec" aria-labelledby="songs">
+        <h2 id="songs">Opening and ending songs</h2>
+        <SongList songs={r.songs} />
+      </section>
+    )
+  }
+
+  {
+    r.watch && (
+      <section class="w-sec" aria-labelledby="order">
+        <h2 id="order">Watch order</h2>
+        <WatchBlock watch={r.watch} />
+      </section>
+    )
+  }
+
+  {
+    story.length > 0 && (
+      <section class="w-sec" aria-labelledby="story">
+        <h2 id="story">Story</h2>
+        <div class="w-prose">
+          {story.map((p) => <p>{p}</p>)}
+        </div>
+        {r.anilistUrl && (
+          <p class="w-source">
+            Synopsis and data from <a href={r.anilistUrl} rel="noopener">AniList</a>.
+          </p>
+        )}
+      </section>
+    )
+  }
+
+  <CrossCards cards={r.cross} />
+</Where>

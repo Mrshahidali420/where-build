@@ -96,6 +96,36 @@ function checkGates(gates) {
   for (const gate of gates) need(isText(gate.page) && COUNTERS[gate.count], `gates ${gate.page}`, `needs a page and a count from: ${Object.keys(COUNTERS).join(', ')}`)
 }
 
+/**
+ * Two ways to ship type. `stylesheet` and `adminStylesheet` name a font
+ * service's CSS (the first site's way). `self` lists @fontsource
+ * packages the build bundles into /_astro/, so a page never waits on another
+ * host: { subsets, faces: [{ pkg, file, weights, preload, admin }] }, where
+ * `file` is the package's file prefix, `preload` the weights the first screen
+ * paints and `admin` the weights /my-admin uses (see integration.mjs).
+ */
+function checkFonts(fonts) {
+  checkText(fonts, ['display', 'text'])
+  if (!fonts.self) return checkText(fonts, ['stylesheet', 'adminStylesheet'])
+  const { subsets, faces } = fonts.self
+  need(Array.isArray(subsets) && subsets.length > 0 && subsets.every(isText), 'fonts.self.subsets', 'must list subsets')
+  need(Array.isArray(faces) && faces.length > 0, 'fonts.self.faces', 'must list at least one face')
+  for (const face of faces) {
+    need(/^@fontsource\/[a-z0-9-]+$/.test(face.pkg || '') && isText(face.file), 'fonts.self.faces', 'needs an @fontsource pkg and its file prefix')
+    for (const key of ['weights', 'preload', 'admin']) {
+      const list = face[key] || []
+      need(Array.isArray(list) && list.every((w) => Number.isInteger(w)), `fonts.self ${face.pkg}.${key}`, 'must list weights')
+    }
+    need((face.weights || []).length > 0, `fonts.self ${face.pkg}.weights`, 'must list at least one weight')
+    for (const weight of [...(face.preload || []), ...(face.admin || [])]) {
+      need(face.weights.includes(weight), `fonts.self ${face.pkg}`, `weight ${weight} is preloaded or used by admin but not shipped`)
+    }
+  }
+}
+
+/** Which build a site runs (scripts/build-site.mjs): the core's, or the Where entity build. */
+export const BUILDERS = ['core', 'where']
+
 function checkObjects(input, keys) {
   for (const key of keys) need(input[key] && typeof input[key] === 'object' && !Array.isArray(input[key]), key, 'must be an object')
 }
@@ -123,15 +153,19 @@ export function defineSite(input) {
   need(Array.isArray(input.wordmark) && input.wordmark.length === 2 && input.wordmark.every(isText), 'wordmark', 'must be two words')
   need(!input.domain || !input.domain.endsWith(DEV_HOST_SUFFIX), 'domain', 'must be a real domain, not a workers.dev host')
   checkColors(input.colors)
-  checkText(input.fonts, ['stylesheet', 'adminStylesheet', 'display', 'text'])
+  checkFonts(input.fonts)
+  need(input.builder === undefined || BUILDERS.includes(input.builder), 'builder', `must be one of ${BUILDERS.join(', ')}`)
   checkRoutes(input.routes)
   checkAmazon(input.amazon)
   checkLinks(input.nav, 'nav')
   checkText(input.footer, ['blurb', 'bar'])
   checkLinks(input.footer.browse, 'footer.browse')
+  if (input.footer.legal !== undefined) checkLinks(input.footer.legal, 'footer.legal')
   checkLinks(input.dock, 'dock')
   for (const item of input.dock) need(DOCK_ICONS[item.icon], `dock ${item.href}`, `needs an icon from: ${Object.keys(DOCK_ICONS).join(', ')}`)
   checkLinks(input.search.emptyLinks, 'search.emptyLinks')
+  if (input.search.pageLinks !== undefined) checkLinks(input.search.pageLinks, 'search.pageLinks')
+  need(input.search.description === undefined || isText(input.search.description), 'search.description', 'must be a non-empty string')
   need(isTextOrNull(input.indexNow.key), 'indexNow.key', 'must be a string or null')
   need(isText(input.d1.name), 'd1.name', 'must be a non-empty string')
   need(isTextOrNull(input.d1.id), 'd1.id', 'must be a string or null')
@@ -139,6 +173,9 @@ export function defineSite(input) {
   need(isText(input.r2.catalogBucket), 'r2.catalogBucket', 'must be a non-empty string')
   need(typeof input.r2.catalogWrite === 'boolean', 'r2.catalogWrite', 'must be true (the site that owns the catalog) or false')
   need(isTextOrNull(input.r2.dataBucket), 'r2.dataBucket', 'must be a string or null')
+  // Where this site keeps its own state in the data bucket (scripts/where-data.mjs).
+  need(input.r2.statePrefix === undefined || /^[a-z0-9-]+$/.test(input.r2.statePrefix), 'r2.statePrefix', 'must be lower case letters, digits and dashes')
+  need(input.builder !== 'where' || (input.r2.dataBucket && input.r2.statePrefix), 'r2', 'a Where site needs dataBucket and statePrefix')
   need(typeof input.dev.blockBots === 'boolean', 'dev.blockBots', 'must be true or false')
   need(typeof input.malExtras === 'boolean', 'malExtras', 'must be true or false')
   need(Array.isArray(input.entityKinds), 'entityKinds', 'must be a list')
@@ -156,13 +193,16 @@ export function defineSite(input) {
 
   const devHost = `${input.workerName}.${input.workersSubdomain}${DEV_HOST_SUFFIX}`
   const host = input.domain || devHost
-  return freeze({ ...structuredClone(input), devHost, host, siteUrl: `https://${host}` })
+  return freeze({ builder: 'core', ...structuredClone(input), devHost, host, siteUrl: `https://${host}` })
 }
 
 /** True for a Workers dev address. Such a host is never indexed. */
 export function isDevHost(hostname) {
   return String(hostname || '').toLowerCase().endsWith(DEV_HOST_SUFFIX)
 }
+
+/** True for a site built by the Where entity build (scripts/make-where.mjs). */
+export const isWhereSite = (site) => site.builder === 'where'
 
 /** True when the site builds this group of core pages. */
 export function hasRoute(site, key) {

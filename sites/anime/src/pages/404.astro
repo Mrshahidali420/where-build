@@ -1,0 +1,65 @@
+---
+/**
+ * The not-found page. It turns the address that was asked for back into
+ * words and offers them to the header search, and lists the hubs. The Worker
+ * serves this file with a real 404 and no-store (src/lib/runtime.js).
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+
+const NEXT = config.nav
+---
+
+<Where title={`Not found | ${config.name}`} description="That page is not on this site." noindex={true} missing={true}>
+  <header class="w-front" style="padding-top:1rem">
+    <h1>That page is <em>not here</em>.</h1>
+    <p>The link may be old, or the show, person or studio has no page yet. Search for it, or start from a list.</p>
+    <p id="miss-try" hidden>
+      <button type="button" class="miss-search" id="miss-search">Search for <b id="miss-name"></b></button>
+    </p>
+  </header>
+  <ul class="w-hubs">
+    {
+      NEXT.map((link) => (
+        <li>
+          <a href={link.href}>
+            <b>{link.label}</b>
+            <span>{link.href}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <script is:inline>
+    // "/voice-actor/kana-hanazawa-2" -> "kana hanazawa", handed to the header search.
+    ;(function () {
+      var raw = ''
+      try {
+        raw = decodeURIComponent(location.pathname)
+      } catch (e) {
+        raw = location.pathname
+      }
+      var words = (raw.split('/').filter(Boolean).pop() || '')
+        .replace(/-\d{3,}$/, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/[^a-z0-9 ']/gi, ' ')
+        .trim()
+      var box = document.getElementById('miss-try')
+      var input = document.getElementById('finder-input')
+      if (words.length < 3 || !box || !input) return
+      document.getElementById('miss-name').textContent = words
+      box.hidden = false
+      document.getElementById('miss-search').addEventListener('click', function () {
+        if (input.offsetParent === null) {
+          var menu = document.querySelector('.menu-btn')
+          if (menu) menu.click()
+        }
+        input.value = words
+        input.dispatchEvent(new Event('input', { bubbles: true }))
+        input.focus()
+      })
+    })()
+  </script>
+</Where>

@@ -23,6 +23,8 @@ import {
   titleYears,
 } from '../src/lib/reslug.mjs'
 import { dropBlocked, dropBlockedRows } from '../src/lib/blocked.js'
+import { ownedOnly } from '../src/lib/owned.mjs'
+import config from '../src/lib/site.mjs'
 import { loadRegistry, saveRegistry, newRegistry, registrySize } from '../src/lib/slug-registry.mjs'
 import { writeFileAtomic } from '../src/lib/write-atomic.mjs'
 
@@ -35,8 +37,8 @@ const read = (p) => JSON.parse(readFileSync(join(DATA, p), 'utf8'))
 // catalog.js. They used to stay in here, so a blocked title still competed
 // for a clean slug and could push a live namesake onto its year slug in the
 // redirect map while the pages used the plain one.
-const comics = dropBlockedRows(dropBlocked(read('comics.json')))
-const anime = dropBlockedRows(dropBlocked(read('anime.json')))
+const comics = ownedOnly(config, dropBlockedRows(dropBlocked(read('comics.json'))))
+const anime = ownedOnly(config, dropBlockedRows(dropBlocked(read('anime.json'))))
 const characters = read('characters.json')
 
 const readonly = process.env.REGISTRY_READONLY === '1'

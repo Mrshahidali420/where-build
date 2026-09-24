@@ -1,0 +1,44 @@
+---
+/**
+ * What the site is, where its data comes from, and, in one sentence, the
+ * family it belongs to (docs/PLAN.md section 3 rule 5: the About page may
+ * name the family; nothing sitewide may).
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { homeBase } from '@sister/core/src/where/cross.mjs'
+
+const home = homeBase(config)
+const homeName = home ? new URL(home).hostname : ''
+---
+
+<Where title={`About ${config.name}`} description={`What ${config.name} is, where its data comes from, and how often it changes.`} canonical="/about" crumbs={[{ name: 'About' }]}>
+  <header class="w-front" style="padding-top:1rem">
+    <h1>About <em>{config.name}</em></h1>
+  </header>
+  <div class="w-prose">
+    <p>
+      {config.name} answers the questions about an anime that come after "where can I watch it": when each
+      episode aired or airs next, who voices each character in Japanese and English, who directed, wrote,
+      designed and scored it, which studio animated it, what its opening and ending songs are, and what order
+      to watch its franchise in.
+    </p>
+    <p>
+      Titles, episodes, credits, casts and air dates come from <a href="https://anilist.co" rel="noopener">AniList</a>.
+      Opening and ending songs come from <a href="https://animethemes.moe" rel="noopener">AnimeThemes</a> and
+      AniSongDB. Cover art and photos belong to their owners. The site rebuilds itself every day at
+      {config.rebuildUtc} UTC. A page exists only when there is something real to say: a person needs enough
+      credited roles, a studio enough shows, a franchise enough entries.
+    </p>
+    {
+      homeName && (
+        <p>
+          {config.name} is part of a small family of sites; where to watch or read a title legally lives on{' '}
+          <a href={home} rel="noopener">{homeName}</a>.
+        </p>
+      )
+    }
+    <p>{config.name} is not affiliated with AniList, AnimeThemes, any studio or any streaming service.</p>
+  </div>
+</Where>

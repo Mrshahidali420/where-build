@@ -1,0 +1,16 @@
+---
+export const prerender = true
+import YearPage from '../../../components/YearPage.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { hubPaths } from '@sister/core/src/where/hubs.mjs'
+
+export function getStaticPaths() {
+  return hubPaths(whereHubs())
+    .filter((p) => p.year && p.page > 1)
+    .map(({ year, page, pages }) => ({ params: { year: String(year), page: String(page) }, props: { page, pages } }))
+}
+
+const { page, pages } = Astro.props
+---
+
+<YearPage year={Astro.params.year} page={page} pages={pages} />

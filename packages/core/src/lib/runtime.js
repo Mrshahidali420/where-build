@@ -84,6 +84,15 @@ export function loadCharacter(env, slug) {
   return readRecord(env, 'c', CHARACTER_SHARDS, slug)
 }
 
+/**
+ * One record of any other shard folder, or null: a Where site's people,
+ * studios, artists and franchises (src/where/shard-folders.mjs names the
+ * folders and their fixed counts).
+ */
+export function loadRecord(env, folder, count, key) {
+  return readRecord(env, folder, count, key)
+}
+
 /** The Cloudflare runtime, whatever Astro version put it there. */
 export const envOf = (astro) => astro.locals?.runtime?.env
 

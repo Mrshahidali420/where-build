@@ -1,0 +1,27 @@
+---
+/** Every year with anime on the site, newest first, each with its count. */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import NameList from '@sister/core/src/components/where/NameList.astro'
+
+const { years } = whereHubs()
+const rows = Object.keys(years)
+  .map(Number)
+  .sort((a, b) => b - a)
+  .map((year) => [String(year), `/year/${year}`, years[year].length])
+---
+
+<Where
+  title={`Anime by Year: ${rows.at(-1)?.[0]} to ${rows[0]?.[0]} | ${config.name}`}
+  description={`Every year of anime on ${config.name}, from ${rows.at(-1)?.[0]} to ${rows[0]?.[0]}, each with all the shows that began in it.`}
+  canonical="/year"
+  crumbs={[{ name: 'By year' }]}
+>
+  <header class="w-front" style="padding-top:1rem">
+    <h1>Anime <em>by year</em></h1>
+    <p>Pick a year to see every show that began in it, most watched first.</p>
+  </header>
+  <NameList rows={rows} noun="show" />
+</Where>

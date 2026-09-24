@@ -1,0 +1,88 @@
+---
+/**
+ * The front page: what the site answers, the most watched shows, the busiest
+ * voice actors and studios, the biggest watch orders, and the way into every
+ * directory. Prerendered once a night from data/where-hubs.json.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import NameList from '@sister/core/src/components/where/NameList.astro'
+
+const { home } = whereHubs()
+const c = home.counts
+// The covers a wide screen paints first load at once; the rest wait for a scroll.
+const FIRST_ROW = 7
+const hubs = [
+  { href: '/directory/voice-actors', label: 'Voice actors', what: `${plural(c.voice, 'voice actor')}, every role they voiced` },
+  { href: '/directory/staff', label: 'Staff', what: `${plural(c.staff, 'person', 'people')} who directed, wrote, drew or scored` },
+  { href: '/directory/studios', label: 'Studios', what: `${plural(c.studios, 'studio')}, every show they animated` },
+  { href: '/directory/artists', label: 'Songs', what: `${plural(c.artists, 'artist')}, every opening and ending` },
+  { href: '/directory/watch-orders', label: 'Watch orders', what: `${plural(c.watch, 'franchise')} in release order` },
+  { href: '/year', label: 'By year', what: `${plural(c.titles, 'anime', 'anime')}, year by year` },
+]
+---
+
+<Where title={`${config.name}: Anime Episode Dates, Voice Actors, Staff and Songs`} description={config.description} canonical="/">
+  <header class="w-front">
+    <h1>When it airs, <em>who made it</em>, who voices it.</h1>
+    <p>
+      {plural(c.titles, 'anime', 'anime')} with the date of every episode, the Japanese and English voice cast, the
+      people and studio behind each one, its opening and ending songs, and the order to watch a franchise in.
+    </p>
+  </header>
+
+  <section class="w-sec" aria-labelledby="popular">
+    <h2 id="popular">Most watched</h2>
+    <ul class="w-grid">
+      {
+        home.titles.map(([title, href, cover, format, year], i) => (
+          <li>
+            <a href={href}>
+              <img src={cover} alt={`Cover of ${title}`} width="136" height="204" loading={i < FIRST_ROW ? 'eager' : 'lazy'} />
+              <b>{title}</b>
+              <small>{[format, year].filter(Boolean).join(' · ')}</small>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="w-sec" aria-labelledby="browse">
+    <h2 id="browse">Browse</h2>
+    <ul class="w-hubs">
+      {
+        hubs.map((hub) => (
+          <li>
+            <a href={hub.href}>
+              <b>{hub.label}</b>
+              <span>{hub.what}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {home.voice.length > 0 && (
+    <section class="w-sec" aria-labelledby="voices">
+      <h2 id="voices">Busiest voice actors</h2>
+      <NameList rows={home.voice} noun="role" />
+    </section>
+  )}
+  {home.studios.length > 0 && (
+    <section class="w-sec" aria-labelledby="studios">
+      <h2 id="studios">Busiest studios</h2>
+      <NameList rows={home.studios} noun="show" />
+    </section>
+  )}
+  {home.watch.length > 0 && (
+    <section class="w-sec" aria-labelledby="orders">
+      <h2 id="orders">Biggest franchises</h2>
+      <NameList rows={home.watch} noun="entry" />
+    </section>
+  )}
+</Where>

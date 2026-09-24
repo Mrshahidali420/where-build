@@ -1,0 +1,40 @@
+---
+/**
+ * Dated episode rows: number, title, air date. `rows` are [number, title,
+ * airedAt] (src/where/episodes.mjs). An episode still to come is marked, and
+ * the next one counts down. The page decides how many rows to pass.
+ */
+import Countdown from '../Countdown.astro'
+import { airDate, isoDate } from '../../where/words.mjs'
+
+const { rows = [], caption } = Astro.props
+const nowSec = Math.floor(Date.now() / 1000)
+const nextAt = rows.find((row) => row[2] > nowSec)?.[2] || 0
+// With no date on any row the column would only say "Not listed" down the page.
+const dated = rows.some((row) => row[2] > 0)
+---
+
+<div class="w-table-wrap">
+  <table class="w-table">
+    {caption && <caption class="sr-only">{caption}</caption>}
+    <thead>
+      <tr><th scope="col">No.</th><th scope="col">Title</th>{dated && <th scope="col">Air date (UTC)</th>}</tr>
+    </thead>
+    <tbody>
+      {
+        rows.map(([n, title, at]) => (
+          <tr class={at > nowSec ? 'w-soon' : undefined}>
+            <td class="w-num">{n}</td>
+            <td>{title || <span class="w-muted">Episode {n}</span>}</td>
+            {dated && (
+              <td class="w-date">
+                {at ? <time datetime={isoDate(at)}>{airDate(at)}</time> : <span class="w-muted">Not listed</span>}
+                {at > 0 && at === nextAt && <> · <Countdown at={at} /></>}
+              </td>
+            )}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

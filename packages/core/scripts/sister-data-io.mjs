@@ -87,7 +87,7 @@ function stopTree(pid) {
  * download done as soon as it says so and stops the process itself, which
  * matters on Windows where a lingering wrangler process outlives the job.
  */
-function pull(bucket, key, file) {
+export function pullObject(bucket, key, file) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [WRANGLER_BIN, 'r2', 'object', 'get', `${bucket}/${key}`, '--remote', '--file', file], {
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -118,7 +118,7 @@ function pull(bucket, key, file) {
   })
 }
 
-const put = (bucket, key, file, contentType = 'application/json') =>
+export const putObject = (bucket, key, file, contentType = 'application/json') =>
   wrangler(['r2', 'object', 'put', `${bucket}/${key}`, '--remote', '--file', file, '--content-type', contentType])
 
 /**
@@ -132,8 +132,8 @@ export async function pullCatalogTitles() {
   try {
     const comicsFile = join(dir, 'comics.json.gz')
     const animeFile = join(dir, 'anime.json.gz')
-    await pull(CATALOG_BUCKET, 'latest/comics.json.gz', comicsFile)
-    await pull(CATALOG_BUCKET, 'latest/anime.json.gz', animeFile)
+    await pullObject(CATALOG_BUCKET, 'latest/comics.json.gz', comicsFile)
+    await pullObject(CATALOG_BUCKET, 'latest/anime.json.gz', animeFile)
     const comics = JSON.parse(gunzipSync(readFileSync(comicsFile)).toString('utf8'))
     const anime = JSON.parse(gunzipSync(readFileSync(animeFile)).toString('utf8'))
     return [...comics, ...anime]
@@ -146,7 +146,7 @@ export async function pullCatalogTitles() {
 export async function pullSisterFile(name, dir) {
   const file = join(dir, name)
   try {
-    await pull(DATA_BUCKET, `latest/${name}`, file)
+    await pullObject(DATA_BUCKET, `latest/${name}`, file)
   } catch (error) {
     if (error.missing) return null
     throw error
@@ -169,9 +169,9 @@ export function pushSisterFiles(dir, files, meta) {
   for (const [name, value] of Object.entries(files)) {
     const file = join(dir, name)
     writeFileAtomic(file, JSON.stringify(value))
-    put(DATA_BUCKET, `latest/${name}`, file)
+    putObject(DATA_BUCKET, `latest/${name}`, file)
   }
   const metaFile = join(dir, 'meta.json')
   writeFileAtomic(metaFile, JSON.stringify(meta, null, 2))
-  put(DATA_BUCKET, 'latest/meta.json', metaFile, 'application/json')
+  putObject(DATA_BUCKET, 'latest/meta.json', metaFile, 'application/json')
 }

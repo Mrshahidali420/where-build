@@ -1,0 +1,33 @@
+---
+/**
+ * Cards to a sister site: at most three, each a proven relation, never to a
+ * workers.dev host (src/where/cross.mjs decided all of that at build time).
+ * Plain links; the page counter records each click as an outbound 'other'.
+ */
+import { MAX_CARDS } from '../../where/cross.mjs'
+
+const { cards = [], heading = 'Elsewhere' } = Astro.props
+const shown = cards.slice(0, MAX_CARDS)
+---
+
+{
+  shown.length > 0 && (
+    <section class="w-sec" aria-labelledby="w-cross-head">
+      <h2 id="w-cross-head">{heading}</h2>
+      <ul class="w-cross">
+        {shown.map((card) => (
+          <li>
+            <a href={card.href} rel="noopener">
+              {card.cover ? <img src={card.cover} alt="" width="48" height="68" loading="lazy" /> : <span />}
+              <span>
+                <b>{card.title}</b>
+                <small>{card.fact}</small>
+                <em>{card.anchor} →</em>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

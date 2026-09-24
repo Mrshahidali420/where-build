@@ -1,0 +1,41 @@
+---
+/** One page of the anime that started in one year, most watched first. */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import Pager from '@sister/core/src/components/Pager.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { PER_YEAR_PAGE, pageSlice } from '@sister/core/src/where/hubs.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+
+const { year, page, pages } = Astro.props
+const rows = whereHubs().years[year]
+const shown = pageSlice(rows, page, PER_YEAR_PAGE)
+const base = `/year/${year}`
+const top = rows.slice(0, 3).map((r) => r[0])
+---
+
+<Where
+  title={`Anime of ${year}: All ${rows.length}${page > 1 ? `, page ${page}` : ''} | ${config.name}`}
+  description={`Every anime that began in ${year}, most watched first: ${plural(rows.length, 'show')}${top.length ? `, led by ${top.join(', ')}` : ''}. Each with its episodes, cast and staff.`}
+  canonical={page > 1 ? `${base}/${page}` : base}
+  crumbs={[{ name: 'By year', href: '/year' }, { name: String(year) }]}
+>
+  <header class="w-front" style="padding-top:1rem">
+    <h1>Anime of <em>{year}</em></h1>
+    <p>{plural(rows.length, 'show')} that began in {year}, most watched first{pages > 1 ? `. Page ${page} of ${pages}` : ''}.</p>
+  </header>
+  <ul class="w-grid">
+    {
+      shown.map(([title, href, cover, format, episodes, season]) => (
+        <li>
+          <a href={href}>
+            <img src={cover} alt={`Cover of ${title}`} width="136" height="204" loading="lazy" />
+            <b>{title}</b>
+            <small>{[format, season, episodes ? plural(episodes, 'ep') : ''].filter(Boolean).join(' · ')}</small>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <Pager current={page} count={pages} base={base} segment="" label={`${year} anime`} />
+</Where>

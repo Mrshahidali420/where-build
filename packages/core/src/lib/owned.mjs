@@ -22,3 +22,13 @@ export function ruleTakes(rule, record) {
 export function ownsTitle(site, record) {
   return site.ownedKinds.some((rule) => ruleTakes(rule, record))
 }
+
+/**
+ * Only the records the site owns. Every reader of the catalog (the slug
+ * registry, the shards, the listings, search and the sitemap) filters through
+ * here, so a record another site owns never gets a page, a slug, a search row
+ * or a sitemap line on this one.
+ */
+export function ownedOnly(site, records) {
+  return records.filter((record) => ownsTitle(site, record))
+}

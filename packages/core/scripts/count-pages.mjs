@@ -18,6 +18,10 @@
  * Gates that need data the catalog does not hold yet print "Phase 1": credits
  * and staff (voice actors, staff) do not exist until the shared ingest runs.
  * A title gate counts only the facts the catalog can prove, so it is a floor.
+ *
+ * A Where site (builder: 'where') is counted from its own data/, the files
+ * scripts/where-data.mjs pulled, by the same src/where/compute.mjs the build
+ * runs: its numbers are exactly the pages the build makes. Pull first.
  */
 import { execFileSync, spawn } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync } from 'node:fs'
@@ -28,6 +32,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { gunzipSync } from 'node:zlib'
 import { ownsTitle } from '../src/lib/owned.mjs'
 import { countGate } from '../src/lib/page-counts.mjs'
+import { isWhereSite } from '../src/lib/define-site.mjs'
+import { computeWhere } from '../src/where/compute.mjs'
+import { loadWhereData } from './where-load.mjs'
 
 const CORE = fileURLToPath(new URL('..', import.meta.url))
 const SITES = join(CORE, '..', '..', 'sites')
@@ -39,11 +46,15 @@ const args = process.argv.slice(2)
 const useSeed = args.includes('--seed')
 const named = args.filter((arg) => !arg.startsWith('--'))
 
+/** Each loaded site's folder under sites/. */
+const siteDirs = new Map()
+
 async function loadSites() {
   const names = named.length ? named : readdirSync(SITES).filter((name) => existsSync(join(SITES, name, 'site.config.mjs')))
   const sites = []
   for (const name of names) {
     const { default: site } = await import(pathToFileURL(join(SITES, name, 'site.config.mjs')).href)
+    siteDirs.set(site, join(SITES, name))
     sites.push(site)
   }
   return sites
@@ -115,6 +126,9 @@ async function loadCatalog(bucket) {
   }
 }
 
+const missingWhy = (gate) =>
+  gate.count === 'where' ? 'pull first (scripts/where-data.mjs pull)' : gate.count === 'credits' ? 'Phase 1 (needs credits.json)' : 'n/a (no themes.json)'
+
 const sites = await loadSites()
 if (!sites.length) {
   console.error('No site to count.')
@@ -124,14 +138,22 @@ const catalog = await loadCatalog(sites[0].r2.catalogBucket)
 const label = catalog.source.startsWith('SEED') ? ' [SEED ONLY]' : ''
 console.log(`Catalog: ${catalog.source}, ${catalog.records.length.toLocaleString('en-US')} titles.\n`)
 
+/** A Where site's page counts from its data/, or null when nothing is pulled yet. */
+function whereCounts(site) {
+  const dir = join(siteDirs.get(site), 'data')
+  if (!existsSync(join(dir, 'anime.json'))) return null
+  return computeWhere(site, loadWhereData(dir)).counts
+}
+
 for (const site of sites) {
   const owned = catalog.records.filter((record) => ownsTitle(site, record))
+  const where = isWhereSite(site) ? whereCounts(site) : null
   console.log(`${site.name} (${site.devHost}): owns ${owned.length.toLocaleString('en-US')} titles${label}`)
   let total = 0
   for (const gate of site.gates) {
-    const count = countGate(gate, owned, { themes: catalog.themes })
+    const count = countGate(gate, owned, { themes: catalog.themes, where })
     if (count !== null) total += count
-    const shown = count === null ? (gate.count === 'credits' ? 'Phase 1 (needs credits.json)' : 'n/a (no themes.json)') : count.toLocaleString('en-US')
+    const shown = count === null ? missingWhy(gate) : count.toLocaleString('en-US')
     console.log(`  ${gate.page.padEnd(40)} ${shown}`)
   }
   console.log(`  ${'counted so far'.padEnd(40)} ${total.toLocaleString('en-US')}${label}\n`)

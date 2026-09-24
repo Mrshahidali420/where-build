@@ -279,6 +279,9 @@ function mi(row) {
   // The row waits here. It is stamped now so the batch keeps real times.
   if (!row.t) row.t = Date.now()
   miQueue.push(row)
+  // With no Turnstile widget no pass ever arrives, so the queue would only
+  // grow. Keep the newest few rows and nothing more.
+  if (!MI_SITEKEY && miQueue.length > MI_QUEUE_MAX) miQueue = miQueue.slice(-MI_QUEUE_MAX)
   miSave()
   if (miQueue.length >= MI_QUEUE_MAX) miFlush()
 }
@@ -362,6 +365,10 @@ function miAskForPass() {
   }
   if (miAsking) return
   miAsking = true
+  // A site with no Turnstile widget yet asks nobody: no pass, so nothing is
+  // ever sent, and no script is fetched from Cloudflare for a key that is not
+  // there. The rows stay in the tab (capped) until the widget exists.
+  if (!MI_SITEKEY) return
 
   var box = document.createElement('div')
   box.style.display = 'none'

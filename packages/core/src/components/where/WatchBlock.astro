@@ -1,0 +1,34 @@
+---
+/**
+ * Where a title sits in its franchise's watch order, with the entries either
+ * side and a link to the full order.
+ */
+const { watch } = Astro.props
+---
+
+{
+  watch && (
+    <div class="w-watch">
+      <p style="margin:0">
+        Entry <b>{watch.position}</b> of <b>{watch.total}</b> in the {watch.name} franchise, in release order.
+      </p>
+      {(watch.prev || watch.next) && (
+        <div class="w-watch__steps">
+          {watch.prev && (
+            <a href={watch.prev.href}>
+              <small>Before this</small>
+              {watch.prev.title}{watch.prev.year ? ` (${watch.prev.year})` : ''}
+            </a>
+          )}
+          {watch.next && (
+            <a href={watch.next.href}>
+              <small>After this</small>
+              {watch.next.title}{watch.next.year ? ` (${watch.next.year})` : ''}
+            </a>
+          )}
+        </div>
+      )}
+      <a class="w-more" href={watch.href}>The full {watch.name} watch order →</a>
+    </div>
+  )
+}

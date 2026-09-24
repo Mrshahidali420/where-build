@@ -1,0 +1,81 @@
+---
+/**
+ * A voice actor: every role they have voiced in an anime on this site, newest
+ * show first, with the character's face and the language. Same shard record
+ * as their staff page; answers 404 unless the voice actor gate let them in.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { loadPerson } from '@sister/core/src/where/runtime.mjs'
+import { personJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { castRoleWord, plural } from '@sister/core/src/where/words.mjs'
+import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
+import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+import Bio from '@sister/core/src/components/where/Bio.astro'
+
+let p
+try {
+  p = await loadPerson(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  return unavailable(Astro, e)
+}
+if (!p || !p.voicePage) return notFound(Astro)
+
+const shows = new Set(p.roles.map((r) => r.href)).size
+const main = p.roles.filter((r) => r.role === 'MAIN').length
+const languages = [...new Set(p.roles.map((r) => r.language))]
+const best = p.roles.filter((r) => r.role === 'MAIN').slice(0, 3).map((r) => r.character.name)
+const lede =
+  `${plural(p.roles.length, 'role')} in ${plural(shows, 'anime', 'anime')}` +
+  (main ? `, ${main} of them main characters` : '') +
+  (languages.length === 1 ? `, in ${languages[0]}.` : '.')
+---
+
+<Where
+  title={`${p.name}: Voice Roles and Characters | ${config.name}`}
+  description={`Every anime character ${p.name} voices${best.length ? `, including ${best.join(', ')}` : ''}: ${lede}`}
+  canonical={p.voiceHref}
+  image={p.image || undefined}
+  jsonld={personJsonld(p, p.voiceHref, config.siteUrl)}
+  crumbs={[{ name: 'Voice actors', href: '/directory/voice-actors' }, { name: p.name }]}
+>
+  <PersonHead person={p} page="voice" lede={lede} />
+
+  <section class="w-sec" aria-labelledby="roles">
+    <h2 id="roles">Roles</h2>
+    <p class="w-sec__note">Newest show first. A character's face opens their profile.</p>
+    <div class="w-table-wrap">
+      <table class="w-table">
+        <thead>
+          <tr><th scope="col">Anime</th><th scope="col">Character</th><th scope="col">Role</th><th scope="col">Language</th></tr>
+        </thead>
+        <tbody>
+          {
+            p.roles.map((r) => (
+              <tr>
+                <td><ShowCell show={r} /></td>
+                <td>
+                  <span class="w-show">
+                    {r.character.face ? (
+                      <a href={r.character.face} rel="noopener" aria-label={`${r.character.name}, character profile`}>
+                        <img class="w-face" src={r.character.image} alt="" width="40" height="40" loading="lazy" style="width:40px;height:40px" />
+                      </a>
+                    ) : r.character.image ? (
+                      <img class="w-face" src={r.character.image} alt="" width="40" height="40" loading="lazy" style="width:40px;height:40px" />
+                    ) : null}
+                    {r.character.name}
+                  </span>
+                </td>
+                <td class="w-muted">{castRoleWord(r.role)}</td>
+                <td class="w-muted">{r.language}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <Bio text={p.bio} source={p.anilistUrl} heading={`About ${p.name}`} />
+</Where>

@@ -1,0 +1,29 @@
+---
+/**
+ * The frame of every Where page: the core shell (Base.astro) with the Where
+ * stylesheet, and a visible trail of the same breadcrumbs Base writes into the
+ * page's structured data.
+ */
+import Base from './Base.astro'
+import '../styles/where.css'
+
+const { crumbs = [], ...props } = Astro.props
+---
+
+<Base {...props} crumbs={crumbs}>
+  <div class="shell w-page">
+    {
+      crumbs.length > 0 && (
+        <nav aria-label="Breadcrumb">
+          <ol class="w-crumbs">
+            <li><a href="/">Home</a></li>
+            {crumbs.map((step) => (
+              <li>{step.href ? <a href={step.href}>{step.name}</a> : <span aria-current="page">{step.name}</span>}</li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <slot />
+  </div>
+</Base>

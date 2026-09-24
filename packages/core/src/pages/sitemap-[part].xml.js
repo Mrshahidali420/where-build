@@ -1,8 +1,10 @@
 export const prerender = true
-import { sitemapParts, urlsetXml } from '../lib/sitemap-urls.js'
+import { getSitemapParts } from '../lib/sitemap-parts.js'
+import { urlsetXml } from '../lib/sitemap-xml.js'
 
 // One file per section, listed by /sitemap.xml.
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const sitemapParts = await getSitemapParts()
   return sitemapParts.map((part) => ({ params: { part: part.name }, props: { urls: part.urls } }))
 }
 

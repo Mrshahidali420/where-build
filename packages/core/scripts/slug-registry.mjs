@@ -34,6 +34,8 @@ import { readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { reslugAll } from '../src/lib/reslug.mjs'
 import { dropBlocked, dropBlockedRows } from '../src/lib/blocked.js'
+import { ownedOnly } from '../src/lib/owned.mjs'
+import config from '../src/lib/site.mjs'
 import {
   REGISTRY_FILE,
   RECOVERED_MARKER,
@@ -69,8 +71,8 @@ function readLiveManifest() {
 
 /** The catalog as the build will see it: blocked titles out, as everywhere. */
 function loadCatalog() {
-  const comics = dropBlockedRows(dropBlocked(read('comics.json')))
-  const anime = dropBlockedRows(dropBlocked(read('anime.json')))
+  const comics = ownedOnly(config, dropBlockedRows(dropBlocked(read('comics.json'))))
+  const anime = ownedOnly(config, dropBlockedRows(dropBlocked(read('anime.json'))))
   const characters = read('characters.json')
   const characterPages = characters.filter((c) => c.image && (c.appearsIn || []).length > 0).length
   return { comics, anime, characters, titles: comics.length + anime.length, characterPages }

@@ -1,0 +1,18 @@
+---
+/** One letter of a directory, first page. Deeper pages: [letter]/[page].astro. */
+export const prerender = true
+import DirectoryLetter from '../../../components/DirectoryLetter.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { hubPaths } from '@sister/core/src/where/hubs.mjs'
+
+export function getStaticPaths() {
+  return hubPaths(whereHubs())
+    .filter((p) => p.letter && p.page === 1)
+    .map(({ group, letter, pages }) => ({ params: { group, letter }, props: { page: 1, pages } }))
+}
+
+const { group, letter } = Astro.params
+const { page, pages } = Astro.props
+---
+
+<DirectoryLetter group={group} letter={letter} page={page} pages={pages} />

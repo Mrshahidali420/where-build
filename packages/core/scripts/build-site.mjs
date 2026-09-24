@@ -20,7 +20,8 @@ import { spawnSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+import { isWhereSite } from '../src/lib/define-site.mjs'
 
 const SCRIPTS = dirname(fileURLToPath(import.meta.url))
 const ASTRO = join(dirname(createRequire(import.meta.url).resolve('astro/package.json')), 'astro.js')
@@ -32,10 +33,20 @@ if (!existsSync(config)) {
   process.exit(1)
 }
 
+// A Where site (builder: 'where') has one data step instead of the core's two:
+// scripts/make-where.mjs writes its registry, redirects and shards together,
+// from the files scripts/where-data.mjs pulled.
+const { default: siteConfig } = await import(pathToFileURL(config).href)
+const dataSteps = isWhereSite(siteConfig)
+  ? [['make-where', ['--max-old-space-size=6000', join(SCRIPTS, 'make-where.mjs')]]]
+  : [
+      ['make-redirects', [join(SCRIPTS, 'make-redirects.mjs')]],
+      ['make-shards', ['--max-old-space-size=6000', join(SCRIPTS, 'make-shards.mjs')]],
+    ]
+
 const steps = [
-  ['make-redirects', [join(SCRIPTS, 'make-redirects.mjs')]],
-  ['make-shards', ['--max-old-space-size=6000', join(SCRIPTS, 'make-shards.mjs')]],
-  ['astro build', [ASTRO, 'build']],
+  ...dataSteps,
+  ['astro build', ['--max-old-space-size=6000', ASTRO, 'build']],
   ['after-build', [join(SCRIPTS, 'after-build.mjs')]],
 ]
 

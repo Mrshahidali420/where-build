@@ -18,15 +18,15 @@ export const prerender = true
 // src/lib/finder-core.js's pathFor() for how the client walks down to the
 // right file — the two must agree, or a query lands on a file the build
 // never wrote.
-import { getSearchIndex } from '../../lib/search-shards.js'
+import { getSearchIndex } from '../../lib/search-index.js'
 
-export function getStaticPaths() {
-  const { files } = getSearchIndex()
+export async function getStaticPaths() {
+  const { files } = await getSearchIndex()
   return [...files.keys()].map((prefix) => ({ params: { prefix } }))
 }
 
-export function GET({ params }) {
-  const { files } = getSearchIndex()
+export async function GET({ params }) {
+  const { files } = await getSearchIndex()
   return new Response(JSON.stringify(files.get(params.prefix) || []), {
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
   })

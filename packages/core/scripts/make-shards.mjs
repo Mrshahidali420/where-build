@@ -23,6 +23,7 @@ import { displayName } from '../src/lib/names.mjs'
 import { groupNamesakes, storyName } from '../src/lib/namesakes.mjs'
 import { loadRegistry, registryHash, registrySize } from '../src/lib/slug-registry.mjs'
 import { dropBlocked, dropBlockedRows } from '../src/lib/blocked.js'
+import { ownedOnly } from '../src/lib/owned.mjs'
 import { sectionOf, SECTIONS } from '../src/lib/section.mjs'
 import { PLATFORMS, FALLBACK } from '../src/lib/platforms.js'
 import { buildOverview } from '../src/lib/prose.mjs'
@@ -618,8 +619,8 @@ async function guardAgainstShrink(manifest) {
 
 async function main() {
   // A blocked title never reaches a shard, so the Worker answers 404 for it.
-  const comics = dropBlockedRows(dropBlocked(read('comics.json')))
-  const anime = dropBlockedRows(dropBlocked(read('anime.json')))
+  const comics = ownedOnly(config, dropBlockedRows(dropBlocked(read('comics.json'))))
+  const anime = ownedOnly(config, dropBlockedRows(dropBlocked(read('anime.json'))))
   const characters = read('characters.json')
   since('read json')
   // Slugs come from the registry make-redirects.mjs just saved. Frozen: a page

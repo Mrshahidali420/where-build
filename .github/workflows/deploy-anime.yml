@@ -1,0 +1,86 @@
+name: 'Deploy: WhereAnime'
+
+# Builds sites/anime from R2 and deploys it to Cloudflare Workers.
+#
+#   pull     scripts/where-data.mjs pull: the shared catalog (read only), the
+#            sister data, and this site's own state (the frozen slug registry
+#            and the last deploy's manifest) from sister-data/anime/.
+#   build    make-where (gates, addresses, shards) and the Astro build.
+#   deploy   wrangler deploy, to whereanime.<subdomain>.workers.dev until the
+#            site has a domain in site.config.mjs.
+#   push     PUSH=1 scripts/where-data.mjs push: the registry and manifest
+#            back to sister-data/anime/, only after a deploy that worked, so
+#            the state in R2 always matches the site that is live.
+#
+# Triggers. Only workflow_dispatch is switched on for now: the first deploys
+# are run by hand and checked. When the site is signed off, uncomment `push`
+# (a change to the core or the site deploys it) and `schedule` (the nightly
+# rebuild at 04:00 UTC, after the 03:00 credits ingest).
+#
+# Never writes the shared catalog's bucket. The token needs Workers Scripts
+# edit and R2 edit on sister-data only.
+
+on:
+  # push:
+  #   branches: [master]
+  #   paths:
+  #     - 'packages/core/**'
+  #     - 'sites/anime/**'
+  #     - 'sites/family.mjs'
+  #     - 'package-lock.json'
+  #     - '.github/workflows/deploy-anime.yml'
+  # schedule:
+  #   - cron: '0 4 * * *' # nightly 04:00 UTC (site.config.mjs rebuildUtc)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time: two runs would race on the slug registry in R2.
+concurrency:
+  group: deploy-anime
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+    defaults:
+      run:
+        working-directory: sites/anime
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+        working-directory: .
+
+      - run: npm test
+        working-directory: .
+
+      - name: Pull data and state from R2
+        run: node ../../packages/core/scripts/where-data.mjs pull
+
+      - name: Build
+        run: npm run build
+
+      # Written from site.config.mjs every time, so a d1 id or a domain added
+      # there reaches the Worker without a hand-edited file.
+      - name: Write wrangler.jsonc
+        run: npm run wrangler
+
+      - name: Deploy
+        run: npx wrangler deploy
+
+      - name: Push the registry and manifest back
+        env:
+          PUSH: '1'
+        run: node ../../packages/core/scripts/where-data.mjs push

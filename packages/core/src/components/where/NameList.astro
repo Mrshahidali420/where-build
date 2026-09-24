@@ -1,0 +1,18 @@
+---
+/** Names with a count: [name, href, count] rows, or { name, href, count } objects. */
+import { plural } from '../../where/words.mjs'
+
+const { rows = [], noun = 'show' } = Astro.props
+const items = rows.map((row) => (Array.isArray(row) ? { name: row[0], href: row[1], count: row[2] } : row))
+---
+
+<ul class="w-names">
+  {
+    items.map((item) => (
+      <li>
+        {item.href ? <a href={item.href}>{item.name}</a> : item.name}
+        {item.count > 0 && <span>{plural(item.count, noun, noun === 'entry' ? 'entries' : undefined)}</span>}
+      </li>
+    ))
+  }
+</ul>

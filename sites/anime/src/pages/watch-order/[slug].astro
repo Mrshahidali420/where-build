@@ -1,0 +1,70 @@
+---
+/**
+ * A franchise's watch order: every anime entry in release order, movies,
+ * OVAs and specials included, with the main story marked. Anime only: the
+ * franchise's manga and novels live on the home site.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { loadWatchOrder } from '@sister/core/src/where/runtime.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { formatWord, plural } from '@sister/core/src/where/words.mjs'
+import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+
+let w
+try {
+  w = await loadWatchOrder(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  return unavailable(Astro, e)
+}
+if (!w) return notFound(Astro)
+
+const main = w.entries.filter((e) => e.main)
+// A main story of one entry says nothing; the Part column shows only for a real chain.
+const marked = main.length > 1
+const years = w.entries.map((e) => e.year).filter(Boolean)
+const span = years.length ? `${Math.min(...years)} to ${Math.max(...years)}` : ''
+---
+
+<Where
+  title={`${w.name} Watch Order: All ${w.entries.length} Anime in Order | ${config.name}`}
+  description={`How to watch ${w.name}: all ${plural(w.entries.length, 'anime', 'anime')} in release order${span ? ` (${span})` : ''}, with movies, OVAs and specials${main.length > 1 ? `, and the ${main.length} entries of the main story marked` : ''}.`}
+  canonical={`/watch-order/${w.slug}`}
+  jsonld={listJsonld(`${w.name} watch order`, w.entries, config.siteUrl)}
+  crumbs={[{ name: 'Watch orders', href: '/directory/watch-orders' }, { name: w.name }]}
+>
+  <header class="w-head" style="grid-template-columns:1fr">
+    <div>
+      <span class="w-kicker">Watch order</span>
+      <h1>{w.name} watch order</h1>
+      <p class="w-head__lede">
+        {plural(w.entries.length, 'anime', 'anime')}{span ? `, ${span}` : ''}. Watch them in release order.{main.length > 1 && <> The {main.length} entries marked “Main story” follow one another as sequels; the rest are movies, specials and side stories.</>}
+      </p>
+    </div>
+  </header>
+
+  <section class="w-sec" aria-labelledby="order">
+    <h2 id="order">In release order</h2>
+    <div class="w-table-wrap">
+      <table class="w-table">
+        <thead>
+          <tr><th scope="col">#</th><th scope="col">Anime</th><th scope="col">Format</th><th scope="col">Episodes</th>{marked && <th scope="col">Part</th>}</tr>
+        </thead>
+        <tbody>
+          {
+            w.entries.map((e, i) => (
+              <tr>
+                <td class="w-num">{i + 1}</td>
+                <td><ShowCell show={e} /></td>
+                <td class="w-muted">{formatWord(e.format)}</td>
+                <td class="w-num">{e.episodes || '—'}</td>
+                {marked && <td>{e.main ? <b>Main story</b> : <span class="w-muted">Extra</span>}</td>}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Where>

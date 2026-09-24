@@ -2,6 +2,18 @@
 
 > Every episode date, every voice actor, every studio and song, and the order to watch each franchise in, for anime from Japan and beyond.
 
-Data source: AniList, plus song lists from AnimeThemes. The site rebuilds every day.
+Data source: AniList for titles, episodes, credits, casts and air dates; AnimeThemes and AniSongDB for opening and ending songs. The site rebuilds every day.
 
-Status: in development. It lives on a preview address that is not indexed, and has no pages of its own yet.
+## Pages
+
+- /anime/<slug>: one anime, with its air dates, next episode, key staff, cast, studios and songs
+- /anime/<slug>/episodes: every episode with its air date, for long-running shows
+- /voice-actor/<slug>: every role a voice actor has played
+- /staff/<slug>: every credit of a director, writer, composer, designer or animator
+- /studio/<slug>: every show an animation studio made
+- /artist/<slug>: every opening and ending song by one artist
+- /watch-order/<slug>: the release order and the main story of a franchise
+- /directory/<group>: A to Z lists of voice actors, staff, studios, song artists and watch orders
+- /year/<year>: anime by the year it started
+
+Status: in development, on a preview address that is not indexed.

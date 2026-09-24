@@ -1,0 +1,13 @@
+---
+/** One show in a table row: small cover, linked title, year. `show` is a record row { title, href, year, cover }. */
+const { show } = Astro.props
+const small = (show.cover || '').replace('/cover/large/', '/cover/medium/')
+---
+
+<span class="w-show">
+  {small ? <img class="w-thumb" src={small} alt="" width="34" height="48" loading="lazy" /> : <span class="w-thumb" />}
+  <span>
+    {show.href ? <a href={show.href}>{show.title}</a> : show.title}
+    {show.year && <span class="w-muted"> ({show.year})</span>}
+  </span>
+</span>

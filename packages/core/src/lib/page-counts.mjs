@@ -101,6 +101,12 @@ export const COUNTERS = {
   },
   /** Pages built from credits.json or staff.json: nothing to count until Phase 1. */
   credits: () => null,
+  /**
+   * A Where site's gates. Its own build code counts them (src/where/compute.mjs,
+   * handed in as extra.where by scripts/count-pages.mjs), so the count and the
+   * pages built can never disagree. null when the sister data was not read.
+   */
+  where: (owned, gate, { where } = {}) => (where ? (where[gate.type] ?? null) : null),
 }
 
 /**

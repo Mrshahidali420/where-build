@@ -1,0 +1,51 @@
+---
+/**
+ * Who made the show: the studio and the key credits first, each linked to
+ * its page when it has one, then the rest of the crew as a plain list.
+ */
+const { studios = [], keyCredits = [], crew = [] } = Astro.props
+---
+
+{
+  (studios.length > 0 || keyCredits.length > 0) && (
+    <dl class="w-credits">
+      {studios.length > 0 && (
+        <div>
+          <dt>{studios.length > 1 ? 'Studios' : 'Studio'}</dt>
+          <dd>
+            {studios.map((s, i) => (
+              <>
+                {i > 0 && ', '}
+                {s.href ? <a href={s.href}>{s.name}</a> : s.name}
+              </>
+            ))}
+          </dd>
+        </div>
+      )}
+      {keyCredits.map((k) => (
+        <div>
+          <dt>{k.label}</dt>
+          <dd>
+            {k.people.map((p, i) => (
+              <>
+                {i > 0 && ', '}
+                {p.href ? <a href={p.href}>{p.name}</a> : p.name}
+              </>
+            ))}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+{
+  crew.length > 0 && (
+    <ul class="w-crew">
+      {crew.map((c) => (
+        <li>
+          {c.href ? <a href={c.href}>{c.name}</a> : c.name}{" "}<span>{c.role}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}

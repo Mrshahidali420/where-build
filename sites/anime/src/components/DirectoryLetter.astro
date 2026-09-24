@@ -1,0 +1,35 @@
+---
+/** One page of one letter of a directory: the A to Z, the names, the pager. */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import Pager from '@sister/core/src/components/Pager.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { GROUPS, PER_LETTER_PAGE, pageSlice } from '@sister/core/src/where/hubs.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import LetterNav from '@sister/core/src/components/where/LetterNav.astro'
+import NameList from '@sister/core/src/components/where/NameList.astro'
+
+const { group, letter, page, pages } = Astro.props
+const dir = whereHubs().groups[group]
+const meta = GROUPS[group]
+const rows = dir.letters[letter]
+const shown = pageSlice(rows, page, PER_LETTER_PAGE)
+const label = letter === '0' ? 'Names not starting with A to Z' : `${meta.label}: ${letter.toUpperCase()}`
+const base = `/directory/${group}/${letter}`
+const path = page > 1 ? `${base}/${page}` : base
+---
+
+<Where
+  title={`${label}${page > 1 ? `, page ${page}` : ''} | ${config.name}`}
+  description={`${plural(rows.length, meta.noun, meta.many)} under ${letter === '0' ? 'a number or symbol' : `the letter ${letter.toUpperCase()}`}, each with every ${meta.count} on ${config.name}.`}
+  canonical={path}
+  crumbs={[{ name: meta.label, href: `/directory/${group}` }, { name: letter === '0' ? '#' : letter.toUpperCase() }]}
+>
+  <header class="w-front" style="padding-top:1rem">
+    <h1>{label}</h1>
+    <p>{plural(rows.length, meta.noun, meta.many)}{pages > 1 ? `, page ${page} of ${pages}` : ''}.</p>
+  </header>
+  <LetterNav group={group} letters={dir.letters} current={letter} />
+  <NameList rows={shown} noun={meta.count} />
+  <Pager current={page} count={pages} base={base} segment="" label={meta.many} />
+</Where>

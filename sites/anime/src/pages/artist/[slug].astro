@@ -1,0 +1,67 @@
+---
+/**
+ * A song artist: every anime opening and ending they perform, with the show
+ * and the episodes each one plays over (themes.json: AnimeThemes, AniSongDB).
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { loadArtist } from '@sister/core/src/where/runtime.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+
+let a
+try {
+  a = await loadArtist(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  return unavailable(Astro, e)
+}
+if (!a) return notFound(Astro)
+
+const ops = a.songs.filter((s) => s.type === 'OP').length
+const eds = a.songs.length - ops
+const shows = new Set(a.songs.map((s) => s.anime.href)).size
+const known = [...new Set(a.songs.map((s) => s.title))].slice(0, 3)
+---
+
+<Where
+  title={`${a.name}: Anime Openings and Endings | ${config.name}`}
+  description={`Every anime song by ${a.name}: ${plural(ops, 'opening')} and ${plural(eds, 'ending')} across ${plural(shows, 'anime', 'anime')}${known.length ? `, including “${known.join('”, “')}”` : ''}.`}
+  canonical={`/artist/${a.slug}`}
+  jsonld={[{ '@type': 'MusicGroup', name: a.name, url: `${config.siteUrl}/artist/${a.slug}` }, listJsonld(`Anime songs by ${a.name}`, a.songs.map((s) => ({ title: s.title, href: s.anime.href })), config.siteUrl)]}
+  crumbs={[{ name: 'Song artists', href: '/directory/artists' }, { name: a.name }]}
+>
+  <header class="w-head" style="grid-template-columns:1fr">
+    <div>
+      <span class="w-kicker">Song artist</span>
+      <h1>{a.name}</h1>
+      <p class="w-head__lede">{plural(ops, 'opening')} and {plural(eds, 'ending')} in {plural(shows, 'anime', 'anime')}.</p>
+    </div>
+  </header>
+
+  <section class="w-sec" aria-labelledby="songs">
+    <h2 id="songs">Songs by {a.name}</h2>
+    <div class="w-table-wrap">
+      <table class="w-table">
+        <thead>
+          <tr><th scope="col">Song</th><th scope="col">Anime</th><th scope="col" class="w-wide">Plays over</th></tr>
+        </thead>
+        <tbody>
+          {
+            a.songs.map((s) => (
+              <tr>
+                <td>
+                  <span class="w-songs__tag">{s.type}{s.seq || ''}</span> “{s.title}”
+                  {s.episodes && <small class="w-narrow w-muted">Episodes {s.episodes}</small>}
+                </td>
+                <td><ShowCell show={s.anime} /></td>
+                <td class="w-muted w-wide">{s.episodes ? `Episodes ${s.episodes}` : '—'}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Where>

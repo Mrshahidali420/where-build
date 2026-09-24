@@ -52,7 +52,10 @@ export const ROUTES = {
   whereToWatch: ['where-to-watch.astro', 'where-to-watch/[list].astro', 'where-to-watch/[list]/[page].astro'],
   shop: ['shop.astro'],
   myList: ['my-list.astro'],
-  search: ['search.astro', 'search/[prefix].json.js', 'search/manifest.v1.json.js'],
+  // The results page, and the slices the header box reads. A site with its own
+  // results page (a Where site) switches on only `searchIndex`.
+  search: ['search.astro'],
+  searchIndex: ['search/[prefix].json.js', 'search/manifest.v1.json.js'],
   sitemaps: ['sitemap.xml.js', 'sitemap-[part].xml.js'],
   admin: [
     'my-admin.astro',

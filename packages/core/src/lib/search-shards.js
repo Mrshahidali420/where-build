@@ -2,10 +2,9 @@
 // /search/<prefix>.json, plus the manifest at /search/manifest.v1.json.
 //
 // Shared by src/pages/search/[prefix].json.js (serves the slices) and
-// src/pages/search/manifest.v1.json.js (serves the manifest), so the expensive
-// pass over the catalog runs exactly once per build: both pages import this
-// module by the same specifier, so the bundler gives them the same module
-// instance and this IIFE below only runs once.
+// src/pages/search/manifest.v1.json.js (serves the manifest) through
+// src/lib/search-index.js, which reads the site's rows once per build and
+// hands them to buildTree() below.
 //
 // --- Why hierarchical slices ---
 //
@@ -39,8 +38,6 @@
 // is, and the word has a letter beyond the current depth, move one letter
 // deeper and repeat. See pathFor() in src/lib/finder-core.js — it must
 // match this exactly, or the client asks for a file the build never wrote.
-import { comics, novels, anime } from './catalog.js'
-import { sectionOf } from './section.mjs'
 
 /**
  * Most records a single slice file may hold — either a leaf slice (every
@@ -129,7 +126,7 @@ function wordsToFileUnder(row) {
  * Turns filing entries into the file tree: splitting a bucket once it is
  * over MAX_PER_SLICE instead of truncating it, so no title is ever dropped
  * (see the module comment up top). Exported on its own, separate from the
- * catalog read below it, so a test can hand it synthetic entries — at
+ * row source (src/lib/search-index.js), so a test can hand it synthetic entries — at
  * production scale (~111k titles) there is no local data to build from,
  * only the local 3.6k-title seed, and projecting the real file count means
  * running this same function over a scaled-up input.
@@ -217,27 +214,6 @@ export function buildTree(rows) {
   }
 
   return { files, manifest }
-}
-
-/** [item, record] pairs for the whole catalog, most-popular first. */
-function catalogRows() {
-  return [
-    ...comics.map((c) => [c, record(c, sectionOf(c))]),
-    ...novels.map((n) => [n, record(n, 'novel')]),
-    ...anime.map((a) => [a, record(a, 'anime')]),
-  ].sort((a, b) => (b[0].popularity || 0) - (a[0].popularity || 0))
-}
-
-// Computed once per build, on first import; the second page to import this
-// module gets the same object back, not a second pass over the catalog.
-//
-//   files    — Map<prefix, record[]>, one entry per slice file to write.
-//   manifest — string[], every prefix that split (has children one letter
-//              deeper). Everything else is a complete leaf.
-let cached = null
-export function getSearchIndex() {
-  if (!cached) cached = buildTree(catalogRows())
-  return cached
 }
 
 export { MAX_PER_SLICE, record, wordsOf, fold }

@@ -1,0 +1,24 @@
+---
+/** The A to Z of a directory. A letter with nobody under it is shown, not linked. */
+import { LETTERS } from '../../where/hubs.mjs'
+
+const { group, letters = {}, current = '' } = Astro.props
+---
+
+<nav aria-label="Browse by letter">
+  <ul class="w-letters">
+    {
+      LETTERS.map((letter) => (
+        <li>
+          {letters[letter]?.length ? (
+            <a href={`/directory/${group}/${letter}`} aria-current={letter === current ? 'page' : undefined}>
+              {letter === '0' ? '#' : letter}
+            </a>
+          ) : (
+            <span aria-hidden="true">{letter === '0' ? '#' : letter}</span>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</nav>

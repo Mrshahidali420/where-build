@@ -1,0 +1,46 @@
+---
+/**
+ * The head of a voice actor or staff page: photo, name, the facts staff.json
+ * holds, and a link to the same person's other page when they have one (a
+ * singer who also voices, a director who once acted).
+ *   page: 'voice' | 'staff'
+ */
+import { birthWords } from '../../where/words.mjs'
+
+const { person: p, page, lede = '' } = Astro.props
+const years = (p.yearsActive || []).filter(Boolean)
+const facts = [
+  ['Born', birthWords(p.birthDate)],
+  ['Hometown', p.homeTown],
+  ['Active', years.length ? (years.length > 1 ? `${years[0]} to ${years[1]}` : `Since ${years[0]}`) : ''],
+  ['Work', (p.occupations || []).join(', ')],
+].filter(([, value]) => value)
+const other = page === 'voice' ? p.staffHref && { href: p.staffHref, label: 'Crew credits' } : p.voiceHref && { href: p.voiceHref, label: 'Voice roles' }
+---
+
+<header class="w-head">
+  {
+    p.image ? (
+      <img class="w-head__pic w-head__pic--round" src={p.image} alt={`Photo of ${p.name}`} width="152" height="152" fetchpriority="high" />
+    ) : (
+      <span class="w-head__pic w-head__pic--round" />
+    )
+  }
+  <div>
+    <span class="w-kicker">{page === 'voice' ? 'Voice actor' : 'Anime staff'}</span>
+    <h1>{p.name}</h1>
+    {(p.native || p.aliases?.length > 0) && <p class="w-head__alt">{[p.native, ...(p.aliases || [])].filter(Boolean).join(' · ')}</p>}
+    {facts.length > 0 && (
+      <dl class="w-facts">
+        {facts.map(([label, value]) => (
+          <div>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+    {lede && <p class="w-head__lede">{lede}</p>}
+    {other && <a class="w-more" href={other.href}>{other.label} of {p.name} →</a>}
+  </div>
+</header>

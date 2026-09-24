@@ -11,6 +11,8 @@ import { join } from 'node:path'
 import { reslugAll } from './reslug.mjs'
 import { loadRegistry } from './slug-registry.mjs'
 import { dropBlocked, dropBlockedRows } from './blocked.js'
+import { ownedOnly } from './owned.mjs'
+import config from './site.mjs'
 
 // Resolved from the working directory, not from import.meta.url: this module is
 // bundled into dist/_worker.js before the prerender step runs it, so a path
@@ -20,9 +22,10 @@ const readJson = (name) =>
   JSON.parse(readFileSync(join(process.cwd(), 'data', `${name}.json`), 'utf8'))
 
 // A blocked title leaves before anything reads the catalog, so no built page,
-// list, hub or sitemap row can name it. See src/lib/blocked.js.
-const comicsRaw = dropBlockedRows(dropBlocked(readJson('comics')))
-const animeRaw = dropBlockedRows(dropBlocked(readJson('anime')))
+// list, hub or sitemap row can name it. See src/lib/blocked.js. So does every
+// record another site owns (the config's ownedKinds, src/lib/owned.mjs).
+const comicsRaw = ownedOnly(config, dropBlockedRows(dropBlocked(readJson('comics'))))
+const animeRaw = ownedOnly(config, dropBlockedRows(dropBlocked(readJson('anime'))))
 const characterData = readJson('characters')
 import { characterHasPage, genreSlug } from './format.js'
 

@@ -1,0 +1,682 @@
+/* The Where sites' own pages: title, episodes, people, studios, songs, watch
+   orders and the hubs. It sits on app.css and uses its tokens (the site's
+   colours and faces, filled in from site.config.mjs by integration.mjs).
+
+   Direction: a broadcast listing. Every page reads like the guide a channel
+   prints: a heavy poster-gothic name for each block, a thin rule under it,
+   and dense, dated rows in a calm text face. Colour carries meaning only:
+   the accent marks what is live or next (the countdown, the current entry of
+   a watch order, a link you can follow); everything else is ink on night. */
+
+.w-page {
+  padding-block: 1.5rem 4rem;
+}
+
+.w-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--dawn-faint);
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+.w-crumbs li + li::before {
+  content: '/';
+  margin-right: 0.35rem;
+  color: var(--cobalt-bright);
+}
+.w-crumbs a {
+  color: var(--dawn-dim);
+}
+
+/* ---- the head of a page: picture, name, one line of facts ---- */
+
+.w-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9.5rem 1fr;
+  gap: 1.5rem;
+  align-items: end;
+  padding: 1.5rem;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgb(site(rgb.night) / 0.35), rgb(site(rgb.night) / 0.92) 70%),
+    var(--w-banner, none) center / cover no-repeat,
+    var(--night-raised);
+  overflow: hidden;
+}
+.w-head::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rose), rgb(site(rgb.cobalt-bright) / 0.4) 45%, transparent);
+}
+.w-head__pic {
+  width: 9.5rem;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--night-sunk);
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.9);
+}
+.w-head__pic--round {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.w-head h1 {
+  font-size: clamp(1.7rem, 1.1rem + 2.6vw, 3rem);
+  max-width: 24ch;
+}
+.w-head__alt {
+  margin: 0.4rem 0 0;
+  color: var(--dawn-dim);
+  font-size: 0.95rem;
+}
+.w-head__lede {
+  margin: 0.9rem 0 0;
+  max-width: 62ch;
+  color: var(--dawn-dim);
+}
+.w-kicker {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  font-family: var(--stencil);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+.w-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+.w-facts div {
+  padding: 0.15rem 0.9rem;
+  border-left: 1px solid var(--cobalt-line);
+}
+.w-facts div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.w-facts dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dawn-faint);
+}
+.w-facts dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- the next episode: the one thing lit on the page ---- */
+
+.w-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  background: rgb(site(rgb.rose) / 0.1);
+  border: 1px solid rgb(site(rgb.rose) / 0.45);
+}
+.w-next__label {
+  font-family: var(--stencil);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+.w-next .countdown {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.w-next__when {
+  color: var(--dawn-dim);
+  font-size: 0.9rem;
+}
+
+/* ---- a block of the page ---- */
+
+.w-sec {
+  margin-top: 2.75rem;
+}
+.w-sec > h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-bottom: 0.6rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--cobalt-line);
+}
+.w-sec > h2::before {
+  content: '';
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  background: var(--rose);
+  transform: translateY(-0.1rem);
+}
+.w-sec__note {
+  margin: -0.4rem 0 1rem;
+  color: var(--dawn-faint);
+  font-size: 0.9rem;
+  max-width: 70ch;
+}
+.w-more {
+  display: inline-block;
+  margin-top: 0.9rem;
+  font-weight: 700;
+  color: var(--rose);
+  text-decoration: none;
+}
+.w-more:hover {
+  text-decoration: underline;
+}
+
+.w-prose {
+  max-width: 70ch;
+  color: var(--dawn-dim);
+}
+.w-prose p {
+  margin: 0 0 0.9rem;
+}
+.w-source {
+  font-size: 0.85rem;
+  color: var(--dawn-faint);
+}
+
+/* ---- tables: episodes, roles, works, songs ---- */
+
+.w-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 10px;
+}
+.w-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+}
+.w-table th {
+  text-align: left;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dawn-faint);
+  font-weight: 500;
+  padding: 0.6rem 0.8rem;
+  background: var(--night-sunk);
+}
+.w-table td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid rgb(site(rgb.cobalt-line) / 0.5);
+  vertical-align: middle;
+}
+.w-table tbody tr:nth-child(even) td {
+  background: rgb(site(rgb.night-raised) / 0.6);
+}
+.w-table a {
+  text-decoration-color: rgb(site(rgb.cobalt-bright) / 0.6);
+}
+.w-num {
+  font-family: var(--stencil);
+  color: var(--cobalt-bright);
+  width: 3.5rem;
+  white-space: nowrap;
+}
+.w-date {
+  white-space: nowrap;
+  color: var(--dawn-dim);
+}
+.w-soon td {
+  background: rgb(site(rgb.rose) / 0.07) !important;
+}
+.w-soon .w-date {
+  color: var(--rose);
+}
+.w-muted {
+  color: var(--dawn-faint);
+}
+.w-thumb {
+  width: 34px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--night-sunk);
+  display: block;
+}
+.w-show {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 14rem;
+}
+
+/* ---- credits ---- */
+
+.w-credits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+.w-credits div {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  background: var(--night-raised);
+  border: 1px solid rgb(site(rgb.cobalt-line) / 0.6);
+}
+.w-credits dt {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dawn-faint);
+}
+.w-credits dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+.w-crew {
+  columns: 16rem;
+  column-gap: 2rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+}
+.w-crew li {
+  break-inside: avoid;
+  padding: 0.2rem 0;
+}
+.w-crew span {
+  color: var(--dawn-faint);
+}
+
+/* ---- cast ---- */
+
+.w-cast {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-cast li {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.7rem;
+  border-radius: 12px;
+  background: var(--night-raised);
+  border: 1px solid rgb(site(rgb.cobalt-line) / 0.6);
+}
+.w-face {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--night-sunk);
+  display: block;
+}
+.w-cast__name {
+  font-weight: 700;
+  line-height: 1.25;
+}
+.w-cast__role {
+  font-size: 0.75rem;
+  color: var(--dawn-faint);
+  margin-left: 0.4rem;
+}
+.w-voices {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+}
+.w-voices li {
+  display: block;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+.w-lang {
+  display: inline-block;
+  min-width: 1.9rem;
+  margin-right: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--cobalt-bright);
+}
+
+/* ---- songs ---- */
+
+.w-songs {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-songs li {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr auto;
+  gap: 0.8rem;
+  align-items: baseline;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  background: var(--night-raised);
+}
+.w-songs__tag {
+  font-family: var(--stencil);
+  font-size: 0.8rem;
+  color: var(--rose);
+}
+.w-songs__eps {
+  font-size: 0.82rem;
+  color: var(--dawn-faint);
+  white-space: nowrap;
+}
+
+/* ---- cards: franchise block, cross-site cards, grids ---- */
+
+.w-watch {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--cobalt-line);
+  background: linear-gradient(120deg, rgb(site(rgb.cobalt) / 0.35), transparent 60%), var(--night-raised);
+}
+.w-watch__steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.w-watch__steps a {
+  display: block;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  background: var(--night-sunk);
+  text-decoration: none;
+}
+.w-watch__steps small {
+  display: block;
+  color: var(--dawn-faint);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.w-cross {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-cross a {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--cobalt-line);
+  background: var(--night-raised);
+  text-decoration: none;
+  transition: border-color 0.2s var(--ease-dawn), transform 0.2s var(--ease-dawn);
+}
+.w-cross a:hover,
+.w-cross a:focus-visible {
+  border-color: var(--rose);
+  transform: translateY(-2px);
+}
+.w-cross img {
+  width: 3rem;
+  height: 4.3rem;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--night-sunk);
+}
+.w-cross b {
+  display: block;
+  line-height: 1.3;
+}
+.w-cross small {
+  display: block;
+  color: var(--dawn-faint);
+  font-size: 0.82rem;
+}
+.w-cross em {
+  display: block;
+  margin-top: 0.3rem;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--rose);
+}
+
+.w-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 1rem 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-grid a {
+  display: block;
+  text-decoration: none;
+}
+.w-grid img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--night-raised);
+  transition: transform 0.25s var(--ease-dawn), box-shadow 0.25s var(--ease-dawn);
+}
+.w-grid a:hover img,
+.w-grid a:focus-visible img {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -14px rgb(site(rgb.rose) / 0.55);
+}
+.w-grid b {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+.w-grid small {
+  color: var(--dawn-faint);
+  font-size: 0.78rem;
+}
+
+/* ---- lists of names: directories, regulars, collaborators ---- */
+
+.w-names {
+  columns: 14rem;
+  column-gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-names li {
+  break-inside: avoid;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgb(site(rgb.cobalt-line) / 0.5);
+}
+.w-names span {
+  color: var(--dawn-faint);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.w-letters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+.w-letters a,
+.w-letters span {
+  display: grid;
+  place-items: center;
+  min-width: 2.3rem;
+  height: 2.3rem;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--cobalt-line);
+  font-family: var(--stencil);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.w-letters a:hover {
+  border-color: var(--rose);
+  color: var(--rose);
+}
+.w-letters [aria-current='page'] {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: var(--night);
+}
+.w-letters span {
+  opacity: 0.35;
+}
+
+.w-hubs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-hubs a {
+  display: block;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--cobalt-line);
+  background: var(--night-raised);
+  text-decoration: none;
+}
+.w-hubs a:hover,
+.w-hubs a:focus-visible {
+  border-color: var(--rose);
+}
+.w-hubs b {
+  display: block;
+  font-family: var(--stencil);
+  font-weight: 400;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.w-hubs span {
+  color: var(--dawn-faint);
+  font-size: 0.88rem;
+}
+
+/* ---- the front page ---- */
+
+.w-front {
+  padding-block: 3rem 1rem;
+}
+.w-front h1 {
+  max-width: 17ch;
+  font-size: clamp(2.1rem, 1.2rem + 4vw, 4rem);
+}
+.w-front h1 em {
+  font-style: normal;
+  color: var(--rose);
+}
+.w-front p {
+  max-width: 56ch;
+  color: var(--dawn-dim);
+  font-size: 1.08rem;
+}
+
+/* Shown only on a phone, in place of a .w-wide column. */
+.w-narrow {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .w-head {
+    grid-template-columns: 6rem 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: start;
+  }
+  .w-head__pic {
+    width: 6rem;
+  }
+  .w-facts div {
+    padding: 0.15rem 0.6rem;
+  }
+  .w-watch__steps {
+    grid-template-columns: 1fr;
+  }
+  .w-songs li {
+    grid-template-columns: 2.6rem 1fr;
+  }
+  .w-songs__eps {
+    grid-column: 2;
+  }
+  .w-cast {
+    grid-template-columns: 1fr;
+  }
+  /* A phone gives the title the room: tighter cells, and a date may wrap. */
+  .w-table th,
+  .w-table td {
+    padding: 0.5rem 0.45rem;
+  }
+  /* A third column moves under the first on a phone (.w-narrow shows it there). */
+  .w-wide {
+    display: none;
+  }
+  .w-narrow {
+    display: block;
+  }
+  .w-show {
+    min-width: 9rem;
+  }
+  .w-num {
+    width: 2.6rem;
+  }
+  .w-date {
+    white-space: normal;
+    width: 6.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-cross a,
+  .w-grid img {
+    transition: none;
+  }
+}

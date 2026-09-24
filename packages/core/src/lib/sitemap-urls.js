@@ -20,6 +20,10 @@ import { watchListPages } from './watch-list-data.js'
 import answerUrls from '@site/data/answer-urls.json'
 import config from './site.mjs'
 import { hasRoute } from './define-site.mjs'
+import { split } from './sitemap-xml.js'
+
+// The XML helpers moved to src/lib/sitemap-xml.js; re-exported for the old readers.
+export { today, urlsetXml } from './sitemap-xml.js'
 
 export const SITE = config.siteUrl
 
@@ -27,10 +31,6 @@ export const SITE = config.siteUrl
 // The old cap of 100 matched a cap in the routes; both went on 22 Sep 2026.
 const PER_PAGE = 60
 const CHARACTERS_PER_PAGE = 120
-
-// Google accepts 50,000 URLs per file. We stay far below that so each file
-// downloads fast and a crawler can finish one in a single pass.
-const CHUNK = 5000
 
 // Only what this site builds is listed: a group of pages it does not switch
 // on in its config (`routes`, see src/lib/routes.mjs) never reaches a sitemap.
@@ -180,16 +180,6 @@ const characterUrls = () =>
     caption: `${person.name} portrait`,
   }))
 
-/** Split a long list into numbered parts, so no single file is huge. */
-function split(name, urls) {
-  if (urls.length <= CHUNK) return urls.length ? [{ name, urls }] : []
-  const parts = []
-  for (let i = 0; i < urls.length; i += CHUNK) {
-    parts.push({ name: `${name}-${parts.length + 1}`, urls: urls.slice(i, i + CHUNK) })
-  }
-  return parts
-}
-
 /**
  * Every sub-sitemap, in crawl order: skeleton first, then titles, then
  * characters. Each entry becomes one /sitemap-<name>.xml file.
@@ -220,47 +210,3 @@ export const sitemapParts = [
     ? split('answers-cast', (answerUrls.cast || []).map((path) => ({ loc: `${SITE}${path}`, priority: '0.6' })))
     : []),
 ]
-
-export const today = () => new Date().toISOString().slice(0, 10)
-
-// A title, a cover URL or a character name can hold a character XML treats as
-// markup. One unescaped "&" makes the whole file unparseable, so every value
-// that reaches the XML goes through here first.
-const xml = (text) =>
-  String(text == null ? '' : text)
-    .split('&')
-    .join('&amp;')
-    .split('<')
-    .join('&lt;')
-    .split('>')
-    .join('&gt;')
-    .split('"')
-    .join('&quot;')
-    .split("'")
-    .join('&apos;')
-
-/**
- * One <image:image> child per URL that owns a picture.
- *
- * Every cover and every portrait is a real picture people search for by the
- * name of the story. Left alone, Google must find ~107,000 of them by
- * crawling each page. Naming them here hands Google Images the list.
- */
-const imageTag = (u) =>
-  u.image
-    ? `<image:image><image:loc>${xml(u.image)}</image:loc><image:title>${xml(u.caption)}</image:title></image:image>`
-    : ''
-
-export function urlsetXml(urls) {
-  const day = today()
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-${urls
-  .map(
-    (u) =>
-      `  <url><loc>${xml(u.loc)}</loc><lastmod>${day}</lastmod><priority>${u.priority}</priority>${imageTag(u)}</url>`,
-  )
-  .join('\n')}
-</urlset>
-`
-}

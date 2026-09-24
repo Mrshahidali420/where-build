@@ -19,8 +19,9 @@ import { isDevHost } from './lib/define-site.mjs'
 // How long the edge keeps a rendered page. The data changes once a day.
 const CACHE_SECONDS = 86400
 
-// The answer pages that hang under a title or a character page.
-const SUBPAGE = /^(\/[^/]+\/[^/]+)(\/(?:buy|free|like|characters))$/
+// The answer pages that hang under a title or a character page, and a Where
+// title's full episode list.
+const SUBPAGE = /^(\/[^/]+\/[^/]+)(\/(?:buy|free|like|characters|episodes))$/
 
 // Where the page script posts one row per view, per outbound click and per
 // exit. It is short on purpose: it travels in every page.

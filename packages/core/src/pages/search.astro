@@ -20,7 +20,7 @@ import config from '../lib/site.mjs'
 
 <Base
   title={`Search — ${config.name}`}
-  description={`Search manhwa, manga, manhua, novels and anime on ${config.name}.`}
+  description={`${config.search.description || 'Search manhwa, manga, manhua, novels and anime'} on ${config.name}.`}
   canonical="/search"
   noindex={true}
 >
@@ -59,10 +59,9 @@ import config from '../lib/site.mjs'
   const summary = document.getElementById('search-summary')
   const results = document.getElementById('search-results')
 
-  const BROWSE_LINKS =
-    '<a href="/manhwa">manhwa</a> / <a href="/manga">manga</a> / ' +
-    '<a href="/manhua">manhua</a> / <a href="/novel">novels</a> / ' +
-    '<a href="/anime">anime</a> / <a href="/character">characters</a>'
+  // The browse pages a search that finds nothing points at: the site's own
+  // (search.pageLinks in its config), filled in at build time by integration.mjs.
+  const BROWSE_LINKS = import.meta.env.SITE_SEARCH_PAGE_LINKS
 
   function setSummary(text) {
     summary.textContent = text

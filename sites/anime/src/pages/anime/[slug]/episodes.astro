@@ -1,0 +1,45 @@
+---
+/**
+ * Every episode of one anime with the date it aired, for "X episode 8 release
+ * date". Built only past what the title page shows (the episodes gate, 13+
+ * dated episodes); below it this address is a 404 and nothing links to it.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { loadAnime } from '@sister/core/src/where/runtime.mjs'
+import { episodesJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { airDate, plural } from '@sister/core/src/where/words.mjs'
+import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
+import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
+
+let r
+try {
+  r = await loadAnime(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  return unavailable(Astro, e)
+}
+if (!r || !r.episodesPage) return notFound(Astro)
+
+const dated = r.rows.filter((row) => row[2])
+const first = dated[0]
+const last = dated[dated.length - 1]
+const span = first && last ? `from ${airDate(first[2])} to ${airDate(last[2])}` : ''
+---
+
+<Where
+  title={`${r.title} Episode Air Dates: All ${r.rows.length} | ${config.name}`}
+  description={`All ${plural(r.rows.length, 'episode')} of ${r.title} with the date each aired${span ? `, ${span}` : ''} (UTC).`}
+  canonical={`/anime/${r.slug}/episodes`}
+  image={r.cover}
+  jsonld={episodesJsonld(r, config.siteUrl)}
+  crumbs={[{ name: r.title, href: `/anime/${r.slug}` }, { name: 'Episodes' }]}
+>
+  <TitleHead record={r} kicker="Episode guide" />
+  <section class="w-sec" aria-labelledby="eps">
+    <h2 id="eps">Every episode</h2>
+    <p class="w-sec__note">{plural(r.rows.length, 'episode')}, {r.dated} with an air date{span ? `, ${span}` : ''}. Dates are in UTC.</p>
+    <EpisodeTable rows={r.rows} caption={`${r.title}: every episode and its air date`} />
+    <a class="w-more" href={`/anime/${r.slug}`}>Cast, staff and songs of {r.title} →</a>
+  </section>
+</Where>
