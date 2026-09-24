@@ -53,10 +53,10 @@ import { gql, sleep, REQUEST_DELAY_MS, IDS_PER_CALL, writeJsonAtomic } from './a
 import {
   WINDOW_QUERY, HISTORY_QUERY, HISTORY_PER_PAGE,
   shapeWindowRow, sortWindow, shapeHistoryRows, windowRange,
-  isReleasing, eligibleForHistory, mergeHistory,
+  isReleasing, eligibleForHistory, mergeHistory, mergeIncomplete, selectDeltaIds,
 } from './sister-airing.mjs'
 import { nextSlice, loadWalkState, advanceWalkState } from './sister-walk.mjs'
-import { airingHealth, checkCoverage } from './sister-health.mjs'
+import { airingHealth, checkCoverage, checkIncomplete } from './sister-health.mjs'
 import { pullCatalogTitles, pullSisterFile, pushSisterFiles, haveCredentials, DATA_BUCKET } from './sister-data-io.mjs'
 import { readOptions } from './sister-cli.mjs'
 
@@ -146,12 +146,26 @@ async function fetchHistory(ids, budget) {
   return { byId, overflow, calls }
 }
 
-/** The rest of a title's schedule past HISTORY_PER_PAGE rows, one id at a time. */
+/**
+ * The rest of a title's schedule past HISTORY_PER_PAGE rows, one id at a
+ * time. Returns { calls, incompleteIds }: an id lands in `incompleteIds`
+ * when its paging did not reach the end this run -- a failed page, or the
+ * call budget running out before or during its turn -- so `byId` is left
+ * holding a truncated history for it and the caller must not record it as
+ * complete (see sister-airing.mjs's mergeIncomplete).
+ */
 async function fetchOverflow(ids, byId, budget, spent) {
   let calls = spent
-  for (const id of ids) {
-    if (calls >= budget) break
+  const incompleteIds = []
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[i]
+    if (calls >= budget) {
+      // Budget is gone: this id and every one after it stays truncated.
+      incompleteIds.push(...ids.slice(i))
+      break
+    }
     let rows = byId.get(id) || []
+    let complete = false
     for (let page = 2; ; page++) {
       if (calls >= budget) break
       let data
@@ -165,11 +179,15 @@ async function fetchOverflow(ids, byId, budget, spent) {
       const connection = data?.Media?.airingSchedule
       rows = rows.concat(shapeHistoryRows(connection?.nodes))
       await sleep(REQUEST_DELAY_MS)
-      if (!connection?.pageInfo?.hasNextPage) break
+      if (!connection?.pageInfo?.hasNextPage) {
+        complete = true
+        break
+      }
     }
     byId.set(id, [...rows].sort((a, b) => a.at - b.at))
+    if (!complete) incompleteIds.push(id)
   }
-  return calls
+  return { calls, incompleteIds }
 }
 
 async function main() {
@@ -185,7 +203,7 @@ async function main() {
   const releasingIds = anime.filter(isReleasing).map((a) => a.id)
   console.log(`${eligibleIds.length} anime earn a history page (${releasingIds.length} RELEASING).`)
 
-  let existing = readJsonOr(AIRING_FILE, { schedule: [], history: {} })
+  let existing = readJsonOr(AIRING_FILE, { schedule: [], history: {}, incomplete: {} })
   let walkRaw = readJsonOr(WALK_FILE, null)
   let prevMeta = null
   if (haveCredentials()) {
@@ -198,6 +216,7 @@ async function main() {
     console.log('No CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID: starting from the local copy only.')
   }
   const existingHistory = existing.history || {}
+  const existingIncomplete = existing.incomplete || {}
 
   let ids
   let walkState = loadWalkState(walkRaw)
@@ -211,10 +230,12 @@ async function main() {
     walkState = advanceWalkState(walkState, slice)
     console.log(`full-refresh slice: ${ids.length} id(s), next run resumes at ${walkState.next}${slice.wrapped ? ' (cycle wrapped)' : ''}.`)
   } else {
-    const missing = eligibleIds.filter((id) => !(existingHistory[id]?.length))
-    const trickle = missing.slice(0, BACKFILL_SIZE)
-    ids = [...new Set([...releasingIds, ...trickle])]
-    console.log(`delta: ${releasingIds.length} RELEASING + ${trickle.length} backfill of ${missing.length} still missing.`)
+    const selection = selectDeltaIds(eligibleIds, releasingIds, existingHistory, existingIncomplete, BACKFILL_SIZE)
+    ids = selection.ids
+    console.log(
+      `delta: ${releasingIds.length} RELEASING + a trickle of up to ${BACKFILL_SIZE} ` +
+        `of ${selection.missingCount} still missing or incomplete.`
+    )
   }
   if (opts.limit) ids = ids.slice(0, opts.limit)
 
@@ -224,21 +245,34 @@ async function main() {
     ? await fetchHistory(ids, MAX_CALLS)
     : { byId: new Map(), overflow: [], calls: 0 }
   let totalCalls = window.calls + historyCalls
+  let overflowIncompleteIds = []
   if (overflow.length) {
     console.log(`  ${overflow.length} title(s) ran past ${HISTORY_PER_PAGE} rows; fetching the rest one at a time.`)
-    totalCalls = await fetchOverflow(overflow, historyById, MAX_CALLS, historyCalls) + window.calls
+    const result = await fetchOverflow(overflow, historyById, MAX_CALLS, historyCalls)
+    totalCalls = result.calls + window.calls
+    overflowIncompleteIds = result.incompleteIds
+    if (overflowIncompleteIds.length) {
+      console.log(`  ${overflowIncompleteIds.length} of those stayed truncated (a failed page or the call budget ran out).`)
+    }
   }
   const seconds = Math.round((Date.now() - startedAt) / 1000)
 
   const nextHistory = mergeHistory(existingHistory, historyById)
-  const nextAiring = { window: { from: window.from, to: window.to }, schedule: window.rows, history: nextHistory }
+  const nextIncomplete = mergeIncomplete(existingIncomplete, [...historyById.keys()], overflowIncompleteIds)
+  const nextAiring = {
+    window: { from: window.from, to: window.to },
+    schedule: window.rows,
+    history: nextHistory,
+    incomplete: nextIncomplete,
+  }
 
   writeJsonAtomic(AIRING_FILE, nextAiring)
   writeJsonAtomic(WALK_FILE, walkState)
 
-  const health = airingHealth(nextHistory, releasingIds)
+  const health = airingHealth(nextHistory, releasingIds, nextIncomplete)
   console.log(
-    `airing.json: ${window.rows.length} schedule row(s), ${health.count} title(s) with history, ` +
+    `airing.json: ${window.rows.length} schedule row(s), ${health.count} title(s) with history ` +
+      `(${health.incompleteCount} incomplete, ${(health.incompleteShare * 100).toFixed(1)}%), ` +
       `${(health.releasingCoverage * 100).toFixed(1)}% of RELEASING anime covered. ${historyById.size} fetched, ${totalCalls} calls, ${seconds}s.`
   )
 
@@ -248,7 +282,10 @@ async function main() {
   }
   if (!haveCredentials()) throw new Error('PUSH=1 but CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID are not set.')
 
-  const problems = checkCoverage('airing.json', 'releasingCoverage', health, prevMeta?.health?.['airing.json'] || null)
+  const problems = [
+    ...checkCoverage('airing.json', 'releasingCoverage', health, prevMeta?.health?.['airing.json'] || null),
+    ...checkIncomplete('airing.json', health),
+  ]
   if (problems.length) throw new Error(`PUSH REFUSED, nothing uploaded:\n  - ${problems.join('\n  - ')}`)
 
   const meta = {

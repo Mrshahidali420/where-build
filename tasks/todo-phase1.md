@@ -89,10 +89,13 @@ plus a small history slice.
 
 ## Open risks for Phase 2
 
-- A title truncated by a failed overflow follow-up (see above) is not
-  retried by delta mode's "still missing" check, since that check only asks
-  whether a title has any history rows, not whether it is complete. Only a
-  manual `full-refresh` run currently re-covers it.
+- ~~A title truncated by a failed overflow follow-up (see above) is not
+  retried by delta mode's "still missing" check~~ -- closed 24 Sep 2026:
+  `fetchOverflow` now reports which ids it could not finish, airing.json
+  carries a new `incomplete` map (`sister-airing.mjs`'s `mergeIncomplete`),
+  `selectDeltaIds` folds it into the delta trickle, and `sister-health.mjs`'s
+  `checkIncomplete` refuses a push whose incomplete share exceeds 5%. See
+  `docs/ingest.md`.
 
 - The coverage floors (credits 99%, staff 99%, airing's RELEASING coverage)
   are enforced as shrink guards against the *previous* push's recorded

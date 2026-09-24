@@ -115,3 +115,43 @@ export function mergeHistory(existing, fetchedById) {
   for (const [id, rows] of fetchedById) merged[id] = rows
   return merged
 }
+
+/**
+ * The next `incomplete` map for airing.json: `{ "<id>": true }` for every
+ * title whose `airingSchedule` connection is known truncated -- a failed or
+ * budget-cut overflow follow-up (scripts/ingest-airing.mjs's `fetchOverflow`)
+ * left it holding fewer rows than AniList actually has. Without this, a
+ * title truncated once stays wrong forever: delta mode's "still missing"
+ * check only asks whether a title has any history rows at all, not whether
+ * that history is complete (see docs/ingest.md's overflow note).
+ *
+ * `attemptedIds` is every id this run actually fetched a history page for
+ * (the main batch's response ids); `incompleteIds` is the subset of those
+ * `fetchOverflow` could not finish. An id this run attempted and finished
+ * cleanly is cleared even if a past run had marked it incomplete; an id the
+ * run never touched keeps whatever `existing` already said about it.
+ */
+export function mergeIncomplete(existing, attemptedIds, incompleteIds) {
+  const stillIncomplete = new Set(incompleteIds)
+  const next = { ...existing }
+  for (const id of attemptedIds) {
+    if (stillIncomplete.has(id)) next[id] = true
+    else delete next[id]
+  }
+  return next
+}
+
+/**
+ * Delta mode's id list (scripts/ingest-airing.mjs): every RELEASING anime,
+ * refreshed nightly, plus a trickle of up to `backfillSize` eligible titles
+ * that either have no history row yet or were left `incomplete` by a failed
+ * overflow follow-up on an earlier run -- so a truncated title is retried
+ * instead of trusted as done. Returns `{ ids, missingCount }`; `missingCount`
+ * is the full backlog size before the trickle cap, for logging.
+ */
+export function selectDeltaIds(eligibleIds, releasingIds, existingHistory, incomplete, backfillSize) {
+  const needsFetch = (id) => !(existingHistory[id]?.length) || Boolean(incomplete?.[id])
+  const missing = eligibleIds.filter(needsFetch)
+  const trickle = missing.slice(0, backfillSize)
+  return { ids: [...new Set([...releasingIds, ...trickle])], missingCount: missing.length }
+}

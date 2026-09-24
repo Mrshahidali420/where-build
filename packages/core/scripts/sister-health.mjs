@@ -19,6 +19,12 @@
 export const COVERAGE_FLOOR = 0.99
 export const MAX_SHARE_DROP = 0.05
 export const MAX_RELATIVE_DROP = 0.2
+// A failed overflow follow-up (scripts/ingest-airing.mjs's fetchOverflow)
+// leaves a title's history truncated rather than absent; this is the ceiling
+// on how much of airing.json's history may be in that state before a push is
+// refused -- an absolute floor, not a shrink guard, so it applies from the
+// very first push too.
+export const MAX_INCOMPLETE_SHARE = 0.05
 
 const round = (n) => Math.round(n * 10000) / 10000
 const share = (n, of) => (of ? round(n / of) : 0)
@@ -39,14 +45,25 @@ export function staffHealth(byId, referencedIds) {
 }
 
 /**
- * { count, releasingCoverage } for airing.json's per-anime history against
- * anime that are RELEASING with a next episode (the one floor the plan names
- * for airing.json). `history` is airing.json's `byId` map.
+ * { count, releasingCoverage, incompleteCount, incompleteShare } for
+ * airing.json's per-anime history against anime that are RELEASING with a
+ * next episode (the one coverage floor the plan names for airing.json), plus
+ * how much of that history is known truncated by a failed overflow
+ * follow-up. `history` is airing.json's `byId` map; `incomplete` is
+ * airing.json's `{ "<id>": true }` map (scripts/sister-airing.mjs's
+ * mergeIncomplete).
  */
-export function airingHealth(history, releasingIds) {
+export function airingHealth(history, releasingIds, incomplete = {}) {
   const ids = new Set(releasingIds)
   const have = [...ids].filter((id) => (history[id] || []).length > 0).length
-  return { count: Object.keys(history).length, releasingCoverage: share(have, ids.size) }
+  const count = Object.keys(history).length
+  const incompleteCount = Object.keys(incomplete).filter((id) => incomplete[id]).length
+  return {
+    count,
+    releasingCoverage: share(have, ids.size),
+    incompleteCount,
+    incompleteShare: share(incompleteCount, count),
+  }
 }
 
 /**
@@ -73,4 +90,20 @@ export function checkCoverage(name, key, health, prev, { floor = COVERAGE_FLOOR,
     `${name}: ${key} fell from ${pct(before)} to ${pct(now)} ` +
       `(floor ${pct(floor)}, limit ${MAX_SHARE_DROP * 100} points or ${MAX_RELATIVE_DROP * 100}% of itself)`,
   ]
+}
+
+/**
+ * Problems with airing.json's incomplete share, as plain sentences. Unlike
+ * checkCoverage this is an absolute ceiling, not a regression guard against a
+ * previous push: a run that leaves too much of its own history truncated is
+ * refused even on the very first push, because there is nothing earlier to
+ * compare it against and no reason to trust a bad batch just because it is
+ * new.
+ */
+export function checkIncomplete(name, health, { maxShare = MAX_INCOMPLETE_SHARE } = {}) {
+  const now = health.incompleteShare ?? 0
+  if (now > maxShare) {
+    return [`${name}: ${pct(now)} of titles with history are incomplete (limit ${pct(maxShare)})`]
+  }
+  return []
 }

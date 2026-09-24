@@ -2,7 +2,10 @@
 // ingest-airing.mjs push against (docs/PLAN.md section 8, Phase 1).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { creditsHealth, staffHealth, airingHealth, checkCoverage, COVERAGE_FLOOR } from '../scripts/sister-health.mjs'
+import {
+  creditsHealth, staffHealth, airingHealth, checkCoverage, checkIncomplete,
+  COVERAGE_FLOOR, MAX_INCOMPLETE_SHARE,
+} from '../scripts/sister-health.mjs'
 
 test('creditsHealth counts coverage of the full catalog id list', () => {
   const byId = { 1: {}, 2: {}, 3: {} }
@@ -18,7 +21,17 @@ test('staffHealth counts coverage of the ids credits.json points at', () => {
 
 test('airingHealth counts RELEASING anime that have at least one history row', () => {
   const history = { 1: [{ at: 1 }], 2: [], 3: [{ at: 2 }] }
-  assert.deepEqual(airingHealth(history, [1, 2, 3, 4]), { count: 3, releasingCoverage: 0.5 })
+  assert.deepEqual(airingHealth(history, [1, 2, 3, 4]), {
+    count: 3, releasingCoverage: 0.5, incompleteCount: 0, incompleteShare: 0,
+  })
+})
+
+test('airingHealth also reports the share of titles with history left incomplete', () => {
+  const history = { 1: [{ at: 1 }], 2: [{ at: 2 }], 3: [{ at: 3 }] }
+  const incomplete = { 1: true, 9: false } // 9 is not even in history; only counted ids matter
+  assert.deepEqual(airingHealth(history, [1, 2, 3], incomplete), {
+    count: 3, releasingCoverage: 1, incompleteCount: 1, incompleteShare: 0.3333,
+  })
 })
 
 test('checkCoverage lets a bootstrap push through as long as it has any records', () => {
@@ -47,4 +60,21 @@ test('checkCoverage respects allowDrop and a custom floor', () => {
   const prev = { coverage: 0.995 }
   assert.deepEqual(checkCoverage('credits.json', 'coverage', { count: 1, coverage: 0.1 }, prev, { allowDrop: true }), [])
   assert.equal(COVERAGE_FLOOR, 0.99)
+})
+
+test('checkIncomplete refuses a push when too large a share of history is incomplete', () => {
+  const problems = checkIncomplete('airing.json', { incompleteShare: 0.1 })
+  assert.equal(problems.length, 1)
+  assert.match(problems[0], /10\.0% of titles with history are incomplete \(limit 5\.0%\)/)
+})
+
+test('checkIncomplete allows a push at or under the floor, even on a brand new file', () => {
+  assert.deepEqual(checkIncomplete('airing.json', { incompleteShare: MAX_INCOMPLETE_SHARE }), [])
+  assert.deepEqual(checkIncomplete('airing.json', { incompleteShare: 0 }), [])
+  assert.deepEqual(checkIncomplete('airing.json', {}), [])
+})
+
+test('checkIncomplete respects a custom maxShare', () => {
+  const problems = checkIncomplete('airing.json', { incompleteShare: 0.02 }, { maxShare: 0.01 })
+  assert.equal(problems.length, 1)
 })

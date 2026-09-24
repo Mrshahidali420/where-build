@@ -47,7 +47,7 @@ freshness is the refresh walk's job, not delta's).
 
 ### `airing.json`
 
-`{ window: { from, to }, schedule: [...], history: {...} }`.
+`{ window: { from, to }, schedule: [...], history: {...}, incomplete: {...} }`.
 
 - `window`/`schedule`: every episode airing +/-60 days of the run, across all
   of AniList, replaced whole every run (`schedule` is a rolling view, not an
@@ -56,6 +56,12 @@ freshness is the refresh walk's job, not delta's).
   dated episode list, for anime that earn one (RELEASING, or FINISHED within
   three years and under 200 episodes -- `eligibleForHistory` in
   `scripts/sister-airing.mjs`). Merged: a title's rows stay once fetched.
+- `incomplete`: `{ "<AniList anime id>": true }`, titles whose `history` row
+  above is known truncated by a failed or budget-cut overflow follow-up
+  (`fetchOverflow` in `ingest-airing.mjs`, past `HISTORY_PER_PAGE` rows). An
+  id here is retried by delta mode's selection on a later run
+  (`selectDeltaIds` in `scripts/sister-airing.mjs`) instead of being trusted
+  as done; it is cleared once that retry completes cleanly.
 
 Alongside it: `airing-refresh-walk.json` (the full-refresh cursor).
 
@@ -107,17 +113,23 @@ per id, one extra page (200 more rows) at a time, when the batched query's
 `airingSchedule.pageInfo.hasNextPage` comes back true. In the local test
 sample below, 28 of 60 titles needed this follow-up, at roughly 4 extra
 calls each; two of those follow-ups failed mid-way (a transient error) and
-were left holding exactly 200 rows rather than the full history. Delta
-mode's "still missing" check only looks at whether a title has *any* rows,
-not whether its history is complete, so a title truncated this way is not
-retried automatically -- a real gap worth closing before this matters (a
-manual `full-refresh` run, or a completeness check added to the selection
-logic, both work; neither is done in Phase 1). Because the sample that
-found this was small and deliberately skewed toward whichever ids the
-"still missing" trickle picked first, this is reported as an observed
-finding, not extrapolated into a revised total call estimate -- watch the
-logged call count on the real GitHub Actions runs instead of trusting a
-straight-line multiplication from this sample.
+were left holding exactly 200 rows rather than the full history.
+
+**Closed 24 Sep 2026: completeness is now tracked per title.** A failed or
+budget-cut overflow page used to leave a title's history silently truncated
+forever, because delta mode's "still missing" check only asked whether a
+title had *any* rows, not whether they were complete. `fetchOverflow` now
+returns which ids it could not finish; `sister-airing.mjs`'s
+`mergeIncomplete` records those in airing.json's new `incomplete` map
+(`{ "<id>": true }`), clearing an id once it is refetched cleanly.
+`selectDeltaIds` folds `incomplete` into the same "still missing" trickle
+selection, so a truncated title is retried on a later delta run instead of
+staying wrong. `sister-health.mjs`'s `airingHealth` reports
+`incompleteCount`/`incompleteShare`, and `checkIncomplete` refuses a push
+whose incomplete share exceeds `MAX_INCOMPLETE_SHARE` (5%, an absolute
+ceiling, not a shrink guard against a previous push -- it applies from the
+very first push too). See `mergeIncomplete`, `selectDeltaIds` in
+`scripts/sister-airing.mjs` and `checkIncomplete` in `scripts/sister-health.mjs`.
 
 **Measured locally against the real catalog and AniList on 24 Sep 2026,
 nothing pushed to R2** (see the session's report for the full numbers):

@@ -5,6 +5,7 @@ import {
   WINDOW_QUERY, HISTORY_QUERY,
   shapeHistoryRows, shapeWindowRow, sortWindow, windowRange,
   isReleasing, isRecentFinished, eligibleForHistory, mergeHistory,
+  mergeIncomplete, selectDeltaIds,
 } from '../scripts/sister-airing.mjs'
 
 test('WINDOW_QUERY pages airingSchedules by a time range', () => {
@@ -70,4 +71,48 @@ test('mergeHistory overwrites only the fetched ids and keeps the rest', () => {
     1: [{ at: 1, episode: 1 }],
     2: [{ at: 2, episode: 1 }, { at: 3, episode: 2 }],
   })
+})
+
+test('mergeIncomplete marks an id incomplete when its overflow follow-up failed', () => {
+  // id 5 was attempted this run (it is in attemptedIds) but its overflow
+  // page failed, so it lands in incompleteIds too -- a failed overflow page
+  // must mark the title incomplete, not silently store a truncated history.
+  const next = mergeIncomplete({}, [5, 6], [5])
+  assert.deepEqual(next, { 5: true })
+})
+
+test('mergeIncomplete clears an id once it is refetched cleanly', () => {
+  const existing = { 5: true, 9: true }
+  // This run attempted id 5 again and it completed (not in incompleteIds);
+  // id 9 was not attempted this run at all, so it keeps its prior state.
+  const next = mergeIncomplete(existing, [5], [])
+  assert.deepEqual(next, { 9: true })
+})
+
+test('mergeIncomplete leaves untouched ids alone', () => {
+  const existing = { 3: true }
+  assert.deepEqual(mergeIncomplete(existing, [], []), { 3: true })
+})
+
+test('selectDeltaIds picks titles with no history at all AND titles marked incomplete', () => {
+  const eligibleIds = [1, 2, 3]
+  const releasingIds = []
+  // 1 has history but is marked incomplete; 2 has complete history; 3 has none.
+  const existingHistory = { 1: [{ at: 1, episode: 1 }], 2: [{ at: 2, episode: 1 }] }
+  const incomplete = { 1: true }
+  const selection = selectDeltaIds(eligibleIds, releasingIds, existingHistory, incomplete, 10)
+  assert.deepEqual(new Set(selection.ids), new Set([1, 3]))
+  assert.equal(selection.missingCount, 2)
+})
+
+test('selectDeltaIds always includes every RELEASING id regardless of history state', () => {
+  const selection = selectDeltaIds([1, 2], [2], { 1: [{ at: 1, episode: 1 }], 2: [{ at: 2, episode: 1 }] }, {}, 10)
+  assert.deepEqual(new Set(selection.ids), new Set([2]))
+})
+
+test('selectDeltaIds caps the missing/incomplete trickle at backfillSize', () => {
+  const eligibleIds = [1, 2, 3, 4]
+  const selection = selectDeltaIds(eligibleIds, [], {}, {}, 2)
+  assert.equal(selection.ids.length, 2)
+  assert.equal(selection.missingCount, 4)
 })
