@@ -1,0 +1,43 @@
+---
+/**
+ * Copyright and takedown notices. The site hosts no video, no episodes and no
+ * scans: only facts, links and the cover art and photos AniList serves. The
+ * address comes from the config (dmcaEmail, then email); until the site has
+ * its own, notices go through the home site's copyright page.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { homeBase } from '@sister/core/src/where/cross.mjs'
+
+const home = homeBase(config)
+const email = config.dmcaEmail || config.email
+---
+
+<Where title={`Copyright and DMCA | ${config.name}`} description={`How to send ${config.name} a copyright or DMCA notice.`} canonical="/dmca" crumbs={[{ name: 'Copyright and DMCA' }]}>
+  <header class="w-intro">
+    <h1>Copyright and DMCA</h1>
+  </header>
+  <div class="prose">
+    <p>
+      {config.name} hosts no video, no episodes and no scans. It lists facts about anime (air dates, credits,
+      casts, songs) and links to official streaming services. Cover art and photos are shown from AniList's image
+      server and belong to their owners.
+    </p>
+    <h2>Sending a notice</h2>
+    <p>
+      If you hold the rights to something shown here and want it removed, send a notice with the address of the
+      page, what the work is, your contact details, and a statement that you are the owner or act for them.
+    </p>
+    {
+      email ? (
+        <p>Send it to <a href={`mailto:${email}`}>{email}</a>.</p>
+      ) : home ? (
+        <p>
+          Until {config.name} has its own mailbox, send it through the
+          <a href={`${home}/dmca`} rel="noopener">copyright page of our sister site</a>, naming the {config.name} page.
+        </p>
+      ) : null
+    }
+  </div>
+</Where>

@@ -1,88 +1,200 @@
 ---
 /**
- * The front page: what the site answers, the most watched shows, the busiest
- * voice actors and studios, the biggest watch orders, and the way into every
- * directory. Prerendered once a night from data/where-hubs.json.
+ * The front page. It says what the site answers (when an episode airs, who
+ * voices whom, who made a show, what order to watch it in), puts the next
+ * episodes on air beside that, and then opens every door: this season, the
+ * busiest voice actors and studios, the franchises to start, the most watched
+ * shows and the directories. Prerendered once a night from
+ * data/where-hubs.json; every block links only to pages that exist.
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import NameList from '@sister/core/src/components/where/NameList.astro'
+import Countdown from '@sister/core/src/components/Countdown.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import { cardOfRow } from '../components/card-row.mjs'
 
-const { home } = whereHubs()
+const hubs = whereHubs()
+const { home } = hubs
 const c = home.counts
-// The covers a wide screen paints first load at once; the rest wait for a scroll.
-const FIRST_ROW = 7
-const hubs = [
-  { href: '/directory/voice-actors', label: 'Voice actors', what: `${plural(c.voice, 'voice actor')}, every role they voiced` },
-  { href: '/directory/staff', label: 'Staff', what: `${plural(c.staff, 'person', 'people')} who directed, wrote, drew or scored` },
-  { href: '/directory/studios', label: 'Studios', what: `${plural(c.studios, 'studio')}, every show they animated` },
-  { href: '/directory/artists', label: 'Songs', what: `${plural(c.artists, 'artist')}, every opening and ending` },
-  { href: '/directory/watch-orders', label: 'Watch orders', what: `${plural(c.watch, 'franchise')} in release order` },
-  { href: '/year', label: 'By year', what: `${plural(c.titles, 'anime', 'anime')}, year by year` },
+const airing = home.airing.slice(0, 6)
+const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
+const clock = (at) => new Date(at * 1000).toISOString().slice(11, 16)
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const dayOf = (at) => WEEKDAYS[new Date(at * 1000).getUTCDay()]
+
+// Questions the site answers, each a link to the page that answers it.
+const asks = [
+  home.airing[0] && { href: home.airing[0][1], text: `When is the next ${home.airing[0][0]} episode?` },
+  home.voice[0] && { href: home.voice[0][1], text: `Every role ${home.voice[0][0]} has voiced` },
+  home.watch[0] && { href: home.watch[0].href, text: `The ${home.watch[0].name} watch order` },
+  home.studios[0] && { href: home.studios[0][1], text: `Every anime by ${home.studios[0][0]}` },
+].filter(Boolean)
+
+const doors = [
+  { href: '/directory/voice-actors', label: 'Voice actors', what: `${plural(c.voice, 'voice actor')} and every role they voiced` },
+  { href: '/directory/staff', label: 'Directors and staff', what: `${plural(c.staff, 'person', 'people')} who directed, wrote, designed or scored` },
+  { href: '/directory/studios', label: 'Studios', what: `${plural(c.studios, 'studio')} and every show they animated` },
+  { href: '/directory/artists', label: 'Song artists', what: `${plural(c.artists, 'artist')} behind the openings and endings` },
+  { href: '/directory/watch-orders', label: 'Watch orders', what: `${plural(c.watch, 'franchise')} in the order to watch them` },
+  { href: '/year', label: 'Anime by year', what: `${plural(home.years.length, 'year')} of anime, ${home.years.at(-1)} to ${home.years[0]}` },
 ]
+const season = home.season
 ---
 
-<Where title={`${config.name}: Anime Episode Dates, Voice Actors, Staff and Songs`} description={config.description} canonical="/">
-  <header class="w-front">
-    <h1>When it airs, <em>who made it</em>, who voices it.</h1>
-    <p>
-      {plural(c.titles, 'anime', 'anime')} with the date of every episode, the Japanese and English voice cast, the
-      people and studio behind each one, its opening and ending songs, and the order to watch a franchise in.
-    </p>
-  </header>
+<Where title={`${config.name}: Anime Episode Dates, Voice Actors, Staff and Watch Orders`} description={config.description} canonical="/" wide={true}>
+  <section class="w-hero" aria-labelledby="hero">
+    <div class="w-hero__copy">
+      <h1 id="hero"><span>Every episode date.</span> <span>Every voice.</span> <span>Every credit.</span></h1>
+      <p class="w-hero__lede">
+        {plural(c.titles, 'anime', 'anime')} with the air date of each episode, the Japanese and English cast, the studio and crew, the opening and ending songs, and the order to watch each franchise in.
+      </p>
+      <form class="w-hero__search" role="search" action="/search" method="get">
+        <label class="sr-only" for="hero-q">Search anime</label>
+        <input id="hero-q" name="q" type="search" placeholder="An anime, like Frieren or One Piece" autocomplete="off" required minlength="2" />
+        <button class="btn" type="submit">Search</button>
+      </form>
+      {asks.length > 0 && (
+        <ul class="w-hero__asks" aria-label="Try">
+          {asks.map((a) => <li><a href={a.href}>{a.text}</a></li>)}
+        </ul>
+      )}
+    </div>
+
+    {
+      airing.length > 0 && (
+        <div class="w-onair" aria-labelledby="onair">
+          <div class="w-onair__head">
+            <h2 id="onair">On air next</h2>
+            {hubs.schedule && <a href="/schedule">Full week</a>}
+          </div>
+          <ol>
+            {airing.map(([title, href, cover, episode, at]) => (
+              <li>
+                <time class="w-onair__time" datetime={new Date(at * 1000).toISOString()}>
+                  <b>{clock(at)}</b>
+                  <small>{dayOf(at)}, UTC</small>
+                </time>
+                <img class="w-thumb" src={small(cover)} alt="" width="36" height="52" loading="eager" decoding="async" />
+                <span class="w-onair__what">
+                  <a href={href}>{title}</a>
+                  <small>Episode {episode}</small>
+                </span>
+                <Countdown at={at} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+  </section>
+
+  {
+    season && (
+      <section class="w-sec" aria-labelledby="season">
+        <div class="w-sec__head">
+          <h2 id="season">New this season: {season.label}</h2>
+          <a class="w-sec__link" href={season.path}>All {season.count} {season.label} anime</a>
+        </div>
+        <Covers items={season.rows.map(cardOfRow)} eager={6} size="sm" />
+        {home.nextSeason && (
+          <a class="w-more" href={home.nextSeason.path}>Coming in {home.nextSeason.label}: {plural(home.nextSeason.count, 'show')}</a>
+        )}
+      </section>
+    )
+  }
+
+  {
+    home.voice.length > 0 && (
+      <section class="w-sec" aria-labelledby="voices">
+        <div class="w-sec__head">
+          <h2 id="voices">Voice actors with the most roles</h2>
+          <a class="w-sec__link" href="/directory/voice-actors">All voice actors</a>
+        </div>
+        <ul class="w-people">
+          {home.voice.map(([name, href, roles, image]) => (
+            <li>
+              <a href={href}>
+                {image ? <img src={image} alt="" width="88" height="88" loading="lazy" decoding="async" /> : <span class="w-people__none" aria-hidden="true">{name.slice(0, 1)}</span>}
+                <b>{name}</b>
+                <small>{plural(roles, 'role')}</small>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <div class="w-split w-split--half">
+    {
+      home.watch.length > 0 && (
+        <section class="w-sec" aria-labelledby="starters">
+          <div class="w-sec__head">
+            <h2 id="starters">Where to start a franchise</h2>
+            <a class="w-sec__link" href="/directory/watch-orders">All watch orders</a>
+          </div>
+          <ul class="w-starters">
+            {home.watch.map((w) => (
+              <li>
+                <a href={w.href}>
+                  {w.cover ? <img class="w-thumb" src={small(w.cover)} alt="" width="44" height="62" loading="lazy" decoding="async" /> : <span class="w-thumb" />}
+                  <span>
+                    <b>{w.name}</b>
+                    <small>Start with {w.first}, then {plural(w.count - 1, 'more entry', 'more entries')}</small>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    {
+      home.studios.length > 0 && (
+        <section class="w-sec" aria-labelledby="studios">
+          <div class="w-sec__head">
+            <h2 id="studios">Studios</h2>
+            <a class="w-sec__link" href="/directory/studios">All studios</a>
+          </div>
+          <ul class="w-studios">
+            {home.studios.map(([name, href, count, known]) => (
+              <li>
+                <a href={href}>
+                  <b>{name}</b>
+                  <small>{plural(count, 'anime', 'anime')}{known.length ? `, including ${known.join(' and ')}` : ''}</small>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
 
   <section class="w-sec" aria-labelledby="popular">
-    <h2 id="popular">Most watched</h2>
-    <ul class="w-grid">
-      {
-        home.titles.map(([title, href, cover, format, year], i) => (
-          <li>
-            <a href={href}>
-              <img src={cover} alt={`Cover of ${title}`} width="136" height="204" loading={i < FIRST_ROW ? 'eager' : 'lazy'} />
-              <b>{title}</b>
-              <small>{[format, year].filter(Boolean).join(' · ')}</small>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="w-sec__head">
+      <h2 id="popular">Most watched of all time</h2>
+      <a class="w-sec__link" href="/anime">Browse all anime</a>
+    </div>
+    <Covers items={home.titles.map(cardOfRow)} size="sm" />
   </section>
 
-  <section class="w-sec" aria-labelledby="browse">
-    <h2 id="browse">Browse</h2>
-    <ul class="w-hubs">
-      {
-        hubs.map((hub) => (
-          <li>
-            <a href={hub.href}>
-              <b>{hub.label}</b>
-              <span>{hub.what}</span>
-            </a>
-          </li>
-        ))
-      }
+  <section class="w-sec" aria-labelledby="doors">
+    <div class="w-sec__head">
+      <h2 id="doors">Look it up by</h2>
+    </div>
+    <ul class="w-doors w-doors--list">
+      {doors.map((d) => (
+        <li>
+          <a href={d.href}>
+            <b>{d.label}</b>
+            <span>{d.what}</span>
+          </a>
+        </li>
+      ))}
     </ul>
   </section>
-
-  {home.voice.length > 0 && (
-    <section class="w-sec" aria-labelledby="voices">
-      <h2 id="voices">Busiest voice actors</h2>
-      <NameList rows={home.voice} noun="role" />
-    </section>
-  )}
-  {home.studios.length > 0 && (
-    <section class="w-sec" aria-labelledby="studios">
-      <h2 id="studios">Busiest studios</h2>
-      <NameList rows={home.studios} noun="show" />
-    </section>
-  )}
-  {home.watch.length > 0 && (
-    <section class="w-sec" aria-labelledby="orders">
-      <h2 id="orders">Biggest franchises</h2>
-      <NameList rows={home.watch} noun="entry" />
-    </section>
-  )}
 </Where>

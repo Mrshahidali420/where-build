@@ -3,6 +3,10 @@
  * A voice actor: every role they have voiced in an anime on this site, newest
  * show first, with the character's face and the language. Same shard record
  * as their staff page; answers 404 unless the voice actor gate let them in.
+ *
+ * A busy actor has hundreds of roles. The first ROLES_OPEN are listed open;
+ * the rest sit in one folded list in the same page (no second address to
+ * crawl), drawn as compact rows so a long career stays a reasonable page.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
@@ -11,7 +15,7 @@ import { loadPerson } from '@sister/core/src/where/runtime.mjs'
 import { personJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { castRoleWord, plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
-import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+import RoleRows from '@sister/core/src/components/where/RoleRows.astro'
 import Bio from '@sister/core/src/components/where/Bio.astro'
 
 let p
@@ -22,14 +26,17 @@ try {
 }
 if (!p || !p.voicePage) return notFound(Astro)
 
+const ROLES_OPEN = 40
 const shows = new Set(p.roles.map((r) => r.href)).size
-const main = p.roles.filter((r) => r.role === 'MAIN').length
+const mains = p.roles.filter((r) => r.role === 'MAIN')
 const languages = [...new Set(p.roles.map((r) => r.language))]
-const best = p.roles.filter((r) => r.role === 'MAIN').slice(0, 3).map((r) => r.character.name)
+const best = mains.slice(0, 3).map((r) => r.character.name)
 const lede =
   `${plural(p.roles.length, 'role')} in ${plural(shows, 'anime', 'anime')}` +
-  (main ? `, ${main} of them main characters` : '') +
+  (mains.length ? `, ${mains.length} of them main characters` : '') +
   (languages.length === 1 ? `, in ${languages[0]}.` : '.')
+const open = p.roles.slice(0, ROLES_OPEN)
+const rest = p.roles.slice(ROLES_OPEN)
 ---
 
 <Where
@@ -43,38 +50,20 @@ const lede =
   <PersonHead person={p} page="voice" lede={lede} />
 
   <section class="w-sec" aria-labelledby="roles">
-    <h2 id="roles">Roles</h2>
-    <p class="w-sec__note">Newest show first. A character's face opens their profile.</p>
-    <div class="w-table-wrap">
-      <table class="w-table">
-        <thead>
-          <tr><th scope="col">Anime</th><th scope="col">Character</th><th scope="col">Role</th><th scope="col">Language</th></tr>
-        </thead>
-        <tbody>
-          {
-            p.roles.map((r) => (
-              <tr>
-                <td><ShowCell show={r} /></td>
-                <td>
-                  <span class="w-show">
-                    {r.character.face ? (
-                      <a href={r.character.face} rel="noopener" aria-label={`${r.character.name}, character profile`}>
-                        <img class="w-face" src={r.character.image} alt="" width="40" height="40" loading="lazy" style="width:40px;height:40px" />
-                      </a>
-                    ) : r.character.image ? (
-                      <img class="w-face" src={r.character.image} alt="" width="40" height="40" loading="lazy" style="width:40px;height:40px" />
-                    ) : null}
-                    {r.character.name}
-                  </span>
-                </td>
-                <td class="w-muted">{castRoleWord(r.role)}</td>
-                <td class="w-muted">{r.language}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+    <div class="w-sec__head">
+      <h2 id="roles">Roles</h2>
+      <p class="w-sec__count">{plural(p.roles.length, 'role')}</p>
     </div>
+    <p class="w-sec__note">Newest show first. A character's name opens their profile on our sister site.</p>
+    <RoleRows roles={open} roleWord={castRoleWord} />
+    {
+      rest.length > 0 && (
+        <details class="w-fold w-fold--big">
+          <summary>Show {plural(rest.length, 'more role')}</summary>
+          <RoleRows roles={rest} roleWord={castRoleWord} />
+        </details>
+      )
+    }
   </section>
 
   <Bio text={p.bio} source={p.anilistUrl} heading={`About ${p.name}`} />

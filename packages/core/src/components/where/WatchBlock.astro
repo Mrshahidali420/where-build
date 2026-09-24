@@ -9,26 +9,37 @@ const { watch } = Astro.props
 {
   watch && (
     <div class="w-watch">
-      <p style="margin:0">
-        Entry <b>{watch.position}</b> of <b>{watch.total}</b> in the {watch.name} franchise, in release order.
+      <p class="w-watch__where">
+        <span class="w-watch__pos">
+          {watch.position}
+          <small>of {watch.total}</small>
+        </span>
+        <span>
+          In the <a href={watch.href}>{watch.name} watch order</a>, counted in release order.
+        </span>
       </p>
       {(watch.prev || watch.next) && (
         <div class="w-watch__steps">
-          {watch.prev && (
+          {watch.prev ? (
             <a href={watch.prev.href}>
-              <small>Before this</small>
-              {watch.prev.title}{watch.prev.year ? ` (${watch.prev.year})` : ''}
+              <small>Watch before</small>
+              {watch.prev.title}
+              {watch.prev.year ? ` (${watch.prev.year})` : ''}
             </a>
+          ) : (
+            <span class="w-watch__none">This is where it starts.</span>
           )}
-          {watch.next && (
+          {watch.next ? (
             <a href={watch.next.href}>
-              <small>After this</small>
-              {watch.next.title}{watch.next.year ? ` (${watch.next.year})` : ''}
+              <small>Watch after</small>
+              {watch.next.title}
+              {watch.next.year ? ` (${watch.next.year})` : ''}
             </a>
+          ) : (
+            <span class="w-watch__none">Nothing comes after it yet.</span>
           )}
         </div>
       )}
-      <a class="w-more" href={watch.href}>The full {watch.name} watch order →</a>
     </div>
   )
 }

@@ -1,0 +1,53 @@
+---
+/**
+ * One anime season: every show that started in it, most watched first, with
+ * its studio and episode count, and the way to the seasons either side.
+ * Only seasons that passed the season gate are built.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import { cardOfRow } from '../../../components/card-row.mjs'
+
+export function getStaticPaths() {
+  return whereHubs().seasonIndex.map((s) => ({ params: { year: String(s.year), season: s.season.toLowerCase() }, props: { key: s.key } }))
+}
+
+const hubs = whereHubs()
+const { key } = Astro.props
+const s = hubs.seasons[key]
+const at = hubs.seasonIndex.findIndex((x) => x.key === key)
+const newer = hubs.seasonIndex[at - 1]
+const older = hubs.seasonIndex[at + 1]
+const items = s.rows.map(cardOfRow)
+const studios = new Set(s.rows.map((r) => r[6]).filter(Boolean)).size
+const top = s.rows.slice(0, 3).map((r) => r[0])
+const MONTHS = { WINTER: 'January', SPRING: 'April', SUMMER: 'July', FALL: 'October' }
+---
+
+<Where
+  title={`${s.label} Anime: All ${s.rows.length} Shows | ${config.name}`}
+  description={`Every anime of the ${s.label} season: ${plural(s.rows.length, 'show')} from ${plural(studios, 'studio')}${top.length ? `, led by ${top.join(', ')}` : ''}. Each with its episode dates, cast and staff.`}
+  canonical={`/season/${key}`}
+  image={s.rows[0]?.[2]}
+  jsonld={listJsonld(`${s.label} anime`, items, config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Seasons', href: '/season' }, { name: s.label }]}
+>
+  <header class="w-intro">
+    <p class="w-kicker">Anime season</p>
+    <h1>{s.label} anime</h1>
+    <p class="w-intro__lede">{plural(s.rows.length, 'show')} that started in {s.label}, from {MONTHS[s.season]} on, from {plural(studios, 'studio')}. Most watched first.</p>
+  </header>
+
+  <nav class="w-stepper" aria-label="Other seasons">
+    {older ? <a href={older.path} rel="prev">{older.label}</a> : <span />}
+    <a href="/season">All seasons</a>
+    {newer ? <a href={newer.path} rel="next">{newer.label}</a> : <span />}
+  </nav>
+
+  <Covers items={items} eager={6} />
+</Where>

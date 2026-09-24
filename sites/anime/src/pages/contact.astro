@@ -1,0 +1,37 @@
+---
+/**
+ * How to reach the people behind the site. The address comes from the config
+ * (email); until the site has its own domain and mailbox, messages go through
+ * the home site's contact page, which the same people read.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { homeBase } from '@sister/core/src/where/cross.mjs'
+
+const home = homeBase(config)
+---
+
+<Where title={`Contact | ${config.name}`} description={`How to reach ${config.name}: wrong dates, missing credits and everything else.`} canonical="/contact" crumbs={[{ name: 'Contact' }]}>
+  <header class="w-intro">
+    <h1>Contact</h1>
+  </header>
+  <div class="prose">
+    <p>Spotted a wrong air date, a missing voice actor or a credit on the wrong person? Tell us and we will look at it.</p>
+    {
+      config.email ? (
+        <p>Write to <a href={`mailto:${config.email}`}>{config.email}</a>. Please include the address of the page.</p>
+      ) : home ? (
+        <p>
+          Until {config.name} has its own mailbox, send your message through the
+          <a href={`${home}/contact`} rel="noopener">contact page of our sister site</a>, and name the {config.name} page it is about.
+        </p>
+      ) : null
+    }
+    <h2>Before you write</h2>
+    <p>
+      Most of what you see comes from <a href="https://anilist.co" rel="noopener">AniList</a>, and a fix made there
+      reaches this site with the next daily rebuild. Correcting AniList directly is often the fastest way.
+    </p>
+  </div>
+</Where>

@@ -1,17 +1,19 @@
 ---
 /**
- * An anime: when each episode airs, who made it, who voices it, its songs and
- * where it sits in its franchise. Rendered by the Worker from one shard
- * record (packages/core/src/where/record-title.mjs); every link in it was
- * resolved at build time to a page that exists.
+ * An anime: when each episode airs, who voices it, who made it, its songs and
+ * where it sits in its franchise, then the rest a reader asks for (story,
+ * official streams, trailer, related shows, questions). Rendered by the Worker
+ * from one shard record (packages/core/src/where/record-title.mjs); every link
+ * in it was resolved at build time to a page that exists.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
 import { truncate } from '@sister/core/src/lib/format.js'
 import { loadAnime } from '@sister/core/src/where/runtime.mjs'
-import { animeJsonld } from '@sister/core/src/where/jsonld.mjs'
-import { formatWord, paragraphs, plural } from '@sister/core/src/where/words.mjs'
+import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { faqOf } from '@sister/core/src/where/faq.mjs'
+import { formatWord, statusWord, seasonWord, sourceWord, partialDate, paragraphs, plural } from '@sister/core/src/where/words.mjs'
 import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
 import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
 import Credits from '@sister/core/src/components/where/Credits.astro'
@@ -19,6 +21,10 @@ import CastList from '@sister/core/src/components/where/CastList.astro'
 import SongList from '@sister/core/src/components/where/SongList.astro'
 import WatchBlock from '@sister/core/src/components/where/WatchBlock.astro'
 import CrossCards from '@sister/core/src/components/where/CrossCards.astro'
+import Streams from '@sister/core/src/components/where/Streams.astro'
+import Trailer from '@sister/core/src/components/where/Trailer.astro'
+import Faq from '@sister/core/src/components/where/Faq.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
 
 let r
 try {
@@ -29,11 +35,18 @@ try {
 }
 if (!r) return notFound(Astro)
 
+// Records built before a field existed simply lack it.
+r.related ||= []
+r.recs ||= []
+r.watchOn ||= []
+
 // The title page lists the first twelve; the rest are on /episodes.
 const FIRST = 12
 const shown = r.rows.slice(0, FIRST)
 const story = paragraphs(r.description)
 const voiced = r.cast.some((c) => c.voices.length > 0)
+const faq = faqOf(r)
+const path = `/anime/${r.slug}`
 const what = formatWord(r.format).toLowerCase()
 const description = truncate(
   `${r.title} (${what}${r.startYear ? `, ${r.startYear}` : ''}): ` +
@@ -42,92 +55,223 @@ const description = truncate(
       voiced ? 'the Japanese and English voice cast' : '',
       r.key.length ? 'who directed and wrote it' : '',
       r.songs.length ? 'its opening and ending songs' : '',
+      r.watch ? 'its watch order' : '',
     ]
       .filter(Boolean)
       .join(', ') +
     '.',
   158,
 )
+
+const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
+const jumps = [
+  shown.length > 0 && { id: 'episodes', label: 'Episodes' },
+  r.cast.length > 0 && { id: 'cast', label: 'Cast' },
+  made && { id: 'staff', label: 'Staff' },
+  r.songs.length > 0 && { id: 'songs', label: 'Songs' },
+  r.watch && { id: 'order', label: 'Watch order' },
+  r.watchOn.length > 0 && { id: 'watch', label: 'Where to watch' },
+  faq.length > 0 && { id: 'faq', label: 'Questions' },
+].filter(Boolean)
+
+const ended = r.endYear && r.endYear !== r.startYear ? `${partialDate(r.startDate) || r.startYear} to ${r.endYear}` : partialDate(r.startDate)
+const factRows = [
+  ['Format', formatWord(r.format)],
+  ['Episodes', r.episodes ? String(r.episodes) : ''],
+  ['Status', statusWord(r.status)],
+  ['Season', seasonWord(r.season, r.seasonYear)],
+  ['Aired', ended],
+  ['Source', sourceWord(r.source)],
+  ['AniList score', r.score ? `${r.score} / 100` : ''],
+  ['Favourites', r.favourites ? `${r.favourites.toLocaleString('en-US')} people` : ''],
+].filter(([, value]) => value)
+const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [formatWord(t.format), t.year].filter(Boolean).join(', '), badge: t.relation })
 ---
 
 <Where
-  title={`${r.title}: Episodes, Cast and Staff | ${config.name}`}
+  title={`${r.title}: Episodes, Air Dates, Cast and Staff | ${config.name}`}
   description={description}
-  canonical={`/anime/${r.slug}`}
+  canonical={path}
   image={r.cover}
   preloadImage={r.cover}
-  jsonld={animeJsonld(r, config.siteUrl)}
-  crumbs={[{ name: 'By year', href: '/year' }, ...(r.startYear ? [{ name: String(r.startYear), href: `/year/${r.startYear}` }] : []), { name: r.title }]}
+  jsonld={[animeJsonld(r, config.siteUrl), faqJsonld(faq, path, config.siteUrl)]}
+  crumbs={[{ name: 'Anime', href: '/anime' }, ...(r.startYear ? [{ name: String(r.startYear), href: `/year/${r.startYear}` }] : []), { name: r.title }]}
 >
-  <TitleHead record={r} kicker={[formatWord(r.format), r.startYear].filter(Boolean).join(' · ')} />
+  <TitleHead record={r} jumps={jumps} />
 
-  {
-    shown.length > 0 && (
-      <section class="w-sec" aria-labelledby="eps">
-        <h2 id="eps">Episodes</h2>
-        {r.rows.length > FIRST && (
-          <p class="w-sec__note">
-            The first {FIRST} of {plural(r.rows.length, 'episode')}{r.dated ? `, ${r.dated} with an air date` : ''}.
-          </p>
+  <div class="w-split">
+    <div class="w-main">
+      {
+        shown.length > 0 && (
+          <section class="w-sec" aria-labelledby="episodes">
+            <div class="w-sec__head">
+              <h2 id="episodes">Episodes</h2>
+              {r.rows.length > FIRST && <p class="w-sec__count">{shown.length} of {r.rows.length}</p>}
+            </div>
+            <EpisodeTable rows={shown} caption={`${r.title} episodes and air dates`} />
+            {r.episodesPage && <a class="w-more" href={`${path}/episodes`}>Every episode of {r.title} with its air date</a>}
+          </section>
+        )
+      }
+
+      {
+        r.cast.length > 0 && (
+          <section class="w-sec" aria-labelledby="cast">
+            <div class="w-sec__head">
+              <h2 id="cast">Cast and voice actors</h2>
+              <p class="w-sec__count">{plural(r.cast.length, 'character')}</p>
+            </div>
+            {voiced && <p class="w-sec__note">Japanese and English voices. A voice actor's name opens every role they have played.</p>}
+            <CastList cast={r.cast} title={r.title} />
+          </section>
+        )
+      }
+
+      {
+        made && (
+          <section class="w-sec" aria-labelledby="staff">
+            <div class="w-sec__head">
+              <h2 id="staff">Who made it</h2>
+            </div>
+            <Credits studios={r.studios} keyCredits={r.key} crew={r.crew} />
+          </section>
+        )
+      }
+
+      {
+        r.songs.length > 0 && (
+          <section class="w-sec" aria-labelledby="songs">
+            <div class="w-sec__head">
+              <h2 id="songs">Opening and ending songs</h2>
+              <p class="w-sec__count">{plural(r.songs.length, 'song')}</p>
+            </div>
+            <SongList songs={r.songs} />
+          </section>
+        )
+      }
+
+      {
+        r.watch && (
+          <section class="w-sec" aria-labelledby="order">
+            <div class="w-sec__head">
+              <h2 id="order">Watch order</h2>
+            </div>
+            <WatchBlock watch={r.watch} />
+          </section>
+        )
+      }
+
+      {
+        story.length > 0 && (
+          <section class="w-sec" aria-labelledby="story">
+            <div class="w-sec__head">
+              <h2 id="story">Story</h2>
+            </div>
+            <div class="w-prose">
+              {story.map((p) => <p>{p}</p>)}
+            </div>
+            {r.anilistUrl && (
+              <p class="w-source">
+                Synopsis from <a href={r.anilistUrl} rel="noopener">AniList</a>.
+              </p>
+            )}
+          </section>
+        )
+      }
+
+      {
+        r.related.length > 0 && (
+          <section class="w-sec" aria-labelledby="related">
+            <div class="w-sec__head">
+              <h2 id="related">Related anime</h2>
+            </div>
+            <Covers items={r.related.map(card)} size="sm" />
+          </section>
+        )
+      }
+
+      {
+        r.recs.length > 0 && (
+          <section class="w-sec" aria-labelledby="recs">
+            <div class="w-sec__head">
+              <h2 id="recs">Fans also watch</h2>
+            </div>
+            <p class="w-sec__note">What AniList members recommend to people who liked {r.title}.</p>
+            <Covers items={r.recs.map(card)} size="sm" />
+          </section>
+        )
+      }
+
+      {
+        faq.length > 0 && (
+          <section class="w-sec" aria-labelledby="faq">
+            <div class="w-sec__head">
+              <h2 id="faq">Questions about {r.title}</h2>
+            </div>
+            <Faq faq={faq} />
+          </section>
+        )
+      }
+    </div>
+
+    <aside class="w-aside" aria-label={`About ${r.title}`}>
+      <section class="w-box" aria-labelledby="facts">
+        <h2 id="facts">Facts</h2>
+        <dl class="w-sheet">
+          {factRows.map(([label, value]) => (
+            <div>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+          {r.studios.length > 0 && (
+            <div>
+              <dt>{r.studios.length > 1 ? 'Studios' : 'Studio'}</dt>
+              <dd>
+                {r.studios.map((s, i) => (
+                  <>
+                    {i > 0 && ', '}
+                    {s.href ? <a href={s.href}>{s.name}</a> : s.name}
+                  </>
+                ))}
+              </dd>
+            </div>
+          )}
+        </dl>
+        {r.genres.length > 0 && (
+          <ul class="w-chips" aria-label="Genres">
+            {r.genres.map((g) => <li>{g}</li>)}
+          </ul>
         )}
-        <EpisodeTable rows={shown} caption={`${r.title} episodes and air dates`} />
-        {r.episodesPage && <a class="w-more" href={`/anime/${r.slug}/episodes`}>Every episode of {r.title} with its air date →</a>}
       </section>
-    )
-  }
 
-  {
-    (r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0) && (
-      <section class="w-sec" aria-labelledby="made">
-        <h2 id="made">Made by</h2>
-        <Credits studios={r.studios} keyCredits={r.key} crew={r.crew} />
-      </section>
-    )
-  }
+      {
+        r.watchOn.length > 0 && (
+          <section class="w-box" aria-labelledby="watch">
+            <h2 id="watch">Where to watch</h2>
+            <p class="w-box__note">Official streams listed on AniList. What each one carries depends on your country.</p>
+            <Streams streams={r.watchOn} title={r.title} />
+          </section>
+        )
+      }
 
-  {
-    r.cast.length > 0 && (
-      <section class="w-sec" aria-labelledby="cast">
-        <h2 id="cast">Cast and voice actors</h2>
-        {voiced && <p class="w-sec__note">Japanese and English voices. Each voice actor's name opens every role they have played.</p>}
-        <CastList cast={r.cast} />
-      </section>
-    )
-  }
+      {
+        r.trailer && (
+          <section class="w-box" aria-labelledby="trailer">
+            <h2 id="trailer">Trailer</h2>
+            <Trailer trailer={r.trailer} title={r.title} />
+          </section>
+        )
+      }
 
-  {
-    r.songs.length > 0 && (
-      <section class="w-sec" aria-labelledby="songs">
-        <h2 id="songs">Opening and ending songs</h2>
-        <SongList songs={r.songs} />
-      </section>
-    )
-  }
-
-  {
-    r.watch && (
-      <section class="w-sec" aria-labelledby="order">
-        <h2 id="order">Watch order</h2>
-        <WatchBlock watch={r.watch} />
-      </section>
-    )
-  }
-
-  {
-    story.length > 0 && (
-      <section class="w-sec" aria-labelledby="story">
-        <h2 id="story">Story</h2>
-        <div class="w-prose">
-          {story.map((p) => <p>{p}</p>)}
-        </div>
-        {r.anilistUrl && (
-          <p class="w-source">
-            Synopsis and data from <a href={r.anilistUrl} rel="noopener">AniList</a>.
-          </p>
-        )}
-      </section>
-    )
-  }
-
-  <CrossCards cards={r.cross} />
+      {
+        r.cross.length > 0 && (
+          <section class="w-box" aria-labelledby="elsewhere">
+            <h2 id="elsewhere">More on our sister site</h2>
+            <CrossCards cards={r.cross} />
+          </section>
+        )
+      }
+    </aside>
+  </div>
 </Where>

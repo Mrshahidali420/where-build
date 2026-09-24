@@ -1,17 +1,28 @@
 // WhereAnime: when an episode airs, who made the show, who voices it, what the
 // songs are and what order to watch a franchise in (docs/PLAN.md section 2.1).
 import { defineSite } from '@sister/core/site'
+import { familyMark } from '@sister/core/src/lib/brand.mjs'
 import { FAMILY } from '../family.mjs'
 
-// The hubs every page can reach. The same list is the menu, the footer and
-// the links a search that finds nothing offers.
-const HUBS = [
+// The main menu. A hub that its gate did not build this time (a week with too
+// few dated episodes has no schedule) is left out of the menu by the layout,
+// from data/site-stats.json.
+const NAV = [
+  { href: '/anime', label: 'Anime' },
+  { href: '/schedule', label: 'Schedule' },
+  { href: '/season', label: 'Seasons' },
   { href: '/directory/voice-actors', label: 'Voice actors' },
   { href: '/directory/staff', label: 'Staff' },
   { href: '/directory/studios', label: 'Studios' },
   { href: '/directory/artists', label: 'Songs' },
   { href: '/directory/watch-orders', label: 'Watch orders' },
-  { href: '/year', label: 'By year' },
+]
+
+const LEGAL = [
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/dmca', label: 'Copyright and DMCA' },
 ]
 
 export default defineSite({
@@ -20,13 +31,13 @@ export default defineSite({
   name: 'WhereAnime',
   shortName: 'WhereAnime',
   wordmark: ['where', 'anime'],
-  tagline: 'Episodes, voices and the people behind them',
+  tagline: 'Episode dates, voice actors and the people behind every anime',
   description:
     'Every episode date, every voice actor, every studio and song, and the order to watch each franchise in, for anime from Japan and beyond.',
-  // Placeholder mark: a map pin with a play button.
-  mark:
-    '<path d="M16 3a9 9 0 0 0-9 9c0 6.6 9 17 9 17s9-10.4 9-17a9 9 0 0 0-9-9Z" fill="none" stroke="currentColor" stroke-width="2.5"></path> ' +
-    '<path d="M14 8.5v7l6-3.5Z" fill="currentColor"></path>',
+  // The Where family pin with the anime symbol, a play button, cut out of it
+  // (packages/core/src/lib/brand.mjs). The icons, the wordmark and the share
+  // image are drawn from it by packages/core/scripts/make-site-icons.mjs.
+  mark: familyMark('play'),
 
   plannedDomain: 'whereanime.com',
   workerName: 'whereanime',
@@ -68,10 +79,10 @@ export default defineSite({
   r2: { ...FAMILY.r2, statePrefix: 'anime' },
 
   // The Where entity build (scripts/make-where.mjs): its own pages live in
-  // sites/anime/src/pages. From the core it takes only the sitemaps, the
-  // search slices and the admin.
+  // sites/anime/src/pages, the results page included. From the core it takes
+  // only the sitemaps, the search slices and the admin.
   builder: 'where',
-  routes: ['sitemaps', 'search', 'searchIndex', 'admin'],
+  routes: ['sitemaps', 'searchIndex', 'admin'],
 
   // Donghua (anime from China and Taiwan) belongs to the manhua site.
   ownedKinds: [{ kind: 'anime', notFrom: ['CN', 'TW'] }],
@@ -82,30 +93,56 @@ export default defineSite({
     { page: '/anime/<slug>', count: 'where', type: 'title', credits: 3 },
     { page: '/anime/<slug>/episodes', count: 'where', type: 'episodes', min: 13 },
     { page: '/voice-actor/<slug>', count: 'where', type: 'voiceActor', min: 3 },
-    { page: '/staff/<slug>', count: 'where', type: 'staff', min: 2 },
+    // Real crew work on 3+ shows, or a key credit (director, writer, creator,
+    // designer, composer) on 2+. Song performances and producer seats do not count.
+    { page: '/staff/<slug>', count: 'where', type: 'staff', min: 3, keyMin: 2 },
     { page: '/studio/<slug>', count: 'where', type: 'studio', min: 2 },
     { page: '/artist/<slug>', count: 'where', type: 'artist', min: 2 },
     { page: '/watch-order/<slug>', count: 'where', type: 'watchOrder', min: 3 },
+    { page: '/schedule', count: 'where', type: 'schedule', min: 10 },
+    { page: '/season/<year>/<season>', count: 'where', type: 'season', min: 12 },
+    { page: '/genre/<slug>[/<page>]', count: 'where', type: 'genre', min: 60, per: 60, maxPages: 10 },
   ],
 
-  nav: HUBS,
+  nav: NAV,
   footer: {
     ...FAMILY.footer,
-    browse: HUBS,
-    // This site's own pages (src/pages/about.astro, privacy.astro).
-    legal: [
-      { href: '/about', label: 'About' },
-      { href: '/privacy', label: 'Privacy' },
+    browse: NAV,
+    // The footer's columns (packages/core/src/layouts/Where.astro).
+    columns: [
+      {
+        title: 'Anime',
+        links: [
+          { href: '/anime', label: 'Browse anime' },
+          { href: '/schedule', label: 'Airing schedule' },
+          { href: '/season', label: 'Seasons' },
+          { href: '/genre', label: 'Genres' },
+          { href: '/year', label: 'Anime by year' },
+        ],
+      },
+      {
+        title: 'People and studios',
+        links: [
+          { href: '/directory/voice-actors', label: 'Voice actors' },
+          { href: '/directory/staff', label: 'Directors and staff' },
+          { href: '/directory/studios', label: 'Studios' },
+          { href: '/directory/artists', label: 'Song artists' },
+          { href: '/directory/watch-orders', label: 'Watch orders' },
+        ],
+      },
     ],
-    blurb: 'Episode dates, casts, studios and songs for every anime in the catalog, from AniList and AnimeThemes.',
+    // This site's own pages (src/pages/about.astro, contact, privacy, dmca).
+    legal: LEGAL,
+    blurb: 'When every episode airs, who voices each character, who made the show, its songs and the order to watch it in.',
+    credit: 'Anime data from AniList. Opening and ending songs from AnimeThemes.',
   },
   search: {
     description: 'Search every anime, with its episode dates, cast and staff,',
-    pageLinks: HUBS.map((hub) => ({ href: hub.href, label: hub.label.toLowerCase() })),
+    pageLinks: NAV.map((hub) => ({ href: hub.href, label: hub.label.toLowerCase() })),
     emptyLinks: [
+      { href: '/anime', label: 'anime' },
       { href: '/directory/voice-actors', label: 'voice actors' },
       { href: '/directory/studios', label: 'studios' },
-      { href: '/year', label: 'anime by year' },
     ],
   },
 })

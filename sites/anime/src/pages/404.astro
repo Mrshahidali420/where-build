@@ -1,27 +1,35 @@
 ---
 /**
  * The not-found page. It turns the address that was asked for back into
- * words and offers them to the header search, and lists the hubs. The Worker
+ * words and offers them to the search, and lists the ways in. The Worker
  * serves this file with a real 404 and no-store (src/lib/runtime.js).
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import stats from '@site/data/site-stats.json'
 
-const NEXT = config.nav
+const gone = new Set(stats.missing || [])
+const doors = config.nav.filter((link) => !gone.has(link.href))
 ---
 
-<Where title={`Not found | ${config.name}`} description="That page is not on this site." noindex={true} missing={true}>
-  <header class="w-front" style="padding-top:1rem">
-    <h1>That page is <em>not here</em>.</h1>
-    <p>The link may be old, or the show, person or studio has no page yet. Search for it, or start from a list.</p>
-    <p id="miss-try" hidden>
-      <button type="button" class="miss-search" id="miss-search">Search for <b id="miss-name"></b></button>
-    </p>
-  </header>
-  <ul class="w-hubs">
+<Where title={`Page not found | ${config.name}`} description="That page is not on this site." noindex={true} missing={true}>
+  <section class="w-lost">
+    <svg class="w-lost__mark" width="96" height="96" viewBox="0 0 32 32" aria-hidden="true" set:html={config.mark}></svg>
+    <div>
+      <p class="w-kicker">Error 404</p>
+      <h1>This page is not on the map</h1>
+      <p class="w-intro__lede">The link may be old, or that show, person or studio has no page yet. Search for it, or start from one of the lists below.</p>
+      <form class="w-hero__search" role="search" action="/search" method="get">
+        <label class="sr-only" for="lost-q">Search anime</label>
+        <input id="lost-q" name="q" type="search" autocomplete="off" placeholder="Search anime" />
+        <button class="btn" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+  <ul class="w-doors w-doors--list">
     {
-      NEXT.map((link) => (
+      doors.map((link) => (
         <li>
           <a href={link.href}>
             <b>{link.label}</b>
@@ -33,7 +41,7 @@ const NEXT = config.nav
   </ul>
 
   <script is:inline>
-    // "/voice-actor/kana-hanazawa-2" -> "kana hanazawa", handed to the header search.
+    // "/voice-actor/kana-hanazawa-2" -> "kana hanazawa", put in the search box.
     ;(function () {
       var raw = ''
       try {
@@ -45,21 +53,10 @@ const NEXT = config.nav
         .replace(/-\d{3,}$/, '')
         .replace(/[-_]+/g, ' ')
         .replace(/[^a-z0-9 ']/gi, ' ')
+        .replace(/\s+/g, ' ')
         .trim()
-      var box = document.getElementById('miss-try')
-      var input = document.getElementById('finder-input')
-      if (words.length < 3 || !box || !input) return
-      document.getElementById('miss-name').textContent = words
-      box.hidden = false
-      document.getElementById('miss-search').addEventListener('click', function () {
-        if (input.offsetParent === null) {
-          var menu = document.querySelector('.menu-btn')
-          if (menu) menu.click()
-        }
-        input.value = words
-        input.dispatchEvent(new Event('input', { bubbles: true }))
-        input.focus()
-      })
+      var input = document.getElementById('lost-q')
+      if (words.length >= 3 && input) input.value = words
     })()
   </script>
 </Where>

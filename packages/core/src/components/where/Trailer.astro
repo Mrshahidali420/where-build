@@ -1,0 +1,35 @@
+---
+/**
+ * The trailer AniList names, as a still with a play button. YouTube's player
+ * (the privacy-enhanced youtube-nocookie.com one) loads only on a click, so
+ * the page costs nothing extra until someone wants the video. No VideoObject
+ * markup: AniList gives no upload date, and a made-up one is worse than none.
+ */
+const { trailer, title } = Astro.props
+---
+
+{
+  trailer && (
+    <div class="w-trailer" data-yt={trailer.id} data-title={`${title} trailer`}>
+      <img src={trailer.thumb} alt={`${title} trailer still`} width="480" height="360" loading="lazy" decoding="async" />
+      <button type="button" aria-label={`Play the ${title} trailer`}>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5Z" fill="currentColor"></path></svg>
+        <span>Play trailer</span>
+      </button>
+    </div>
+  )
+}
+
+<script>
+  for (const box of document.querySelectorAll<HTMLElement>('.w-trailer')) {
+    box.querySelector('button')?.addEventListener('click', () => {
+      const frame = document.createElement('iframe')
+      frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(box.dataset.yt || '')}?autoplay=1`
+      frame.title = box.dataset.title || 'Trailer'
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture'
+      frame.allowFullscreen = true
+      box.replaceChildren(frame)
+      frame.focus()
+    })
+  }
+</script>

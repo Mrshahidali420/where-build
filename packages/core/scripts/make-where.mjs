@@ -34,6 +34,7 @@ import { homeBase } from '../src/where/cross.mjs'
 import { titleRecord } from '../src/where/record-title.mjs'
 import { personRecord, studioRecord, artistRecord, franchiseRecord } from '../src/where/record-entities.mjs'
 import { hubsOf, searchRowsOf, pageUrlsOf } from '../src/where/outputs.mjs'
+import { hubPaths } from '../src/where/hubs.mjs'
 import { WHERE_SHARDS } from '../src/where/shard-folders.mjs'
 import { writeShardFolder } from './where-shards.mjs'
 import { readData, loadWhereData } from './where-load.mjs'
@@ -44,7 +45,7 @@ const DATA = join(ROOT, 'data')
 const OUT = join(ROOT, 'public', 'd')
 const SHRINK_LIMIT = 0.02
 // The site's own pages that are not entity pages; the sitemap lists them.
-const EXTRA_PAGES = ['/about', '/privacy']
+const EXTRA_PAGES = ['/about', '/contact', '/privacy', '/dmca']
 
 const read = (name, empty) => readData(DATA, name, empty)
 const write = (name, value) => writeFileAtomic(join(DATA, name), JSON.stringify(value))
@@ -137,11 +138,15 @@ function main() {
   }
   since('shards')
 
-  const hubs = hubsOf({ titles, people, studios, artists, watch })
+  const hubs = hubsOf({ titles, people, studios, artists, watch, where, airing: data.airing?.schedule || [] })
   write('where-hubs.json', hubs)
   write('search-rows.json', searchRowsOf(titles))
   write('page-urls.json', pageUrlsOf({ titles, people, studios, artists, watch, hubs, extra: EXTRA_PAGES }))
-  write('site-stats.json', { comics: 0, anime: titles.length, genres: [] })
+  // The page shell reads this small file: the numbers it shows, and the hubs
+  // whose gate kept them out this time, so no menu or footer link names a 404.
+  const built = new Set(hubPaths(hubs).map((p) => p.path))
+  const missing = ['/schedule', '/season', '/genre'].filter((path) => !built.has(path))
+  write('site-stats.json', { comics: 0, anime: titles.length, genres: [], missing })
   write('redirects.json', { ...redirects, ...read('manual-redirects.json', {}) })
 
   const manifest = {

@@ -1,0 +1,27 @@
+---
+/**
+ * Shows as compact rows: a small cover, the linked title with its year and
+ * format, and on the right what this row is about (a credit, an episode
+ * count, a status). `items` are record rows { title, href, year, format,
+ * cover, roles?, episodes? }; `note` picks the right-hand text.
+ */
+import { formatWord } from '../../where/words.mjs'
+
+const { items = [], note = (w) => (w.roles || []).join(', ') } = Astro.props
+const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
+---
+
+<ul class="w-works">
+  {
+    items.map((w) => (
+      <li>
+        {w.cover ? <img class="w-thumb" src={small(w.cover)} alt="" width="36" height="52" loading="lazy" decoding="async" /> : <span class="w-thumb" />}
+        <span class="w-works__show">
+          {w.href ? <a href={w.href}>{w.title}</a> : w.title}
+          <small>{[w.year, formatWord(w.format)].filter(Boolean).join(', ')}</small>
+        </span>
+        <span class="w-works__note">{note(w)}</span>
+      </li>
+    ))
+  }
+</ul>

@@ -177,9 +177,12 @@ export default function sisterCore(site) {
         }
         updateConfig({
           // The settings every site shares. The page addresses never carry a
-          // trailing slash or ".html", and the page CSS travels inside the page.
+          // trailing slash or ".html". The home site's CSS travels inside each
+          // page; a Where site's goes to hashed files under /_astro/, shared by
+          // every page and cached for a year (public/_headers), so the page
+          // itself carries only its content.
           trailingSlash: 'never',
-          build: { format: 'file', inlineStylesheets: 'always' },
+          build: { format: 'file', inlineStylesheets: isWhereSite(site) ? 'never' : 'always' },
           // Covers are served straight from AniList's CDN, so no local processing.
           image: { remotePatterns: [{ protocol: 'https', hostname: 's4.anilist.co' }] },
           vite: {

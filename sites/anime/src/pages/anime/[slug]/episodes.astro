@@ -25,21 +25,25 @@ const dated = r.rows.filter((row) => row[2])
 const first = dated[0]
 const last = dated[dated.length - 1]
 const span = first && last ? `from ${airDate(first[2])} to ${airDate(last[2])}` : ''
+const path = `/anime/${r.slug}`
 ---
 
 <Where
   title={`${r.title} Episode Air Dates: All ${r.rows.length} | ${config.name}`}
   description={`All ${plural(r.rows.length, 'episode')} of ${r.title} with the date each aired${span ? `, ${span}` : ''} (UTC).`}
-  canonical={`/anime/${r.slug}/episodes`}
+  canonical={`${path}/episodes`}
   image={r.cover}
   jsonld={episodesJsonld(r, config.siteUrl)}
-  crumbs={[{ name: r.title, href: `/anime/${r.slug}` }, { name: 'Episodes' }]}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: r.title, href: path }, { name: 'Episodes' }]}
 >
-  <TitleHead record={r} kicker="Episode guide" />
-  <section class="w-sec" aria-labelledby="eps">
-    <h2 id="eps">Every episode</h2>
-    <p class="w-sec__note">{plural(r.rows.length, 'episode')}, {r.dated} with an air date{span ? `, ${span}` : ''}. Dates are in UTC.</p>
+  <TitleHead record={r} />
+  <section class="w-sec" aria-labelledby="episodes">
+    <div class="w-sec__head">
+      <h2 id="episodes">Every episode</h2>
+      <p class="w-sec__count">{plural(r.rows.length, 'episode')}</p>
+    </div>
+    <p class="w-sec__note">{r.dated} with an air date{span ? `, ${span}` : ''}. Dates are the first broadcast, in UTC.</p>
     <EpisodeTable rows={r.rows} caption={`${r.title}: every episode and its air date`} />
-    <a class="w-more" href={`/anime/${r.slug}`}>Cast, staff and songs of {r.title} →</a>
+    <a class="w-more" href={path}>Cast, staff and songs of {r.title}</a>
   </section>
 </Where>

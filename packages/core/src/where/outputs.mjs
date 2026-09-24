@@ -3,7 +3,8 @@
  * resolved records, so a hub, a search row and a sitemap line exist exactly
  * when the page they name does:
  *
- *   hubsOf       data/where-hubs.json   the directories, the years, the home page lists
+ *   hubsOf       data/where-hubs.json   the directories, years, seasons, genres,
+ *                                       the week's schedule and the front page lists
  *   searchRowsOf data/search-rows.json  the header search's rows (src/lib/search-shards.js)
  *   pageUrlsOf   data/page-urls.json    the sitemap (src/lib/where-sitemap.js)
  *
@@ -12,17 +13,82 @@
 import { record as searchRecord } from '../lib/search-shards.js'
 import { directory, hubPaths } from './hubs.mjs'
 import { formatWord, seasonWord } from './words.mjs'
+import { seasonAt, shiftSeason, upcomingEpisodes } from './anime-hubs.mjs'
 
-const HOME_TITLES = 18
-const HOME_ROWS = 12
+const HOME_ROWS = 16
+const HOME_AIRING = 10
+const HOME_WATCH = 8
 
 const byPopularity = (a, b) => (b.popularity || 0) - (a.popularity || 0) || a.id - b.id
 
+/** A title as a grid card: [title, href, cover, format, episodes, season, studio]. */
+const cardRow = (t) => [t.title, `/anime/${t.slug}`, t.cover, formatWord(t.format), t.episodes || 0, seasonWord(t.season, t.seasonYear), t.studios[0]?.name || '']
+
+/** The season hubs, keyed "2026/summer", and a small index of them. */
+function seasonHubs(seasons, recordOf) {
+  const lists = {}
+  const index = []
+  for (const s of seasons) {
+    const rows = s.items.map((item) => recordOf.get(item.id)).filter(Boolean).map(cardRow)
+    const key = s.path.slice('/season/'.length)
+    lists[key] = { year: s.year, season: s.season, label: seasonWord(s.season, s.year), rows }
+    index.push({ key, path: s.path, year: s.year, season: s.season, label: seasonWord(s.season, s.year), count: rows.length, cover: rows[0]?.[2] || '' })
+  }
+  return { lists, index }
+}
+
+function genreHubs(genres, recordOf) {
+  const lists = {}
+  const index = []
+  for (const g of genres) {
+    const rows = g.items.map((item) => recordOf.get(item.id)).filter(Boolean).map(cardRow)
+    lists[g.slug] = { name: g.name, total: g.total, per: g.per, rows }
+    index.push({ slug: g.slug, name: g.name, total: g.total, pages: g.pages, covers: rows.slice(0, 3).map((r) => r[2]) })
+  }
+  return { lists, index }
+}
+
+/** A schedule row: [title, href, cover, episode, at, planned episodes]. */
+const airingRow = (recordOf) => (row) => {
+  const t = recordOf.get(row.id)
+  return [t.title, `/anime/${t.slug}`, t.cover, row.episode, row.at, t.episodes || 0]
+}
+
+/** The current season's list, or the newest one with a page before it. */
+function currentSeason(index, now) {
+  const here = seasonAt(now)
+  const at = index.findIndex((s) => s.year < here.year || (s.year === here.year && seasonOrder(s.season) <= seasonOrder(here.season)))
+  const next = shiftSeason(here, 1)
+  return {
+    current: at >= 0 ? index[at] : null,
+    next: index.find((s) => s.year === next.year && s.season === next.season) || null,
+  }
+}
+const seasonOrder = (season) => ['WINTER', 'SPRING', 'SUMMER', 'FALL'].indexOf(season)
+
+/** Franchises to start: the most watched ones, each with the entry to begin at. */
+function watchStarters(watch, popularityOf) {
+  return watch
+    .map((w) => {
+      const main = w.entries.filter((e) => e.main)
+      const first = (main.length ? main : w.entries)[0]
+      const pop = Math.max(0, ...w.entries.map((e) => popularityOf.get(e.href) || 0))
+      return { name: w.name, href: `/watch-order/${w.slug}`, count: w.entries.length, first: first?.title || '', cover: first?.cover || '', pop }
+    })
+    .sort((a, b) => b.pop - a.pop || a.name.localeCompare(b.name))
+    .slice(0, HOME_WATCH)
+    .map(({ pop: _pop, ...row }) => row)
+}
+
 /**
  * titles: the title records; people/studios/artists/watch: their records.
+ * where: computeWhere's { schedule, seasons, genres, now }.
  * Every row names a page that exists: each list holds only records with a page.
  */
-export function hubsOf({ titles, people, studios, artists, watch }) {
+export function hubsOf({ titles, people, studios, artists, watch, where = {}, airing = [] }) {
+  const now = where.now || Math.floor(Date.now() / 1000)
+  const recordOf = new Map(titles.map((t) => [t.id, t]))
+  const popularityOf = new Map(titles.map((t) => [`/anime/${t.slug}`, t.popularity || 0]))
   const voice = people.filter((p) => p.voicePage)
   const crew = people.filter((p) => p.staffPage)
   const groups = {
@@ -35,17 +101,54 @@ export function hubsOf({ titles, people, studios, artists, watch }) {
   const years = {}
   for (const t of [...titles].sort(byPopularity)) {
     if (!t.startYear) continue
-    ;(years[t.startYear] ||= []).push([t.title, `/anime/${t.slug}`, t.cover, formatWord(t.format), t.episodes || 0, seasonWord(t.season, t.seasonYear)])
+    ;(years[t.startYear] ||= []).push(cardRow(t))
   }
+  const seasons = seasonHubs(where.seasons || [], recordOf)
+  const genres = genreHubs(where.genres || [], recordOf)
+  const schedule = where.schedule
+    ? { from: where.schedule.from, total: where.schedule.total, days: where.schedule.days.map((d) => ({ day: d.day, rows: d.rows.map(airingRow(recordOf)) })) }
+    : null
+  const { current, next } = currentSeason(seasons.index, now)
+  const topVoices = [...voice].sort((a, b) => b.counts.roles - a.counts.roles || a.id - b.id).slice(0, HOME_ROWS)
+  const topStudios = [...studios].sort((a, b) => b.works.length - a.works.length || a.id - b.id).slice(0, HOME_ROWS)
+
   const home = {
-    titles: [...titles].sort(byPopularity).slice(0, HOME_TITLES).map((t) => [t.title, `/anime/${t.slug}`, t.cover, formatWord(t.format), t.startYear || 0]),
-    voice: groups['voice-actors'].top.slice(0, HOME_ROWS),
-    studios: groups.studios.top.slice(0, HOME_ROWS),
-    watch: groups['watch-orders'].top.slice(0, HOME_ROWS),
+    titles: [...titles].sort(byPopularity).slice(0, HOME_ROWS).map(cardRow),
+    airing: upcomingEpisodes(airing, (id) => recordOf.has(id), now, HOME_AIRING).map(airingRow(recordOf)),
+    season: current ? { ...current, rows: seasons.lists[current.key].rows.slice(0, HOME_ROWS) } : null,
+    nextSeason: next,
+    voice: topVoices.map((p) => [p.name, p.voiceHref, p.counts.roles, p.image || '']),
+    studios: topStudios.map((s) => [
+      s.name,
+      `/studio/${s.slug}`,
+      s.works.length,
+      [...s.works].sort((a, b) => (popularityOf.get(b.href) || 0) - (popularityOf.get(a.href) || 0)).slice(0, 2).map((w) => w.title),
+    ]),
+    watch: watchStarters(watch, popularityOf),
     years: Object.keys(years).map(Number).sort((a, b) => b - a),
-    counts: { titles: titles.length, voice: voice.length, staff: crew.length, studios: studios.length, artists: artists.length, watch: watch.length },
+    counts: {
+      titles: titles.length,
+      voice: voice.length,
+      staff: crew.length,
+      studios: studios.length,
+      artists: artists.length,
+      watch: watch.length,
+      seasons: seasons.index.length,
+      genres: genres.index.length,
+      airing: schedule?.total || 0,
+    },
   }
-  return { groups, years, home }
+  return {
+    groups,
+    years,
+    seasons: seasons.lists,
+    seasonIndex: seasons.index,
+    genres: genres.lists,
+    genreIndex: genres.index,
+    schedule,
+    builtAt: now,
+    home,
+  }
 }
 
 /** The header search's rows, most popular first: titles only, the one thing people type into it. */

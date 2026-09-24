@@ -12,7 +12,7 @@ import { loadPerson } from '@sister/core/src/where/runtime.mjs'
 import { personJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
-import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+import WorkRows from '@sister/core/src/components/where/WorkRows.astro'
 import NameList from '@sister/core/src/components/where/NameList.astro'
 import Bio from '@sister/core/src/components/where/Bio.astro'
 
@@ -24,6 +24,7 @@ try {
 }
 if (!p || !p.staffPage) return notFound(Astro)
 
+const OPEN = 20
 const lead = [...p.works].sort((a, b) => b.items.length - a.items.length)[0]
 // What the group says about the person, as the end of "most of all ...".
 const AS = { created: 'as a creator', directed: 'as a director', wrote: 'as a writer', designed: 'as a designer', composed: 'in music and songs', animated: 'as an animator', sound: 'in sound', produced: 'as a producer' }
@@ -42,24 +43,19 @@ const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
   <PersonHead person={p} page="staff" lede={lede} />
 
   {
-    p.works.map((group, i) => (
-      <section class="w-sec" aria-labelledby={`g${i}`}>
-        <h2 id={`g${i}`}>{group.label}</h2>
-        <div class="w-table-wrap">
-          <table class="w-table">
-            <thead>
-              <tr><th scope="col">Anime</th><th scope="col">Credit</th></tr>
-            </thead>
-            <tbody>
-              {group.items.map((w) => (
-                <tr>
-                  <td><ShowCell show={w} /></td>
-                  <td class="w-muted">{w.roles.join(', ')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    p.works.map((group) => (
+      <section class="w-sec" aria-labelledby={`g-${group.key}`}>
+        <div class="w-sec__head">
+          <h2 id={`g-${group.key}`}>{group.label}</h2>
+          <p class="w-sec__count">{plural(group.items.length, 'anime', 'anime')}</p>
         </div>
+        <WorkRows items={group.items.slice(0, OPEN)} />
+        {group.items.length > OPEN && (
+          <details class="w-fold w-fold--big">
+            <summary>Show {plural(group.items.length - OPEN, 'more anime', 'more anime')}</summary>
+            <WorkRows items={group.items.slice(OPEN)} />
+          </details>
+        )}
       </section>
     ))
   }
@@ -67,7 +63,9 @@ const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
   {
     p.collaborators.length > 0 && (
       <section class="w-sec" aria-labelledby="with">
-        <h2 id="with">Works most often with</h2>
+        <div class="w-sec__head">
+          <h2 id="with">Works most often with</h2>
+        </div>
         <NameList rows={p.collaborators} noun="shared show" />
       </section>
     )

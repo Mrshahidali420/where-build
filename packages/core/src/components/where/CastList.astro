@@ -1,38 +1,39 @@
 ---
 /**
- * The cast: each character's face and name with their Japanese and English
- * voices. A voice links to its voice actor page here; a face links to the
- * character's own page on the home site, the family's canonical character
- * pages (docs/PLAN.md section 3), only when that page exists.
+ * The cast: each character's face, name and part, with their Japanese and
+ * English voices. A voice links to its voice actor page on this site. The
+ * character links to its own page on the home site, the family's canonical
+ * character pages (docs/PLAN.md section 3), and only when that page exists
+ * there (src/where/cross.mjs characterUrl decided it at build time): this
+ * site has no character pages of its own.
  */
 import { castRoleWord } from '../../where/words.mjs'
 
-const { cast = [] } = Astro.props
+const { cast = [], title = '' } = Astro.props
 const SHORT = { Japanese: 'JP', English: 'EN' }
+const small = (url) => String(url || '').replace('/character/large/', '/character/medium/')
 ---
 
-<ul class="w-cast">
+<ul class="w-cast" aria-label={title ? `Cast of ${title}` : undefined}>
   {
     cast.map((c) => (
-      <li>
-        {c.face ? (
-          <a href={c.face} rel="noopener" aria-label={`${c.name}, character profile`}>
-            {c.image ? <img class="w-face" src={c.image} alt={c.name} width="56" height="56" loading="lazy" /> : <span class="w-face" />}
-          </a>
-        ) : c.image ? (
-          <img class="w-face" src={c.image} alt={c.name} width="56" height="56" loading="lazy" />
-        ) : (
-          <span class="w-face" />
-        )}
-        <div>
-          <span class="w-cast__name">{c.name}</span>
-          {castRoleWord(c.role) && <span class="w-cast__role">{castRoleWord(c.role)}</span>}
+      <li class:list={[{ 'w-cast--main': c.role === 'MAIN' }]}>
+        {c.image ? <img class="w-face" src={small(c.image)} alt="" width="64" height="64" loading="lazy" decoding="async" /> : <span class="w-face" />}
+        <div class="w-cast__who">
+          <p class="w-cast__name">
+            {c.face ? (
+              <a href={c.face} rel="noopener" title={`${c.name}: character profile`}>{c.name}</a>
+            ) : (
+              c.name
+            )}
+            {castRoleWord(c.role) && <span class="w-cast__role">{castRoleWord(c.role)}</span>}
+          </p>
           {c.voices.length > 0 && (
             <ul class="w-voices">
               {c.voices.map((v) => (
                 <li>
                   <abbr class="w-lang" title={v.language}>{SHORT[v.language] || v.language}</abbr>
-                  {v.href ? <a href={v.href}>{v.name}</a> : v.name}
+                  {v.href ? <a href={v.href}>{v.name}</a> : <span>{v.name}</span>}
                 </li>
               ))}
             </ul>

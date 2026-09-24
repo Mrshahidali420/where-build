@@ -17,11 +17,11 @@ const rows = Object.keys(years)
   title={`Anime by Year: ${rows.at(-1)?.[0]} to ${rows[0]?.[0]} | ${config.name}`}
   description={`Every year of anime on ${config.name}, from ${rows.at(-1)?.[0]} to ${rows[0]?.[0]}, each with all the shows that began in it.`}
   canonical="/year"
-  crumbs={[{ name: 'By year' }]}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'By year' }]}
 >
-  <header class="w-front" style="padding-top:1rem">
-    <h1>Anime <em>by year</em></h1>
-    <p>Pick a year to see every show that began in it, most watched first.</p>
+  <header class="w-intro">
+    <h1>Anime by year</h1>
+    <p class="w-intro__lede">Pick a year to see every show that began in it, most watched first.</p>
   </header>
   <NameList rows={rows} noun="show" />
 </Where>

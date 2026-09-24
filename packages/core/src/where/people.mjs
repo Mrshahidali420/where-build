@@ -12,6 +12,8 @@
  * Pure: maps in, maps out.
  */
 
+import { isCountedCrew, keyCreditOf } from './roles.mjs'
+
 /** The voice languages a title page's cast table shows. Every language still counts toward a person's page. */
 export const CAST_LANGUAGES = ['Japanese', 'English']
 
@@ -24,6 +26,8 @@ function blank(id, info) {
     crew: [], // { titleId, role }
     voiceRoleCount: 0,
     staffWorkCount: 0,
+    crewShowCount: 0,
+    keyShowCount: 0,
   }
 }
 
@@ -56,11 +60,27 @@ export function buildPeople(titles, credits, staff) {
       }
     }
   }
-  for (const person of people.values()) {
-    person.voiceRoleCount = new Set(person.voice.map((v) => `${v.titleId}:${v.characterId}`)).size
-    person.staffWorkCount = new Set(person.crew.map((c) => c.titleId)).size
-  }
+  for (const person of people.values()) Object.assign(person, countsOf(person))
   return people
+}
+
+/**
+ * What a person's credits add up to:
+ *   voiceRoleCount  distinct (show, character) voice roles
+ *   staffWorkCount  distinct shows with any crew credit (what a staff page lists)
+ *   crewShowCount   distinct shows with a credit that counts as crew work
+ *                   (not a song performance, not a producer seat; roles.mjs)
+ *   keyShowCount    distinct shows where they hold a key credit (director,
+ *                   series writer, original creator, character design, music)
+ */
+export function countsOf(person) {
+  const shows = (credits) => new Set(credits.map((c) => c.titleId)).size
+  return {
+    voiceRoleCount: new Set(person.voice.map((v) => `${v.titleId}:${v.characterId}`)).size,
+    staffWorkCount: shows(person.crew),
+    crewShowCount: shows(person.crew.filter((c) => isCountedCrew(c.role))),
+    keyShowCount: shows(person.crew.filter((c) => keyCreditOf(c.role))),
+  }
 }
 
 /** Most credited first, then best loved, then by id, so the order never flickers between builds. */

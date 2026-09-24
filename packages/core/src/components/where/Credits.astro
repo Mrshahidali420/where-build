@@ -1,32 +1,21 @@
 ---
 /**
  * Who made the show: the studio and the key credits first, each linked to
- * its page when it has one, then the rest of the crew as a plain list.
+ * its page when it has one, then the rest of the crew, folded when it is long.
  */
 const { studios = [], keyCredits = [], crew = [] } = Astro.props
+const rows = [...(studios.length ? [{ label: studios.length > 1 ? 'Studios' : 'Studio', people: studios }] : []), ...keyCredits]
+const OPEN_CREW = 12
 ---
 
 {
-  (studios.length > 0 || keyCredits.length > 0) && (
+  rows.length > 0 && (
     <dl class="w-credits">
-      {studios.length > 0 && (
+      {rows.map((row) => (
         <div>
-          <dt>{studios.length > 1 ? 'Studios' : 'Studio'}</dt>
+          <dt>{row.label}</dt>
           <dd>
-            {studios.map((s, i) => (
-              <>
-                {i > 0 && ', '}
-                {s.href ? <a href={s.href}>{s.name}</a> : s.name}
-              </>
-            ))}
-          </dd>
-        </div>
-      )}
-      {keyCredits.map((k) => (
-        <div>
-          <dt>{k.label}</dt>
-          <dd>
-            {k.people.map((p, i) => (
+            {row.people.map((p, i) => (
               <>
                 {i > 0 && ', '}
                 {p.href ? <a href={p.href}>{p.name}</a> : p.name}
@@ -40,12 +29,15 @@ const { studios = [], keyCredits = [], crew = [] } = Astro.props
 }
 {
   crew.length > 0 && (
-    <ul class="w-crew">
-      {crew.map((c) => (
-        <li>
-          {c.href ? <a href={c.href}>{c.name}</a> : c.name}{" "}<span>{c.role}</span>
-        </li>
-      ))}
-    </ul>
+    <details class="w-fold" open={crew.length <= OPEN_CREW}>
+      <summary>Full crew, {crew.length} credits</summary>
+      <ul class="w-crew">
+        {crew.map((c) => (
+          <li>
+            {c.href ? <a href={c.href}>{c.name}</a> : c.name} <span>{c.role}</span>
+          </li>
+        ))}
+      </ul>
+    </details>
   )
 }

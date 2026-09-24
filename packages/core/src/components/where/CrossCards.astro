@@ -6,28 +6,25 @@
  */
 import { MAX_CARDS } from '../../where/cross.mjs'
 
-const { cards = [], heading = 'Elsewhere' } = Astro.props
+const { cards = [] } = Astro.props
 const shown = cards.slice(0, MAX_CARDS)
 ---
 
 {
   shown.length > 0 && (
-    <section class="w-sec" aria-labelledby="w-cross-head">
-      <h2 id="w-cross-head">{heading}</h2>
-      <ul class="w-cross">
-        {shown.map((card) => (
-          <li>
-            <a href={card.href} rel="noopener">
-              {card.cover ? <img src={card.cover} alt="" width="48" height="68" loading="lazy" /> : <span />}
-              <span>
-                <b>{card.title}</b>
-                <small>{card.fact}</small>
-                <em>{card.anchor} →</em>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <ul class="w-cross">
+      {shown.map((card) => (
+        <li>
+          <a href={card.href} rel="noopener">
+            {card.cover ? <img src={card.cover} alt="" width="44" height="62" loading="lazy" /> : <span class="w-cross__blank" />}
+            <span>
+              <b>{card.title}</b>
+              <small>{card.fact}</small>
+              <em>{card.anchor}</em>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
   )
 }

@@ -7,9 +7,9 @@ import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
 import { loadStudio } from '@sister/core/src/where/runtime.mjs'
-import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
-import { formatWord, statusWord, plural } from '@sister/core/src/where/words.mjs'
-import ShowCell from '@sister/core/src/components/where/ShowCell.astro'
+import { listJsonld, studioJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { formatWord, plural } from '@sister/core/src/where/words.mjs'
+import Covers from '@sister/core/src/components/where/Covers.astro'
 import NameList from '@sister/core/src/components/where/NameList.astro'
 
 let s
@@ -20,63 +20,72 @@ try {
 }
 if (!s) return notFound(Astro)
 
+const OPEN = 48
 const years = s.works.map((w) => w.year).filter(Boolean)
-const span = years.length ? `${Math.min(...years)} to ${Math.max(...years)}` : ''
+const first = years.length ? Math.min(...years) : null
+const latest = years.length ? Math.max(...years) : null
+const span = first ? (first === latest ? String(first) : `${first} to ${latest}`) : ''
 const known = s.works.slice(0, 3).map((w) => w.title)
+const airing = s.works.filter((w) => w.status === 'RELEASING').length
+const series = s.works.filter((w) => w.format === 'TV').length
+const films = s.works.filter((w) => w.format === 'MOVIE').length
+const items = s.works.map((w) => ({
+  title: w.title,
+  href: w.href,
+  cover: w.cover,
+  meta: [w.year, formatWord(w.format), w.episodes ? plural(w.episodes, 'ep') : ''].filter(Boolean).join(', '),
+  badge: w.status === 'RELEASING' ? 'Airing' : w.status === 'NOT_YET_RELEASED' ? 'Upcoming' : '',
+}))
 ---
 
 <Where
   title={`Anime by ${s.name}: All ${s.works.length} Shows | ${config.name}`}
   description={`Every anime animated by ${s.name}${span ? `, ${span}` : ''}${known.length ? `, including ${known.join(', ')}` : ''}, with episode counts and its regular directors.`}
   canonical={`/studio/${s.slug}`}
-  jsonld={[{ '@type': 'Organization', name: s.name, url: `${config.siteUrl}/studio/${s.slug}` }, listJsonld(`Anime by ${s.name}`, s.works, config.siteUrl)]}
+  jsonld={[studioJsonld(s, config.siteUrl), listJsonld(`Anime by ${s.name}`, s.works, config.siteUrl)]}
   crumbs={[{ name: 'Studios', href: '/directory/studios' }, { name: s.name }]}
 >
-  <header class="w-head" style="grid-template-columns:1fr">
-    <div>
-      <span class="w-kicker">Animation studio</span>
-      <h1>{s.name}</h1>
-      <p class="w-head__lede">{plural(s.works.length, 'anime', 'anime')} on this site{span ? `, from ${span}` : ''}.</p>
-    </div>
+  <header class="w-intro">
+    <p class="w-kicker">Animation studio</p>
+    <h1>{s.name}</h1>
+    <p class="w-intro__lede">
+      {plural(s.works.length, 'anime', 'anime')} on {config.name}{span ? `, from ${span}` : ''}.
+      {[series && plural(series, 'TV series', 'TV series'), films && plural(films, 'film'), airing && `${airing} airing now`].filter(Boolean).join(', ')}{(series || films || airing) ? '.' : ''}
+    </p>
   </header>
 
-  <section class="w-sec" aria-labelledby="works">
-    <h2 id="works">Anime by {s.name}</h2>
-    <div class="w-table-wrap">
-      <table class="w-table">
-        <thead>
-          <tr><th scope="col">Anime</th><th scope="col">Format</th><th scope="col">Episodes</th><th scope="col">Status</th></tr>
-        </thead>
-        <tbody>
-          {
-            s.works.map((w) => (
-              <tr>
-                <td><ShowCell show={w} /></td>
-                <td class="w-muted">{formatWord(w.format)}</td>
-                <td class="w-num">{w.episodes || '—'}</td>
-                <td class="w-muted">{statusWord(w.status)}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-  </section>
+  <div class="w-split w-split--even">
+    <section class="w-sec w-main" aria-labelledby="works">
+      <div class="w-sec__head">
+        <h2 id="works">Anime by {s.name}</h2>
+        <p class="w-sec__count">Newest first</p>
+      </div>
+      <Covers items={items.slice(0, OPEN)} eager={6} size="sm" />
+      {items.length > OPEN && (
+        <details class="w-fold w-fold--big">
+          <summary>Show {plural(items.length - OPEN, 'older anime', 'older anime')}</summary>
+          <Covers items={items.slice(OPEN)} size="sm" />
+        </details>
+      )}
+    </section>
 
-  {
-    s.directors.length > 0 && (
-      <section class="w-sec" aria-labelledby="dir">
-        <h2 id="dir">Its regular directors</h2>
-        <NameList rows={s.directors} noun="show" />
-      </section>
-    )
-  }
-  {
-    s.composers.length > 0 && (
-      <section class="w-sec" aria-labelledby="music">
-        <h2 id="music">Its regular composers</h2>
-        <NameList rows={s.composers} noun="show" />
-      </section>
-    )
-  }
+    {
+      (s.directors.length > 0 || s.composers.length > 0) && (
+        <aside class="w-aside">
+          {s.directors.length > 0 && (
+            <section class="w-box" aria-labelledby="dir">
+              <h2 id="dir">Regular directors</h2>
+              <NameList rows={s.directors} noun="show" />
+            </section>
+          )}
+          {s.composers.length > 0 && (
+            <section class="w-box" aria-labelledby="music">
+              <h2 id="music">Regular composers</h2>
+              <NameList rows={s.composers} noun="show" />
+            </section>
+          )}
+        </aside>
+      )
+    }
+  </div>
 </Where>

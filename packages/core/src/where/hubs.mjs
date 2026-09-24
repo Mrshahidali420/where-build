@@ -70,8 +70,23 @@ export function hubPaths(hubs) {
       paths.push({ path: `/year/${year}${page > 1 ? `/${page}` : ''}`, year, page, pages })
     }
   }
+  paths.push({ path: '/anime' })
+  if (hubs.schedule) paths.push({ path: '/schedule' })
+  const seasons = hubs.seasonIndex || []
+  if (seasons.length) paths.push({ path: '/season' })
+  for (const s of seasons) paths.push({ path: s.path, key: s.key })
+  const genres = hubs.genreIndex || []
+  if (genres.length) paths.push({ path: '/genre' })
+  for (const g of genres) {
+    for (let page = 1; page <= g.pages; page++) {
+      paths.push({ path: `/genre/${g.slug}${page > 1 ? `/${page}` : ''}`, slug: g.slug, page, pages: g.pages })
+    }
+  }
   return paths
 }
+
+/** The hub pages of one kind, for a page's getStaticPaths: 'season' | 'genre'. */
+export const hubPathsOf = (hubs, prefix) => hubPaths(hubs).filter((p) => p.path.startsWith(`/${prefix}/`))
 
 /** One page's slice of a list. */
 export const pageSlice = (rows, page, per) => rows.slice((page - 1) * per, page * per)

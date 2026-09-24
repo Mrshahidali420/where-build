@@ -17,6 +17,7 @@ import { buildPeople } from './people.mjs'
 import { buildStudios } from './studios.mjs'
 import { buildArtists } from './artists.mjs'
 import { buildFranchises } from './franchises.mjs'
+import { buildSchedule, buildSeasons, buildGenres } from './anime-hubs.mjs'
 import {
   gatesOf,
   passesTitle,
@@ -52,10 +53,17 @@ export function gateTitles(site, data, gates = gatesOf(site)) {
 
 const idsWhere = (map, test) => new Set([...map.values()].filter(test).map((entry) => entry.id ?? entry.key ?? entry.anchorId))
 
-export function computeWhere(site, data) {
+/**
+ * now: unix seconds, the moment the build stands at (the schedule's week).
+ */
+export function computeWhere(site, data, { now = Math.floor(Date.now() / 1000) } = {}) {
   const gates = gatesOf(site)
   const titles = gateTitles(site, data, gates)
   const items = titles.map((t) => t.item)
+  const titleIds = new Set(items.map((item) => item.id))
+  const schedule = buildSchedule(data.airing?.schedule, (id) => titleIds.has(id), now, gates.schedule)
+  const seasons = buildSeasons(items, gates.season)
+  const genres = buildGenres(items, gates.genre)
   const people = buildPeople(items, data.credits, data.staff)
   const studios = buildStudios(items, data.credits)
   const artists = buildArtists(items, data.themes)
@@ -76,6 +84,9 @@ export function computeWhere(site, data) {
     studio: pages.studio.size,
     artist: pages.artist.size,
     watchOrder: pages.watch.size,
+    schedule: schedule ? 1 : 0,
+    season: seasons.length,
+    genre: genres.reduce((n, g) => n + g.pages, 0),
   }
-  return { gates, titles, people, studios, artists, franchises, pages, counts }
+  return { gates, titles, people, studios, artists, franchises, pages, counts, now, schedule, seasons, genres }
 }

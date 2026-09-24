@@ -20,10 +20,15 @@ export const WHERE_GATE_DEFAULTS = {
   title: { credits: 3 },
   episodes: { min: 13 },
   voiceActor: { min: 3 },
-  staff: { min: 2 },
+  // min: shows with real crew work; keyMin: shows with a key credit. Either lets a person in.
+  staff: { min: 3, keyMin: 2 },
   studio: { min: 2 },
   artist: { min: 2 },
   watchOrder: { min: 3 },
+  // The anime-intent hubs (src/where/anime-hubs.mjs): a hub below its gate is not built.
+  schedule: { min: 10 },
+  season: { min: 12 },
+  genre: { min: 60, per: 60, maxPages: 10 },
 }
 
 /** One gate's settings: the site's own, over the defaults. */
@@ -53,8 +58,15 @@ export const passesEpisodes = (dated, gate) => dated >= gate.min
 /** A voice actor: a name to print and enough distinct roles. */
 export const passesVoiceActor = (person, gate) => Boolean(person.name) && person.voiceRoleCount >= gate.min
 
-/** Staff: a name to print and credits on enough different shows. */
-export const passesStaff = (person, gate) => Boolean(person.name) && person.staffWorkCount >= gate.min
+/**
+ * Staff: a name to print, and real crew work: credits on enough different
+ * shows (song performances and producer seats do not count, people.mjs
+ * countsOf), or a key credit (director, writer, creator, designer, composer)
+ * on enough shows. A singer whose only credits are theme songs has an artist
+ * page, not a staff page.
+ */
+export const passesStaff = (person, gate) =>
+  Boolean(person.name) && (person.crewShowCount >= gate.min || person.keyShowCount >= (gate.keyMin ?? Infinity))
 
 export const passesStudio = (studio, gate) => Boolean(studio.name) && studio.titleIds.length >= gate.min
 

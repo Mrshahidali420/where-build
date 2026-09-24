@@ -25,9 +25,10 @@ const path = page > 1 ? `${base}/${page}` : base
   canonical={path}
   crumbs={[{ name: meta.label, href: `/directory/${group}` }, { name: letter === '0' ? '#' : letter.toUpperCase() }]}
 >
-  <header class="w-front" style="padding-top:1rem">
+  <header class="w-intro">
+    <p class="w-kicker">{meta.label} A to Z</p>
     <h1>{label}</h1>
-    <p>{plural(rows.length, meta.noun, meta.many)}{pages > 1 ? `, page ${page} of ${pages}` : ''}.</p>
+    <p class="w-intro__lede">{plural(rows.length, meta.noun, meta.many)}{pages > 1 ? `, page ${page} of ${pages}` : ''}.</p>
   </header>
   <LetterNav group={group} letters={dir.letters} current={letter} />
   <NameList rows={shown} noun={meta.count} />

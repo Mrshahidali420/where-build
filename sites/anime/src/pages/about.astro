@@ -1,8 +1,7 @@
 ---
 /**
  * What the site is, where its data comes from, and, in one sentence, the
- * family it belongs to (docs/PLAN.md section 3 rule 5: the About page may
- * name the family; nothing sitewide may).
+ * family it belongs to.
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
@@ -14,28 +13,35 @@ const homeName = home ? new URL(home).hostname : ''
 ---
 
 <Where title={`About ${config.name}`} description={`What ${config.name} is, where its data comes from, and how often it changes.`} canonical="/about" crumbs={[{ name: 'About' }]}>
-  <header class="w-front" style="padding-top:1rem">
-    <h1>About <em>{config.name}</em></h1>
+  <header class="w-intro">
+    <h1>About {config.name}</h1>
   </header>
-  <div class="w-prose">
+  <div class="prose">
     <p>
       {config.name} answers the questions about an anime that come after "where can I watch it": when each
       episode aired or airs next, who voices each character in Japanese and English, who directed, wrote,
       designed and scored it, which studio animated it, what its opening and ending songs are, and what order
       to watch its franchise in.
     </p>
+    <h2>Where the data comes from</h2>
     <p>
-      Titles, episodes, credits, casts and air dates come from <a href="https://anilist.co" rel="noopener">AniList</a>.
-      Opening and ending songs come from <a href="https://animethemes.moe" rel="noopener">AnimeThemes</a> and
-      AniSongDB. Cover art and photos belong to their owners. The site rebuilds itself every day at
-      {config.rebuildUtc} UTC. A page exists only when there is something real to say: a person needs enough
-      credited roles, a studio enough shows, a franchise enough entries.
+      Titles, episodes, credits, casts, air dates and streaming links come from
+      <a href="https://anilist.co" rel="noopener">AniList</a>. Opening and ending songs come from
+      <a href="https://animethemes.moe" rel="noopener">AnimeThemes</a> and AniSongDB. Cover art and photos belong
+      to their owners. The site rebuilds itself every day at {config.rebuildUtc} UTC, so a new episode date or a
+      new cast member shows up by the next morning.
+    </p>
+    <h2>What gets a page</h2>
+    <p>
+      A page exists only when there is something real to say: a voice actor needs at least three credited roles,
+      a staff member real crew work on three shows or a key credit on two, a studio two shows, a franchise three
+      entries, and a season, genre or week enough shows to fill a list.
     </p>
     {
       homeName && (
         <p>
-          {config.name} is part of a small family of sites; where to watch or read a title legally lives on{' '}
-          <a href={home} rel="noopener">{homeName}</a>.
+          {config.name} is part of a small family of sites. Where to watch or read a title legally, and the
+          characters' own pages, live on <a href={home} rel="noopener">{homeName}</a>.
         </p>
       )
     }

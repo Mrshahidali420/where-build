@@ -1,29 +1,211 @@
 ---
 /**
- * The frame of every Where page: the core shell (Base.astro) with the Where
- * stylesheet, and a visible trail of the same breadcrumbs Base writes into the
- * page's structured data.
+ * The frame of every Where page: head, header, breadcrumbs, footer.
+ *
+ * It stands on its own and does not use Base.astro: Base carries the home
+ * site's 110 KB stylesheet, of which a Where page used a tenth. The Where
+ * stylesheets (where-base.css, where.css) are built into one hashed file under
+ * /_astro/ that every page shares and a browser caches for a year
+ * (public/_headers), so a page's HTML carries only its own content.
+ *
+ * What it keeps from Base, unchanged: the dev-host noindex, the counter
+ * script, the header search (src/lib/finder-dropdown.js) and one @graph of
+ * structured data with the page's breadcrumbs (src/lib/page-graph.mjs).
  */
-import Base from './Base.astro'
+import '../styles/where-base.css'
 import '../styles/where.css'
+import config from '../lib/site.mjs'
+import { isDevHost } from '../lib/define-site.mjs'
+import { pageGraph, graphJson } from '../lib/page-graph.mjs'
+import { homeBase } from '../where/cross.mjs'
+import counterRaw from './counter-script.js?raw'
+import { fontPreload } from 'virtual:site-fonts'
+import stats from '@site/data/site-stats.json'
 
-const { crumbs = [], ...props } = Astro.props
+const {
+  title,
+  description,
+  canonical = Astro.url.pathname,
+  image,
+  jsonld,
+  crumbs = [],
+  preloadImage,
+  noindex = false,
+  missing = false,
+  wide = false,
+} = Astro.props
+
+const site = config.siteUrl
+const cleanPath = canonical.replace(/\.html$/, '').replace(/^\/index$/, '/') || '/'
+const canonicalUrl = new URL(cleanPath, site).href
+const here = Astro.url.pathname.replace(/\.html$/, '')
+const devHost = isDevHost(Astro.url.hostname)
+
+// A hub its gate did not build this time is left out of every menu.
+const gone = new Set(stats.missing || [])
+const live = (links = []) => links.filter((link) => !gone.has(link.href))
+const nav = live(config.nav)
+const columns = (config.footer.columns || []).map((col) => ({ ...col, links: live(col.links) }))
+const legal = config.footer.legal || []
+const isHere = (href) => here === href || here.startsWith(`${href}/`) || (href === '/anime' && /^\/(anime|year|genre)(\/|$)/.test(here))
+
+const counterScript = counterRaw
+  .replaceAll('__GA4_ID__', config.ga4Id || '')
+  .replace('__NO_GA4__', config.ga4Id ? 'false' : 'true')
+  .replace('__TURNSTILE_SITEKEY__', config.turnstileSiteKey || '')
+
+const graph = pageGraph({ config, jsonld, crumbs })
+const searchLabel = `Search ${(Math.floor(stats.anime / 1000) * 1000).toLocaleString('en-US')}+ anime`
+const family = homeBase(config)
+const familyName = family ? new URL(family).hostname : ''
+const year = new Date().getUTCFullYear()
 ---
 
-<Base {...props} crumbs={crumbs}>
-  <div class="shell w-page">
-    {
-      crumbs.length > 0 && (
-        <nav aria-label="Breadcrumb">
-          <ol class="w-crumbs">
-            <li><a href="/">Home</a></li>
-            {crumbs.map((step) => (
-              <li>{step.href ? <a href={step.href}>{step.name}</a> : <span aria-current="page">{step.name}</span>}</li>
+<!doctype html>
+<html lang="en" data-missing={missing ? '1' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="theme-color" content={config.colors.night} />
+    <meta name="color-scheme" content="dark" />
+    {devHost ? <meta name="robots" content="noindex,nofollow" /> : noindex && <meta name="robots" content="noindex,follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={config.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={image || `${site}/og-image.png`} />
+    {!image && <meta property="og:image:width" content="1200" />}
+    {!image && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content={image ? 'summary' : 'summary_large_image'} />
+
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    {fontPreload.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
+    <link rel="preconnect" href="https://s4.anilist.co" />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    <script type="application/ld+json" set:html={graphJson(graph)} />
+    <script is:inline set:html={counterScript}></script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="top">
+      <div class="shell top__bar">
+        <a class="brand" href="/" aria-label={`${config.name} home`}>
+          <svg class="brand__mark" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true" set:html={config.mark}></svg>
+          <span class="brand__word">{config.wordmark[0]}<span>{config.wordmark[1]}</span></span>
+        </a>
+
+        <form class="finder" id="finder" role="search" action="/search" method="get">
+          <svg class="finder__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3.6-3.6"></path>
+          </svg>
+          <input
+            id="finder-input"
+            name="q"
+            type="search"
+            placeholder={searchLabel}
+            autocomplete="off"
+            aria-label="Search anime"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="finder-results"
+            aria-autocomplete="list"
+          />
+          <ul id="finder-results" role="listbox" hidden></ul>
+          <span id="finder-status" class="sr-only" aria-live="polite"></span>
+        </form>
+
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+            <path class="menu-btn__bars" d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path class="menu-btn__x" d="M4.5 4.5l11 11M15.5 4.5l-11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <span class="menu-btn__label">Menu</span>
+        </button>
+      </div>
+
+      <nav class="menu" id="site-menu" aria-label="Main">
+        <div class="shell">
+          <ul class="menu__list">
+            {nav.map((item) => (
+              <li><a href={item.href} aria-current={isHere(item.href) ? 'page' : undefined}>{item.label}</a></li>
             ))}
-          </ol>
-        </nav>
-      )
-    }
-    <slot />
-  </div>
-</Base>
+          </ul>
+          <ul class="menu__extra">
+            {legal.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class:list={['shell', 'page', { 'page--wide': wide }]}>
+      {
+        crumbs.length > 0 && (
+          <nav aria-label="Breadcrumb">
+            <ol class="crumbs">
+              <li><a href="/">Home</a></li>
+              {crumbs.map((step) => (
+                <li>{step.href ? <a href={step.href}>{step.name}</a> : <span aria-current="page">{step.name}</span>}</li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="shell foot__grid">
+        <div class="foot__brand">
+          <a class="brand" href="/" aria-label={`${config.name} home`}>
+            <svg class="brand__mark" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true" set:html={config.mark}></svg>
+            <span class="brand__word">{config.wordmark[0]}<span>{config.wordmark[1]}</span></span>
+          </a>
+          <p>{config.footer.blurb}</p>
+          <p class="foot__small">
+            Rebuilt every day at {config.rebuildUtc} UTC. {config.name} is not affiliated with any studio or streaming service.
+          </p>
+        </div>
+        {columns.map((col) => (
+          <div class="foot__col">
+            <h2>{col.title}</h2>
+            <ul>{col.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul>
+          </div>
+        ))}
+        <div class="foot__col">
+          <h2>{config.name}</h2>
+          <ul>{legal.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul>
+        </div>
+      </div>
+      <div class="shell foot__bar">
+        <p>
+          {config.footer.credit} Cover art and photos belong to their owners.
+          {config.amazon.stores.us && ' As an Amazon Associate we earn from qualifying purchases.'}
+        </p>
+        {family && (
+          <p>
+            Where to watch and read legally: <a href={family} rel="noopener">{familyName}</a>, our sister site.
+          </p>
+        )}
+        <p>© {year} {config.name}</p>
+      </div>
+    </footer>
+
+    <script>
+      import '../lib/finder-dropdown.js'
+      import '../lib/where-menu.js'
+    </script>
+  </body>
+</html>

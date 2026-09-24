@@ -97,3 +97,34 @@ Open risks:
   the home site has blocked.
 - Page weight: the core's inline stylesheet is about 110 KB on every page;
   a big voice-actor page is about 560 KB of HTML.
+
+## Polish pass: design, hubs, brand (25 Sep 2026)
+
+- [x] Own Where layout and stylesheets (where-base.css + where.css), no
+      inline CSS: 111,678 bytes inline per page before, 0 after; two hashed
+      /_astro/*.css files (45.7 KB + 11.9 KB, 12.5 + 8.0 KB gzipped), cached
+      immutable. Home 146 KB to 47 KB of HTML; Takehito Koyasu 560 KB to 313 KB.
+- [x] Header (logo, search, eight-link nav, phone menu that scrolls inside
+      the viewport), footer (columns, about/contact/privacy/DMCA, one credit
+      line, family link). Amazon sentence only when a tag exists; none now.
+- [x] Homepage: hero, search, airing next with countdowns, this season,
+      voice actors, watch-order starters, studios, most watched, doors.
+- [x] Title pages: synopsis, trailer (click to load), official streams,
+      OP/ED, folded FAQ + FAQPage schema, facts, related, fans also watch,
+      next-episode countdown. Cast with faces and JP/EN voices; a character
+      name links to manhwaindex only when its registry has the page.
+- [x] Hubs: /schedule (this week by day), /season index + one page per
+      season (gate 12), /genre index + paged genres (gate 60), /anime.
+- [x] Staff gate: 3+ shows with real crew credits (song performance and
+      "produced" do not count), or 2+ shows in a key role. 19,631 to 12,776.
+- [x] Brand: family mark (shared pin, per-site symbol) in core/src/lib/brand.mjs,
+      full icon set, manifest, theme-color, 1200x630 OG, brand sheet in
+      tasks/anime-shots-v2/brand-sheet.png.
+
+Counts (real R2 data): title 18,576, episodes 75, voice actor 11,891,
+staff 12,776, studio 593, artist 3,936, watch order 1,216, schedule 1,
+season 192, genre pages 171. Sitemap about 50,000 URLs.
+
+Open risks: prerendered hubs carry the build host's noindex when built on
+the dev host (the deploy build sets the real host); schedule is one page
+that goes stale between builds (countdowns run in the browser from UTC).

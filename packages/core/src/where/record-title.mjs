@@ -96,11 +96,79 @@ function watchOf(item, ctx) {
   }
 }
 
+/** The official streams AniList lists, one per service, http(s) only. */
+export function watchOnOf(item) {
+  const seen = new Set()
+  const out = []
+  for (const link of item.watchLinks || []) {
+    if (!link?.site || !/^https?:\/\//i.test(link.url || '') || seen.has(link.site)) continue
+    seen.add(link.site)
+    out.push({ site: link.site, url: link.url })
+  }
+  return out
+}
+
+/** The trailer, when AniList names a YouTube id (the page plays it only on a click). */
+export function trailerOf(item) {
+  const id = String(item.trailer?.id || '').trim()
+  if (!/^[\w-]{6,20}$/.test(id)) return null
+  return { id, thumb: String(item.trailer.thumb || '').trim() || `https://i.ytimg.com/vi/${id}/hqdefault.jpg` }
+}
+
+/** AniList's relation types, as a reader says them. */
+const RELATION_WORDS = {
+  PREQUEL: 'Prequel',
+  SEQUEL: 'Sequel',
+  PARENT: 'Main story',
+  SIDE_STORY: 'Side story',
+  SPIN_OFF: 'Spin-off',
+  ALTERNATIVE: 'Alternative version',
+  SUMMARY: 'Recap',
+  CHARACTER: 'Same characters',
+  OTHER: 'Related',
+}
+const RELATION_ORDER = Object.keys(RELATION_WORDS)
+const MAX_RELATED = 12
+const MAX_RECS = 8
+
+const cardOf = (ctx, id) => {
+  const t = ctx.titleById.get(id)
+  const href = t && ctx.link.title(id)
+  return href ? { title: t.title, href, cover: t.cover || '', year: t.startYear || null, format: t.format || '' } : null
+}
+
+/** Other anime AniList relates to this one, each with a page here, closest relation first. */
+export function relatedOf(item, ctx) {
+  const seen = new Set([item.id])
+  return (item.relations || [])
+    .filter((rel) => rel.type === 'ANIME' && RELATION_WORDS[rel.relation])
+    .sort((a, b) => RELATION_ORDER.indexOf(a.relation) - RELATION_ORDER.indexOf(b.relation))
+    .map((rel) => {
+      if (seen.has(rel.id)) return null
+      seen.add(rel.id)
+      const card = cardOf(ctx, rel.id)
+      return card ? { ...card, relation: RELATION_WORDS[rel.relation] } : null
+    })
+    .filter(Boolean)
+    .slice(0, MAX_RELATED)
+}
+
+/** AniList readers' recommendations, best rated first, only titles with a page and not already related. */
+export function recsOf(item, ctx, related = []) {
+  const skip = new Set([ctx.link.title(item.id), ...related.map((r) => r.href)])
+  return [...(item.recIds || [])]
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+    .map((rec) => cardOf(ctx, rec.id))
+    .filter((card) => card && !skip.has(card.href) && skip.add(card.href))
+    .slice(0, MAX_RECS)
+}
+
 /** t: one entry of computeWhere's titles ({ item, rows, dated, episodesPage }). */
 export function titleRecord(t, ctx) {
   const { item } = t
   const row = ctx.credits[String(item.id)]
   const { key, crew } = creditsOf(row, ctx)
+  const related = relatedOf(item, ctx)
   return {
     id: item.id,
     slug: item.slug,
@@ -122,8 +190,14 @@ export function titleRecord(t, ctx) {
     episodes: item.episodes || null,
     description: item.description || '',
     genres: item.genres || [],
+    tags: (item.tags || []).slice(0, 8),
     score: item.score || null,
     popularity: item.popularity || 0,
+    favourites: item.favourites || 0,
+    trailer: trailerOf(item),
+    watchOn: watchOnOf(item),
+    related,
+    recs: recsOf(item, ctx, related),
     anilistUrl: item.anilistUrl || '',
     nextEpisode: item.nextEpisode || null,
     rows: t.rows,

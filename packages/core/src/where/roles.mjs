@@ -48,6 +48,22 @@ const CATEGORY_OF = new Map(CATEGORIES.flatMap((c) => c.roles.map((role) => [rol
 export const categoryOf = (role) => CATEGORY_OF.get(baseRole(role)) || OTHER
 
 /**
+ * Singing or playing on a show is a performance, not crew work: those credits
+ * already live on the song artist's page (src/where/artists.mjs).
+ */
+export const PERFORMANCE_ROLES = ['Theme Song Performance', 'Insert Song Performance', 'Music Performance']
+
+/**
+ * Does a credit count toward a staff page? Not a performance, and not a
+ * production-company seat (producer, planning), which names the company's
+ * representative rather than someone who made the show.
+ */
+export function isCountedCrew(role) {
+  if (PERFORMANCE_ROLES.includes(baseRole(role))) return false
+  return categoryOf(role).key !== 'produced'
+}
+
+/**
  * The credits a title page names first, each linked to the person's page:
  * the ones people search for ("anime directed by W", "who wrote X").
  * Each lists the AniList roles that fill it, best first.

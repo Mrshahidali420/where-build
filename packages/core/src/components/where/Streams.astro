@@ -1,0 +1,29 @@
+---
+/**
+ * Where to watch: the official streams AniList lists for the show, each with
+ * the service's own tile (src/components/Mark.astro) and a direct link. What a
+ * service carries depends on the reader's country, and the page says so.
+ * Plain outbound links: nofollow, because the list is AniList's, not ours.
+ */
+import Mark from '../Mark.astro'
+
+const { streams = [], title = '' } = Astro.props
+---
+
+{
+  streams.length > 0 && (
+    <ul class="w-streams" aria-label={`Official streams of ${title}`}>
+      {streams.map((s) => (
+        <li>
+          <a href={s.url} rel="noopener nofollow" target="_blank" data-platform={s.site}>
+            <Mark site={s.site} size="2rem" />
+            <span>{s.site}</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M6 3h7v7M13 3 4 12"></path>
+            </svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

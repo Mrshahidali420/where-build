@@ -29,13 +29,14 @@ const total = Object.values(dir.letters).reduce((n, rows) => n + rows.length, 0)
   canonical={`/directory/${group}`}
   crumbs={[{ name: meta.label }]}
 >
-  <header class="w-front" style="padding-top:1rem">
+  <header class="w-intro">
+    <p class="w-kicker">Directory</p>
     <h1>{meta.label}</h1>
-    <p>{plural(total, meta.noun, meta.many)}, A to Z. Pick a letter, or start with the busiest below.</p>
+    <p class="w-intro__lede">{plural(total, meta.noun, meta.many)}, A to Z. Pick a letter, or start with the busiest below.</p>
   </header>
   <LetterNav group={group} letters={dir.letters} />
   <section class="w-sec" aria-labelledby="top">
-    <h2 id="top">The busiest</h2>
+    <div class="w-sec__head"><h2 id="top">The busiest</h2></div>
     <NameList rows={dir.top} noun={meta.count} />
   </section>
 </Where>

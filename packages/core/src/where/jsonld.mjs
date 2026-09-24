@@ -27,7 +27,24 @@ export function animeJsonld(r, siteUrl) {
     ...(isMovie ? {} : { numberOfEpisodes: r.episodes || undefined }),
     productionCompany: r.studios.map((s) => clean({ '@type': 'Organization', name: s.name, url: abs(siteUrl, s.href) })),
     director: director.map((p) => clean({ '@type': 'Person', name: p.name, url: abs(siteUrl, p.href) })),
+    musicBy: (r.key.find((k) => k.label === 'Music')?.people || []).map((p) => clean({ '@type': 'Person', name: p.name, url: abs(siteUrl, p.href) })),
+    actor: actorsOf(r).map((v) => clean({ '@type': 'Person', name: v.name, url: abs(siteUrl, v.href) })),
   })
+}
+
+/** The Japanese voices of the main cast, as the page's cast table prints them, at most ten. */
+function actorsOf(r) {
+  const seen = new Set()
+  const out = []
+  for (const c of r.cast || []) {
+    if (c.role !== 'MAIN') continue
+    for (const v of c.voices) {
+      if (v.language !== 'Japanese' || seen.has(v.name)) continue
+      seen.add(v.name)
+      out.push(v)
+    }
+  }
+  return out.slice(0, 10)
 }
 
 export function episodesJsonld(r, siteUrl) {
@@ -51,6 +68,19 @@ export function personJsonld(p, path, siteUrl) {
     sameAs: p.anilistUrl ? [p.anilistUrl] : undefined,
   })
 }
+
+/** The page's folded questions (src/where/faq.mjs), word for word as printed. */
+export function faqJsonld(faq, path, siteUrl) {
+  if (!faq.length) return null
+  return {
+    '@type': 'FAQPage',
+    '@id': `${siteUrl}${path}#faq`,
+    mainEntity: faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }
+}
+
+/** A studio: the company. Its shows go in a separate ItemList node. */
+export const studioJsonld = (s, siteUrl) => ({ '@type': 'Organization', name: s.name, url: `${siteUrl}/studio/${s.slug}` })
 
 export function listJsonld(name, items, siteUrl) {
   return {

@@ -1,0 +1,26 @@
+---
+/**
+ * A grid of covers: each a link to a title page with one line of facts under
+ * the name. `items` are { title, href, cover, meta, badge? }; `eager` covers
+ * load at once (the first row a wide screen paints), the rest on scroll.
+ * `size`: 'md' (default) or 'sm' for a denser row.
+ */
+const { items = [], eager = 0, size = 'md', label } = Astro.props
+---
+
+<ul class:list={['w-covers', `w-covers--${size}`]} aria-label={label}>
+  {
+    items.map((item, i) => (
+      <li>
+        <a href={item.href}>
+          <span class="w-covers__art">
+            <img src={item.cover} alt="" width="160" height="228" loading={i < eager ? 'eager' : 'lazy'} decoding="async" />
+            {item.badge && <span class="w-covers__badge">{item.badge}</span>}
+          </span>
+          <b>{item.title}</b>
+          {item.meta && <small>{item.meta}</small>}
+        </a>
+      </li>
+    ))
+  }
+</ul>

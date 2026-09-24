@@ -1,0 +1,29 @@
+---
+/**
+ * A voice actor's roles as compact rows: the character (face, name, part,
+ * language) and the show it is in. The character's name links to its page on
+ * the home site only when that page exists (record-entities.mjs decided it).
+ * Kept lean on purpose: a long career is hundreds of these rows.
+ */
+const { roles = [], roleWord = (r) => r } = Astro.props
+const SHORT = { Japanese: 'JP', English: 'EN' }
+const face = (url) => String(url || '').replace('/character/large/', '/character/medium/')
+---
+
+<ul class="w-roles">
+  {
+    roles.map((r) => (
+      <li>
+        {r.character.image ? <img class="w-face w-face--sm" src={face(r.character.image)} alt="" width="44" height="44" loading="lazy" decoding="async" /> : <span class="w-face w-face--sm" />}
+        <span class="w-roles__who">
+          {r.character.face ? <a href={r.character.face} rel="noopener">{r.character.name}</a> : <span>{r.character.name}</span>}
+          <small>{[roleWord(r.role), SHORT[r.language] || r.language].filter(Boolean).join(', ')}</small>
+        </span>
+        <span class="w-roles__show">
+          <a href={r.href}>{r.title}</a>
+          {r.year && <small>{r.year}</small>}
+        </span>
+      </li>
+    ))
+  }
+</ul>

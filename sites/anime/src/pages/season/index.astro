@@ -1,0 +1,76 @@
+---
+/**
+ * Every anime season with a page (enough shows to be worth a list, the season
+ * gate), newest first, the current and the coming one called out.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+
+const hubs = whereHubs()
+const seasons = hubs.seasonIndex
+const { season: current, nextSeason: next } = hubs.home
+const byYear = new Map()
+for (const s of seasons) {
+  if (!byYear.has(s.year)) byYear.set(s.year, [])
+  byYear.get(s.year).push(s)
+}
+const ORDER = ['WINTER', 'SPRING', 'SUMMER', 'FALL']
+const lead = [next, current].filter(Boolean)
+---
+
+<Where
+  title={`Anime Seasons: Every Season from ${seasons.at(-1)?.year} to ${seasons[0]?.year} | ${config.name}`}
+  noindex={seasons.length === 0}
+  description={`Every anime season from ${seasons.at(-1)?.label} to ${seasons[0]?.label}: ${plural(seasons.length, 'season')}, each with all its shows, studios and episode counts.`}
+  canonical="/season"
+  jsonld={listJsonld('Anime seasons', seasons.map((s) => ({ name: s.label, href: s.path })), config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Seasons' }]}
+>
+  <header class="w-intro">
+    <h1>Anime seasons</h1>
+    <p class="w-intro__lede">Japanese TV airs in four seasons a year: winter from January, spring from April, summer from July and fall from October. Pick one to see everything that started in it.</p>
+  </header>
+
+  {
+    lead.length > 0 && (
+      <ul class="w-tiles w-tiles--lead">
+        {lead.map((s) => (
+          <li>
+            <a href={s.path}>
+              {s.cover && <img src={s.cover} alt="" width="72" height="102" loading="eager" decoding="async" />}
+              <span>
+                <small>{s === next ? 'Coming next' : 'This season'}</small>
+                <b>{s.label} anime</b>
+                <small>{plural(s.count, 'show')}</small>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <section class="w-sec" aria-labelledby="all">
+    <div class="w-sec__head">
+      <h2 id="all">Every season</h2>
+    </div>
+    <div class="w-seasons">
+      {[...byYear].map(([year, list]) => (
+        <div class="w-seasons__year">
+          <span class="w-seasons__label">{year}</span>
+          <ul>
+            {ORDER.map((name) => {
+              const s = list.find((x) => x.season === name)
+              const word = name.charAt(0) + name.slice(1).toLowerCase()
+              return <li>{s ? <a href={s.path}>{word} <small>{s.count}</small></a> : <span aria-hidden="true">{word}</span>}</li>
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+</Where>

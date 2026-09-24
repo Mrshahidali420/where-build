@@ -1,0 +1,102 @@
+---
+/**
+ * The full search results page. One prerendered file for every query: the
+ * query is read from the address in the browser and the results drawn there
+ * (packages/core/src/lib/search-page.js, the same code as the core's page),
+ * so it is never indexed.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+---
+
+<Where
+  title={`Search anime | ${config.name}`}
+  description={`Search every anime on ${config.name}, with its episode dates, cast and staff.`}
+  canonical="/search"
+  noindex={true}
+  crumbs={[{ name: 'Search' }]}
+>
+  <header class="w-intro">
+    <h1>Search anime</h1>
+    <form id="search-form" class="w-hero__search" role="search" action="/search" method="get">
+      <label for="search-input" class="sr-only">Search anime</label>
+      <input id="search-input" name="q" type="search" autocomplete="off" placeholder="An anime title, in English or Japanese" />
+      <button class="btn" type="submit">Search</button>
+    </form>
+    <p id="search-summary" class="w-intro__lede" role="status" aria-live="polite"></p>
+  </header>
+  <div id="search-results"></div>
+</Where>
+
+<script>
+  import '@sister/core/src/lib/search-page.js'
+</script>
+
+<style is:global>
+  /* Global: everything under #search-results is drawn by the script, so it
+     never carries Astro's scoping attribute. */
+  .search-state {
+    max-width: 40rem;
+    padding: var(--s-4) var(--s-5);
+    border: 1px dashed var(--line);
+    border-radius: var(--r-md);
+    color: var(--dawn-dim);
+  }
+  .search-state a {
+    color: var(--rose-soft);
+  }
+  .search-state--error button {
+    margin-top: var(--s-2);
+    font: inherit;
+    color: var(--night);
+    background: var(--rose);
+    border: 0;
+    border-radius: var(--r-sm);
+    padding: 0.35rem 0.8rem;
+    cursor: pointer;
+  }
+  .search-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: var(--s-5) var(--s-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .search-card a {
+    display: grid;
+    gap: var(--s-2);
+    text-decoration: none;
+  }
+  .search-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 460 / 651;
+    object-fit: cover;
+    border-radius: var(--r-md);
+    background: var(--night-sunk);
+  }
+  .search-card b {
+    font-size: var(--t-sm);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .search-card a:hover b {
+    color: var(--rose);
+  }
+  .search-card em {
+    font-style: normal;
+    font-size: var(--t-xs);
+    color: var(--dawn-faint);
+    text-transform: capitalize;
+  }
+  .search-note {
+    margin-top: var(--s-5);
+    color: var(--dawn-faint);
+    font-size: var(--t-sm);
+  }
+</style>

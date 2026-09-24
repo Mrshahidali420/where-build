@@ -13,10 +13,10 @@ const amazon = Boolean(config.amazon.stores.us)
 ---
 
 <Where title={`Privacy | ${config.name}`} description={`What ${config.name} records about a visit, and what it never does.`} canonical="/privacy" crumbs={[{ name: 'Privacy' }]}>
-  <header class="w-front" style="padding-top:1rem">
+  <header class="w-intro">
     <h1>Privacy</h1>
   </header>
-  <div class="w-prose">
+  <div class="prose">
     <p>{config.name} has no accounts, no logins and no forms. It does not ask for your name or e-mail.</p>
     <h2>What a visit records</h2>
     <p>
@@ -60,7 +60,7 @@ const amazon = Boolean(config.amazon.stores.us)
     <h2>Links out</h2>
     <p>
       Links to AniList, to streaming services and to other sites open those sites under their own privacy
-      policies. Covers and photos load from AniList's image server.
+      policies. Covers and photos load from AniList's image server. A trailer loads YouTube's privacy-enhanced player only after you press play.
     </p>
   </div>
 </Where>

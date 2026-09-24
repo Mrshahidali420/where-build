@@ -1,17 +1,19 @@
 ---
 /**
- * The head of a title page: cover, name, one line of facts, and the next
- * episode's countdown when one is due. `record` is a title shard record
- * (src/where/record-title.mjs).
+ * The head of a title page: cover, name, the facts people look for first,
+ * the next episode's countdown when one is due, and a row of jumps to the
+ * page's own sections. `record` is a title shard record
+ * (src/where/record-title.mjs); `jumps` is [{ id, label }] of the sections
+ * this page actually has.
  */
 import Countdown from '../Countdown.astro'
 import { formatWord, statusWord, seasonWord, sourceWord, partialDate, airDate } from '../../where/words.mjs'
 
-const { record, kicker = '' } = Astro.props
-const r = record
+const { record: r, jumps = [] } = Astro.props
 const nowSec = Math.floor(Date.now() / 1000)
 const next = r.nextEpisode && r.nextEpisode.at > nowSec ? r.nextEpisode : null
-const alt = [r.romaji !== r.title ? r.romaji : '', r.native].filter(Boolean).join(' · ')
+const alt = [r.romaji !== r.title ? r.romaji : '', r.native].filter(Boolean).join(' / ')
+const studio = r.studios[0]
 const facts = [
   ['Format', formatWord(r.format)],
   ['Episodes', r.episodes ? String(r.episodes) : r.status === 'RELEASING' ? 'Airing' : ''],
@@ -19,14 +21,17 @@ const facts = [
   ['Status', statusWord(r.status)],
   ['Source', sourceWord(r.source)],
 ].filter(([, value]) => value)
-const banner = r.banner ? `--w-banner: url('${r.banner.replace(/'/g, '%27')}')` : undefined
+const banner = r.banner ? `--banner: url('${r.banner.replace(/'/g, '%27')}')` : undefined
 ---
 
-<header class="w-head" style={banner}>
-  <img class="w-head__pic" src={r.cover} alt={`Cover of ${r.title}`} width="152" height="228" fetchpriority="high" />
-  <div>
-    {kicker && <span class="w-kicker">{kicker}</span>}
-    <h1>{r.title}<slot name="after-title" /></h1>
+<header class="w-head w-head--title" style={banner}>
+  <img class="w-head__pic" src={r.cover} alt={`Cover of ${r.title}`} width="176" height="250" fetchpriority="high" />
+  <div class="w-head__body">
+    <p class="w-kicker">
+      {formatWord(r.format)}{r.startYear ? `, ${r.startYear}` : ''}
+      {studio && <>{' by '}{studio.href ? <a href={studio.href}>{studio.name}</a> : studio.name}</>}
+    </p>
+    <h1>{r.title}</h1>
     {alt && <p class="w-head__alt" lang="ja">{alt}</p>}
     <dl class="w-facts">
       {facts.map(([label, value]) => (
@@ -40,12 +45,24 @@ const banner = r.banner ? `--w-banner: url('${r.banner.replace(/'/g, '%27')}')` 
       next && (
         <p class="w-next">
           <span class="w-next__label">Episode {next.number}</span>
-          <Countdown at={next.at} />
+          <Countdown at={next.at} local={true} />
           <span class="w-next__when">
-            <time datetime={new Date(next.at * 1000).toISOString()}>{airDate(next.at)}</time> (UTC)
+            <time datetime={new Date(next.at * 1000).toISOString()}>{airDate(next.at)}</time>, UTC
           </span>
         </p>
       )
     }
   </div>
 </header>
+
+{
+  jumps.length > 1 && (
+    <nav class="w-jumps" aria-label="On this page">
+      <ul>
+        {jumps.map((j) => (
+          <li><a href={`#${j.id}`}>{j.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

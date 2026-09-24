@@ -1,0 +1,40 @@
+---
+/** Every anime genre with a page (the genre gate), biggest first, each with three of its covers. */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+
+const genres = whereHubs().genreIndex
+---
+
+<Where
+  title={`Anime Genres: ${genres.length} Genres, Most Watched First | ${config.name}`}
+  description={`Anime by genre: ${genres.map((g) => g.name).slice(0, 8).join(', ')} and more, each with its most watched shows and their casts and staff.`}
+  canonical="/genre"
+  noindex={genres.length === 0}
+  jsonld={listJsonld('Anime genres', genres.map((g) => ({ name: g.name, href: `/genre/${g.slug}` })), config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Genres' }]}
+>
+  <header class="w-intro">
+    <h1>Anime genres</h1>
+    <p class="w-intro__lede">{plural(genres.length, 'genre')}, biggest first. Each lists its most watched shows.</p>
+  </header>
+  <ul class="w-genres">
+    {
+      genres.map((g, i) => (
+        <li>
+          <a href={`/genre/${g.slug}`}>
+            <span class="w-genres__art" aria-hidden="true">
+              {g.covers.map((src) => <img src={src} alt="" width="80" height="114" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />)}
+            </span>
+            <b>{g.name}</b>
+            <small>{plural(g.total, 'anime', 'anime')}</small>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Where>

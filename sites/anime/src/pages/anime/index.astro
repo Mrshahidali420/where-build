@@ -1,0 +1,101 @@
+---
+/**
+ * The way into every anime on the site: this week's schedule, the seasons,
+ * the genres, the years, and the most watched shows. Prerendered once a
+ * night from data/where-hubs.json; every block links only to pages the build
+ * gated in.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import { cardOfRow } from '../../components/card-row.mjs'
+
+const hubs = whereHubs()
+const { home } = hubs
+const c = home.counts
+const seasons = (hubs.seasonIndex || []).slice(0, 8)
+const genres = hubs.genreIndex || []
+const years = home.years.slice(0, 16)
+const popular = home.titles.map(cardOfRow)
+---
+
+<Where
+  title={`Browse Anime: Seasons, Genres, Years and Schedule | ${config.name}`}
+  description={`Browse ${plural(c.titles, 'anime', 'anime')} by season, genre and year, or see what airs this week. Every show with its episode dates, cast and staff.`}
+  canonical="/anime"
+  jsonld={listJsonld('Most watched anime', popular, config.siteUrl)}
+  crumbs={[{ name: 'Anime' }]}
+>
+  <header class="w-intro">
+    <h1>Browse anime</h1>
+    <p class="w-intro__lede">{plural(c.titles, 'anime', 'anime')}, each with its episode dates, cast, staff and songs. Start from a season, a genre or a year.</p>
+  </header>
+
+  <nav class="w-doors" aria-label="Ways in">
+    {hubs.schedule && <a href="/schedule"><b>Airing this week</b><span>{plural(c.airing, 'episode')} due in the next seven days</span></a>}
+    {seasons.length > 0 && <a href="/season"><b>Seasons</b><span>{plural(c.seasons, 'season')}, winter to fall</span></a>}
+    {genres.length > 0 && <a href="/genre"><b>Genres</b><span>{plural(c.genres, 'genre')}, most watched first</span></a>}
+    <a href="/year"><b>By year</b><span>Every year from {home.years.at(-1)} to {home.years[0]}</span></a>
+  </nav>
+
+  {
+    seasons.length > 0 && (
+      <section class="w-sec" aria-labelledby="seasons">
+        <div class="w-sec__head">
+          <h2 id="seasons">Recent seasons</h2>
+          <a class="w-sec__link" href="/season">Every season</a>
+        </div>
+        <ul class="w-tiles">
+          {seasons.map((s) => (
+            <li>
+              <a href={s.path}>
+                {s.cover && <img src={s.cover} alt="" width="72" height="102" loading="lazy" decoding="async" />}
+                <span>
+                  <b>{s.label}</b>
+                  <small>{plural(s.count, 'anime', 'anime')}</small>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    genres.length > 0 && (
+      <section class="w-sec" aria-labelledby="genres">
+        <div class="w-sec__head">
+          <h2 id="genres">Genres</h2>
+          <a class="w-sec__link" href="/genre">All genres</a>
+        </div>
+        <ul class="w-chips w-chips--links">
+          {genres.map((g) => (
+            <li><a href={`/genre/${g.slug}`}>{g.name} <span>{g.total.toLocaleString('en-US')}</span></a></li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="w-sec" aria-labelledby="years">
+    <div class="w-sec__head">
+      <h2 id="years">By year</h2>
+      <a class="w-sec__link" href="/year">All years</a>
+    </div>
+    <ul class="w-chips w-chips--links">
+      {years.map((y) => <li><a href={`/year/${y}`}>{y}</a></li>)}
+    </ul>
+  </section>
+
+  <section class="w-sec" aria-labelledby="popular">
+    <div class="w-sec__head">
+      <h2 id="popular">Most watched</h2>
+    </div>
+    <Covers items={popular} eager={6} />
+  </section>
+</Where>

@@ -1,0 +1,16 @@
+---
+export const prerender = true
+import GenrePage from '../../components/GenrePage.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { hubPathsOf } from '@sister/core/src/where/hubs.mjs'
+
+export function getStaticPaths() {
+  return hubPathsOf(whereHubs(), 'genre')
+    .filter((p) => p.page === 1)
+    .map(({ slug, pages }) => ({ params: { slug }, props: { pages } }))
+}
+
+const { pages } = Astro.props
+---
+
+<GenrePage slug={Astro.params.slug} page={1} pages={pages} />

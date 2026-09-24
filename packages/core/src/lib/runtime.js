@@ -141,8 +141,9 @@ export function unavailable(astro, error) {
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="robots" content="noarchive">' +
     '<title>One moment</title>' +
-    `<style>body{font:16px/1.5 system-ui,sans-serif;margin:0;min-height:100vh;display:grid;place-items:center;background:${config.colors.night};color:${config.colors.dawn}}main{max-width:32rem;padding:2rem}h1{font-size:1.4rem;margin:0 0 .5rem}p{margin:0 0 1rem;opacity:.8}a{color:${config.colors.rose}}</style>` +
-    '</head><body><main><h1>One moment</h1>' +
+    `<style>body{font:16px/1.5 system-ui,sans-serif;margin:0;min-height:100vh;display:grid;place-items:center;background:${config.colors.night};color:${config.colors.dawn}}main{max-width:32rem;padding:2rem}h1{font-size:1.4rem;margin:0 0 .5rem}p{margin:0 0 1rem;opacity:.8}a{color:${config.colors.rose}}.brand{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;font-weight:800;font-size:1.2rem;text-decoration:none;color:${config.colors.dawn}}.brand svg{color:${config.colors.rose}}.brand span{color:${config.colors.rose}}</style>` +
+    `<link rel="icon" href="/favicon.svg" type="image/svg+xml">` +
+    `</head><body><main><a class="brand" href="/"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">${config.mark}</svg>${config.wordmark[0]}<span>${config.wordmark[1]}</span></a><h1>One moment</h1>` +
     '<p>This page exists, but the data behind it did not load just now. Refresh in a few seconds.</p>' +
     '<p><a href="javascript:location.reload()">Try again</a></p></main></body></html>'
   return new Response(body, {

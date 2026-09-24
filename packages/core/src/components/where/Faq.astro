@@ -1,0 +1,21 @@
+---
+/**
+ * The page's questions, folded: each opens to its answer. `faq` is
+ * [{ q, a }] from src/where/faq.mjs; the page puts the same list in its
+ * FAQPage structured data, so what is marked up is exactly what is shown.
+ */
+const { faq = [] } = Astro.props
+---
+
+{
+  faq.length > 0 && (
+    <div class="w-faq">
+      {faq.map(({ q, a }, i) => (
+        <details open={i === 0}>
+          <summary>{q}</summary>
+          <p>{a}</p>
+        </details>
+      ))}
+    </div>
+  )
+}

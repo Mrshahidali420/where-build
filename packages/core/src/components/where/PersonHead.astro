@@ -15,21 +15,22 @@ const facts = [
   ['Active', years.length ? (years.length > 1 ? `${years[0]} to ${years[1]}` : `Since ${years[0]}`) : ''],
   ['Work', (p.occupations || []).join(', ')],
 ].filter(([, value]) => value)
-const other = page === 'voice' ? p.staffHref && { href: p.staffHref, label: 'Crew credits' } : p.voiceHref && { href: p.voiceHref, label: 'Voice roles' }
+const other = page === 'voice' ? p.staffHref && { href: p.staffHref, label: `Crew credits of ${p.name}` } : p.voiceHref && { href: p.voiceHref, label: `Voice roles of ${p.name}` }
 ---
 
-<header class="w-head">
+<header class="w-head w-head--person">
   {
     p.image ? (
-      <img class="w-head__pic w-head__pic--round" src={p.image} alt={`Photo of ${p.name}`} width="152" height="152" fetchpriority="high" />
+      <img class="w-head__pic w-head__pic--round" src={p.image} alt={`Photo of ${p.name}`} width="160" height="160" fetchpriority="high" />
     ) : (
-      <span class="w-head__pic w-head__pic--round" />
+      <span class="w-head__pic w-head__pic--round w-head__pic--none" aria-hidden="true">{p.name.slice(0, 1)}</span>
     )
   }
-  <div>
-    <span class="w-kicker">{page === 'voice' ? 'Voice actor' : 'Anime staff'}</span>
+  <div class="w-head__body">
+    <p class="w-kicker">{page === 'voice' ? 'Voice actor' : 'Anime staff'}{p.language ? `, ${p.language}` : ''}</p>
     <h1>{p.name}</h1>
-    {(p.native || p.aliases?.length > 0) && <p class="w-head__alt">{[p.native, ...(p.aliases || [])].filter(Boolean).join(' · ')}</p>}
+    {(p.native || p.aliases?.length > 0) && <p class="w-head__alt">{[p.native, ...(p.aliases || [])].filter(Boolean).join(' / ')}</p>}
+    {lede && <p class="w-head__lede">{lede}</p>}
     {facts.length > 0 && (
       <dl class="w-facts">
         {facts.map(([label, value]) => (
@@ -40,7 +41,6 @@ const other = page === 'voice' ? p.staffHref && { href: p.staffHref, label: 'Cre
         ))}
       </dl>
     )}
-    {lede && <p class="w-head__lede">{lede}</p>}
-    {other && <a class="w-more" href={other.href}>{other.label} of {p.name} →</a>}
+    {other && <a class="w-more" href={other.href}>{other.label}</a>}
   </div>
 </header>
