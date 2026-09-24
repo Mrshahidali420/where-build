@@ -22,5 +22,13 @@ regress/*/wrangler.jsonc
 # and the builds, never committed.
 .regress/
 
+# The shared sister ingest's own output: credits.json, staff.json,
+# airing.json and their walk/seen state, plus anything pulled down from R2 to
+# build them (scripts/ingest-credits.mjs, ingest-staff.mjs, ingest-airing.mjs,
+# sister-data-io.mjs). Not scoped to any one site's data/, and never committed:
+# R2 sister-data/latest/ is the source of truth, the same rule the catalog
+# itself follows.
+packages/core/data/
+
 # Local secrets for `wrangler dev`. Never committed.
 .dev.vars

@@ -1,0 +1,60 @@
+name: Backfill staff
+
+# Hand-run: Actions -> Backfill staff -> Run workflow. ingest-credits.yml
+# already fetches every NEW staff id, ids only, every night. This is the slow
+# insurance sweep MODE=full-refresh runs: a slice of every id credits.json
+# has ever pointed at, walked forward every run regardless of what staff.json
+# already holds, so a changed bio, photo or work list eventually reaches it
+# even though nothing tells this script it changed (scripts/ingest-staff.mjs,
+# scripts/sister-walk.mjs).
+#
+# The FIRST run of this workflow, with default settings, IS the one-time
+# staff backfill docs/PLAN.md section 6 calls for: the default full-refresh
+# slice (1000 calls, about 50,000 ids) already covers the plan's ~40,000 to
+# 60,000-person estimate in one pass for most of it; run it again (or raise
+# max_calls) if the log says it did not finish.
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_calls:
+        description: 'API call ceiling for this run (blank = the script default, 1000; raise it for the first full backfill)'
+        required: false
+        default: ''
+      limit:
+        description: 'Cap the id list to this many (testing only)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sister-staff-backfill
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+
+      - name: Walk the staff refresh slice
+        working-directory: packages/core
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SITE_CONFIG: ../../sites/anime/site.config.mjs
+          MODE: full-refresh
+          MAX_CALLS: ${{ github.event.inputs.max_calls }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          PUSH: '1'
+        run: node scripts/ingest-staff.mjs

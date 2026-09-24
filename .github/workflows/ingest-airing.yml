@@ -1,0 +1,58 @@
+name: 'Sister ingest: airing schedule'
+
+# Shared across all four sister sites (docs/PLAN.md section 2.0): a rolling
+# +/-60 day window of every episode airing anywhere, plus a per-anime episode
+# history for RELEASING anime (every night) and a trickle backfill of
+# finished-but-recent anime that still lack one (AIRING_BACKFILL ids a
+# night, default 200 -- see scripts/ingest-airing.mjs). Never touches the
+# shared catalog's own bucket: that one is pulled read only.
+
+on:
+  schedule:
+    - cron: '20 3 * * *' # daily 03:20 UTC, after ingest-credits.yml's 03:00 run
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'delta or full-refresh (blank = delta)'
+        required: false
+        default: ''
+      limit:
+        description: 'Cap the id list to this many (testing only)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sister-airing
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+
+      # A bad AniList night must not stop the workflow: the health check
+      # inside the script refuses to push a damaged file, so a failed step
+      # here just leaves R2 holding yesterday's airing.json.
+      - name: Walk the airing schedule
+        continue-on-error: true
+        working-directory: packages/core
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SITE_CONFIG: ../../sites/anime/site.config.mjs
+          MODE: ${{ github.event.inputs.mode || 'delta' }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          PUSH: '1'
+        run: node scripts/ingest-airing.mjs

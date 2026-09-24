@@ -1,0 +1,89 @@
+name: 'Sister ingest: credits'
+
+# Shared across all four sister sites (docs/PLAN.md section 2.0): every
+# title's staff, studios and cast, ids only. Two schedules in one workflow:
+#
+#   Mondays 00:30 UTC   a full-refresh slice: MODE=full-refresh walks forward
+#                       through the whole catalog id space regardless of
+#                       updatedAt, insurance against a credit changing without
+#                       updatedAt moving. Position kept in R2 (see
+#                       scripts/sister-walk.mjs).
+#   daily   03:00 UTC   MODE=delta: only ids whose catalog updatedAt moved
+#                       since credits-seen.json last recorded it, plus a
+#                       staff delta right after (new ids only -- the slow
+#                       staff refresh sweep is workflow_dispatch only, see
+#                       backfill-staff.yml).
+#
+# Never touches the shared catalog's own bucket: that one is pulled read
+# only. Only the two secrets named below are used; this workflow can never
+# write anything but sister-data.
+
+on:
+  schedule:
+    - cron: '30 0 * * 1' # Monday 00:30 UTC: full-refresh slice
+    - cron: '0 3 * * *' # daily 03:00 UTC: delta
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'delta or full-refresh (blank = follow the schedule, or delta for a manual run)'
+        required: false
+        default: ''
+      limit:
+        description: 'Cap the id list to this many (testing only)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+# One group for this whole workflow: the weekly and the daily run must never
+# overlap, since both write sister-data/latest/credits.json.
+concurrency:
+  group: sister-credits
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    # A full-refresh slice is bounded by MAX_CALLS (default 1200 calls, about
+    # 45 minutes of AniList pacing) plus the catalog pull; well under the cap.
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+
+      # A bad AniList night, a wrangler hiccup or a refused push must not stop
+      # the workflow: the health check inside the script already refuses to
+      # push a damaged file, so a failed step here just means R2 keeps
+      # yesterday's copy, exactly as it should.
+      - name: Walk credits
+        continue-on-error: true
+        working-directory: packages/core
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SITE_CONFIG: ../../sites/anime/site.config.mjs
+          MODE: ${{ github.event.inputs.mode || (github.event.schedule == '30 0 * * 1' && 'full-refresh') || 'delta' }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          PUSH: '1'
+        run: node scripts/ingest-credits.mjs
+
+      # New staff/voice-actor ids credits.json now points at, ids only (no
+      # bio yet -- that is the slow sweep in backfill-staff.yml). Runs after
+      # credits so it sees today's ids, not yesterday's.
+      - name: Walk new staff ids
+        continue-on-error: true
+        working-directory: packages/core
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SITE_CONFIG: ../../sites/anime/site.config.mjs
+          MODE: delta
+          PUSH: '1'
+        run: node scripts/ingest-staff.mjs
