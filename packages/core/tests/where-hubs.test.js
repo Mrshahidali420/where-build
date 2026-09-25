@@ -233,3 +233,14 @@ test('family mark: one pin, a symbol cut out per site, a tile for the icons', ()
   assert.match(tile, /fill="#000000"/)
   assert.match(tile, /color="#ffffff"/)
 })
+
+test('family mark: the screen shape moves every part of a symbol into the screen', async () => {
+  const { SCREEN_PATH, shapeOf } = await import('../src/lib/brand.mjs')
+  const screen = familyMark('lines', 'screen')
+  assert.ok(screen.includes(SCREEN_PATH))
+  assert.equal(shapeOf(screen), 'screen')
+  assert.equal(shapeOf(familyMark('lines')), 'pin')
+  // every bar of the text lines moves, not only the first
+  assert.match(screen, /M9\.5 10h12v2\.2H9\.5ZM9\.5 13\.4h12v2\.2H9\.5ZM9\.5 16\.8h7\.5V19H9\.5Z/)
+  assert.throws(() => familyMark('play', 'star'), /no shape/)
+})

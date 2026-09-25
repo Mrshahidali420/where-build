@@ -28,7 +28,7 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import sharp from 'sharp'
 import config from '../src/lib/site.mjs'
-import { tileSvg, familyMark, FAMILY_SYMBOLS } from '../src/lib/brand.mjs'
+import { tileSvg, familyMark, FAMILY_SYMBOLS, shapeOf } from '../src/lib/brand.mjs'
 
 const PUBLIC = join(process.cwd(), 'public')
 const require = createRequire(join(process.cwd(), 'package.json'))
@@ -172,9 +172,9 @@ if (sheetAt > 0) {
     `<g color="${accent}" transform="translate(60 70) scale(7.5)">${mark}</g>` +
     label(60, 330, 'The mark') +
     Object.keys(FAMILY_SYMBOLS)
-      .map((symbol, i) => `<g color="${familyMark(symbol) === mark ? accent : colors['dawn-dim']}" transform="translate(${760 + i * 150} 450) scale(3.5)">${familyMark(symbol)}</g>`)
+      .map((symbol, i) => `<g color="${familyMark(symbol, shapeOf(mark)) === mark ? accent : colors['dawn-dim']}" transform="translate(${760 + i * 150} 450) scale(3.5)">${familyMark(symbol, shapeOf(mark))}</g>`)
       .join('') +
-    label(760, 590, 'The family: one pin, one symbol per site') +
+    label(760, 590, 'The family: one shape, one symbol per site') +
     `<rect x="420" y="60" width="920" height="120" rx="16" fill="${colors.night}"/>` +
     `<image x="460" y="84" width="${Math.round((72 / 48) * 400)}" height="72" href="${embed('logo.svg')}"/>` +
     `<rect x="420" y="200" width="920" height="120" rx="16" fill="#f7f4ee"/>` +

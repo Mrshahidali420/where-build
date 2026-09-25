@@ -9,6 +9,9 @@
  *
  *     mark: familyMark('book')
  *
+ * A site may take the screen shape instead of the pin (WhereAnime does:
+ * familyMark('play', 'screen')); the symbol is moved to the screen's middle.
+ *
  * in its site.config.mjs and its own colours; scripts/make-site-icons.mjs
  * draws every icon, the wordmark and the share image from the same shapes.
  *
@@ -23,6 +26,18 @@
 export const PIN_PATH =
   'M16 2a11 11 0 0 1 11 11c0 7.6-7.7 13.9-10.1 16.9a1.15 1.15 0 0 1-1.8 0C12.7 26.9 5 20.6 5 13A11 11 0 0 1 16 2Z'
 
+/**
+ * The screen: a rounded TV screen whose bottom edge drops into the pin's
+ * point, with the small camera dot in its top right corner cut out. The
+ * "where" is the point, the "watch" is the screen. Chosen for WhereAnime on
+ * 25 Sep 2026; it reads at 16 px where the pin's round head blurs.
+ */
+export const SCREEN_PATH =
+  'M7 3.5h18a5 5 0 0 1 5 5v11a5 5 0 0 1-5 5h-5.6l-2.6 3.8a1 1 0 0 1-1.6 0l-2.6-3.8H7a5 5 0 0 1-5-5v-11a5 5 0 0 1 5-5Z' +
+  ' M25.2 6.7a1.4 1.4 0 1 1 0 2.8a1.4 1.4 0 1 1 0-2.8Z'
+
+const SHAPES = { pin: PIN_PATH, screen: SCREEN_PATH }
+
 /** The symbols a site cuts out of the head. Each sits inside the circle of radius 7 around (16, 13). */
 export const FAMILY_SYMBOLS = {
   // A play button, nudged right of centre so it looks centred.
@@ -35,11 +50,33 @@ export const FAMILY_SYMBOLS = {
   lines: 'M10 9h12v2.2H10ZM10 12.4h12v2.2H10ZM10 15.8h7.5V18H10Z',
 }
 
-/** The mark as SVG content for a 0 0 32 32 viewBox: one even-odd path in currentColor. */
-export function familyMark(symbol) {
+/**
+ * The mark as SVG content for a 0 0 32 32 viewBox: one even-odd path in
+ * currentColor. `shape` is 'pin' (the family default) or 'screen'.
+ */
+export function familyMark(symbol, shape = 'pin') {
   const cut = FAMILY_SYMBOLS[symbol]
   if (!cut) throw new Error(`familyMark: no symbol "${symbol}" (${Object.keys(FAMILY_SYMBOLS).join(', ')})`)
-  return `<path fill="currentColor" fill-rule="evenodd" d="${PIN_PATH} ${cut}"></path>`
+  const outline = SHAPES[shape]
+  if (!outline) throw new Error(`familyMark: no shape "${shape}" (${Object.keys(SHAPES).join(', ')})`)
+  // The screen's play sits a touch lower and left than the pin's, in the middle of the screen.
+  const symbolPath = shape === 'screen' ? shiftPath(cut, -0.5, 1) : cut
+  return `<path fill="currentColor" fill-rule="evenodd" d="${outline} ${symbolPath}"></path>`
+}
+
+/** Which shape a mark was drawn with. */
+export const shapeOf = (mark) => (mark.includes(SCREEN_PATH) ? 'screen' : 'pin')
+
+/**
+ * Moves a symbol path. The symbols use only absolute M, H and V besides
+ * relative commands, so moving those three moves the whole shape.
+ */
+function shiftPath(d, dx, dy) {
+  const at = (n, by) => +(Number(n) + by).toFixed(2)
+  return d
+    .replace(/M([\d.]+) ([\d.]+)/g, (_, x, y) => `M${at(x, dx)} ${at(y, dy)}`)
+    .replace(/H([\d.]+)/g, (_, x) => `H${at(x, dx)}`)
+    .replace(/V([\d.]+)/g, (_, y) => `V${at(y, dy)}`)
 }
 
 /**

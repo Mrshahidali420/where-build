@@ -49,7 +49,7 @@ export default defineSite({
   // The Where family pin with the anime symbol, a play button, cut out of it
   // (packages/core/src/lib/brand.mjs). The icons, the wordmark and the share
   // image are drawn from it by packages/core/scripts/make-site-icons.mjs.
-  mark: familyMark('play'),
+  mark: familyMark('play', 'screen'),
 
   plannedDomain: 'whereanime.com',
 
