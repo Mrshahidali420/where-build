@@ -18,6 +18,13 @@
   "observability": {
     "enabled": true
   },
+  "d1_databases": [
+    {
+      "binding": "ANALYTICS",
+      "database_name": "whereanime-analytics",
+      "database_id": "cf342163-4a44-42b2-b427-49196cf9d333"
+    }
+  ],
   "triggers": {
     "crons": [
       "10 0 * * *"

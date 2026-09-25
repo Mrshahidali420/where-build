@@ -73,7 +73,7 @@ export default defineSite({
     },
   },
 
-  d1: { name: 'whereanime-analytics', id: null },
+  d1: { name: 'whereanime-analytics', id: 'cf342163-4a44-42b2-b427-49196cf9d333' },
   adminSalt: 'whereanime',
   rebuildUtc: '04:00',
   r2: { ...FAMILY.r2, statePrefix: 'anime' },
