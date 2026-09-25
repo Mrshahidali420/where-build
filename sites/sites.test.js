@@ -33,33 +33,54 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05)
 }
 
-test('four sites, each on its dev address only', () => {
+// Sites that have launched on their own domain. The rest live on their dev address.
+const LIVE = new Set(['whereanime'])
+
+test('four sites, each on its dev address until it launches on its planned domain', () => {
   assert.deepEqual(NAMES.sort(), ['anime', 'manga', 'manhua', 'novel'])
   for (const site of sites) {
-    assert.equal(site.domain, null, site.key)
-    assert.equal(site.siteUrl, `https://${site.workerName}.mr-shahidali-sa.workers.dev`)
+    if (LIVE.has(site.key)) {
+      assert.equal(site.domain, site.plannedDomain, site.key)
+      assert.equal(site.siteUrl, `https://${site.domain}`)
+    } else {
+      assert.equal(site.domain, null, site.key)
+      assert.equal(site.siteUrl, `https://${site.workerName}.mr-shahidali-sa.workers.dev`)
+    }
     assert.match(site.plannedDomain, /^where[a-z]+\.com$/)
     assert.equal(site.r2.catalogWrite, false, `${site.key} must never write the catalog`)
     assert.equal(site.malExtras, false)
   }
 })
 
-test('no site carries a borrowed id: analytics, ads, shop tags and keys stay empty', () => {
+// The one borrowing the owner asked for: on 25 Sep 2026 he told WhereAnime to
+// use the same Associates account's manhwaindex tags until its own exist.
+const BORROWS_SHOP_TAGS = new Set(['whereanime'])
+
+test('no site carries a borrowed id: analytics, ads, shop tags and keys are empty or its own', () => {
   for (const site of sites) {
-    for (const key of ['ga4Id', 'adsensePub', 'turnstileSiteKey', 'email', 'dmcaEmail']) assert.equal(site[key], null, `${site.key}.${key}`)
+    // Before launch these stay empty; a live site may carry its own.
+    if (!LIVE.has(site.key)) {
+      for (const key of ['ga4Id', 'adsensePub', 'turnstileSiteKey', 'email', 'dmcaEmail']) assert.equal(site[key], null, `${site.key}.${key}`)
+      assert.equal(site.indexNow.key, null)
+    }
     // A shop tag is empty until the owner creates it, and then it is the
-    // site's own (whereanime-20), never another site's.
-    assert.ok(Object.values(site.amazon.stores).every((tag) => tag === '' || tag.startsWith(site.key)), `${site.key} amazon tags`)
-    assert.equal(site.indexNow.key, null)
+    // site's own (whereanime-20), never another site's, bar the one exception above.
+    const tagOk = (tag) => tag === '' || tag.startsWith(site.key) || (BORROWS_SHOP_TAGS.has(site.key) && tag.startsWith('manhwainde'))
+    assert.ok(Object.values(site.amazon.stores).every(tagOk), `${site.key} amazon tags`)
     // A site gets its own D1 database once provisioned (WhereAnime did on 25 Sep
     // 2026); until then the id is null. Never manhwaindex's, checked below.
     assert.ok(site.d1.id === null || /^[0-9a-f-]{36}$/.test(site.d1.id), `${site.key}.d1.id`)
   }
   // And nothing copied from manhwaindex's config, whatever the key.
   const ids = /G-[A-Z0-9]{8,12}|ca-pub-|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
-  for (const name of [...NAMES.map((n) => join(n, 'site.config.mjs')), 'family.mjs']) {
-    assert.doesNotMatch(readFileSync(join(HERE, name), 'utf8'), ids, name)
+  // The same list without the shop tags, for the site allowed to borrow them.
+  const idsBarTags = /G-[A-Z0-9]{8,12}|ca-pub-|0x4AAAAAAE|368b5571dfe5|a31cde34-/
+  for (const n of NAMES) {
+    const text = readFileSync(join(HERE, n, 'site.config.mjs'), 'utf8')
+    const key = sites.find((s) => s.key.endsWith(n))?.key
+    assert.doesNotMatch(text, BORROWS_SHOP_TAGS.has(key) ? idsBarTags : ids, n)
   }
+  assert.doesNotMatch(readFileSync(join(HERE, 'family.mjs'), 'utf8'), ids, 'family.mjs')
 })
 
 test('every palette is its own and at least as readable as manhwaindex', () => {

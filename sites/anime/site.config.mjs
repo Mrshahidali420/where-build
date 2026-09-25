@@ -51,14 +51,27 @@ export default defineSite({
   // image are drawn from it by packages/core/scripts/make-site-icons.mjs.
   mark: familyMark('play', 'screen'),
 
+  // Live since 26 Sep 2026: custom domains for the apex and www, the
+  // workers.dev dev host off (packages/core/src/lib/wrangler-config.mjs).
+  domain: 'whereanime.com',
   plannedDomain: 'whereanime.com',
 
-  // Amazon Associates tags, this site's own and never another site's. Empty
-  // until the owner creates them: the links still work, only without a tag
-  // (packages/core/src/lib/shop-links.js), and the Associates sentence stays
-  // out of the footer and the privacy page until a tag exists. When they are
-  // made: us: 'whereanime-20', and the Italian store's tag in it.
-  amazon: { stores: { ...FAMILY.amazon.stores, us: '', it: '' } },
+  // Amazon Associates tags. Until the owner creates WhereAnime's own
+  // (us: 'whereanime-20' and the Italian store's), the site uses the same
+  // account's manhwaindex tags on the owner's instruction of 25 Sep 2026;
+  // whereanime.com must be on that account's site list.
+  amazon: {
+    stores: {
+      ...FAMILY.amazon.stores,
+      us: 'manhwaindex-20',
+      uk: 'manhwaindex-21',
+      de: 'manhwaindex06-21',
+      fr: 'manhwainde0f6-21',
+      it: 'manhwaindex04-21',
+      es: 'manhwaindex0a-21',
+      ca: 'manhwaindex01-20',
+    },
+  },
   workerName: 'whereanime',
 
   colors: {
