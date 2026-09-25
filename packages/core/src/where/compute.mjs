@@ -27,7 +27,14 @@ import {
   passesStudio,
   passesArtist,
   passesWatchOrder,
+  passesShop,
 } from './gates.mjs'
+import { shopName } from '../lib/shop-links.js'
+import { similarAll, likePagesOf } from './similar.mjs'
+import { buildMoods } from './moods.mjs'
+
+/** How many titles /shop could shelve: a cover and a name a shop knows (src/where/shop.mjs). */
+export const shelvableCount = (items) => items.filter((item) => item.cover && shopName(item).length >= 2).length
 
 /** How many credits a title carries: named crew roles, and cast rows with a voice. */
 export function creditCount(row) {
@@ -68,6 +75,9 @@ export function computeWhere(site, data, { now = Math.floor(Date.now() / 1000) }
   const studios = buildStudios(items, data.credits)
   const artists = buildArtists(items, data.themes)
   const franchises = buildFranchises(items)
+  const similar = similarAll(items)
+  const likes = likePagesOf(items, similar, gates.like)
+  const moods = buildMoods(items, gates.mood)
 
   const pages = {
     voice: idsWhere(people, (p) => passesVoiceActor(p, gates.voiceActor)),
@@ -87,6 +97,9 @@ export function computeWhere(site, data, { now = Math.floor(Date.now() / 1000) }
     schedule: schedule ? 1 : 0,
     season: seasons.length,
     genre: genres.reduce((n, g) => n + g.pages, 0),
+    shop: passesShop(shelvableCount(items), gates.shop) ? 1 : 0,
+    mood: moods.length,
+    like: likes.size,
   }
-  return { gates, titles, people, studios, artists, franchises, pages, counts, now, schedule, seasons, genres }
+  return { gates, titles, people, studios, artists, franchises, pages, counts, now, schedule, seasons, genres, similar, likes, moods }
 }

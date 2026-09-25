@@ -10,7 +10,6 @@
  * The caller decides whether the reader should see picks at all (US store
  * only) and passes nothing when not, so this box never has to know.
  */
-import { AMAZON_DISCLOSURE } from '../lib/shop-links.js'
 import { BUY_ICONS } from '../lib/buy-icons.js'
 import { PICK_LABELS, pickUrl } from '../lib/picks.js'
 
@@ -28,13 +27,13 @@ const shown = picks.slice(0, max)
         {sub && <p>{sub}</p>}
       </div>
       <p class="buys__note">
-        Chosen by hand on Amazon. {AMAZON_DISCLOSURE} The price and the stock are
+        Chosen by hand on Amazon. The price and the stock are
         Amazon's, and are right at the moment you look.
       </p>
       <ul class="picks__list">
         {shown.map((pick) => (
           <li>
-            <a href={pickUrl(pick.a)} rel="noopener nofollow sponsored" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="pick">
+            <a href={pickUrl(pick.a)} rel="nofollow sponsored noopener" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="pick">
               <span class="buy__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d={BUY_ICONS[ICON_OF[pick.t]] || BUY_ICONS.tag} />

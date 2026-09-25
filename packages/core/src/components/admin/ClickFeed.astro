@@ -11,9 +11,15 @@
  * Figures", then "on Solo Leveling · Top picks · Manhwa · United States". Its
  * `label` is only the button's words ("Printed volumes"), so it is never used
  * as the page name.
+ *
+ * A Google or song search reads as a search instead: "Google search · The
+ * Berserker NPC Unknowingly Destroys…" or "YouTube · song search · Ali (ru)".
+ * searchTarget (src/lib/admin.js) reads that straight out of the link's own
+ * address, so it works on a row written before a link ever carried its own
+ * data-platform, same as one written just now.
  */
 import PlatformIcon from './PlatformIcon.astro'
-import { SPOTS, clock, countryName, humanize, sectionName, shopName, words } from '../../lib/admin.js'
+import { SPOTS, clock, countryName, humanize, searchTarget, sectionName, shopName, words } from '../../lib/admin.js'
 import { clickKey, flagOf, groupRepeats } from '../../lib/admin-chart.js'
 
 const { rows = [], empty = 'No clicks yet.' } = Astro.props
@@ -24,11 +30,18 @@ const lines = groupRepeats(rows, clickKey).map((row) => {
   const page = humanize(row.path, '')
   const flag = flagOf(row.country)
   const where = row.country ? `${flag ? `${flag} ` : ''}${countryName(row.country)}` : ''
+  const search = !isBuy ? searchTarget(row.target) : null
+  const isGoogle = search && search.service === 'Google'
   return {
     ...row,
-    who: row.platform || row.label || words(row.name),
-    // Read and watch: the page the reader was on. Buy: what they went to buy.
-    what: isBuy ? `Buy ${shopName(row.shop_kind)}` : page,
+    who: search ? (isGoogle ? 'Google search' : search.service) : row.platform || row.label || words(row.name),
+    // Read and watch: the page the reader was on. Buy: what they went to
+    // buy. A search: the words they were looking for.
+    what: isBuy
+      ? `Buy ${shopName(row.shop_kind)}`
+      : search
+        ? isGoogle ? search.query : `song search · ${search.query}`
+        : page,
     meta: [
       isBuy ? `on ${page}` : '',
       isBuy ? SPOTS[row.detail] || '' : '',

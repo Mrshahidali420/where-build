@@ -1,0 +1,112 @@
+---
+/**
+ * The reader's own list, the home site's way: no account, kept in their
+ * browser (packages/core/src/lib/my-list.js), with statuses, named lists, an
+ * AniList import and the For you picks. One static page, identical for
+ * everybody, drawn by packages/core/src/lib/my-list-page.js; noindex, because
+ * there is nothing on it for a search engine.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import ForYou from '@sister/core/src/components/where/ForYou.astro'
+---
+
+<Where
+  title={`My list | ${config.name}`}
+  description={`The anime you saved on ${config.name}, kept in your own browser. No account needed.`}
+  canonical="/my-list"
+  noindex={true}
+  crumbs={[{ name: 'My list' }]}
+>
+  <div class="ml">
+    <header class="w-intro">
+      <h1>My list</h1>
+      <p class="w-intro__lede">
+        The anime you saved, with their next episodes. Your list stays in this browser: no account, nothing sent to
+        us. If enough people use lists, we will add accounts so a list can follow you between devices.
+        <a href="/privacy#your-list">How it works</a>
+      </p>
+    </header>
+
+    <p class="ml-blocked" hidden>
+      <strong>Your browser is blocking storage.</strong> The list works while this tab is open, but it will be gone
+      when you close it. Private windows and strict privacy settings do this.
+    </p>
+
+    <section class="ml-alerts" aria-labelledby="ml-alerts-h" hidden>
+      <h2 id="ml-alerts-h">News about your anime</h2>
+      <ul class="ml-alerts__list"></ul>
+    </section>
+
+    <section class="ml-week" aria-labelledby="ml-week-h" hidden>
+      <h2 id="ml-week-h">Airing this week</h2>
+      <ul class="ml-week__list"></ul>
+    </section>
+
+    <div class="ml-tabbar">
+      <div class="ml-tabs" role="tablist" aria-label="Your lists"></div>
+      <button type="button" class="ml-btn ml-btn--ghost ml-newbtn" aria-expanded="false" aria-controls="ml-newlist">+ New list</button>
+    </div>
+    <form class="ml-form" id="ml-newlist" hidden>
+      <label for="ml-newlist-name">Name of the new list</label>
+      <div class="ml-form__row">
+        <input id="ml-newlist-name" maxlength="40" autocomplete="off" placeholder="Weekend binge" />
+        <button type="submit" class="ml-btn">Create</button>
+        <button type="button" class="ml-btn ml-btn--ghost ml-cancel">Cancel</button>
+      </div>
+    </form>
+    <p class="ml-msg" role="status" aria-live="polite"></p>
+
+    <div class="ml-panel" role="tabpanel" id="ml-panel" tabindex="-1">
+      <div class="ml-listbar" hidden>
+        <p class="ml-listbar__name"></p>
+        <button type="button" class="ml-btn ml-btn--ghost ml-rename">Rename</button>
+        <button type="button" class="ml-btn ml-btn--ghost ml-delete">Delete list</button>
+      </div>
+      <form class="ml-form ml-renameform" hidden>
+        <label for="ml-rename-name">New name</label>
+        <div class="ml-form__row">
+          <input id="ml-rename-name" maxlength="40" autocomplete="off" />
+          <button type="submit" class="ml-btn">Save</button>
+          <button type="button" class="ml-btn ml-btn--ghost ml-cancel">Cancel</button>
+        </div>
+      </form>
+      <p class="ml-count"></p>
+      <ul class="ml-items"></ul>
+      <div class="ml-empty" hidden>
+        <p class="ml-empty__text"></p>
+        <p>
+          Open any show from <a href="/anime">the anime list</a>, <a href="/season">this season</a> or
+          <a href="/search">search</a>, and tap <b>Add to my list</b> under its title.
+        </p>
+      </div>
+    </div>
+
+    <ForYou heading="For you" more={false} />
+
+    <section class="ml-import" aria-labelledby="ml-import-h">
+      <h2 id="ml-import-h">Import from AniList</h2>
+      <p>
+        Already track anime on AniList? Bring your public list across, custom lists included. Your browser asks
+        AniList directly; the username never reaches us. AniList wins on status for shows you already saved here.
+      </p>
+      <form class="ml-form ml-importform">
+        <label for="ml-anilist-user">AniList username</label>
+        <div class="ml-form__row">
+          <input id="ml-anilist-user" maxlength="30" autocomplete="username" spellcheck="false" placeholder="your-name" />
+          <button type="submit" class="ml-btn">Import</button>
+        </div>
+      </form>
+      <p class="ml-import__msg" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="ml-danger">
+      <button type="button" class="ml-btn ml-btn--ghost ml-clear">Clear my whole list</button>
+    </section>
+  </div>
+</Where>
+
+<script>
+  import '@sister/core/src/lib/my-list-page.js'
+</script>

@@ -13,6 +13,8 @@ const FORMATS = {
   MUSIC: 'Music video',
 }
 export const formatWord = (format) => FORMATS[format] || 'Anime'
+/** The format inside a sentence: 'TV series', 'OVA' and 'ONA' keep their capitals, 'movie' does not. */
+export const formatInSentence = (format) => formatWord(format).replace(/^(Movie|Special|Anime|Music video)$/, (word) => word.toLowerCase())
 
 const STATUSES = {
   FINISHED: 'Finished',

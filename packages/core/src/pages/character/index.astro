@@ -15,7 +15,6 @@ import config from '../../lib/site.mjs'
 import CharacterTile from '../../components/CharacterTile.astro'
 import Pager from '../../components/Pager.astro'
 import { charactersWithPages } from '../../lib/catalog.js'
-import { AMAZON_DISCLOSURE } from '../../lib/shop-links.js'
 import { displayName } from '../../lib/names.mjs'
 
 export const PER_PAGE = 120
@@ -113,7 +112,7 @@ const jsonld = {
       <ul class="people people--wall people--doors">
         {items.map((person, i) => <CharacterTile person={person} eager={i < EAGER} />)}
       </ul>
-      <p class="wall__note">Merch doors open the official shelves in your own country's store. {AMAZON_DISCLOSURE}</p>
+      <p class="wall__note">Merch doors open the official shelves in your own country's store.</p>
     </section>
     <Pager current={1} count={pageCount} base="/character" label="characters" />
 

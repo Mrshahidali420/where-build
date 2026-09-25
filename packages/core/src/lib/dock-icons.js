@@ -10,4 +10,6 @@ export const DOCK_ICONS = {
     '<rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect>',
   shop: '<path d="M6 7h12l1 13H5z"></path><path d="M9 10V6a3 3 0 0 1 6 0v4"></path>',
   search: '<circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path>',
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M4 10h16M8 3v4M16 3v4"></path><path d="M8 14h3"></path>',
+  list: '<path d="M7 3h10a1 1 0 0 1 1 1v17l-6-4-6 4V4a1 1 0 0 1 1-1z"></path>',
 }

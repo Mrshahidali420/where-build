@@ -38,6 +38,8 @@ import { hubPaths } from '../src/where/hubs.mjs'
 import { WHERE_SHARDS } from '../src/where/shard-folders.mjs'
 import { writeShardFolder } from './where-shards.mjs'
 import { readData, loadWhereData } from './where-load.mjs'
+import { writeListShards, writeFeedPool } from './list-files.mjs'
+import { ROW_RECS_MAX } from '../src/lib/list-row.js'
 import config from '../src/lib/site.mjs'
 
 const ROOT = process.cwd()
@@ -120,6 +122,11 @@ function main() {
     franchiseOf,
     crewByTitle: crewByTitle(where.people),
     cross: { base: homeBase(config), home: data.home, cast: data.cast, comicsById: new Map(data.comics.map((c) => [c.id, c])) },
+    // Hand-picked Amazon products (data/picks.json, kept in git beside the
+    // site's config), the genre and tag matches, and the like pages.
+    picks: read('picks.json', null),
+    similar: where.similar,
+    likes: where.likes,
   }
   const titles = where.titles.map((t) => titleRecord(t, ctx))
   const people = lists.people.map((p) => personRecord(p, slugs.person.get(p.id), ctx))
@@ -138,6 +145,26 @@ function main() {
   }
   since('shards')
 
+  // My list: one short row per title (its status, next episode, streams) in
+  // public/d/l/, and the For you pool in public/d/feed.v1.json. Static files,
+  // read only by a reader who has a list (src/lib/list-data.js).
+  const nowSec = Math.floor(Date.now() / 1000)
+  const recsInIndex = new Map(
+    where.titles.map(({ item }) => [
+      item.id,
+      [...(item.recIds || [])]
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        .map((rec) => rec.id)
+        .filter((id) => id !== item.id && titleById.has(id))
+        .slice(0, ROW_RECS_MAX),
+    ]),
+  )
+  const listItems = where.titles.map((t) => t.item)
+  const rowFiles = writeListShards(join(OUT, 'l'), listItems, titleById, recsInIndex, nowSec)
+  const feed = writeFeedPool(join(OUT, 'feed.v1.json'), listItems, titleById, recsInIndex, nowSec)
+  console.log(`  my list: ${rowFiles.count} row files (${(rowFiles.bytes / 1048576).toFixed(1)} MB), For you pool ${feed.items} titles`)
+  since('list files')
+
   const hubs = hubsOf({ titles, people, studios, artists, watch, where, airing: data.airing?.schedule || [] })
   write('where-hubs.json', hubs)
   write('search-rows.json', searchRowsOf(titles))
@@ -145,7 +172,7 @@ function main() {
   // The page shell reads this small file: the numbers it shows, and the hubs
   // whose gate kept them out this time, so no menu or footer link names a 404.
   const built = new Set(hubPaths(hubs).map((p) => p.path))
-  const missing = ['/schedule', '/season', '/genre'].filter((path) => !built.has(path))
+  const missing = ['/schedule', '/season', '/genre', '/shop', '/mood'].filter((path) => !built.has(path))
   write('site-stats.json', { comics: 0, anime: titles.length, genres: [], missing })
   write('redirects.json', { ...redirects, ...read('manual-redirects.json', {}) })
 

@@ -1,9 +1,13 @@
 ---
 /**
  * The newest pages opened, one line each: a dot (rose = the visit started
- * here), the time, the page name cut with "…", and a small line with where
- * the reader came from, the country, the page number inside the visit and
- * the device.
+ * here), the time, the page name cut with "…", and a small line with the
+ * page's kind, where the reader came from, the country, the page number
+ * inside the visit and the device.
+ *
+ * The kind opens the second line, not the first: a long title already fills
+ * the first line up to its own "…", and a word tacked on after it would be
+ * pushed off a 390 px phone before the reader ever sees it.
  *
  * rows: [{ ts, href, name, section, from, country, step, device }]
  */
@@ -29,9 +33,10 @@ const lines = rows.map((row) => ({
         <time datetime={new Date(row.ts).toISOString()}>{clock(row.ts).replace(' UTC', '')}</time>
         <span class="what">
           <span class="line1" title={row.name}>
-            <a href={row.href}>{row.name}</a>{row.section !== row.name && ` · ${row.section}`}
+            <a href={row.href}>{row.name}</a>
           </span>
           <span class="meta">
+            {row.section !== row.name && `${row.section} · `}
             <span class="src">{row.from}</span>
             {row.where && ` · ${row.where}`}
             {` · page ${row.step || 1}`}

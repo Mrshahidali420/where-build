@@ -47,14 +47,16 @@ test('four sites, each on its dev address only', () => {
 test('no site carries a borrowed id: analytics, ads, shop tags and keys stay empty', () => {
   for (const site of sites) {
     for (const key of ['ga4Id', 'adsensePub', 'turnstileSiteKey', 'email', 'dmcaEmail']) assert.equal(site[key], null, `${site.key}.${key}`)
-    assert.ok(Object.values(site.amazon.stores).every((tag) => tag === ''), `${site.key} amazon tags`)
+    // A shop tag is empty until the owner creates it, and then it is the
+    // site's own (whereanime-20), never another site's.
+    assert.ok(Object.values(site.amazon.stores).every((tag) => tag === '' || tag.startsWith(site.key)), `${site.key} amazon tags`)
     assert.equal(site.indexNow.key, null)
     // A site gets its own D1 database once provisioned (WhereAnime did on 25 Sep
     // 2026); until then the id is null. Never manhwaindex's, checked below.
     assert.ok(site.d1.id === null || /^[0-9a-f-]{36}$/.test(site.d1.id), `${site.key}.d1.id`)
   }
   // And nothing copied from manhwaindex's config, whatever the key.
-  const ids = /G-[A-Z0-9]{8,12}|ca-pub-|manhwaindex-2|0x4AAAAAAE|368b5571dfe5|a31cde34-/
+  const ids = /G-[A-Z0-9]{8,12}|ca-pub-|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
   for (const name of [...NAMES.map((n) => join(n, 'site.config.mjs')), 'family.mjs']) {
     assert.doesNotMatch(readFileSync(join(HERE, name), 'utf8'), ids, name)
   }
@@ -80,5 +82,20 @@ test('every palette is its own and at least as readable as manhwaindex', () => {
 test('no sister links to a workers.dev host', () => {
   for (const site of sites) {
     for (const url of Object.values(site.sisterSites)) if (url) assert.doesNotMatch(url, /workers\.dev/)
+  }
+})
+
+test('hand-picked products hold ASINs and names only, never a shop tag', () => {
+  for (const name of NAMES) {
+    const file = join(HERE, name, 'data', 'picks.json')
+    if (!existsSync(file)) continue
+    const text = readFileSync(file, 'utf8')
+    assert.doesNotMatch(text, /tag=|"[a-z0-9]+-2[0-2]"/i, `${name}: picks.json carries a tag`)
+    const picks = JSON.parse(text)
+    for (const group of [picks.titles, picks.characters, picks.people]) {
+      for (const list of Object.values(group || {})) {
+        for (const pick of list) assert.deepEqual(Object.keys(pick).filter((k) => !['a', 'n', 't'].includes(k)), [], `${name}: ${pick.a}`)
+      }
+    }
   }
 })

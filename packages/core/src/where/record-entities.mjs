@@ -102,6 +102,7 @@ export function personRecord(person, slug, ctx) {
     gender: info.gender || '',
     occupations: clip(info.occupations, 4),
     language: info.language || '',
+    favourites: info.favourites || 0,
     anilistUrl: info.anilistUrl || '',
     voicePage,
     staffPage,

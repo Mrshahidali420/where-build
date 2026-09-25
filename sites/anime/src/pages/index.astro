@@ -15,6 +15,7 @@ import { plural } from '@sister/core/src/where/words.mjs'
 import Countdown from '@sister/core/src/components/Countdown.astro'
 import Covers from '@sister/core/src/components/where/Covers.astro'
 import { cardOfRow } from '../components/card-row.mjs'
+import ForYou from '@sister/core/src/components/where/ForYou.astro'
 
 const hubs = whereHubs()
 const { home } = hubs
@@ -40,7 +41,9 @@ const doors = [
   { href: '/directory/artists', label: 'Song artists', what: `${plural(c.artists, 'artist')} behind the openings and endings` },
   { href: '/directory/watch-orders', label: 'Watch orders', what: `${plural(c.watch, 'franchise')} in the order to watch them` },
   { href: '/year', label: 'Anime by year', what: `${plural(home.years.length, 'year')} of anime, ${home.years.at(-1)} to ${home.years[0]}` },
-]
+  (hubs.moodIndex || []).length > 0 && { href: '/mood', label: 'Anime by mood', what: `${plural(hubs.moodIndex.length, 'mood')}, from calm and cosy to dark and heavy` },
+  hubs.shop && { href: '/shop', label: 'Anime shop', what: 'Blu-rays, figures, manga and merch, all on Amazon' },
+].filter(Boolean)
 const season = home.season
 ---
 
@@ -90,6 +93,8 @@ const season = home.season
       )
     }
   </section>
+
+  <ForYou />
 
   {
     season && (

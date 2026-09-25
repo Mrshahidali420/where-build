@@ -135,8 +135,10 @@ h1 {
 }
 .note { color: var(--faint); font-size: 12.5px; margin: 4px 0 0; }
 
-/* The date range: a compact switch with one short word per choice. */
-.ranges {
+/* The date range: a compact switch with one short word per choice. Any other
+   filter made of a few plain links (the click feed's kind chips below) shares
+   the same look under .chips, so a new one never needs new CSS. */
+.ranges, .chips {
   display: flex;
   width: 100%;
   background: var(--surface);
@@ -145,7 +147,7 @@ h1 {
   padding: 3px;
 }
 @media (min-width: 620px) { .ranges { width: auto; } }
-.ranges a {
+.ranges a, .chips a {
   flex: 1;
   display: flex;
   align-items: center;
@@ -157,8 +159,14 @@ h1 {
   font-size: 13px;
   white-space: nowrap;
 }
-.ranges a:hover { color: var(--text); text-decoration: none; }
-.ranges a[aria-current] { background: var(--surface-2); color: var(--text); font-weight: 600; box-shadow: 0 0 0 1px var(--line-2); }
+.ranges a:hover, .chips a:hover { color: var(--text); text-decoration: none; }
+.ranges a[aria-current], .chips a[aria-current] { background: var(--surface-2); color: var(--text); font-weight: 600; box-shadow: 0 0 0 1px var(--line-2); }
+
+/* Inside a panel, above a feed: flex-wrap so five chips still fit a 320 px
+   phone without scrolling sideways, and a small gap under it before the
+   feed starts. */
+.chips { flex-wrap: wrap; gap: 4px; margin: 2px 0 10px; }
+.chips a { flex: none; min-height: 32px; padding: 0 10px; }
 
 /* ------------------------------------------------------------ the board */
 

@@ -9,9 +9,13 @@
  * instead opens a SEARCH for the song on YouTube, Spotify and Amazon, where
  * the official uploads and releases live. A search link claims nothing about
  * what it will find, so none of them is called "official".
+ *
+ * Each link carries data-go="song" and its own data-platform (see the click
+ * tracker in src/layouts/Base.astro), so a click reads as "song_youtube" and
+ * the like on /my-admin instead of an unlabelled "outbound_other".
  */
 import { themeLabel, songWords, episodesWords } from '../lib/answers.mjs'
-import { shopUrl, ALL, AMAZON_DISCLOSURE } from '../lib/shop-links.js'
+import { shopUrl, ALL } from '../lib/shop-links.js'
 
 const { themes = [], title, country } = Astro.props
 const rows = Array.isArray(themes) ? themes : []
@@ -30,9 +34,8 @@ const listenLinks = (row) => {
     // The whole store, not a department: each store files music under its
     // own id, and a guessed one would hide the CD or download asked for.
     { label: 'Amazon', url: shopUrl(terms, ALL, country), rel: 'nofollow sponsored noopener', aff: 'music' },
-  ]
+  ].map((link) => ({ ...link, go: 'song' }))
 }
-const hasAmazon = rows.some((row) => searchTerms(row))
 ---
 
 {
@@ -44,7 +47,6 @@ const hasAmazon = rows.some((row) => searchTerms(row))
           Every opening (OP) and ending (ED) of {title} we have on record. Each
           song opens a search on YouTube, Spotify or Amazon.
         </p>
-        {hasAmazon && <p class="songs__note">{AMAZON_DISCLOSURE}</p>}
       </div>
       <dl class="facts">
         {rows.map((row) => {
@@ -66,6 +68,8 @@ const hasAmazon = rows.some((row) => searchTerms(row))
                         target="_blank"
                         data-aff={link.aff}
                         data-aff-src="themes"
+                        data-go={link.go}
+                        data-platform={link.label}
                         aria-label={`Search ${link.label} for ${searchTerms(row)}`}
                       >
                         {link.label}
@@ -83,10 +87,6 @@ const hasAmazon = rows.some((row) => searchTerms(row))
 }
 
 <style>
-  .songs__note {
-    font-size: 0.8rem;
-    color: var(--dawn-faint);
-  }
   .songs__listen {
     display: flex;
     flex-wrap: wrap;

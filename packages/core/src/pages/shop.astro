@@ -35,7 +35,7 @@ import {
   pickUrl,
   PICK_LABELS,
 } from '../lib/picks.js'
-import { shelfLinks, characterShopLinks, shopUrl, AMAZON_DISCLOSURE, BOOKS, TOYS, ALL } from '../lib/shop-links.js'
+import { shelfLinks, characterShopLinks, shopUrl, BOOKS, TOYS, ALL } from '../lib/shop-links.js'
 import { hasCharacterBuyPage } from '../lib/gates.mjs'
 import { displayName } from '../lib/names.mjs'
 
@@ -244,7 +244,7 @@ const jsonld = {
       <p>
         Books, box sets, discs and figures for the series in this index. We hold no
         stock and ship nothing. Every link opens Amazon, so you see what is really
-        in print today. {AMAZON_DISCLOSURE}
+        in print today.
       </p>
     </header>
 
@@ -282,7 +282,7 @@ const jsonld = {
             <p>
               Real products for the most-read series and the best-loved faces, picked
               by hand on Amazon: the first volume, a box set, a figure. Tap a series
-              for the rest. {AMAZON_DISCLOSURE}
+              for the rest.
             </p>
           </div>
           <h3 class="picks-sub">Series</h3>
@@ -379,7 +379,6 @@ const jsonld = {
         <h2>Light novels</h2>
         <p>
           The prose originals and spin-offs behind these series, most read first.
-          {AMAZON_DISCLOSURE}
         </p>
       </div>
       <ul class="shop-shelf">
@@ -425,7 +424,6 @@ const jsonld = {
         <p>
           Fan-favourite faces from stories big enough that figures of them are
           really made. Each link opens Amazon's live search for that character.
-          {AMAZON_DISCLOSURE}
         </p>
       </div>
       <ul class="shop-shelf">
@@ -528,7 +526,6 @@ const jsonld = {
         price, the stock and the edition you see are Amazon's own and are correct
         at the moment you look. A series that was never printed in English will
         show an empty shelf, and that is the honest answer.
-        {' '}{AMAZON_DISCLOSURE}
       </p>
     </section>
 

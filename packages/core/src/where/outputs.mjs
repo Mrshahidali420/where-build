@@ -14,6 +14,8 @@ import { record as searchRecord } from '../lib/search-shards.js'
 import { directory, hubPaths } from './hubs.mjs'
 import { formatWord, seasonWord } from './words.mjs'
 import { seasonAt, shiftSeason, upcomingEpisodes } from './anime-hubs.mjs'
+import { shopOf } from './shop.mjs'
+import { likeHubs, moodHubs } from './hub-extras.mjs'
 
 const HOME_ROWS = 16
 const HOME_AIRING = 10
@@ -148,6 +150,11 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
     schedule,
     builtAt: now,
     home,
+    // Built only when their gates passed (computeWhere's counts), so a hub a
+    // gate kept out has no page, no menu link and no sitemap line.
+    shop: where.counts?.shop ? shopOf(titles) : null,
+    ...moodHubs(where.moods || [], recordOf, cardRow),
+    like: likeHubs(where.likes || new Map(), recordOf, cardRow),
   }
 }
 

@@ -1,0 +1,57 @@
+---
+/**
+ * One anime mood: the shows that carry its themes, best fit first, then the
+ * most watched (packages/core/src/where/moods.mjs). Only a mood that passed
+ * its gate (`mood` in site.config.mjs gates) has a path, so a thin list is
+ * never built. Prerendered from data/where-hubs.json.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import { cardOfRow } from '../../components/card-row.mjs'
+
+export function getStaticPaths() {
+  return (whereHubs().moodIndex || []).map((m) => ({ params: { slug: m.slug } }))
+}
+
+const mood = whereHubs().moods[Astro.params.slug]
+const others = whereHubs().moodIndex.filter((m) => m.slug !== mood.slug)
+const items = mood.rows.map(cardOfRow)
+---
+
+<Where
+  title={`${mood.title}: ${plural(items.length, 'Show')} to Watch | ${config.name}`}
+  description={`${mood.intro.split('. ')[0]}. ${plural(items.length, 'anime', 'anime')}, starting with ${items.slice(0, 3).map((i) => i.title).join(', ')}.`}
+  canonical={`/mood/${mood.slug}`}
+  image={items[0]?.cover}
+  jsonld={listJsonld(mood.title, items, config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Moods', href: '/mood' }, { name: mood.title }]}
+>
+  <header class="w-intro">
+    <p class="w-kicker">{mood.ask}</p>
+    <h1>{mood.title}</h1>
+    <p class="w-intro__lede">{mood.intro}</p>
+  </header>
+
+  <section class="w-sec" aria-labelledby="shows">
+    <div class="w-sec__head">
+      <h2 id="shows">The shows</h2>
+      <p class="w-sec__count">{plural(items.length, 'show')}</p>
+    </div>
+    <p class="w-sec__note">Closest fit first. Each opens its episode dates, voice cast and staff.</p>
+    <Covers items={items} eager={6} />
+  </section>
+
+  <section class="w-sec" aria-labelledby="more-moods">
+    <div class="w-sec__head">
+      <h2 id="more-moods">Another mood</h2>
+    </div>
+    <ul class="w-chips w-chips--links">
+      {others.map((m) => <li><a href={`/mood/${m.slug}`}>{m.ask}</a></li>)}
+    </ul>
+  </section>
+</Where>

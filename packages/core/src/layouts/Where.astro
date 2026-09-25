@@ -14,8 +14,12 @@
  */
 import '../styles/where-base.css'
 import '../styles/where.css'
+import '../styles/where-commerce.css'
+import '../styles/where-list.css'
 import config from '../lib/site.mjs'
 import { isDevHost } from '../lib/define-site.mjs'
+import { DOCK_ICONS } from '../lib/dock-icons.js'
+import { dockItems, isDockActive } from '../lib/dock.js'
 import { pageGraph, graphJson } from '../lib/page-graph.mjs'
 import { homeBase } from '../where/cross.mjs'
 import counterRaw from './counter-script.js?raw'
@@ -59,6 +63,12 @@ const searchLabel = `Search ${(Math.floor(stats.anime / 1000) * 1000).toLocaleSt
 const family = homeBase(config)
 const familyName = family ? new URL(family).hostname : ''
 const year = new Date().getUTCFullYear()
+// The phone bar: the config's links, less any hub its gate left out.
+const dock = dockItems(config.dock, stats.missing || [])
+// The Associates sentence, only once the site has a tag in any store: before
+// that no link earns anything, so saying it would not be true. It lives here
+// and on the privacy page, never beside a box (the owner's rule).
+const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
 ---
 
 <!doctype html>
@@ -96,7 +106,7 @@ const year = new Date().getUTCFullYear()
     <script is:inline set:html={counterScript}></script>
   </head>
 
-  <body>
+  <body class:list={[{ 'has-dock': dock.length > 0 }]}>
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="top">
@@ -192,7 +202,7 @@ const year = new Date().getUTCFullYear()
       <div class="shell foot__bar">
         <p>
           {config.footer.credit} Cover art and photos belong to their owners.
-          {config.amazon.stores.us && ' As an Amazon Associate we earn from qualifying purchases.'}
+          {hasAmazonTag && ' As an Amazon Associate we earn from qualifying purchases.'}
         </p>
         {family && (
           <p>
@@ -202,6 +212,19 @@ const year = new Date().getUTCFullYear()
         <p>© {year} {config.name}</p>
       </div>
     </footer>
+
+    {
+      dock.length > 0 && (
+        <nav class="dock" aria-label="Quick links">
+          {dock.map((item) => (
+            <a href={item.href} class={isDockActive(here, item.href) ? 'dock__on' : undefined} aria-current={isDockActive(here, item.href) ? 'page' : undefined}>
+              <svg viewBox="0 0 24 24" aria-hidden="true" set:html={DOCK_ICONS[item.icon]}></svg>
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+      )
+    }
 
     <script>
       import '../lib/finder-dropdown.js'

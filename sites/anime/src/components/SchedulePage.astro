@@ -1,0 +1,86 @@
+---
+/**
+ * /schedule (drawn by pages/[hub].astro): every episode due in the coming week, day by day, for the shows
+ * on this site. Built only when the week passes its gate (enough dated
+ * episodes, packages/core/src/where/anime-hubs.mjs buildSchedule): a week the
+ * data cannot fill gets no page, so the route is dynamic and its one path is
+ * listed only then. Prerendered at the nightly build; the countdowns and the
+ * reader's own clock times are filled in by the browser.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import Countdown from '@sister/core/src/components/Countdown.astro'
+
+const schedule = whereHubs().schedule
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const dayWords = (day) => {
+  const d = new Date(`${day}T00:00:00Z`)
+  return { weekday: WEEKDAYS[d.getUTCDay()], date: `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}` }
+}
+const clock = (at) => new Date(at * 1000).toISOString().slice(11, 16)
+const first = dayWords(schedule.days[0].day)
+const last = dayWords(schedule.days.at(-1).day)
+const shows = new Set(schedule.days.flatMap((d) => d.rows.map((r) => r[1]))).size
+const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
+const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ title, href }))
+---
+
+<Where
+  title={`Anime Airing Schedule This Week: ${first.date} to ${last.date} | ${config.name}`}
+  description={`Every anime episode airing from ${first.weekday} ${first.date} to ${last.weekday} ${last.date}: ${plural(schedule.total, 'episode')} of ${plural(shows, 'show')}, with the time each airs and a countdown.`}
+  canonical="/schedule"
+  jsonld={listJsonld('Anime airing this week', items, config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Airing schedule' }]}
+>
+  <header class="w-intro">
+    <p class="w-kicker">Airing schedule</p>
+    <h1>Anime airing this week</h1>
+    <p class="w-intro__lede">
+      {plural(schedule.total, 'episode')} of {plural(shows, 'show')} from {first.weekday} {first.date} to {last.weekday} {last.date}. Times are the first broadcast in Japan, in UTC, with your own clock beside each one.
+    </p>
+  </header>
+
+  <nav class="w-daynav" aria-label="Days">
+    <ul>
+      {schedule.days.map((d) => (
+        <li><a href={`#d-${d.day}`}>{dayWords(d.day).weekday.slice(0, 3)}<small>{d.rows.length}</small></a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="w-days">
+    {
+      schedule.days.map((d) => {
+        const words = dayWords(d.day)
+        return (
+          <section class="w-day" id={`d-${d.day}`} aria-labelledby={`h-${d.day}`}>
+            <h2 id={`h-${d.day}`}>
+              {words.weekday} <span>{words.date}</span>
+            </h2>
+            {d.rows.length ? (
+              <ol class="w-airing">
+                {d.rows.map(([title, href, cover, episode, at, planned]) => (
+                  <li>
+                    <time class="w-airing__time" datetime={new Date(at * 1000).toISOString()}>{clock(at)}</time>
+                    {cover ? <img class="w-thumb" src={small(cover)} alt="" width="36" height="52" loading="lazy" decoding="async" /> : <span class="w-thumb" />}
+                    <span class="w-airing__what">
+                      <a href={href}>{title}</a>
+                      <small>Episode {episode}{planned ? ` of ${planned}` : ''}</small>
+                    </span>
+                    <Countdown at={at} local={true} />
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p class="w-day__none">No episodes listed for this day.</p>
+            )}
+          </section>
+        )
+      })
+    }
+  </div>
+</Where>

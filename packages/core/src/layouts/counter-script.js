@@ -439,23 +439,41 @@ document.addEventListener('click', function (event) {
   // used for this: the official read and watch links carry that same rel,
   // so reading rel filed every free link as a sale link.
   var kind = link.getAttribute('data-aff') // books, discs, figures, ...
-  var go = link.getAttribute('data-go') // read or watch
-  var site = link.getAttribute('data-platform') // WEBTOON, Netflix, ...
+  var go = link.getAttribute('data-go') // read, watch or song
+  var site = link.getAttribute('data-platform') // WEBTOON, Netflix, YouTube, ...
 
   // The name alone says what the click was, so a report needs no filter:
-  // affiliate_amazon_books, read_webtoon, watch_crunchyroll. The set is
-  // bounded by five shop kinds and 48 platforms, about a hundred names in
-  // total, so it can never grow into GA4's ceiling of 500.
+  // affiliate_amazon_books, read_webtoon, watch_crunchyroll, song_youtube.
+  // The set is bounded by five shop kinds, 48 platforms and a handful of
+  // song services, so it can never grow into GA4's ceiling of 500.
   var name = 'outbound_other'
   if (kind) name = 'affiliate_amazon_' + ga4Name(kind)
   else if (go && site) name = ga4Name(go) + '_' + ga4Name(site)
 
-  var label = link.querySelector('.buy__label')
+  // Our own kind column only ever holds one of these four (see CLICK in
+  // src/lib/action-sql.js, which every rollup and report is built on).
+  // A song search is real, but it is not a sale or a read or a watch, so
+  // it files under 'other' there; the event name above still says it
+  // was a song.
+  var clickKind = kind ? 'buy' : go === 'read' || go === 'watch' ? go : 'other'
+
+  // The label is the button's own words, never a whole card or row's
+  // text. A buy button scopes to .buy__label on purpose. A tagged read,
+  // watch or song link already knows its own platform from data-platform,
+  // so it needs no text at all. Anything left over falls back to its
+  // aria-label, then its own text, never a parent's.
+  var buyLabel = link.querySelector('.buy__label')
+  var label = buyLabel
+    ? buyLabel.textContent
+    : go && site
+      ? site
+      : link.getAttribute('aria-label') || link.textContent || ''
+  label = label.replace(/\s+/g, ' ').trim()
 
   gtag('event', name.slice(0, 40), {
     // The same facts again as parameters, so every click can also be read
     // as one group: all buying, or one platform across both verbs.
-    click_type: kind ? 'buy' : go || 'other',
+    click_type: clickKind,
     shop_kind: kind || '',
     platform: site || (kind ? 'Amazon' : url.hostname),
     // The first part of the path is the page kind: manhwa, manga, anime,
@@ -463,21 +481,15 @@ document.addEventListener('click', function (event) {
     page_type: location.pathname.split('/')[1] || 'home',
     link_domain: url.hostname,
     link_url: url.href,
-    link_label: (label ? label.textContent : link.textContent || '')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 100),
+    link_label: label.slice(0, 100),
     page_path: location.pathname,
   })
 
   // The same click, in our own database, under the same name.
   mi({
     name: name.slice(0, 40),
-    kind: kind ? 'buy' : go || 'other',
-    label: (label ? label.textContent : link.textContent || '')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 120),
+    kind: clickKind,
+    label: label.slice(0, 120),
     platform: site || (kind ? 'Amazon' : url.hostname),
     shop_kind: kind || '',
     target: url.href,

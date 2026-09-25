@@ -2,17 +2,27 @@
 /**
  * An anime: when each episode airs, who voices it, who made it, its songs and
  * where it sits in its franchise, then the rest a reader asks for (story,
- * official streams, trailer, related shows, questions). Rendered by the Worker
- * from one shard record (packages/core/src/where/record-title.mjs); every link
- * in it was resolved at build time to a page that exists.
+ * official streams, what to buy, trailer, related shows, questions). Rendered
+ * by the Worker from one shard record (packages/core/src/where/record-title.mjs);
+ * every link in it was resolved at build time to a page that exists.
+ *
+ * The buy box sits in the side column right above "Where to watch", the home
+ * site's order (its buy box sits above its platform list). The Amazon
+ * Associates sentence is never beside it: it is in the footer and on the
+ * privacy page.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
-import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { envOf, countryOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
 import { truncate } from '@sister/core/src/lib/format.js'
+import { checkedLong } from '@sister/core/src/lib/checked.js'
+import { freeSplit } from '@sister/core/src/lib/answers.mjs'
+import { picksShowFor } from '@sister/core/src/lib/picks.js'
 import { loadAnime } from '@sister/core/src/where/runtime.mjs'
 import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
+import { animeShopRows } from '@sister/core/src/where/shop.mjs'
+import { quickStats, pills, answerLine } from '@sister/core/src/where/title-lines.mjs'
 import { formatWord, statusWord, seasonWord, sourceWord, partialDate, paragraphs, plural } from '@sister/core/src/where/words.mjs'
 import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
 import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
@@ -25,6 +35,9 @@ import Streams from '@sister/core/src/components/where/Streams.astro'
 import Trailer from '@sister/core/src/components/where/Trailer.astro'
 import Faq from '@sister/core/src/components/where/Faq.astro'
 import Covers from '@sister/core/src/components/where/Covers.astro'
+import BuyBox from '@sister/core/src/components/BuyBox.astro'
+import TopPicks from '@sister/core/src/components/TopPicks.astro'
+import MyListButton from '@sister/core/src/components/MyListButton.astro'
 
 let r
 try {
@@ -38,9 +51,11 @@ if (!r) return notFound(Astro)
 // Records built before a field existed simply lack it.
 r.related ||= []
 r.recs ||= []
+r.similar ||= []
 r.watchOn ||= []
 
-// The title page lists the first twelve; the rest are on /episodes.
+const country = countryOf(Astro)
+// The first twelve episodes are listed here; the rest are on /episodes.
 const FIRST = 12
 const shown = r.rows.slice(0, FIRST)
 const story = paragraphs(r.description)
@@ -63,6 +78,16 @@ const description = truncate(
   158,
 )
 
+// The services that give something away (the home site's platform facts).
+const freeNames = freeSplit(r.watchOn).free.map((row) => row.link.site)
+const freeLinks = r.watchOn.filter((s) => freeNames.includes(s.site))
+const stats = quickStats(r)
+
+// What to buy: Amazon searches in the reader's own store, and the products
+// picked by hand, shown only to readers on amazon.com where they were picked.
+const buys = animeShopRows(r, country)
+const picked = r.picks && picksShowFor(country) ? r.picks : null
+
 const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
 const jumps = [
   shown.length > 0 && { id: 'episodes', label: 'Episodes' },
@@ -71,6 +96,7 @@ const jumps = [
   r.songs.length > 0 && { id: 'songs', label: 'Songs' },
   r.watch && { id: 'order', label: 'Watch order' },
   r.watchOn.length > 0 && { id: 'watch', label: 'Where to watch' },
+  buys.length > 0 && { id: 'own', label: 'Buy' },
   faq.length > 0 && { id: 'faq', label: 'Questions' },
 ].filter(Boolean)
 
@@ -83,9 +109,26 @@ const factRows = [
   ['Aired', ended],
   ['Source', sourceWord(r.source)],
   ['AniList score', r.score ? `${r.score} / 100` : ''],
+  ['AniList chart', r.chart ? `#${r.chart.rank.toLocaleString('en-US')} ${r.chart.words} of all time` : ''],
+  ['Watching now', r.watching ? `${r.watching.toLocaleString('en-US')} people` : ''],
+  ['Finished it', r.completed ? `${r.completed.toLocaleString('en-US')} people` : ''],
   ['Favourites', r.favourites ? `${r.favourites.toLocaleString('en-US')} people` : ''],
 ].filter(([, value]) => value)
 const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [formatWord(t.format), t.year].filter(Boolean).join(', '), badge: t.relation })
+const similarCard = (t) => ({ ...card(t), meta: t.shared?.length ? t.shared.join(', ') : card(t).meta })
+
+// The My list button needs the ids of the shows tied to this one, so the For
+// you feed can rank them first for anyone who saves it.
+const listItem = {
+  id: r.id,
+  slug: r.slug,
+  title: r.title,
+  cover: r.cover,
+  genres: r.genres,
+  tags: r.tags,
+  relations: r.related.filter((t) => t.id).map((t) => ({ id: t.id, hit: true })),
+  recs: r.recs.filter((t) => t.id).map((t) => ({ id: t.id })),
+}
 ---
 
 <Where
@@ -97,7 +140,43 @@ const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [form
   jsonld={[animeJsonld(r, config.siteUrl), faqJsonld(faq, path, config.siteUrl)]}
   crumbs={[{ name: 'Anime', href: '/anime' }, ...(r.startYear ? [{ name: String(r.startYear), href: `/year/${r.startYear}` }] : []), { name: r.title }]}
 >
-  <TitleHead record={r} jumps={jumps} />
+  <TitleHead record={r} jumps={jumps}>
+    <MyListButton item={listItem} ns="anime" />
+  </TitleHead>
+
+  <div class="w-lead">
+    <ul class="w-pills">
+      {pills(r, freeNames).map((pill) => <li class={pill.live ? 'w-pill--live' : undefined}>{pill.text}</li>)}
+    </ul>
+    {
+      stats.length > 2 && (
+        <dl class="w-stats">
+          {stats.map((s) => (
+            <div class={s.hot ? 'w-stats--hot' : undefined}>
+              <dt>{s.label}</dt>
+              <dd>{s.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+    <p class="w-answer">
+      {answerLine(r, freeNames)}
+      <small>Checked against AniList on {checkedLong}.</small>
+    </p>
+    {
+      freeLinks.length > 0 && (
+        <p class="w-free">
+          <b>Watch it free on</b>
+          {freeLinks.map((s) => (
+            <a href={s.url} rel="noopener nofollow" target="_blank" data-go="watch" data-platform={s.site}>
+              {s.site}
+            </a>
+          ))}
+        </p>
+      )
+    }
+  </div>
 
   <div class="w-split">
     <div class="w-main">
@@ -145,7 +224,8 @@ const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [form
               <h2 id="songs">Opening and ending songs</h2>
               <p class="w-sec__count">{plural(r.songs.length, 'song')}</p>
             </div>
-            <SongList songs={r.songs} />
+            <p class="w-sec__note">Each song opens a search for it on YouTube, Spotify or Amazon.</p>
+            <SongList songs={r.songs} listen={true} country={country} />
           </section>
         )
       }
@@ -157,6 +237,23 @@ const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [form
               <h2 id="order">Watch order</h2>
             </div>
             <WatchBlock watch={r.watch} />
+            {r.watch.thread && (
+              <>
+                <p class="w-sec__note">
+                  The main story{r.watch.thread.total > r.watch.thread.steps.length ? `, entries ${r.watch.thread.from} to ${r.watch.thread.from + r.watch.thread.steps.length - 1} of ${r.watch.thread.total}` : ''}, one season after the other:
+                </p>
+                <ol class="w-thread">
+                  {r.watch.thread.steps.map((step) => (
+                    <li class={step.self ? 'w-thread--self' : undefined}>
+                      {step.href ? <a href={step.href}>{step.title}</a> : <b>{step.title}</b>}
+                      <small>
+                        {[step.year, formatWord(step.format), step.episodes ? plural(step.episodes, 'episode') : '', step.self ? 'you are here' : ''].filter(Boolean).join(' · ')}
+                      </small>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )}
           </section>
         )
       }
@@ -203,6 +300,31 @@ const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [form
       }
 
       {
+        r.similar.length > 0 && (
+          <section class="w-sec" aria-labelledby="similar">
+            <div class="w-sec__head">
+              <h2 id="similar">You may also like</h2>
+              {r.likeHref && <a class="w-more" href={r.likeHref}>More anime like {r.title}</a>}
+            </div>
+            <p class="w-sec__note">Shows that share its genres and themes, the most watched first.</p>
+            <Covers items={r.similar.map(similarCard)} size="sm" />
+          </section>
+        )
+      }
+
+      {
+        r.likeHref && (
+          <nav class="w-cross" aria-label={`More about ${r.title}`}>
+            <a href={r.likeHref}>
+              <small>If you finished it</small>
+              <b>Anime like {r.title}</b>
+              <small>The closest shows, and why each one is there</small>
+            </a>
+          </nav>
+        )
+      }
+
+      {
         faq.length > 0 && (
           <section class="w-sec" aria-labelledby="faq">
             <div class="w-sec__head">
@@ -243,15 +365,39 @@ const card = (t) => ({ title: t.title, href: t.href, cover: t.cover, meta: [form
             {r.genres.map((g) => <li>{g}</li>)}
           </ul>
         )}
+        {r.anilistUrl && (
+          <p class="w-track">
+            <a href={r.anilistUrl} target="_blank" rel="noopener">Track it on AniList</a>
+            <span>a free account keeps your watch list in one place</span>
+          </p>
+        )}
       </section>
+
+      {
+        buys.length > 0 && (
+          <div id="own">
+            <BuyBox heading="Own it" sub={`Discs, the original books and figures for ${r.title}, from Amazon.`} rows={buys} />
+          </div>
+        )
+      }
 
       {
         r.watchOn.length > 0 && (
           <section class="w-box" aria-labelledby="watch">
             <h2 id="watch">Where to watch</h2>
             <p class="w-box__note">Official streams listed on AniList. What each one carries depends on your country.</p>
-            <Streams streams={r.watchOn} title={r.title} />
+            <Streams streams={r.watchOn} title={r.title} free={freeNames} />
           </section>
+        )
+      }
+
+      {
+        picked && (
+          <TopPicks
+            heading={`Top picks for ${picked.from || r.title}`}
+            sub={picked.from ? `Picked by hand for the ${picked.from} books and merch this show was made from.` : 'Real products on Amazon, picked by hand.'}
+            picks={picked.picks}
+          />
         )
       }
 

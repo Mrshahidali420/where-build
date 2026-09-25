@@ -82,6 +82,12 @@ export function hubPaths(hubs) {
       paths.push({ path: `/genre/${g.slug}${page > 1 ? `/${page}` : ''}`, slug: g.slug, page, pages: g.pages })
     }
   }
+  // The shop, the moods and the like pages: each only when its gate built it.
+  if (hubs.shop) paths.push({ path: '/shop' })
+  const moods = hubs.moodIndex || []
+  if (moods.length) paths.push({ path: '/mood' })
+  for (const m of moods) paths.push({ path: `/mood/${m.slug}`, slug: m.slug })
+  for (const slug of Object.keys(hubs.like || {})) paths.push({ path: `/anime/${slug}/like`, slug })
   return paths
 }
 

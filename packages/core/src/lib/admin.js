@@ -314,3 +314,72 @@ export const SPOTS = {
   shop: 'Shop page',
   themes: 'Theme songs box',
 }
+
+// ------------------------------------------------------------ search links
+
+/**
+ * A handful of outbound links are themselves a search, not a destination: a
+ * Google search, or the YouTube/Spotify search a theme song's listen link
+ * opens (src/components/Themes.astro). Their stored `label` says nothing
+ * useful — old rows, from before that link carried its own data-platform,
+ * hold whatever text the click happened to glue together — so the click feed
+ * reads the query straight out of the link's own address instead. That means
+ * this works the same on a row written five minutes ago and one written
+ * before this fix shipped, because it never looks at `label` at all.
+ *
+ * Amazon's search (the third listen link) is not covered here: it is a buy
+ * link first, and the click feed already reads it through the ordinary buy
+ * path (shop_kind, detail), which says more about it than "search" would.
+ *
+ * Returns { service, query } or null when `target` is not one of these.
+ */
+export function searchTarget(target) {
+  let url
+  try {
+    url = new URL(String(target || ''))
+  } catch (e) {
+    return null
+  }
+  const host = url.hostname.replace(/^www\./, '')
+
+  if (host === 'google.com' || host.endsWith('.google.com')) {
+    if (!url.pathname.startsWith('/search')) return null
+    const q = url.searchParams.get('q')
+    return q ? { service: 'Google', query: q } : null
+  }
+  if (host === 'youtube.com' && url.pathname === '/results') {
+    const q = url.searchParams.get('search_query')
+    return q ? { service: 'YouTube', query: q } : null
+  }
+  if (host === 'open.spotify.com' && url.pathname.startsWith('/search/')) {
+    const q = url.pathname.slice('/search/'.length).replace(/\/$/, '')
+    if (!q) return null
+    try {
+      return { service: 'Spotify', query: decodeURIComponent(q) }
+    } catch (e) {
+      return { service: 'Spotify', query: q }
+    }
+  }
+  return null
+}
+
+// ------------------------------------------------------------- click filter
+
+/** The click feed's filter chips, in the order they are drawn. An empty key
+ * means "All". The kind column only ever holds these four values (see CLICK
+ * in src/lib/action-sql.js), so nothing is ever left out of every chip. */
+export const CLICK_FILTERS = [
+  { key: '', label: 'All' },
+  { key: 'buy', label: 'Buy (Amazon)' },
+  { key: 'read', label: 'Read' },
+  { key: 'watch', label: 'Watch' },
+  { key: 'other', label: 'Other' },
+]
+
+/** Which chip a request asked for, from ?clicks=. An address with no such
+ * kind — a typo, an old link, nothing at all — is the same as asking for
+ * "All", never a broken page. */
+export function clickFilterOf(url) {
+  const key = url.searchParams.get('clicks') || ''
+  return CLICK_FILTERS.find((f) => f.key === key) || CLICK_FILTERS[0]
+}

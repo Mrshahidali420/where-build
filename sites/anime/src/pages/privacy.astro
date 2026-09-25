@@ -9,7 +9,8 @@ export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 
-const amazon = Boolean(config.amazon.stores.us)
+// Only once the site has a tag in some store: before that no link earns anything.
+const amazon = Object.values(config.amazon.stores).some(Boolean)
 ---
 
 <Where title={`Privacy | ${config.name}`} description={`What ${config.name} records about a visit, and what it never does.`} canonical="/privacy" crumbs={[{ name: 'Privacy' }]}>
@@ -17,7 +18,7 @@ const amazon = Boolean(config.amazon.stores.us)
     <h1>Privacy</h1>
   </header>
   <div class="prose">
-    <p>{config.name} has no accounts, no logins and no forms. It does not ask for your name or e-mail.</p>
+    <p>{config.name} has no accounts and no logins. It never asks for your name or e-mail.</p>
     <h2>What a visit records</h2>
     <p>
       The site counts its own visits in its own database on Cloudflare: the page address and title, the site
@@ -57,10 +58,22 @@ const amazon = Boolean(config.amazon.stores.us)
         </>
       )
     }
+    <h2 id="your-list">Your list</h2>
+    <p>
+      <a href="/my-list">My list</a> is kept in your own browser's storage, on this device only. The anime you
+      save, their statuses and your named lists are never sent to us, and nothing links them to you. Clearing the
+      site's data in your browser, or the button at the bottom of My list, removes them. To show a saved show's next
+      episode, the page downloads small public files that each hold dozens of shows, and the site keeps no
+      record of which ones a browser asked for.
+    </p>
+    <p>
+      The AniList import asks AniList for a public list straight from your browser. The username you type goes to
+      AniList, never to us, and AniList's own privacy policy covers that request.
+    </p>
     <h2>Links out</h2>
     <p>
       Links to AniList, to streaming services and to other sites open those sites under their own privacy
-      policies. Covers and photos load from AniList's image server. A trailer loads YouTube's privacy-enhanced player only after you press play.
+      policies, and a link to a shop, Amazon included, opens that shop under its own. Covers and photos load from AniList's image server. A trailer loads YouTube's privacy-enhanced player only after you press play.
     </p>
   </div>
 </Where>

@@ -17,6 +17,8 @@ import {
   ask,
   askOne,
   clock,
+  CLICK_FILTERS,
+  clickFilterOf,
   dayKey,
   RECENT,
   humanize,
@@ -33,6 +35,13 @@ const { db, secret, signedIn, wrongWord } = await gate(Astro, env)
 
 const now = Date.now()
 const today = new Date(now).toISOString().slice(0, 10)
+
+// Which click-kind chip is picked (?clicks=buy|read|watch|other), and how
+// many rows to bring back for it. "All" keeps the old count of 30; a single
+// kind reads much thinner traffic overall, so it gets more rows to still
+// feel like a real feed.
+const clickFilter = clickFilterOf(Astro.url)
+const CLICK_LIMIT = clickFilter.key ? 50 : 30
 
 let live = {}
 let todayRow = {}
@@ -78,7 +87,9 @@ if (signedIn) {
     ask(
       db,
       `SELECT ts, name, kind, path, label, page_type, platform, shop_kind, detail, country, target
-       FROM events WHERE ${RECENT} AND ${CLICK} ORDER BY ts DESC LIMIT 30`
+       FROM events WHERE ${RECENT} AND ${CLICK}${clickFilter.key ? ' AND kind = ?' : ''}
+       ORDER BY ts DESC LIMIT ${CLICK_LIMIT}`,
+      ...(clickFilter.key ? [clickFilter.key] : [])
     ),
     // Addresses people asked for that are not here. Grouped, because one bad
     // link on somebody else's site sends the same wrong address over and over,
@@ -204,8 +215,18 @@ const brokenRows = missing.map((row) => ({
   </div>
 
   <div class="panel">
-    <h2>The last 30 clicks out</h2>
+    <h2>The last {CLICK_LIMIT} clicks out{clickFilter.key && ` · ${clickFilter.label}`}</h2>
     <p class="say">Every link that sends a reader away. That hand-off is the job of this site.</p>
+    <nav class="chips" aria-label="Filter clicks by kind">
+      {CLICK_FILTERS.map((f) => (
+        <a
+          href={f.key ? `/my-admin?clicks=${f.key}` : '/my-admin'}
+          aria-current={f.key === clickFilter.key ? 'page' : undefined}
+        >
+          {f.label}
+        </a>
+      ))}
+    </nav>
     <ClickFeed rows={clicks} empty="No clicks out yet." />
   </div>
 

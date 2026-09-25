@@ -29,6 +29,15 @@ export const WHERE_GATE_DEFAULTS = {
   schedule: { min: 10 },
   season: { min: 12 },
   genre: { min: 60, per: 60, maxPages: 10 },
+  // The shop page (src/where/shop.mjs): enough shelvable titles to fill its
+  // first shelf, or no page, no menu link and no sitemap line.
+  shop: { min: 24 },
+  // A mood page (src/where/moods.mjs): at least `min` shows fit its recipe;
+  // the page lists at most `per`.
+  mood: { min: 24, per: 60 },
+  // "Anime like X" (src/where/similar.mjs): only the `top` most watched
+  // titles, and only when the list reaches `min` shows. No long tail.
+  like: { top: 300, min: 10 },
 }
 
 /** One gate's settings: the site's own, over the defaults. */
@@ -73,3 +82,6 @@ export const passesStudio = (studio, gate) => Boolean(studio.name) && studio.tit
 export const passesArtist = (artist, gate) => Boolean(artist.name) && artist.songs.length >= gate.min
 
 export const passesWatchOrder = (franchise, gate) => franchise.ids.length >= gate.min
+
+/** /shop: enough titles with a cover and a name a shop knows (shopOf's `total`). */
+export const passesShop = (total, gate) => total >= gate.min

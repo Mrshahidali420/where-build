@@ -41,48 +41,29 @@ import config from './site.mjs'
  * searches the whole store on the same words. That finds slightly more noise,
  * never an error page.
  */
-const STORES = {
-  us: {
-    host: 'www.amazon.com',
-    tag: config.amazon.stores.us,
-    dept: { books: 'stripbooks', video: 'movies-tv', toys: 'toys-and-games' },
-  },
-  uk: {
-    host: 'www.amazon.co.uk',
-    tag: config.amazon.stores.uk,
-    dept: { books: 'stripbooks', video: 'dvd' },
-  },
-  de: {
-    host: 'www.amazon.de',
-    tag: config.amazon.stores.de,
-    dept: { books: 'stripbooks', video: 'dvd' },
-  },
-  fr: {
-    host: 'www.amazon.fr',
-    tag: config.amazon.stores.fr,
-    dept: { books: 'stripbooks', video: 'dvd' },
-  },
-  it: {
-    host: 'www.amazon.it',
-    tag: config.amazon.stores.it,
-    dept: { books: 'stripbooks', video: 'dvd' },
-  },
-  es: {
-    host: 'www.amazon.es',
-    tag: config.amazon.stores.es,
-    dept: { books: 'stripbooks', video: 'dvd' },
-  },
-  ca: {
-    host: 'www.amazon.ca',
-    tag: config.amazon.stores.ca,
-    dept: { books: 'stripbooks', video: 'movies-tv' },
-  },
-  jp: {
-    host: 'www.amazon.co.jp',
-    tag: config.amazon.stores.jp,
-    dept: { books: 'english-books', video: 'dvd' },
-  },
+const STORE_HOSTS = {
+  us: { host: 'www.amazon.com', dept: { books: 'stripbooks', video: 'movies-tv', toys: 'toys-and-games' } },
+  uk: { host: 'www.amazon.co.uk', dept: { books: 'stripbooks', video: 'dvd' } },
+  de: { host: 'www.amazon.de', dept: { books: 'stripbooks', video: 'dvd' } },
+  fr: { host: 'www.amazon.fr', dept: { books: 'stripbooks', video: 'dvd' } },
+  it: { host: 'www.amazon.it', dept: { books: 'stripbooks', video: 'dvd' } },
+  es: { host: 'www.amazon.es', dept: { books: 'stripbooks', video: 'dvd' } },
+  ca: { host: 'www.amazon.ca', dept: { books: 'stripbooks', video: 'movies-tv' } },
+  jp: { host: 'www.amazon.co.jp', dept: { books: 'english-books', video: 'dvd' } },
 }
+
+/**
+ * The stores with their tags: { us: { host, tag, dept }, ... }. `tags` is a
+ * site's amazon.stores ({ us: '<its US tag>', it: '' }); a store left out or left ''
+ * has no tag. Exported so a test can build the stores of any set of tags.
+ */
+export function storesFrom(tags = {}) {
+  return Object.fromEntries(
+    Object.entries(STORE_HOSTS).map(([key, store]) => [key, { ...store, tag: String(tags[key] || '') }])
+  )
+}
+
+const STORES = storesFrom(config.amazon.stores)
 
 // Which store serves which country. A country that is not listed, or one whose
 // store has no tag yet, gets the US store. Neighbours that genuinely shop on
@@ -116,18 +97,21 @@ export const ALL = 'all'
 
 /**
  * The store to use for one reader. Falls back to the US store whenever we have
- * no approved tag for their country, so a link is never built without a tag.
+ * no approved tag for their country, so a link is never sent to a store we
+ * cannot be paid by. `stores` defaults to the site's own (storesFrom).
  */
-export function storeFor(country) {
-  const picked = STORES[COUNTRY_STORE[String(country || '').toUpperCase()]]
-  return picked && picked.tag ? picked : STORES.us
+export function storeFor(country, stores = STORES) {
+  const picked = stores[COUNTRY_STORE[String(country || '').toUpperCase()]]
+  return picked && picked.tag ? picked : stores.us
 }
 
 /**
- * An Amazon shop link in the reader's own store, carrying the tag for it.
+ * An Amazon shop link in the reader's own store, carrying the tag for it. A
+ * store with no tag yet (a site not approved anywhere) still gets a working
+ * search link, only without a `tag` parameter.
  */
-export function shopUrl(terms, department, country) {
-  const store = storeFor(country)
+export function shopUrl(terms, department, country, stores = STORES) {
+  const store = storeFor(country, stores)
   const params = new URLSearchParams({ k: terms })
   const dept = store.dept[department]
   if (dept) params.set('i', dept)
@@ -451,7 +435,7 @@ function ownMerch(who, both, country) {
   ]
 }
 
-// Amazon requires this sentence wherever their links appear. It is kept beside
-// the links so the two can never be shipped apart.
+// Amazon requires this sentence on the site. It shows in the footer of every
+// page (src/layouts/Base.astro) and on the privacy page, not beside each box.
 export const AMAZON_DISCLOSURE =
   'As an Amazon Associate we earn from qualifying purchases.'

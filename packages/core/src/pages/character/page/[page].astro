@@ -2,7 +2,6 @@
 export const prerender = true
 import Base from '../../../layouts/Base.astro'
 import CharacterTile from '../../../components/CharacterTile.astro'
-import { AMAZON_DISCLOSURE } from '../../../lib/shop-links.js'
 import Pager from '../../../components/Pager.astro'
 import { PEOPLE, PER_PAGE } from '../index.astro'
 
@@ -37,7 +36,7 @@ const current = Number(page)
       <ul class="people people--wall people--doors">
         {items.map((person) => <CharacterTile person={person} />)}
       </ul>
-      <p class="wall__note">Merch doors open the official shelves in your own country's store. {AMAZON_DISCLOSURE}</p>
+      <p class="wall__note">Merch doors open the official shelves in your own country's store.</p>
     </section>
     <Pager current={current} count={pageCount} base="/character" label="characters" />
   </div>

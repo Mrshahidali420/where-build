@@ -1,0 +1,637 @@
+/* The reader's own things on a Where site: the phone dock, the "Add to my
+   list" button on a title page, the /my-list page and the For you block.
+   Tokens are in where-base.css. The behaviour (src/lib/my-list.js and the
+   scripts that use it) is the home site's; only the look is this site's. */
+
+/* ---- the phone dock ---- */
+
+.dock {
+  display: none;
+}
+@media (max-width: 860px) {
+  .dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 35;
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    background: rgb(site(rgb.night-sunk) / 0.96);
+    border-top: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .dock a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 3.4rem;
+    padding: 0.45rem 0.1rem;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--dawn-faint);
+    text-decoration: none;
+  }
+  .dock a:hover {
+    color: var(--dawn);
+  }
+  .dock a:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: -4px;
+    border-radius: var(--r-sm);
+  }
+  /* The page you are on: the on-air light above its icon. */
+  .dock__on {
+    color: var(--rose) !important;
+  }
+  .dock__on::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 28%;
+    right: 28%;
+    height: 2px;
+    border-radius: 0 0 2px 2px;
+    background: var(--rose);
+  }
+  .dock svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Room under the footer, so the dock never covers the last line. */
+  body.has-dock {
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  /* The header menu is a sheet over the page; the dock steps aside for it. */
+  .menu-open .dock {
+    display: none;
+  }
+}
+
+/* ---- "Add to my list" on a title page ---- */
+
+/* It sits in the title head, beside the cover on a computer and in its own
+   full-width row under the cover on a phone. The two buttons always share one
+   row: Add takes the room, Lists keeps its own width. The panel opens in the
+   page flow under the buttons, so the head (which clips its banner) can never
+   cut it off, and on a phone it is as wide as the screen. */
+.mylist {
+  position: relative;
+  margin-top: var(--s-5);
+  max-width: 26rem;
+}
+.mylist__bar {
+  display: flex;
+  gap: var(--s-2);
+}
+.mylist__add,
+.mylist__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  white-space: nowrap;
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  background: rgb(site(rgb.rose) / 0.12);
+  color: var(--dawn);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.mylist__add:hover,
+.mylist__more:hover {
+  background: rgb(site(rgb.rose) / 0.24);
+}
+.mylist__add:focus-visible,
+.mylist__more:focus-visible,
+.mylist__pop :is(select, input, button, a):focus-visible,
+.mylist__undo:focus-visible,
+.ml :is(button, select, input, a):focus-visible {
+  outline: 2px solid var(--dawn);
+  outline-offset: 2px;
+}
+.mylist__add {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.mylist__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mylist__more {
+  flex: 0 0 auto;
+  border-color: var(--line);
+  background: rgb(site(rgb.night) / 0.6);
+  font-weight: 500;
+}
+.mylist__more svg,
+.mylist__icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mylist__more[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+.mylist__tick {
+  display: none;
+}
+.mylist--on .mylist__add {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: var(--night);
+}
+.mylist--on .mylist__plus {
+  display: none;
+}
+.mylist--on .mylist__tick {
+  display: inline;
+}
+.mylist__notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem var(--s-3);
+}
+.mylist__note {
+  margin: var(--s-2) 0 0;
+  font-size: var(--t-xs);
+  color: var(--dawn-dim);
+}
+.mylist__note:empty {
+  margin: 0;
+}
+.mylist__undo {
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rose-soft);
+  font: inherit;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+.mylist__undo[hidden],
+.mylist__pop[hidden] {
+  display: none;
+}
+.mylist__pop {
+  margin-top: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--night-sunk);
+  box-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.8);
+}
+.mylist__field,
+.mylist__new label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: var(--t-xs);
+  color: var(--dawn-dim);
+}
+.mylist__head {
+  margin: var(--s-4) 0 0.3rem;
+  font-size: var(--t-xs);
+  color: var(--dawn-dim);
+}
+.mylist__pop select,
+.mylist__new input,
+.ml select,
+.ml input {
+  min-height: 2.75rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--night);
+  color: var(--dawn);
+  font: inherit;
+  font-size: var(--t-sm);
+}
+.mylist__lists {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 13rem;
+  overflow-y: auto;
+}
+.mylist__lists li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.mylist__lists label {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 2.75rem;
+  cursor: pointer;
+  font-size: var(--t-sm);
+  overflow-wrap: anywhere;
+}
+.mylist__lists input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  accent-color: var(--rose);
+}
+.mylist__edit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.4rem;
+  font-size: var(--t-xs);
+  font-weight: 700;
+}
+.mylist__empty {
+  padding-block: 0.4rem;
+  font-size: var(--t-sm);
+  color: var(--dawn-faint);
+}
+.mylist__new {
+  margin-top: var(--s-3);
+}
+.mylist__row,
+.ml-form__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.mylist__row input,
+.ml-form__row input {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+.mylist__row button,
+.ml-btn {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--rose);
+  border-radius: var(--r-sm);
+  background: rgb(site(rgb.rose) / 0.16);
+  color: var(--dawn);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s var(--ease);
+}
+.mylist__row button:hover,
+.ml-btn:hover {
+  background: rgb(site(rgb.rose) / 0.3);
+}
+.ml-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+.ml-btn--ghost {
+  border-color: var(--line);
+  background: transparent;
+  font-weight: 500;
+}
+.ml-btn--ghost:hover {
+  border-color: var(--rose);
+  background: transparent;
+}
+.ml-btn[hidden] {
+  display: none;
+}
+.mylist__msg {
+  margin: var(--s-3) 0 0;
+  font-size: var(--t-xs);
+  color: var(--rose-soft);
+}
+.mylist__msg:empty {
+  display: none;
+}
+.mylist__open {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: 0.3rem;
+  font-size: var(--t-sm);
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  .w-head .mylist {
+    grid-column: 1 / -1;
+    max-width: none;
+    margin-top: var(--s-1);
+  }
+}
+
+/* ---- /my-list ---- */
+
+.ml-blocked,
+.ml-alerts,
+.ml-week {
+  margin-bottom: var(--s-6);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  background: var(--night-raised);
+}
+.ml-alerts {
+  border-color: rgb(site(rgb.rose) / 0.55);
+}
+.ml-blocked[hidden],
+.ml-alerts[hidden],
+.ml-week[hidden],
+.ml-form[hidden],
+.ml-empty[hidden],
+.ml-listbar[hidden] {
+  display: none;
+}
+.ml h2 {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-3);
+}
+.ml-alerts__list,
+.ml-week__list,
+.ml-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ml-alerts__list a,
+.ml-week__list a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem var(--s-4);
+  min-height: 2.75rem;
+  color: var(--dawn);
+  text-decoration: none;
+}
+.ml-alerts__list a:hover,
+.ml-week__list a:hover {
+  color: var(--rose);
+}
+.ml-week__list span {
+  font-size: var(--t-sm);
+  color: var(--rose-soft);
+}
+.ml-tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+.ml-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.ml-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--dawn-dim);
+  font: inherit;
+  font-size: var(--t-sm);
+  cursor: pointer;
+}
+.ml-tab em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-xs);
+  color: var(--dawn-faint);
+}
+.ml-tab:hover {
+  color: var(--dawn);
+  border-color: var(--cobalt-bright);
+}
+.ml-tab[aria-selected='true'] {
+  background: var(--dawn);
+  border-color: var(--dawn);
+  color: var(--night);
+  font-weight: 700;
+}
+.ml-tab[aria-selected='true'] em {
+  color: var(--night);
+}
+.ml-form {
+  margin-top: var(--s-4);
+  max-width: 32rem;
+}
+.ml-form label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: var(--t-sm);
+  color: var(--dawn-dim);
+}
+.ml-msg,
+.ml-import__msg {
+  margin: var(--s-3) 0 0;
+  font-size: var(--t-sm);
+  color: var(--rose-soft);
+}
+.ml-msg:empty,
+.ml-import__msg:empty {
+  display: none;
+}
+.ml-panel {
+  margin-top: var(--s-4);
+}
+.ml-panel:focus {
+  outline: none;
+}
+.ml-listbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+.ml-listbar__name {
+  margin: 0 auto 0 0;
+  font-size: var(--t-md);
+  font-weight: 700;
+}
+.ml-count {
+  margin: var(--s-3) 0 var(--s-1);
+  font-size: var(--t-sm);
+  color: var(--dawn-faint);
+}
+.ml-count:empty {
+  display: none;
+}
+.ml-item {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-3) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.ml-item img,
+.ml-item__nocover {
+  display: block;
+  width: 46px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  background: var(--night-sunk);
+}
+.ml-item__title {
+  font-weight: 700;
+  color: var(--dawn);
+  text-decoration: none;
+}
+a.ml-item__title:hover {
+  color: var(--rose);
+}
+.ml-item__facts,
+.ml-item__next {
+  margin: 0.15rem 0 0;
+  font-size: var(--t-xs);
+  color: var(--dawn-dim);
+}
+.ml-item__next {
+  color: var(--rose-soft);
+}
+.ml-item__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--s-2);
+}
+.ml-item--gone .ml-item__title {
+  color: var(--dawn-faint);
+}
+.ml-badge {
+  display: inline-block;
+  margin-top: 0.3rem;
+  padding: 0.1rem 0.55rem;
+  border: 1px dashed var(--cobalt-line);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--dawn-faint);
+}
+.ml-empty {
+  margin-top: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-md);
+  color: var(--dawn-dim);
+}
+.ml-import {
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+}
+.ml-import > p {
+  max-width: 60ch;
+  font-size: var(--t-sm);
+  color: var(--dawn-dim);
+}
+.ml-danger {
+  margin-top: var(--s-6);
+}
+@media (max-width: 640px) {
+  .ml-item {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+  .ml-item__controls {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+/* ---- For you (home page and /my-list) ---- */
+
+.foryou[hidden],
+.foryou__week[hidden] {
+  display: none;
+}
+.foryou__week {
+  margin-bottom: var(--s-5);
+}
+.foryou__week h3 {
+  margin-bottom: var(--s-3);
+  font-size: var(--t-md);
+  color: var(--dawn-dim);
+}
+.foryou__weeklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--s-2) var(--s-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.foryou__weeklist a {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-2);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-soft);
+  text-decoration: none;
+  color: var(--dawn);
+}
+.foryou__weeklist a:hover {
+  border-color: var(--cobalt-bright);
+}
+.foryou__weeklist img {
+  width: 36px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.foryou__weeklist b {
+  display: block;
+  font-size: var(--t-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.foryou__weeklist em {
+  font-style: normal;
+  font-size: var(--t-xs);
+  color: var(--rose-soft);
+}
+/* The reason line is the whole point of a pick, so it reads in the accent. */
+.foryou__why {
+  font-size: var(--t-xs);
+  line-height: 1.35;
+  color: var(--rose-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mylist__add,
+  .mylist__more,
+  .ml-btn {
+    transition: none;
+  }
+}

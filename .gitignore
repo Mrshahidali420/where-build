@@ -6,11 +6,14 @@ node_modules/
 # Per-site build output and state. The catalog and every file the build writes
 # live under each site's data/ and public/d/, never in git: the catalog is
 # pulled from R2 (packages/core/scripts/catalog-snapshot.mjs) or unpacked from
-# packages/core/seed on each build. The two files a site keeps by hand stay.
+# packages/core/seed on each build. The files a site keeps by hand stay.
 sites/*/dist/
 sites/*/data/*
 !sites/*/data/manual-redirects.json
 !sites/*/data/character-slug-keep.json
+# Hand-picked Amazon products (ASINs and short names, never a tag), kept by
+# hand like the two above. See packages/core/src/lib/picks.js.
+!sites/*/data/picks.json
 sites/*/public/d/
 regress/*/dist/
 regress/*/data/

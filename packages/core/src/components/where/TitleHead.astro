@@ -52,6 +52,8 @@ const banner = r.banner ? `--banner: url('${r.banner.replace(/'/g, '%27')}')` : 
         </p>
       )
     }
+    {/* The page's own additions to the head: the My list button. */}
+    <slot />
   </div>
 </header>
 

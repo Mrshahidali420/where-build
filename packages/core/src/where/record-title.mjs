@@ -10,6 +10,8 @@ import { CAST_LANGUAGES } from './people.mjs'
 import { studiosOfTitle } from './studios.mjs'
 import { artistKey } from './artists.mjs'
 import { crossCards, characterUrl } from './cross.mjs'
+import { mainChain } from './franchises.mjs'
+import { picksForTitleIn } from '../lib/picks-core.js'
 
 /** How many cast rows a title record keeps: the credits walk fetched 25. */
 const CAST_MAX = 25
@@ -93,6 +95,31 @@ function watchOf(item, ctx) {
     total: franchise.ids.length,
     prev: at > 0 ? entryOf(ctx, franchise.ids[at - 1]) : null,
     next: at < franchise.ids.length - 1 ? entryOf(ctx, franchise.ids[at + 1]) : null,
+    thread: threadOf(item, franchise, ctx),
+  }
+}
+
+/** How many main-story entries the thread on a title page shows around this one. */
+const THREAD_MAX = 9
+
+/**
+ * The main story of the franchise as a thread (prequel to sequel, one season
+ * after the other), cut to the entries around this title. Null when this
+ * title is not on the main story (a film or side story), or the story is one
+ * entry long: the prev/next steps already say all there is.
+ */
+function threadOf(item, franchise, ctx) {
+  const chain = mainChain(franchise, ctx.titleById)
+  const at = chain.indexOf(item.id)
+  if (at < 0 || chain.length < 2) return null
+  const from = Math.max(0, Math.min(at - Math.floor(THREAD_MAX / 2), chain.length - THREAD_MAX))
+  return {
+    from: from + 1,
+    total: chain.length,
+    steps: chain.slice(from, from + THREAD_MAX).map((id) => {
+      const t = ctx.titleById.get(id)
+      return { title: t.title, href: id === item.id ? null : ctx.link.title(id), year: t.startYear || null, episodes: t.episodes || null, format: t.format || '', self: id === item.id }
+    }),
   }
 }
 
@@ -134,7 +161,7 @@ const MAX_RECS = 8
 const cardOf = (ctx, id) => {
   const t = ctx.titleById.get(id)
   const href = t && ctx.link.title(id)
-  return href ? { title: t.title, href, cover: t.cover || '', year: t.startYear || null, format: t.format || '' } : null
+  return href ? { id, title: t.title, href, cover: t.cover || '', year: t.startYear || null, format: t.format || '' } : null
 }
 
 /** Other anime AniList relates to this one, each with a page here, closest relation first. */
@@ -163,12 +190,39 @@ export function recsOf(item, ctx, related = []) {
     .slice(0, MAX_RECS)
 }
 
+/**
+ * "You may also like": the closest shows by genre and tag (ctx.similar,
+ * src/where/similar.mjs) that the page does not already show as related or
+ * recommended, each with the genres it shares.
+ */
+export function similarCardsOf(item, ctx, shown = []) {
+  const skip = new Set(shown.map((c) => c.href))
+  const out = []
+  for (const match of ctx.similar?.get(item.id) || []) {
+    if (out.length >= SIMILAR_CARDS) break
+    const card = cardOf(ctx, match.id)
+    if (!card || skip.has(card.href)) continue
+    skip.add(card.href)
+    out.push({ ...card, shared: match.genres.slice(0, 3) })
+  }
+  return out
+}
+const SIMILAR_CARDS = 6
+
+/** AniList's all-time chart place, when it has one: "#1 most popular of all time". */
+function chartOf(item) {
+  const words = { POPULAR: 'most popular', RATED: 'highest rated' }
+  const best = (item.ranks || []).filter((r) => r.allTime && words[r.type]).sort((a, b) => a.rank - b.rank)[0]
+  return best ? { rank: best.rank, words: words[best.type] } : null
+}
+
 /** t: one entry of computeWhere's titles ({ item, rows, dated, episodesPage }). */
 export function titleRecord(t, ctx) {
   const { item } = t
   const row = ctx.credits[String(item.id)]
   const { key, crew } = creditsOf(row, ctx)
   const related = relatedOf(item, ctx)
+  const recs = recsOf(item, ctx, related)
   return {
     id: item.id,
     slug: item.slug,
@@ -197,7 +251,15 @@ export function titleRecord(t, ctx) {
     trailer: trailerOf(item),
     watchOn: watchOnOf(item),
     related,
-    recs: recsOf(item, ctx, related),
+    recs,
+    similar: similarCardsOf(item, ctx, [...related, ...recs]),
+    chart: chartOf(item),
+    watching: item.readers?.current || 0,
+    completed: item.readers?.completed || 0,
+    // Hand-picked Amazon products: this show's own, or its source's (the
+    // manga it was made from), with `from` naming that source.
+    picks: ctx.picks ? picksForTitleIn(ctx.picks, item) : null,
+    likeHref: ctx.likes?.has(item.id) ? `${ctx.link.title(item.id)}/like` : null,
     anilistUrl: item.anilistUrl || '',
     nextEpisode: item.nextEpisode || null,
     rows: t.rows,

@@ -17,6 +17,7 @@ import { castRoleWord, plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
 import RoleRows from '@sister/core/src/components/where/RoleRows.astro'
 import Bio from '@sister/core/src/components/where/Bio.astro'
+import { voiceFacts } from '@sister/core/src/where/person-facts.mjs'
 
 let p
 try {
@@ -36,6 +37,8 @@ const lede =
   (mains.length ? `, ${mains.length} of them main characters` : '') +
   (languages.length === 1 ? `, in ${languages[0]}.` : '.')
 const open = p.roles.slice(0, ROLES_OPEN)
+// The character page's facts sheet, for a person: bio facts, role numbers.
+const glance = voiceFacts(p)
 const rest = p.roles.slice(ROLES_OPEN)
 ---
 
@@ -48,6 +51,24 @@ const rest = p.roles.slice(ROLES_OPEN)
   crumbs={[{ name: 'Voice actors', href: '/directory/voice-actors' }, { name: p.name }]}
 >
   <PersonHead person={p} page="voice" lede={lede} />
+
+  {
+    glance.rows.length > 2 && (
+      <section class="w-sec" aria-labelledby="glance">
+        <div class="w-sec__head">
+          <h2 id="glance">{p.name} at a glance</h2>
+        </div>
+        <dl class="w-sheet w-sheet--wide">
+          {glance.rows.map(([label, value]) => (
+            <div>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )
+  }
 
   <section class="w-sec" aria-labelledby="roles">
     <div class="w-sec__head">
@@ -66,5 +87,5 @@ const rest = p.roles.slice(ROLES_OPEN)
     }
   </section>
 
-  <Bio text={p.bio} source={p.anilistUrl} heading={`About ${p.name}`} />
+  <Bio text={glance.bio} source={p.anilistUrl} heading={`About ${p.name}`} />
 </Where>

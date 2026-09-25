@@ -18,6 +18,17 @@ const NAV = [
   { href: '/directory/watch-orders', label: 'Watch orders' },
 ]
 
+// The phone bar (packages/core/src/layouts/Where.astro): five thumb targets.
+// A hub its gate did not build (no schedule this week) drops out of it, the
+// same way it drops out of the menu.
+const DOCK = [
+  { href: '/', label: 'Home', icon: 'home' },
+  { href: '/schedule', label: 'Schedule', icon: 'calendar' },
+  { href: '/search', label: 'Search', icon: 'search' },
+  { href: '/my-list', label: 'My list', icon: 'list' },
+  { href: '/shop', label: 'Shop', icon: 'shop' },
+]
+
 const LEGAL = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
@@ -40,6 +51,13 @@ export default defineSite({
   mark: familyMark('play'),
 
   plannedDomain: 'whereanime.com',
+
+  // Amazon Associates tags, this site's own and never another site's. Empty
+  // until the owner creates them: the links still work, only without a tag
+  // (packages/core/src/lib/shop-links.js), and the Associates sentence stays
+  // out of the footer and the privacy page until a tag exists. When they are
+  // made: us: 'whereanime-20', and the Italian store's tag in it.
+  amazon: { stores: { ...FAMILY.amazon.stores, us: '', it: '' } },
   workerName: 'whereanime',
 
   colors: {
@@ -102,9 +120,14 @@ export default defineSite({
     { page: '/schedule', count: 'where', type: 'schedule', min: 10 },
     { page: '/season/<year>/<season>', count: 'where', type: 'season', min: 12 },
     { page: '/genre/<slug>[/<page>]', count: 'where', type: 'genre', min: 60, per: 60, maxPages: 10 },
+    { page: '/shop', count: 'where', type: 'shop', min: 24 },
+    { page: '/mood/<slug>', count: 'where', type: 'mood', min: 24, per: 60 },
+    // Only the famous few: the 300 most watched, each with 10+ close matches.
+    { page: '/anime/<slug>/like', count: 'where', type: 'like', top: 300, min: 10 },
   ],
 
   nav: NAV,
+  dock: DOCK,
   footer: {
     ...FAMILY.footer,
     browse: NAV,
@@ -118,6 +141,9 @@ export default defineSite({
           { href: '/season', label: 'Seasons' },
           { href: '/genre', label: 'Genres' },
           { href: '/year', label: 'Anime by year' },
+          { href: '/mood', label: 'Anime by mood' },
+          { href: '/shop', label: 'Anime shop' },
+          { href: '/my-list', label: 'My list' },
         ],
       },
       {

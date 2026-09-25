@@ -1,0 +1,92 @@
+---
+/**
+ * "Anime like X", for the famous few only: the most watched titles whose list
+ * of close shows reaches the gate (packages/core/src/where/similar.mjs,
+ * likePagesOf; `like` in site.config.mjs gates). AniList members' own
+ * recommendations lead, then the closest genre and tag matches, each with the
+ * reason it is on the list. The long tail gets no like page, so a thin one is
+ * never built. Prerendered at the nightly build from data/where-hubs.json.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+
+export function getStaticPaths() {
+  return Object.keys(whereHubs().like || {}).map((slug) => ({ params: { slug } }))
+}
+
+const page = whereHubs().like[Astro.params.slug]
+const recs = page.rows.filter((row) => row.kind === 'rec')
+const matches = page.rows.filter((row) => row.kind !== 'rec')
+const path = `${page.href}/like`
+const first = page.rows.slice(0, 3).map((row) => row.title)
+---
+
+<Where
+  title={`${plural(page.rows.length, 'Anime', 'Anime')} Like ${page.title} | ${config.name}`}
+  description={`Finished ${page.title}? ${plural(page.rows.length, 'anime', 'anime')} like it, starting with ${first.join(', ')}, each with the reason it is on the list.`}
+  canonical={path}
+  image={page.cover}
+  jsonld={listJsonld(`Anime like ${page.title}`, page.rows, config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: page.title, href: page.href }, { name: 'Anime like it' }]}
+>
+  <header class="w-intro">
+    <p class="w-kicker">If you finished it</p>
+    <h1>Anime like {page.title}</h1>
+    <p class="w-intro__lede">{page.intro}</p>
+    <a class="w-more" href={page.href}>Episode dates, cast and staff of {page.title}</a>
+  </header>
+
+  {
+    recs.length > 0 && (
+      <section class="w-sec" aria-labelledby="recs">
+        <div class="w-sec__head">
+          <h2 id="recs">What its fans recommend</h2>
+          <p class="w-sec__count">{plural(recs.length, 'show')}</p>
+        </div>
+        <ul class="w-covers">
+          {recs.map((row, i) => (
+            <li>
+              <a href={row.href}>
+                <span class="w-covers__art">
+                  <img src={row.cover} alt="" width="160" height="228" loading={i < 6 ? 'eager' : 'lazy'} decoding="async" />
+                </span>
+                <b>{row.title}</b>
+                <small>{row.meta}</small>
+                <span class="w-why">{row.why}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    matches.length > 0 && (
+      <section class="w-sec" aria-labelledby="matches">
+        <div class="w-sec__head">
+          <h2 id="matches">Same genres, same themes</h2>
+          <p class="w-sec__count">{plural(matches.length, 'show')}</p>
+        </div>
+        <ul class="w-covers">
+          {matches.map((row) => (
+            <li>
+              <a href={row.href}>
+                <span class="w-covers__art">
+                  <img src={row.cover} alt="" width="160" height="228" loading="lazy" decoding="async" />
+                </span>
+                <b>{row.title}</b>
+                <small>{row.meta}</small>
+                <span class="w-why">{row.why}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Where>

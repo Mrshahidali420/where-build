@@ -1,0 +1,228 @@
+---
+/**
+ * /shop (drawn by pages/[hub].astro, built only past the `shop` gate): the
+ * other direction from a title page's buy box, for a viewer who wants anime
+ * merch but has not picked a show yet. Category doors first, then shelves of
+ * the most watched shows, the hand-picked products, the manga and light
+ * novels behind the shows, and the best-known characters.
+ *
+ * We stock nothing and hold no product data: every link opens Amazon's own
+ * search (or a hand-picked product page) in the US store, because a page built
+ * ahead of time has no reader to have a country yet. Tags come only from
+ * site.config.mjs; with none yet, the links carry no tag. The Amazon
+ * Associates sentence is in the footer and on the privacy page, not here.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import { shopUrl, VIDEO, BOOKS, TOYS, ALL } from '@sister/core/src/lib/shop-links.js'
+import { BUY_ICONS } from '@sister/core/src/lib/buy-icons.js'
+import { PICK_LABELS, pickUrl } from '@sister/core/src/lib/picks.js'
+
+const shop = whereHubs().shop
+const BOOK_TERMS = { MANGA: 'manga', COMIC: 'manga', LIGHT_NOVEL: 'light novel', WEB_NOVEL: 'light novel', NOVEL: 'novel' }
+const BOOK_WORDS = { MANGA: 'Manga', COMIC: 'Comic', LIGHT_NOVEL: 'Light novels', WEB_NOVEL: 'Novels', NOVEL: 'Novel' }
+
+// The category doors: a whole kind of thing, for any show.
+const doors = [
+  { kind: 'discs', icon: 'disc', label: 'Blu-ray and DVD', note: 'Box sets and films', url: shopUrl('anime blu-ray box set', VIDEO) },
+  { kind: 'figures', icon: 'figure', label: 'Scale figures', note: 'Statues and figures', url: shopUrl('anime figure', TOYS) },
+  { kind: 'plush', icon: 'plush', label: 'Plushies', note: 'Soft toys of the cast', url: shopUrl('anime plush', TOYS) },
+  { kind: 'prints', icon: 'poster', label: 'Posters and scrolls', note: 'Wall art and prints', url: shopUrl('anime poster wall scroll', ALL) },
+  { kind: 'apparel', icon: 'shirt', label: 'Apparel', note: 'Hoodies, shirts, bags', url: shopUrl('anime hoodie', ALL) },
+  { kind: 'books', icon: 'book', label: 'Manga box sets', note: 'The stories in print', url: shopUrl('manga box set', BOOKS) },
+  { kind: 'books', icon: 'book', label: 'Light novels', note: 'The prose originals', url: shopUrl('light novel', BOOKS) },
+  { kind: 'books', icon: 'book', label: 'Art books', note: 'Artbooks and guides', url: shopUrl('anime art book', BOOKS) },
+]
+
+/** The two or three links under a cover: discs, the books when there are any, and merch. */
+const shelfLinks = ([, , , name, source]) =>
+  [
+    { kind: 'discs', label: 'Discs', url: shopUrl(`${name} anime`, VIDEO) },
+    BOOK_TERMS[source] && { kind: 'books', label: BOOK_WORDS[source], url: shopUrl(`${name} ${BOOK_TERMS[source]}`, BOOKS) },
+    { kind: 'merch', label: 'Merch', url: shopUrl(`${name} anime`, TOYS) },
+  ].filter(Boolean)
+
+const bookLinks = ([, , , name, source]) => [
+  { kind: 'books', label: `Shop ${BOOK_WORDS[source]?.toLowerCase() || 'books'}`, url: shopUrl(`${name} ${BOOK_TERMS[source] || 'manga'}`, BOOKS) },
+]
+
+const faceLinks = ([name, , show]) => [
+  { kind: 'figures', label: 'Figures', url: shopUrl(`${name} ${show} figure`, TOYS) },
+  { kind: 'prints', label: 'Posters', url: shopUrl(`${name} ${show} poster`, ALL) },
+]
+
+const jumps = [
+  { id: 'categories', label: 'Categories' },
+  { id: 'popular', label: 'Most watched' },
+  shop.picked.length > 0 && { id: 'picks', label: 'Top picks' },
+  shop.books.length > 0 && { id: 'books', label: 'The books behind them' },
+  shop.faces.length > 0 && { id: 'characters', label: 'Characters' },
+].filter(Boolean)
+const items = shop.popular.map(([title, href]) => ({ title, href }))
+---
+
+<Where
+  title={`Anime Shop: Blu-rays, Figures, Manga and Merch | ${config.name}`}
+  description={`Anime Blu-rays, figures, plushies, posters, apparel and the manga behind ${plural(shop.popular.length, 'of the most watched shows', 'of the most watched shows')}. Every link opens Amazon.`}
+  canonical="/shop"
+  jsonld={listJsonld('Anime shop: the most watched shows', items, config.siteUrl)}
+  crumbs={[{ name: 'Shop' }]}
+  wide={true}
+>
+  <header class="w-intro">
+    <p class="w-kicker">Anime shop</p>
+    <h1>Blu-rays, figures, manga and merch</h1>
+    <p class="w-intro__lede">
+      For the anime on {config.name}: the disc releases, the manga and light novels they were made from,
+      figures, plushies, posters and clothes. We stock nothing and ship nothing. Every link opens Amazon,
+      so the price and the stock you see are theirs, right at the moment you look.
+    </p>
+    <ul class="w-shop-jump">
+      {jumps.map((j) => <li><a href={`#${j.id}`}>{j.label}</a></li>)}
+    </ul>
+  </header>
+
+  <section class="w-sec" aria-labelledby="categories">
+    <div class="w-sec__head">
+      <h2 id="categories">Shop by category</h2>
+    </div>
+    <ul class="w-shopdoors">
+      {
+        doors.map((door) => (
+          <li>
+            <a href={door.url} rel="nofollow sponsored noopener" target="_blank" data-aff={door.kind} data-aff-src="shop">
+              <span class="buy__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={BUY_ICONS[door.icon]} /></svg>
+              </span>
+              <b>{door.label}</b>
+              <small>{door.note}</small>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="w-sec" aria-labelledby="popular">
+    <div class="w-sec__head">
+      <h2 id="popular">The most watched anime</h2>
+      <p class="w-sec__count">{plural(shop.popular.length, 'show')}</p>
+    </div>
+    <p class="w-sec__note">Discs, the books behind the show and its merch. The cover opens the show's own page.</p>
+    <ul class="w-shelf">
+      {
+        shop.popular.map((row, i) => (
+          <li>
+            <a class="w-shelf__cover" href={row[1]}>
+              <img src={row[2]} alt={`Cover of ${row[0]}`} width="160" height="228" loading={i < 6 ? 'eager' : 'lazy'} decoding="async" />
+              <b>{row[0]}</b>
+            </a>
+            <p class="w-shelf__buy">
+              {shelfLinks(row).map((link) => (
+                <a href={link.url} rel="nofollow sponsored noopener" target="_blank" data-aff={link.kind} data-aff-src="shop" aria-label={`${link.label} for ${row[0]} on Amazon`}>
+                  {link.label}
+                </a>
+              ))}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    shop.picked.length > 0 && (
+      <section class="w-sec" aria-labelledby="picks">
+        <div class="w-sec__head">
+          <h2 id="picks">Top picks, chosen by hand</h2>
+        </div>
+        <p class="w-sec__note">Real products on Amazon for the biggest shows: the first volume, a box set, a figure. Tap a show for the rest.</p>
+        <ul class="w-shelf">
+          {shop.picked.map((p) => (
+            <li>
+              <a class="w-shelf__cover" href={p.href}>
+                <img src={p.cover} alt={`Cover of ${p.title}`} width="160" height="228" loading="lazy" decoding="async" />
+                <b>{p.title}</b>
+              </a>
+              <p class="w-shelf__buy">
+                {p.picks.map((pick) => (
+                  <a href={pickUrl(pick.a)} rel="nofollow sponsored noopener" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="shop" title={pick.n} aria-label={`${pick.n} on Amazon`}>
+                    {PICK_LABELS[pick.t] || 'Merch'}
+                  </a>
+                ))}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    shop.books.length > 0 && (
+      <section class="w-sec" aria-labelledby="books">
+        <div class="w-sec__head">
+          <h2 id="books">The books behind them</h2>
+        </div>
+        <p class="w-sec__note">Most anime start as a manga or a light novel. These are the printed originals of more well-watched shows.</p>
+        <ul class="w-shelf">
+          {shop.books.map((row) => (
+            <li>
+              <a class="w-shelf__cover" href={row[1]}>
+                <img src={row[2]} alt={`Cover of ${row[0]}`} width="160" height="228" loading="lazy" decoding="async" />
+                <b>{row[0]}</b>
+              </a>
+              <p class="w-shelf__buy">
+                {bookLinks(row).map((link) => (
+                  <a href={link.url} rel="nofollow sponsored noopener" target="_blank" data-aff={link.kind} data-aff-src="shop" aria-label={`${link.label} of ${row[0]} on Amazon`}>
+                    {link.label}
+                  </a>
+                ))}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    shop.faces.length > 0 && (
+      <section class="w-sec" aria-labelledby="characters">
+        <div class="w-sec__head">
+          <h2 id="characters">Figures of the best-known characters</h2>
+        </div>
+        <p class="w-sec__note">Main characters of the most watched shows, the faces figures are made of. Each link opens Amazon's live search for that character.</p>
+        <ul class="w-faces">
+          {shop.faces.map((face) => (
+            <li>
+              <img src={face[1]} alt="" width="56" height="56" loading="lazy" decoding="async" />
+              <span>
+                <b>{face[0]}</b>
+                <small>
+                  <a href={face[4]}>{face[3]}</a>
+                </small>
+              </span>
+              <p class="w-shelf__buy">
+                {faceLinks(face).map((link) => (
+                  <a href={link.url} rel="nofollow sponsored noopener" target="_blank" data-aff={link.kind} data-aff-src="shop" aria-label={`${link.label} of ${face[0]} on Amazon`}>
+                    {link.label}
+                  </a>
+                ))}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <p class="w-shop-note">
+    Amazon's search is live: it can show other sellers and other editions, and the price, the stock and the
+    edition are Amazon's own at the moment you look. A show that was never released on disc in your region
+    will show an empty shelf, and that is the honest answer.
+  </p>
+</Where>

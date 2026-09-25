@@ -1,0 +1,47 @@
+---
+/**
+ * "For you": picks from the reader's own list and the shows on it that air
+ * this week, drawn in their browser (src/lib/where-for-you.js). Hidden for a
+ * reader with no list. The tiny inline script marks <html> before the first
+ * paint when a list exists, so the section keeps its room from the start
+ * (grey cards) and nothing under it jumps when the picks arrive.
+ */
+const { heading = 'For you', more = true } = Astro.props
+---
+
+<script is:inline>
+  try {
+    if (/"titles":\{"/.test(localStorage.getItem('mi_list_v1') || '')) document.documentElement.classList.add('mi-has-list')
+  } catch (e) {}
+</script>
+<section class="w-sec foryou" id="for-you" aria-labelledby="foryou-h" hidden>
+  <div class="w-sec__head">
+    <h2 id="foryou-h">{heading}</h2>
+    {more && <a class="w-more" href="/my-list">My list</a>}
+  </div>
+  <p class="w-sec__note">Picked in your browser from the anime you saved. Your list never leaves this device.</p>
+  <div class="foryou__week" hidden>
+    <h3>On your list this week</h3>
+    <ul class="foryou__weeklist"></ul>
+  </div>
+  <ul class="w-covers w-covers--sm foryou__grid">
+    {Array.from({ length: 6 }, () => (
+      <li class="foryou__ghost" aria-hidden="true"><span class="w-covers__art"><span class="foryou__ghostart"></span></span></li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  import '../../lib/where-for-you.js'
+</script>
+
+<style is:global>
+  html.mi-has-list .foryou[hidden] {
+    display: block;
+  }
+  .foryou__ghostart {
+    display: block;
+    aspect-ratio: 460 / 651;
+    background: var(--night-raised);
+  }
+</style>
