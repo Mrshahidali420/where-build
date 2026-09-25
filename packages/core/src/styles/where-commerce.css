@@ -239,6 +239,33 @@
   font-size: var(--t-xs);
   color: var(--dawn-faint);
 }
+.w-pills .w-pill--dub {
+  border-color: var(--cobalt-bright);
+  color: var(--dawn);
+}
+/* Sub or dub, in one line under the answer: lit only when a dub is listed. */
+.w-dub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-1) var(--s-3);
+  margin: var(--s-4) 0 0;
+  max-width: 68ch;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--dawn-dim);
+}
+.w-dub--yes {
+  border-color: var(--cobalt-bright);
+  color: var(--dawn);
+}
+.w-dub a {
+  font-weight: 700;
+  white-space: nowrap;
+}
 .w-free {
   display: flex;
   flex-wrap: wrap;

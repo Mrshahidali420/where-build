@@ -22,7 +22,7 @@ import { loadAnime } from '@sister/core/src/where/runtime.mjs'
 import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
-import { quickStats, pills, answerLine, castLanguages } from '@sister/core/src/where/title-lines.mjs'
+import { quickStats, pills, answerLine, castLanguages, dubOf } from '@sister/core/src/where/title-lines.mjs'
 import { listWords } from '@sister/core/src/where/hub-extras.mjs'
 import { formatWord, statusWord, seasonWord, sourceWord, partialDate, paragraphs, plural } from '@sister/core/src/where/words.mjs'
 import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
@@ -64,7 +64,8 @@ const voiced = r.cast.some((c) => c.voices.length > 0)
 // The languages the cast table holds: the page never says "English" without an English voice in it.
 const languages = castLanguages(r)
 const english = languages.includes('English')
-const dubbed = r.cast.filter((c) => c.voices.some((v) => v.language === 'English')).length
+// Sub or dub, said only from the cast table (null when it has no voices).
+const dub = dubOf(r)
 const faq = faqOf(r)
 const path = `/anime/${r.slug}`
 const what = formatWord(r.format).toLowerCase()
@@ -151,7 +152,7 @@ const listItem = {
 
   <div class="w-lead">
     <ul class="w-pills">
-      {pills(r, freeNames).map((pill) => <li class={pill.live ? 'w-pill--live' : undefined}>{pill.text}</li>)}
+      {pills(r, freeNames).map((pill) => <li class:list={[{ 'w-pill--live': pill.live, 'w-pill--dub': pill.dub }]}>{pill.text}</li>)}
     </ul>
     {
       stats.length > 2 && (
@@ -169,6 +170,14 @@ const listItem = {
       {answerLine(r, freeNames)}
       <small>Checked against AniList on {checkedLong}.</small>
     </p>
+    {
+      dub && (
+        <p class:list={['w-dub', { 'w-dub--yes': dub.dubbed }]}>
+          {dub.line}
+          {dub.dubbed && r.cast.length > 0 && <a href="#cast">See the English cast</a>}
+        </p>
+      )
+    }
     {
       freeLinks.length > 0 && (
         <p class="w-free">
@@ -208,7 +217,7 @@ const listItem = {
             {voiced && (
               <p class="w-sec__note">
                 {english
-                  ? `The Japanese voice and the English dub voice side by side (English for ${dubbed} of ${plural(r.cast.length, 'character')}).`
+                  ? `The Japanese voice and the English dub voice side by side (English for ${dub.voiced} of ${plural(r.cast.length, 'character')}).`
                   : 'Japanese voices. AniList lists no English dub cast for it.'}{' '}
                 A voice actor's name opens every role they have played.
               </p>

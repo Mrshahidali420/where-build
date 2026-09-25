@@ -148,11 +148,12 @@ test('faq: every answer comes from the record, and a question without data is le
   const faq = faqOf(record(), 0)
   assert.deepEqual(
     faq.map((f) => f.q),
-    ['How many episodes does Show have?', 'Who voices Hero in Show?', 'Who made Show?', 'What is the opening song of Show?'],
+    ['How many episodes does Show have?', 'Who voices Hero in Show?', 'Is Show dubbed in English?', 'Who made Show?', 'What is the opening song of Show?'],
   )
   assert.match(faq[0].a, /12 episodes/)
   assert.equal(faq[1].a, 'Hero is voiced by Aoi in Japanese and by Ann in the English dub.')
-  assert.equal(faq[2].a, 'Show was animated by Studio A and directed by Dee.')
+  assert.equal(faq[2].a, 'Yes. Show has an English dub: AniList lists English voices for 1 character, with Ann as Hero.')
+  assert.equal(faq[3].a, 'Show was animated by Studio A and directed by Dee.')
   const airing = faqOf(record({ status: 'RELEASING', episodes: null, nextEpisode: { number: 8, at: 2000 }, rows: [[1, '', 500], [2, '', 900], [3, '', 3000]] }), 1000)
   assert.equal(airing[0].a, 'Show is still airing. 2 episodes have aired so far.')
   assert.match(airing[1].q, /episode 8/)

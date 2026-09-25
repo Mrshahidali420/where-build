@@ -8,6 +8,7 @@
  * Pure: a title record (src/where/record-title.mjs) in, [{ q, a }] out.
  */
 import { airDate, partialDate, plural, seasonWord } from './words.mjs'
+import { dubOf } from './title-lines.mjs'
 
 const MAX = 6
 
@@ -62,6 +63,23 @@ function voiceAnswer(r) {
   }
 }
 
+/** Sub or dub (title-lines.mjs dubOf): asked only once the show is out, and only when the cast table has voices. */
+function dubAnswer(r) {
+  const dub = dubOf(r)
+  if (!dub || r.status === 'NOT_YET_RELEASED') return null
+  const q = `Is ${r.title} dubbed in English?`
+  if (!dub.dubbed) return { q, a: `No English dub is listed for ${r.title}. AniList lists only its Japanese voice cast, so it is watched in Japanese with subtitles.` }
+  const lead = r.cast.find((c) => c.role === 'MAIN' && c.voices.some((v) => v.language === 'English'))
+  const en = lead ? listWords(lead.voices.filter((v) => v.language === 'English').map((v) => v.name)) : ''
+  const sites = (r.watchOn || []).map((w) => w.site)
+  return {
+    q,
+    a:
+      `Yes. ${r.title} has an English dub: AniList lists English voices for ${plural(dub.voiced, 'character')}${lead ? `, with ${en} as ${lead.name}` : ''}.` +
+      (sites.length ? ` It streams officially on ${listWords(sites.slice(0, 3))}; which of them carry the dub depends on your country.` : ''),
+  }
+}
+
 function makersAnswer(r) {
   const studios = names(r.studios)
   const directors = names(keyOf(r, 'Director'))
@@ -101,7 +119,7 @@ function songAnswer(r) {
 
 /** The page's questions, most asked first, never more than six. */
 export function faqOf(r, now = Math.floor(Date.now() / 1000)) {
-  return [episodesAnswer(r, now), nextAnswer(r, now), voiceAnswer(r), makersAnswer(r), orderAnswer(r), songAnswer(r), streamAnswer(r)]
+  return [episodesAnswer(r, now), nextAnswer(r, now), voiceAnswer(r), dubAnswer(r), makersAnswer(r), orderAnswer(r), songAnswer(r), streamAnswer(r)]
     .filter(Boolean)
     .slice(0, MAX)
 }
