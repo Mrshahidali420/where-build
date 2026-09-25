@@ -78,6 +78,11 @@
     flex: 1 1 0;
     padding: var(--s-2) var(--s-3);
   }
+  /* "1970 to 2027" is wider than a third of a phone: let it break, never spill out */
+  .w-hubhead__stats dd {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 /* ---- tabs: plain links, the one on show filled ---- */
@@ -125,20 +130,22 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* the A to Z inside a hub head: one scrolling row on a phone */
+/* Anything in the tools row may shrink to the page: a grid item's default
+   min-width is its content, and a long row there widened the whole page. */
+.w-hubhead__tools > * {
+  min-width: 0;
+}
+
+/* the A to Z inside a hub head: three rows of nine on a phone, every letter in sight */
 @media (max-width: 760px) {
   .w-hubhead__tools .w-letters {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-  }
-  .w-hubhead__tools .w-letters::-webkit-scrollbar {
-    display: none;
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 6px;
   }
   .w-hubhead__tools .w-letters a,
   .w-hubhead__tools .w-letters span {
-    min-width: 2.5rem;
+    min-width: 0;
     height: 2.5rem;
   }
 }
