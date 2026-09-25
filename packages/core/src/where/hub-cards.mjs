@@ -24,6 +24,9 @@ const best = (items, popOf, hrefOf = (x) => x.href) =>
 
 const yearsOf = (list) => list.map((x) => x.year).filter(Boolean)
 
+/** AniList's grey "no image" placeholder counts as no picture: the card draws initials instead. */
+export const pictureOf = (url) => (!url || /\/default\.(jpg|png)$/i.test(url) ? '' : url)
+
 /** "2013 to 2023", "2013", or '' when no year is known. */
 export function spanOf(years) {
   if (!years.length) return ''
@@ -42,7 +45,7 @@ export function voiceCard(p, popOf) {
   const roles = p.roles || []
   const mains = roles.filter((r) => r.role === 'MAIN')
   const top = best(mains.length ? mains : roles, popOf)
-  return [p.name, p.voiceHref, p.counts.roles, p.image || '', top ? `${top.character.name} in ${top.title}` : '', p.favourites || 0, newest(roles), '']
+  return [p.name, p.voiceHref, p.counts.roles, pictureOf(p.image), top ? `${top.character.name} in ${top.title}` : '', p.favourites || 0, newest(roles), '']
 }
 
 /**
@@ -60,7 +63,7 @@ export function staffCard(p, popOf) {
   const top = best(keys, popOf, (x) => x.item.href) || best(crew, popOf, (x) => x.item.href)
   const pop = [...new Set(keys.map((x) => x.item.href))].reduce((n, href) => n + (popOf(href) || 0), 0)
   const line = top ? `${roleWords(top.role)}, ${top.item.title}` : ''
-  return [p.name, p.staffHref, p.counts.shows, p.image || '', line, pop, newest(items), spanOf(yearsOf(items))]
+  return [p.name, p.staffHref, p.counts.shows, pictureOf(p.image), line, pop, newest(items), spanOf(yearsOf(items))]
 }
 
 /** A studio: shows, the years it spans, its most watched show, three covers. */

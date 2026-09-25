@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { directory, hubPaths, letterPath, pageSlice, sortPath, yearPlan, PER_LETTER_PAGE, PER_RANK_PAGE } from '../src/where/hubs.mjs'
-import { artistCard, formatGroups, newestRows, roleWords, spanOf, staffCard, studioCard, voiceCard, watchCard } from '../src/where/hub-cards.mjs'
+import { artistCard, formatGroups, newestRows, pictureOf, roleWords, spanOf, staffCard, studioCard, voiceCard, watchCard } from '../src/where/hub-cards.mjs'
 
 // [name, href, count, image, line, pop, year, span]
 const card = (name, count, pop = 0, year = 0) => [name, `/x/${name.toLowerCase()}`, count, '', '', pop, year, '']
@@ -161,4 +161,12 @@ test('newest rows: by season then year, ties keep the most watched order, undate
     newestRows(rows, 3).map((r) => r[0]),
     ['e', 'c', 'a'],
   )
+})
+
+test('pictures: the AniList placeholder is no picture', () => {
+  assert.equal(pictureOf('https://s4.anilist.co/file/anilistcdn/staff/large/default.jpg'), '')
+  assert.equal(pictureOf('https://s4.anilist.co/file/anilistcdn/staff/large/n95118-oOElrn1aSaiC.png'), 'https://s4.anilist.co/file/anilistcdn/staff/large/n95118-oOElrn1aSaiC.png')
+  assert.equal(pictureOf(''), '')
+  const p = { name: 'X', voiceHref: '/voice-actor/x', image: 'https://s4.anilist.co/file/anilistcdn/staff/large/default.jpg', counts: { roles: 3 }, roles: [] }
+  assert.equal(voiceCard(p, () => 0)[3], '')
 })
