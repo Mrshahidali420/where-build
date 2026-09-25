@@ -1,0 +1,32 @@
+---
+/**
+ * Cards for lists of lists (genres, moods, years, seasons): three covers of
+ * the list's most watched shows side by side, its name, its size and one line
+ * on what is in it.
+ * items: [{ href, title, covers: [url], meta, note?, badge? }]
+ */
+const { items = [], eager = 4, label, size = 'md' } = Astro.props
+const medium = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
+---
+
+<ul class:list={['w-collage', `w-collage--${size}`]} aria-label={label}>
+  {
+    items.map((item, i) => (
+      <li>
+        <a href={item.href}>
+          <span class="w-collage__art" aria-hidden="true">
+            {item.covers.slice(0, 3).map((src) => (
+              <img src={medium(src)} alt="" width="100" height="142" loading={i < eager ? 'eager' : 'lazy'} decoding="async" />
+            ))}
+            {item.badge && <span class="w-collage__badge">{item.badge}</span>}
+          </span>
+          <span class="w-collage__copy">
+            <b>{item.title}</b>
+            {item.meta && <small class="w-collage__meta">{item.meta}</small>}
+            {item.note && <small class="w-collage__note">{item.note}</small>}
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

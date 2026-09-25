@@ -11,7 +11,9 @@
  * Pure.
  */
 import { record as searchRecord } from '../lib/search-shards.js'
-import { directory, hubPaths } from './hubs.mjs'
+import { GROUPS, directory, hubPaths, yearPlan } from './hubs.mjs'
+import { artistCard, staffCard, studioCard, voiceCard, watchCard } from './hub-cards.mjs'
+import { genreNote } from './genre-notes.mjs'
 import { formatWord, seasonWord } from './words.mjs'
 import { seasonAt, shiftSeason, upcomingEpisodes } from './anime-hubs.mjs'
 import { shopOf } from './shop.mjs'
@@ -34,7 +36,17 @@ function seasonHubs(seasons, recordOf) {
     const rows = s.items.map((item) => recordOf.get(item.id)).filter(Boolean).map(cardRow)
     const key = s.path.slice('/season/'.length)
     lists[key] = { year: s.year, season: s.season, label: seasonWord(s.season, s.year), rows }
-    index.push({ key, path: s.path, year: s.year, season: s.season, label: seasonWord(s.season, s.year), count: rows.length, cover: rows[0]?.[2] || '' })
+    index.push({
+      key,
+      path: s.path,
+      year: s.year,
+      season: s.season,
+      label: seasonWord(s.season, s.year),
+      count: rows.length,
+      cover: rows[0]?.[2] || '',
+      covers: rows.slice(0, 3).map((r) => r[2]),
+      top: rows[0]?.[0] || '',
+    })
   }
   return { lists, index }
 }
@@ -45,9 +57,34 @@ function genreHubs(genres, recordOf) {
   for (const g of genres) {
     const rows = g.items.map((item) => recordOf.get(item.id)).filter(Boolean).map(cardRow)
     lists[g.slug] = { name: g.name, total: g.total, per: g.per, rows }
-    index.push({ slug: g.slug, name: g.name, total: g.total, pages: g.pages, covers: rows.slice(0, 3).map((r) => r[2]) })
+    index.push({ slug: g.slug, name: g.name, total: g.total, pages: g.pages, covers: rows.slice(0, 3).map((r) => r[2]), note: genreNote(g.name), top: rows[0]?.[0] || '' })
   }
   return { lists, index }
+}
+
+/**
+ * The year hubs: a page per year with enough shows, the thin years at either
+ * end folded into one page each (hubs.mjs yearPlan). Rows most watched first;
+ * the index newest first, with each page's three top covers.
+ */
+function yearHubs(titles, now) {
+  const byYear = {}
+  for (const t of [...titles].sort(byPopularity)) {
+    if (t.startYear) (byYear[t.startYear] ||= []).push(t)
+  }
+  const plan = yearPlan(Object.fromEntries(Object.entries(byYear).map(([y, list]) => [y, list.length])), { current: new Date(now * 1000).getUTCFullYear() })
+  const years = {}
+  const yearIndex = []
+  const add = (key, label, list, from, to) => {
+    const rows = list.map(cardRow)
+    years[key] = rows
+    yearIndex.push({ key, label, from, to, count: rows.length, covers: rows.slice(0, 3).map((r) => r[2]), top: rows[0]?.[0] || '' })
+  }
+  const merged = (bucket) => bucket.years.flatMap((y) => byYear[y]).sort(byPopularity)
+  if (plan.late) add(plan.late.key, plan.late.label, merged(plan.late), plan.late.years[0], plan.late.years.at(-1))
+  for (const y of plan.own) add(String(y), String(y), byYear[y], y, y)
+  if (plan.early) add(plan.early.key, plan.early.label, merged(plan.early), plan.early.years[0], plan.early.years.at(-1))
+  return { years, yearIndex }
 }
 
 /** A schedule row: [title, href, cover, episode, at, planned episodes]. */
@@ -93,18 +130,16 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
   const popularityOf = new Map(titles.map((t) => [`/anime/${t.slug}`, t.popularity || 0]))
   const voice = people.filter((p) => p.voicePage)
   const crew = people.filter((p) => p.staffPage)
+  const popOf = (href) => popularityOf.get(href) || 0
+  const dir = (group, rows) => directory(rows, Object.keys(GROUPS[group].sorts))
   const groups = {
-    'voice-actors': directory(voice.map((p) => [p.name, p.voiceHref, p.counts.roles])),
-    staff: directory(crew.map((p) => [p.name, p.staffHref, p.counts.shows])),
-    studios: directory(studios.map((s) => [s.name, `/studio/${s.slug}`, s.works.length])),
-    artists: directory(artists.map((a) => [a.name, `/artist/${a.slug}`, a.songs.length])),
-    'watch-orders': directory(watch.map((w) => [w.name, `/watch-order/${w.slug}`, w.entries.length])),
+    'voice-actors': dir('voice-actors', voice.map((p) => voiceCard(p, popOf))),
+    staff: dir('staff', crew.map((p) => staffCard(p, popOf))),
+    studios: dir('studios', studios.map((s) => studioCard(s, popOf))),
+    artists: dir('artists', artists.map((a) => artistCard(a, popOf))),
+    'watch-orders': dir('watch-orders', watch.map((w) => watchCard(w, popOf))),
   }
-  const years = {}
-  for (const t of [...titles].sort(byPopularity)) {
-    if (!t.startYear) continue
-    ;(years[t.startYear] ||= []).push(cardRow(t))
-  }
+  const { years, yearIndex } = yearHubs(titles, now)
   const seasons = seasonHubs(where.seasons || [], recordOf)
   const genres = genreHubs(where.genres || [], recordOf)
   const schedule = where.schedule
@@ -127,7 +162,7 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
       [...s.works].sort((a, b) => (popularityOf.get(b.href) || 0) - (popularityOf.get(a.href) || 0)).slice(0, 2).map((w) => w.title),
     ]),
     watch: watchStarters(watch, popularityOf),
-    years: Object.keys(years).map(Number).sort((a, b) => b - a),
+    years: yearIndex.filter((y) => /^\d+$/.test(y.key)).map((y) => Number(y.key)),
     counts: {
       titles: titles.length,
       voice: voice.length,
@@ -143,6 +178,7 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
   return {
     groups,
     years,
+    yearIndex,
     seasons: seasons.lists,
     seasonIndex: seasons.index,
     genres: genres.lists,

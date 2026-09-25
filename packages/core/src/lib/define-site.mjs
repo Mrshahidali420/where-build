@@ -106,6 +106,7 @@ function checkGates(gates) {
  */
 function checkFonts(fonts) {
   checkText(fonts, ['display', 'text'])
+  need(fonts.displayWeight === undefined || /^[1-9]00$/.test(fonts.displayWeight), 'fonts.displayWeight', "must be a weight like '400', as a string")
   if (!fonts.self) return checkText(fonts, ['stylesheet', 'adminStylesheet'])
   const { subsets, faces } = fonts.self
   need(Array.isArray(subsets) && subsets.length > 0 && subsets.every(isText), 'fonts.self.subsets', 'must list subsets')
@@ -193,7 +194,11 @@ export function defineSite(input) {
 
   const devHost = `${input.workerName}.${input.workersSubdomain}${DEV_HOST_SUFFIX}`
   const host = input.domain || devHost
-  return freeze({ builder: 'core', ...structuredClone(input), devHost, host, siteUrl: `https://${host}` })
+  const site = structuredClone(input)
+  // The weight the display face is drawn at (src/lib/font-pairs.mjs): a
+  // one-weight poster face is 400, a variable family its heavy cut.
+  site.fonts = { displayWeight: '400', ...site.fonts }
+  return freeze({ builder: 'core', ...site, devHost, host, siteUrl: `https://${host}` })
 }
 
 /** True for a Workers dev address. Such a host is never indexed. */

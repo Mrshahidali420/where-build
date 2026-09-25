@@ -2,6 +2,7 @@
 // songs are and what order to watch a franchise in (docs/PLAN.md section 2.1).
 import { defineSite } from '@sister/core/site'
 import { familyMark } from '@sister/core/src/lib/brand.mjs'
+import { fontPair } from '@sister/core/src/lib/font-pairs.mjs'
 import { FAMILY } from '../family.mjs'
 
 // The main menu. A hub that its gate did not build this time (a week with too
@@ -75,21 +76,11 @@ export default defineSite({
     day: '#ffffff',
   },
 
-  // Self-hosted type (@fontsource, OFL). Dela Gothic One is a Japanese poster
-  // gothic: the section names and the wordmark speak in it. Zen Kaku Gothic New
-  // is the body face, from the same tradition, with a calm Latin that holds
-  // long credit lists and dated episode tables. Latin and Latin Extended only.
-  fonts: {
-    display: "'Dela Gothic One', 'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif",
-    text: "'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif",
-    self: {
-      subsets: ['latin', 'latin-ext'],
-      faces: [
-        { pkg: '@fontsource/dela-gothic-one', file: 'dela-gothic-one', weights: [400], preload: [400], admin: [] },
-        { pkg: '@fontsource/zen-kaku-gothic-new', file: 'zen-kaku-gothic-new', weights: [400, 500, 700], preload: [400], admin: [500, 700] },
-      ],
-    },
-  },
+  // Self-hosted type (@fontsource, OFL, Latin and Latin Extended), one line
+  // to swap: the pairs are in packages/core/src/lib/font-pairs.mjs and every
+  // one is installed ('dela-zen', 'unbounded-figtree', 'bricolage-jakarta').
+  // tasks/font-options.png shows the three side by side.
+  fonts: fontPair('dela-zen'),
 
   d1: { name: 'whereanime-analytics', id: 'cf342163-4a44-42b2-b427-49196cf9d333' },
   adminSalt: 'whereanime',

@@ -78,3 +78,26 @@ test('a Where build never pulls the catalog sources into its graph', () => {
   assert.equal(sourceFileFor(fixture, 'virtual:search-source').endsWith(join('lib', 'search-source-catalog.js')), true)
   assert.equal(sourceFileFor(fixture, './something.js'), null)
 })
+
+test('font pairs: one line picks a pair, every face ships its preloaded weight, the display weight defaults to 400', async () => {
+  const { FONT_PAIRS, fontPair } = await import('../src/lib/font-pairs.mjs')
+  for (const key of Object.keys(FONT_PAIRS)) {
+    const site = defineSite({ ...selfHosted(), fonts: fontPair(key) })
+    assert.deepEqual(site.fonts.self.subsets, ['latin', 'latin-ext'])
+    assert.match(site.fonts.displayWeight, /^[1-9]00$/)
+    const code = fontModule(site, 'page')
+    for (const face of site.fonts.self.faces) assert.match(code, new RegExp(`${face.pkg}/latin-ext-${face.weights[0]}\.css`))
+  }
+  assert.throws(() => fontPair('comic-sans'), /no pair/)
+  assert.equal(defineSite(selfHosted()).fonts.displayWeight, '400')
+  assert.throws(() => defineSite({ ...selfHosted(), fonts: { ...selfHosted().fonts, displayWeight: 'bold' } }), /displayWeight/)
+})
+
+test('every font pair is installed in the anime site, so the swap is one line', async () => {
+  const { FONT_PAIRS } = await import('../src/lib/font-pairs.mjs')
+  const { readFileSync } = await import('node:fs')
+  const pkg = JSON.parse(readFileSync(new URL('../../../sites/anime/package.json', import.meta.url), 'utf8'))
+  for (const pair of Object.values(FONT_PAIRS)) {
+    for (const face of pair.faces) assert.ok(pkg.dependencies[face.pkg], `${face.pkg} is in sites/anime/package.json`)
+  }
+})

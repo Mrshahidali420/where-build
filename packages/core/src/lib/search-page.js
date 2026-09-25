@@ -126,4 +126,8 @@ const params = new URLSearchParams(location.search)
 const q = params.get('q') || ''
 input.value = q
 if (q.trim()) run(q)
-else showHint()
+else {
+  showHint()
+  // Arriving with nothing typed (the phone dock's Search button): ready to type.
+  input.focus()
+}

@@ -1,16 +1,20 @@
 ---
 /**
- * One anime season: every show that started in it, most watched first, with
- * its studio and episode count, and the way to the seasons either side.
- * Only seasons that passed the season gate are built.
+ * One anime season: every show that started in it, split by format (TV
+ * first), most watched first inside each, with jump links to each format, and
+ * the way to the seasons either side. Only seasons that passed the season
+ * gate are built.
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import SortTabs from '@sister/core/src/components/where/SortTabs.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { formatGroups } from '@sister/core/src/where/hub-cards.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import Covers from '@sister/core/src/components/where/Covers.astro'
 import { cardOfRow } from '../../../components/card-row.mjs'
 
 export function getStaticPaths() {
@@ -24,9 +28,11 @@ const at = hubs.seasonIndex.findIndex((x) => x.key === key)
 const newer = hubs.seasonIndex[at - 1]
 const older = hubs.seasonIndex[at + 1]
 const items = s.rows.map(cardOfRow)
+const groups = formatGroups(s.rows)
 const studios = new Set(s.rows.map((r) => r[6]).filter(Boolean)).size
 const top = s.rows.slice(0, 3).map((r) => r[0])
 const MONTHS = { WINTER: 'January', SPRING: 'April', SUMMER: 'July', FALL: 'October' }
+const isNow = hubs.home.season?.key === key
 ---
 
 <Where
@@ -37,17 +43,29 @@ const MONTHS = { WINTER: 'January', SPRING: 'April', SUMMER: 'July', FALL: 'Octo
   jsonld={listJsonld(`${s.label} anime`, items, config.siteUrl)}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Seasons', href: '/season' }, { name: s.label }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">Anime season</p>
-    <h1>{s.label} anime</h1>
-    <p class="w-intro__lede">{plural(s.rows.length, 'show')} that started in {s.label}, from {MONTHS[s.season]} on, from {plural(studios, 'studio')}. Most watched first.</p>
-  </header>
+  <HubHead
+    kicker={isNow ? 'Airing this season' : 'Anime season'}
+    title={`${s.label} anime`}
+    lede={`${plural(s.rows.length, 'show')} that started in ${s.label}, from ${MONTHS[s.season]} on, from ${plural(studios, 'studio')}. Most watched first${top[0] ? `, led by ${top[0]}` : ''}.`}
+    stats={[[s.rows.length.toLocaleString('en-US'), 'shows'], [String(studios), 'studios'], ...groups.slice(0, 2).map((g) => [String(g.rows.length), g.label])]}
+  >
+    {groups.length > 1 && <SortTabs tabs={groups.map((g) => ({ label: g.label, href: `#f-${g.key}`, count: g.rows.length }))} label="Jump to a format" />}
+    <nav class="w-stepper" aria-label="Other seasons">
+      {older ? <a href={older.path} rel="prev">{older.label}</a> : <span />}
+      <a href="/season">All seasons</a>
+      {newer ? <a href={newer.path} rel="next">{newer.label}</a> : <span />}
+    </nav>
+  </HubHead>
 
-  <nav class="w-stepper" aria-label="Other seasons">
-    {older ? <a href={older.path} rel="prev">{older.label}</a> : <span />}
-    <a href="/season">All seasons</a>
-    {newer ? <a href={newer.path} rel="next">{newer.label}</a> : <span />}
-  </nav>
-
-  <Covers items={items} eager={6} />
+  {
+    groups.map((g, i) => (
+      <section class="w-sec" id={`f-${g.key}`} aria-labelledby={`h-${g.key}`}>
+        <div class="w-sec__head">
+          <h2 id={`h-${g.key}`}>{g.label}</h2>
+          <p class="w-sec__count">{plural(g.rows.length, 'show')}</p>
+        </div>
+        <Covers items={g.rows.map(cardOfRow)} eager={i === 0 ? 6 : 0} />
+      </section>
+    ))
+  }
 </Where>

@@ -1,67 +1,66 @@
 ---
 /**
- * The way into every anime on the site: this week's schedule, the seasons,
- * the genres, the years, and the most watched shows. Prerendered once a
- * night from data/where-hubs.json; every block links only to pages the build
- * gated in.
+ * The way into every anime on the site: the ways to browse, this season's top
+ * shows, the genres, the moods, the recent years and the most watched shows.
+ * Prerendered once a night from data/where-hubs.json; every block links only
+ * to pages the build gated in.
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import CollageCards from '@sister/core/src/components/where/CollageCards.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import Covers from '@sister/core/src/components/where/Covers.astro'
 import { cardOfRow } from '../../components/card-row.mjs'
 
 const hubs = whereHubs()
 const { home } = hubs
 const c = home.counts
-const seasons = (hubs.seasonIndex || []).slice(0, 8)
-const genres = hubs.genreIndex || []
-const years = home.years.slice(0, 16)
+const season = home.season
+const genres = (hubs.genreIndex || []).slice(0, 8)
+const moods = (hubs.moodIndex || []).slice(0, 4)
+const years = (hubs.yearIndex || []).filter((y) => /^\d+$/.test(y.key)).slice(0, 6)
 const popular = home.titles.map(cardOfRow)
+
+const doors = [
+  hubs.schedule && { href: '/schedule', label: 'Airing this week', what: `${plural(c.airing, 'episode')} in the next seven days` },
+  c.seasons > 0 && { href: '/season', label: 'Seasons', what: `${plural(c.seasons, 'season')}, winter to fall` },
+  c.genres > 0 && { href: '/genre', label: 'Genres', what: `${plural(c.genres, 'genre')}, biggest first` },
+  hubs.moodIndex?.length > 0 && { href: '/mood', label: 'Moods', what: `${plural(hubs.moodIndex.length, 'mood')} for what you want tonight` },
+  { href: '/year', label: 'By year', what: `${home.years.at(-1)} to ${home.years[0]}` },
+  { href: '/directory/watch-orders', label: 'Watch orders', what: `${plural(c.watch, 'franchise')} in order` },
+].filter(Boolean)
 ---
 
 <Where
-  title={`Browse Anime: Seasons, Genres, Years and Schedule | ${config.name}`}
-  description={`Browse ${plural(c.titles, 'anime', 'anime')} by season, genre and year, or see what airs this week. Every show with its episode dates, cast and staff.`}
+  title={`Browse Anime: Seasons, Genres, Moods, Years and Schedule | ${config.name}`}
+  description={`Browse ${plural(c.titles, 'anime', 'anime')} by season, genre, mood and year, or see what airs this week. Every show with its episode dates, cast and staff.`}
   canonical="/anime"
   jsonld={listJsonld('Most watched anime', popular, config.siteUrl)}
   crumbs={[{ name: 'Anime' }]}
 >
-  <header class="w-intro">
-    <h1>Browse anime</h1>
-    <p class="w-intro__lede">{plural(c.titles, 'anime', 'anime')}, each with its episode dates, cast, staff and songs. Start from a season, a genre or a year.</p>
-  </header>
+  <HubHead
+    kicker="Browse"
+    title="Browse anime"
+    lede="Every show with its episode dates, cast, staff and songs. Start from what airs this week, a season, a genre, a mood or a year."
+    stats={[[c.titles.toLocaleString('en-US'), 'anime'], [String(c.seasons), 'seasons'], [String(c.genres), 'genres']]}
+  />
 
   <nav class="w-doors" aria-label="Ways in">
-    {hubs.schedule && <a href="/schedule"><b>Airing this week</b><span>{plural(c.airing, 'episode')} due in the next seven days</span></a>}
-    {seasons.length > 0 && <a href="/season"><b>Seasons</b><span>{plural(c.seasons, 'season')}, winter to fall</span></a>}
-    {genres.length > 0 && <a href="/genre"><b>Genres</b><span>{plural(c.genres, 'genre')}, most watched first</span></a>}
-    <a href="/year"><b>By year</b><span>Every year from {home.years.at(-1)} to {home.years[0]}</span></a>
+    {doors.map((d) => <a href={d.href}><b>{d.label}</b><span>{d.what}</span></a>)}
   </nav>
 
   {
-    seasons.length > 0 && (
-      <section class="w-sec" aria-labelledby="seasons">
+    season && (
+      <section class="w-sec" aria-labelledby="season">
         <div class="w-sec__head">
-          <h2 id="seasons">Recent seasons</h2>
-          <a class="w-sec__link" href="/season">Every season</a>
+          <h2 id="season">Top of {season.label}</h2>
+          <a class="w-sec__link" href={season.path}>All {season.count} shows</a>
         </div>
-        <ul class="w-tiles">
-          {seasons.map((s) => (
-            <li>
-              <a href={s.path}>
-                {s.cover && <img src={s.cover} alt="" width="72" height="102" loading="lazy" decoding="async" />}
-                <span>
-                  <b>{s.label}</b>
-                  <small>{plural(s.count, 'anime', 'anime')}</small>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <Covers items={season.rows.slice(0, 12).map(cardOfRow)} eager={6} size="sm" />
       </section>
     )
   }
@@ -71,31 +70,37 @@ const popular = home.titles.map(cardOfRow)
       <section class="w-sec" aria-labelledby="genres">
         <div class="w-sec__head">
           <h2 id="genres">Genres</h2>
-          <a class="w-sec__link" href="/genre">All genres</a>
+          <a class="w-sec__link" href="/genre">All {hubs.genreIndex.length} genres</a>
         </div>
-        <ul class="w-chips w-chips--links">
-          {genres.map((g) => (
-            <li><a href={`/genre/${g.slug}`}>{g.name} <span>{g.total.toLocaleString('en-US')}</span></a></li>
-          ))}
-        </ul>
+        <CollageCards items={genres.map((g) => ({ href: `/genre/${g.slug}`, title: g.name, covers: g.covers, meta: plural(g.total, 'show'), note: g.note }))} size="sm" eager={0} />
+      </section>
+    )
+  }
+
+  {
+    moods.length > 0 && (
+      <section class="w-sec" aria-labelledby="moods">
+        <div class="w-sec__head">
+          <h2 id="moods">By mood</h2>
+          <a class="w-sec__link" href="/mood">All {hubs.moodIndex.length} moods</a>
+        </div>
+        <CollageCards items={moods.map((m) => ({ href: `/mood/${m.slug}`, title: m.ask, covers: m.covers, meta: `${m.title} · ${plural(m.count, 'show')}` }))} size="sm" eager={0} />
       </section>
     )
   }
 
   <section class="w-sec" aria-labelledby="years">
     <div class="w-sec__head">
-      <h2 id="years">By year</h2>
-      <a class="w-sec__link" href="/year">All years</a>
+      <h2 id="years">Recent years</h2>
+      <a class="w-sec__link" href="/year">Every year</a>
     </div>
-    <ul class="w-chips w-chips--links">
-      {years.map((y) => <li><a href={`/year/${y}`}>{y}</a></li>)}
-    </ul>
+    <CollageCards items={years.map((y) => ({ href: `/year/${y.key}`, title: y.label, covers: y.covers, meta: plural(y.count, 'show'), note: y.top ? `Top: ${y.top}` : '' }))} size="sm" eager={0} />
   </section>
 
   <section class="w-sec" aria-labelledby="popular">
     <div class="w-sec__head">
-      <h2 id="popular">Most watched</h2>
+      <h2 id="popular">Most watched of all time</h2>
     </div>
-    <Covers items={popular} eager={6} />
+    <Covers items={popular} eager={0} />
   </section>
 </Where>

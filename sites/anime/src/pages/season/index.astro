@@ -1,11 +1,14 @@
 ---
 /**
- * Every anime season with a page (enough shows to be worth a list, the season
- * gate), newest first, the current and the coming one called out.
+ * Every anime season with a page (the season gate), newest first: the coming
+ * and current season up top, the last three years as cards with their top
+ * covers, then every season back to the first as a compact year-by-year chart.
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import CollageCards from '@sister/core/src/components/where/CollageCards.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
@@ -19,58 +22,85 @@ for (const s of seasons) {
   byYear.get(s.year).push(s)
 }
 const ORDER = ['WINTER', 'SPRING', 'SUMMER', 'FALL']
-const lead = [next, current].filter(Boolean)
+const cardOf = (s, badge) => ({ href: s.path, title: s.label, covers: s.covers || [s.cover], meta: plural(s.count, 'show'), note: s.top ? `Top: ${s.top}` : '', badge })
+const lead = [current && cardOf(current, 'This season'), next && cardOf(next, 'Coming next')].filter(Boolean)
+const leadKeys = new Set([current?.key, next?.key])
+const recentYears = [...byYear.keys()].slice(0, 3)
+// Six cards: one full row on a wide screen, three rows of two on a phone.
+const recent = seasons.filter((s) => recentYears.includes(s.year) && !leadKeys.has(s.key)).slice(0, 6).map((s) => cardOf(s))
+const total = seasons.reduce((n, s) => n + s.count, 0)
 ---
 
 <Where
   title={`Anime Seasons: Every Season from ${seasons.at(-1)?.year} to ${seasons[0]?.year} | ${config.name}`}
   noindex={seasons.length === 0}
-  description={`Every anime season from ${seasons.at(-1)?.label} to ${seasons[0]?.label}: ${plural(seasons.length, 'season')}, each with all its shows, studios and episode counts.`}
+  description={`Every anime season from ${seasons.at(-1)?.label} to ${seasons[0]?.label}: ${plural(seasons.length, 'season')}, ${current ? `${current.label} with ${plural(current.count, 'show')} now, ` : ''}each with all its shows, studios and episode counts.`}
   canonical="/season"
   jsonld={listJsonld('Anime seasons', seasons.map((s) => ({ name: s.label, href: s.path })), config.siteUrl)}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Seasons' }]}
 >
-  <header class="w-intro">
-    <h1>Anime seasons</h1>
-    <p class="w-intro__lede">Japanese TV airs in four seasons a year: winter from January, spring from April, summer from July and fall from October. Pick one to see everything that started in it.</p>
-  </header>
+  <HubHead
+    kicker="Seasonal anime"
+    title="Anime seasons"
+    lede="Japanese TV airs in four seasons a year: winter from January, spring from April, summer from July and fall from October. Pick one to see everything that started in it."
+    stats={[[String(seasons.length), 'seasons'], [total.toLocaleString('en-US'), 'shows'], [`${seasons.at(-1)?.year} to ${seasons[0]?.year}`, 'years']]}
+  />
 
   {
     lead.length > 0 && (
-      <ul class="w-tiles w-tiles--lead">
-        {lead.map((s) => (
-          <li>
-            <a href={s.path}>
-              {s.cover && <img src={s.cover} alt="" width="72" height="102" loading="eager" decoding="async" />}
-              <span>
-                <small>{s === next ? 'Coming next' : 'This season'}</small>
-                <b>{s.label} anime</b>
-                <small>{plural(s.count, 'show')}</small>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <section class="w-sec" aria-labelledby="now">
+        <div class="w-sec__head">
+          <h2 id="now">Now and next</h2>
+        </div>
+        <CollageCards items={lead} eager={2} size="lg" />
+      </section>
+    )
+  }
+
+  {
+    recent.length > 0 && (
+      <section class="w-sec" aria-labelledby="recent">
+        <div class="w-sec__head">
+          <h2 id="recent">Recent seasons</h2>
+          <p class="w-sec__count">
+            {recentYears.at(-1)} to {recentYears[0]}
+          </p>
+        </div>
+        <CollageCards items={recent} eager={0} size="sm" />
+      </section>
     )
   }
 
   <section class="w-sec" aria-labelledby="all">
     <div class="w-sec__head">
       <h2 id="all">Every season</h2>
+      <p class="w-sec__count">{plural(seasons.length, 'season')}</p>
     </div>
     <div class="w-seasons">
-      {[...byYear].map(([year, list]) => (
-        <div class="w-seasons__year">
-          <span class="w-seasons__label">{year}</span>
-          <ul>
-            {ORDER.map((name) => {
-              const s = list.find((x) => x.season === name)
-              const word = name.charAt(0) + name.slice(1).toLowerCase()
-              return <li>{s ? <a href={s.path}>{word} <small>{s.count}</small></a> : <span aria-hidden="true">{word}</span>}</li>
-            })}
-          </ul>
-        </div>
-      ))}
+      {
+        [...byYear].map(([year, list]) => (
+          <div class="w-seasons__year">
+            <span class="w-seasons__label">{year}</span>
+            <ul>
+              {ORDER.map((name) => {
+                const s = list.find((x) => x.season === name)
+                const word = name.charAt(0) + name.slice(1).toLowerCase()
+                return (
+                  <li>
+                    {s ? (
+                      <a href={s.path} aria-current={s.key === current?.key ? 'true' : undefined}>
+                        {word} <small>{s.count}</small>
+                      </a>
+                    ) : (
+                      <span aria-hidden="true">{word}</span>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))
+      }
     </div>
   </section>
 </Where>

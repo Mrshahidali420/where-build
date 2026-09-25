@@ -12,6 +12,7 @@ import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
 import Covers from '@sister/core/src/components/where/Covers.astro'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
 import { cardOfRow } from '../../components/card-row.mjs'
 
 export function getStaticPaths() {
@@ -31,11 +32,7 @@ const items = mood.rows.map(cardOfRow)
   jsonld={listJsonld(mood.title, items, config.siteUrl)}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Moods', href: '/mood' }, { name: mood.title }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">{mood.ask}</p>
-    <h1>{mood.title}</h1>
-    <p class="w-intro__lede">{mood.intro}</p>
-  </header>
+  <HubHead kicker={mood.ask} title={mood.title} lede={mood.intro} stats={[[String(items.length), 'shows']]} />
 
   <section class="w-sec" aria-labelledby="shows">
     <div class="w-sec__head">
@@ -51,7 +48,7 @@ const items = mood.rows.map(cardOfRow)
       <h2 id="more-moods">Another mood</h2>
     </div>
     <ul class="w-chips w-chips--links">
-      {others.map((m) => <li><a href={`/mood/${m.slug}`}>{m.ask}</a></li>)}
+      {others.map((m) => <li><a href={`/mood/${m.slug}`}>{m.ask} <span>{m.count}</span></a></li>)}
     </ul>
   </section>
 </Where>

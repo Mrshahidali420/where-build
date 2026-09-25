@@ -1,27 +1,53 @@
 ---
-/** Every year with anime on the site, newest first, each with its count. */
+/**
+ * Every year with a page, newest first, grouped by decade: three covers, the
+ * count and the most watched show of each. The thin early years share one
+ * page (src/where/hubs.mjs yearPlan), listed last.
+ */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import CollageCards from '@sister/core/src/components/where/CollageCards.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
-import NameList from '@sister/core/src/components/where/NameList.astro'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
 
-const { years } = whereHubs()
-const rows = Object.keys(years)
-  .map(Number)
-  .sort((a, b) => b - a)
-  .map((year) => [String(year), `/year/${year}`, years[year].length])
+const index = whereHubs().yearIndex
+const total = index.reduce((n, y) => n + y.count, 0)
+const cardOf = (y) => ({ href: `/year/${y.key}`, title: y.label, covers: y.covers, meta: plural(y.count, 'show'), note: y.top ? `Top: ${y.top}` : '' })
+const decades = new Map()
+for (const y of index) {
+  const label = /^\d+$/.test(y.key) ? `${Math.floor(Number(y.key) / 10) * 10}s` : y.from > 2000 ? 'Later' : 'Earlier'
+  if (!decades.has(label)) decades.set(label, [])
+  decades.get(label).push(y)
+}
+const newest = index.find((y) => /^\d+$/.test(y.key))
+const oldest = index.at(-1)
 ---
 
 <Where
-  title={`Anime by Year: ${rows.at(-1)?.[0]} to ${rows[0]?.[0]} | ${config.name}`}
-  description={`Every year of anime on ${config.name}, from ${rows.at(-1)?.[0]} to ${rows[0]?.[0]}, each with all the shows that began in it.`}
+  title={`Anime by Year: Every Year from ${oldest?.from} to ${newest?.key} | ${config.name}`}
+  description={`Anime by the year it began, from ${oldest?.from} to ${newest?.key}: ${plural(total, 'show')} across ${plural(index.length, 'page')}, each list most watched first with episode dates, cast and staff.`}
   canonical="/year"
+  jsonld={listJsonld('Anime by year', index.map((y) => ({ name: y.label, href: `/year/${y.key}` })), config.siteUrl)}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'By year' }]}
 >
-  <header class="w-intro">
-    <h1>Anime by year</h1>
-    <p class="w-intro__lede">Pick a year to see every show that began in it, most watched first.</p>
-  </header>
-  <NameList rows={rows} noun="show" />
+  <HubHead kicker="Browse" title="Anime by year" lede="Pick a year to see every show that began in it, most watched first. Years with only a handful of shows share one page." stats={[[total.toLocaleString('en-US'), 'shows'], [String(index.length), 'year pages']]}>
+    <nav class="w-tabs" aria-label="Jump to a decade">
+      <ul>{[...decades.keys()].map((d) => <li><a href={`#d-${d.toLowerCase()}`}>{d}</a></li>)}</ul>
+    </nav>
+  </HubHead>
+
+  {
+    [...decades].map(([decade, years], i) => (
+      <section class="w-sec" id={`d-${decade.toLowerCase()}`} aria-labelledby={`h-${decade.toLowerCase()}`}>
+        <div class="w-sec__head">
+          <h2 id={`h-${decade.toLowerCase()}`}>{decade}</h2>
+          <p class="w-sec__count">{plural(years.reduce((n, y) => n + y.count, 0), 'show')}</p>
+        </div>
+        <CollageCards items={years.map(cardOf)} eager={i === 0 ? 4 : 0} size="sm" />
+      </section>
+    ))
+  }
 </Where>

@@ -1,24 +1,33 @@
 ---
-/** The A to Z of a directory. A letter with nobody under it is shown, not linked. */
-import { LETTERS } from '../../where/hubs.mjs'
+/**
+ * The A to Z of a directory. A letter with its own page links there; a letter
+ * too thin for a page links to '#', where its names were folded
+ * (src/where/hubs.mjs directory); a letter with nobody is shown, not linked.
+ */
+import { LETTERS, letterPath } from '../../where/hubs.mjs'
 
-const { group, letters = {}, current = '' } = Astro.props
+const { group, dir, current = '' } = Astro.props
 ---
 
 <nav aria-label="Browse by letter">
   <ul class="w-letters">
     {
-      LETTERS.map((letter) => (
-        <li>
-          {letters[letter]?.length ? (
-            <a href={`/directory/${group}/${letter}`} aria-current={letter === current ? 'page' : undefined}>
-              {letter === '0' ? '#' : letter}
-            </a>
-          ) : (
-            <span aria-hidden="true">{letter === '0' ? '#' : letter}</span>
-          )}
-        </li>
-      ))
+      LETTERS.map((letter) => {
+        const href = letterPath(group, dir, letter)
+        const own = Boolean(dir.letters[letter]?.length)
+        const text = letter === '0' ? '#' : letter
+        return (
+          <li>
+            {href ? (
+              <a href={href} aria-current={own && letter === current ? 'page' : undefined} title={own ? undefined : `Names under ${letter.toUpperCase()} are on the # page`}>
+                {text}
+              </a>
+            ) : (
+              <span aria-hidden="true">{text}</span>
+            )}
+          </li>
+        )
+      })
     }
   </ul>
 </nav>

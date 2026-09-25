@@ -1,36 +1,55 @@
 ---
-/** One page of one letter of a directory: the A to Z, the names, the pager. */
+/**
+ * One page of one letter of a directory: the tabs, the A to Z, the cards, the
+ * pager. '#' holds the names that do not start with A to Z and the letters
+ * too thin for a page of their own (src/where/hubs.mjs directory).
+ */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import Pager from '@sister/core/src/components/Pager.astro'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import EntityCards from '@sister/core/src/components/where/EntityCards.astro'
+import LetterNav from '@sister/core/src/components/where/LetterNav.astro'
+import SortTabs from '@sister/core/src/components/where/SortTabs.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { GROUPS, PER_LETTER_PAGE, pageSlice } from '@sister/core/src/where/hubs.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import LetterNav from '@sister/core/src/components/where/LetterNav.astro'
-import NameList from '@sister/core/src/components/where/NameList.astro'
+import { directoryTabs } from './directory-tabs.mjs'
 
 const { group, letter, page, pages } = Astro.props
 const dir = whereHubs().groups[group]
 const meta = GROUPS[group]
-const rows = dir.letters[letter]
-const shown = pageSlice(rows, page, PER_LETTER_PAGE)
-const label = letter === '0' ? 'Names not starting with A to Z' : `${meta.label}: ${letter.toUpperCase()}`
+const all = dir.letters[letter]
+const rows = pageSlice(all, page, PER_LETTER_PAGE).map((i) => dir.rows[i])
+const start = (page - 1) * PER_LETTER_PAGE
+const folded = letter === '0' ? (dir.merged || []).map((l) => l.toUpperCase()) : []
+const mark = letter === '0' ? ['#', ...folded].join(', ') : letter.toUpperCase()
+const heading = letter === '0' ? `${meta.label}: ${folded.length ? `#, ${folded.join(', ')}` : 'other names'}` : `${meta.label}: ${mark}`
+const under =
+  letter === '0'
+    ? `names that start with a number or symbol${folded.length ? `, or with ${folded.join(', ').replace(/, ([^,]*)$/, ' or $1')}` : ''}`
+    : `the letter ${mark}`
+const pageWords = page > 1 ? `, page ${page}` : ''
 const base = `/directory/${group}/${letter}`
-const path = page > 1 ? `${base}/${page}` : base
+const shape = group === 'studios' ? 'studio' : group === 'voice-actors' || group === 'staff' ? 'portrait' : 'cover'
 ---
 
 <Where
-  title={`${label}${page > 1 ? `, page ${page}` : ''} | ${config.name}`}
-  description={`${plural(rows.length, meta.noun, meta.many)} under ${letter === '0' ? 'a number or symbol' : `the letter ${letter.toUpperCase()}`}, each with every ${meta.count} on ${config.name}.`}
-  canonical={path}
-  crumbs={[{ name: meta.label, href: `/directory/${group}` }, { name: letter === '0' ? '#' : letter.toUpperCase() }]}
+  title={`${heading}${pageWords} | ${config.name}`}
+  description={`${plural(all.length, meta.noun, meta.many)} under ${under}, A to Z: ${rows.slice(0, 3).map((r) => r[0]).join(', ')} and more, each with every ${meta.count} on ${config.name}.`}
+  canonical={page > 1 ? `${base}/${page}` : base}
+  jsonld={listJsonld(heading, rows.map(([title, href]) => ({ title, href })), config.siteUrl, start)}
+  crumbs={[{ name: meta.label, href: `/directory/${group}` }, { name: `${mark}${pageWords}` }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">{meta.label} A to Z</p>
-    <h1>{label}</h1>
-    <p class="w-intro__lede">{plural(rows.length, meta.noun, meta.many)}{pages > 1 ? `, page ${page} of ${pages}` : ''}.</p>
-  </header>
-  <LetterNav group={group} letters={dir.letters} current={letter} />
-  <NameList rows={shown} noun={meta.count} />
-  <Pager current={page} count={pages} base={base} segment="" label={meta.many} />
+  <HubHead kicker={`${meta.label} A to Z`} title={`${heading}${pageWords}`} lede={`${plural(all.length, meta.noun, meta.many)} under ${under}, A to Z.`} stats={[[all.length.toLocaleString('en-US'), meta.many]]}>
+    <SortTabs tabs={directoryTabs(group, dir, 'az')} label={`Sort ${meta.many}`} />
+    <LetterNav group={group} dir={dir} current={letter} />
+  </HubHead>
+
+  <section class="w-sec" aria-label={heading}>
+    {pages > 1 && <p class="w-sec__count w-sec__count--top">{(start + 1).toLocaleString('en-US')} to {(start + rows.length).toLocaleString('en-US')} of {all.length.toLocaleString('en-US')}</p>}
+    <EntityCards rows={rows} noun={meta.count} shape={shape} eager={6} />
+    <Pager current={page} count={pages} base={base} segment="" label={`${meta.many} under ${mark}`} />
+  </section>
 </Where>

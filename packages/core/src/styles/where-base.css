@@ -26,6 +26,7 @@
 
   --display: site(fonts.display);
   --text: site(fonts.text);
+  --display-weight: site(fonts.displayWeight);
 
   /* type scale: a major third from 16 px, the top steps fluid */
   --t-xs: 0.8125rem;
@@ -92,7 +93,7 @@ h1,
 h2,
 h3 {
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: var(--display-weight);
   line-height: 1.12;
   letter-spacing: 0.005em;
   margin: 0;
@@ -204,6 +205,7 @@ a:hover {
 }
 .brand__word {
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: 1.3rem;
   line-height: 1;
   letter-spacing: 0.01em;
@@ -404,6 +406,11 @@ a:hover {
     grid-column: 1 / -1;
     grid-row: 2;
     width: 100%;
+  }
+  /* A phone with a Search button in the dock needs no second box up here:
+     the header is the logo and the menu, and shorter for it. */
+  .has-dock-search .finder {
+    display: none;
   }
   .menu-btn {
     display: inline-flex;

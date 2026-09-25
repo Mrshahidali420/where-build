@@ -16,6 +16,7 @@ import '../styles/where-base.css'
 import '../styles/where.css'
 import '../styles/where-commerce.css'
 import '../styles/where-list.css'
+import '../styles/where-hubs.css'
 import config from '../lib/site.mjs'
 import { isDevHost } from '../lib/define-site.mjs'
 import { DOCK_ICONS } from '../lib/dock-icons.js'
@@ -37,6 +38,8 @@ const {
   noindex = false,
   missing = false,
   wide = false,
+  // false on a page with its own search box (home, /search): one box at a time.
+  headerSearch = true,
 } = Astro.props
 
 const site = config.siteUrl
@@ -65,6 +68,8 @@ const familyName = family ? new URL(family).hostname : ''
 const year = new Date().getUTCFullYear()
 // The phone bar: the config's links, less any hub its gate left out.
 const dock = dockItems(config.dock, stats.missing || [])
+// With a Search button in the phone dock, the header drops its box on phones.
+const dockSearch = dock.some((item) => item.href === '/search')
 // The Associates sentence, only once the site has a tag in any store: before
 // that no link earns anything, so saying it would not be true. It lives here
 // and on the privacy page, never beside a box (the owner's rule).
@@ -106,7 +111,7 @@ const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
     <script is:inline set:html={counterScript}></script>
   </head>
 
-  <body class:list={[{ 'has-dock': dock.length > 0 }]}>
+  <body class:list={[{ 'has-dock': dock.length > 0, 'has-dock-search': dockSearch }]}>
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="top">
@@ -116,6 +121,7 @@ const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
           <span class="brand__word">{config.wordmark[0]}<span>{config.wordmark[1]}</span></span>
         </a>
 
+        {headerSearch && (
         <form class="finder" id="finder" role="search" action="/search" method="get">
           <svg class="finder__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <circle cx="11" cy="11" r="7"></circle>
@@ -136,6 +142,7 @@ const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
           <ul id="finder-results" role="listbox" hidden></ul>
           <span id="finder-status" class="sr-only" aria-live="polite"></span>
         </form>
+        )}
 
         <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu">
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
@@ -227,8 +234,9 @@ const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
     }
 
     <script>
-      import '../lib/finder-dropdown.js'
       import '../lib/where-menu.js'
+      // The header box is left out where the page has its own (home, /search).
+      if (document.getElementById('finder-input')) import('../lib/finder-dropdown.js')
     </script>
   </body>
 </html>

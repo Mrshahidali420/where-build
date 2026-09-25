@@ -1,0 +1,17 @@
+---
+/** The first page of a directory's other ranked lists (most roles, newest). The default sort's first page is the directory's front. */
+export const prerender = true
+import DirectoryRank from '../../../../components/DirectoryRank.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { DEFAULT_SORT, hubPaths } from '@sister/core/src/where/hubs.mjs'
+
+export function getStaticPaths() {
+  return hubPaths(whereHubs())
+    .filter((p) => p.sort && p.sort !== DEFAULT_SORT && p.page === 1)
+    .map(({ group, sort, pages }) => ({ params: { group, sort }, props: { pages } }))
+}
+
+const { pages } = Astro.props
+---
+
+<DirectoryRank group={Astro.params.group} sort={Astro.params.sort} page={1} pages={pages} />

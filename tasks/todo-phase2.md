@@ -128,3 +128,34 @@ season 192, genre pages 171. Sitemap about 50,000 URLs.
 Open risks: prerendered hubs carry the build host's noindex when built on
 the dev host (the deploy build sets the real host); schedule is one page
 that goes stale between builds (countdowns run in the browser from UTC).
+
+## Hub upgrade and font options (25 Sep 2026)
+
+- [x] Directories (voice actors, staff, studios, song artists, watch orders):
+      portrait or cover cards with the count, the years and what each is best
+      known for (src/where/hub-cards.mjs); ranked lists as plain-link tabs
+      (most popular, most roles/shows/songs, longest, newest) at
+      /directory/<group>/by/<sort>[/<page>], capped at 480; the A to Z at 96
+      cards a page, letters under 12 names folded into '#'.
+- [x] Staff "most popular" ranks by how watched the shows they hold a key
+      credit on are, so directors and creators lead, not singers.
+- [x] Years: busy years keep a page, the thin early years share
+      /year/before-1961 (yearPlan); the far-future handful is dropped. Index
+      by decade with cover cards.
+- [x] Seasons: now and next, six recent seasons as cover cards, the full
+      chart; a season page split by format with jump links.
+- [x] Genres and moods: three-cover cards with the count, top show and one
+      line; a genre page opens with its newest shows.
+- [x] Schedule: day tabs with counts, today lit, cover cards with the time in
+      the reader's zone and a countdown; each episode moves to the reader's
+      own day.
+- [x] /anime: ways in, top of this season, genres, moods, recent years.
+- [x] One search box at a time: none in the header on home and /search, none
+      in the phone header when the dock has Search; /search focuses its box.
+- [x] /voice-actor, /staff, /studio, /artist, /watch-order and plurals 301 to
+      their directories.
+- [x] Fonts: one-line swap, `fonts: fontPair('dela-zen')` in site.config.mjs
+      (packages/core/src/lib/font-pairs.mjs); every pair installed; sheet in
+      tasks/font-options.png. Live pair unchanged.
+- [x] Tests: where-hub-cards (directory, paths, year plan, cards, format
+      groups, newest), font pairs in where-config.

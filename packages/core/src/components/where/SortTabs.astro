@@ -1,0 +1,24 @@
+---
+/**
+ * The views of one hub as a row of plain links (a ranked list, the A to Z, a
+ * filter), the one being shown marked. Server-rendered, so each view is a
+ * page a crawler can follow.
+ * tabs: [{ label, href, current?, count? }]
+ */
+const { tabs = [], label = 'Sort' } = Astro.props
+---
+
+<nav class="w-tabs" aria-label={label}>
+  <ul>
+    {
+      tabs.map((tab) => (
+        <li>
+          <a href={tab.href} aria-current={tab.current ? 'page' : undefined}>
+            {tab.label}
+            {tab.count != null && <small>{Number(tab.count).toLocaleString('en-US')}</small>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

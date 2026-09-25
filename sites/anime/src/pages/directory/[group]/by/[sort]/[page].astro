@@ -1,0 +1,17 @@
+---
+/** Page 2 and on of any of a directory's ranked lists. */
+export const prerender = true
+import DirectoryRank from '../../../../../components/DirectoryRank.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { hubPaths } from '@sister/core/src/where/hubs.mjs'
+
+export function getStaticPaths() {
+  return hubPaths(whereHubs())
+    .filter((p) => p.sort && p.page > 1)
+    .map(({ group, sort, page, pages }) => ({ params: { group, sort, page: String(page) }, props: { page, pages } }))
+}
+
+const { page, pages } = Astro.props
+---
+
+<DirectoryRank group={Astro.params.group} sort={Astro.params.sort} page={page} pages={pages} />

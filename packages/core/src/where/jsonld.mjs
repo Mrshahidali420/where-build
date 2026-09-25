@@ -82,10 +82,11 @@ export function faqJsonld(faq, path, siteUrl) {
 /** A studio: the company. Its shows go in a separate ItemList node. */
 export const studioJsonld = (s, siteUrl) => ({ '@type': 'Organization', name: s.name, url: `${siteUrl}/studio/${s.slug}` })
 
-export function listJsonld(name, items, siteUrl) {
+/** `start`: how many items came before this page, so page 2 counts on from page 1. */
+export function listJsonld(name, items, siteUrl, start = 0) {
   return {
     '@type': 'ItemList',
     name,
-    itemListElement: items.map((item, i) => clean({ '@type': 'ListItem', position: i + 1, name: item.title || item.name, url: abs(siteUrl, item.href) })),
+    itemListElement: items.map((item, i) => clean({ '@type': 'ListItem', position: start + i + 1, name: item.title || item.name, url: abs(siteUrl, item.href) })),
   }
 }

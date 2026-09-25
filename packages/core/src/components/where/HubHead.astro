@@ -1,0 +1,29 @@
+---
+/**
+ * The head of a hub page: a kicker, the title, one sentence on what the list
+ * is, and its size. The slot takes the page's controls (sort tabs, the A to
+ * Z, filters), all plain links so every view is a crawlable page.
+ */
+const { kicker, title, lede, stats = [] } = Astro.props
+---
+
+<header class="w-hubhead">
+  <div class="w-hubhead__copy">
+    {kicker && <p class="w-kicker">{kicker}</p>}
+    <h1>{title}</h1>
+    {lede && <p class="w-hubhead__lede">{lede}</p>}
+  </div>
+  {
+    stats.length > 0 && (
+      <dl class="w-hubhead__stats">
+        {stats.map(([value, label]) => (
+          <div>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+  {Astro.slots.has('default') && <div class="w-hubhead__tools"><slot /></div>}
+</header>

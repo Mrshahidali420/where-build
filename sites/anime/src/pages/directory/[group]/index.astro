@@ -1,42 +1,22 @@
 ---
 /**
  * The front of one directory (voice actors, staff, studios, song artists,
- * watch orders): the A to Z, and the busiest names first. Prerendered from
- * data/where-hubs.json (packages/core/src/where/hubs.mjs).
+ * watch orders): the first page of its most popular list, with the other
+ * sorts and the A to Z above it. Prerendered from data/where-hubs.json
+ * (packages/core/src/where/hubs.mjs).
  */
 export const prerender = true
-import Where from '@sister/core/src/layouts/Where.astro'
-import config from '@sister/core/src/lib/site.mjs'
+import DirectoryRank from '../../../components/DirectoryRank.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
-import { GROUPS } from '@sister/core/src/where/hubs.mjs'
-import { plural } from '@sister/core/src/where/words.mjs'
-import LetterNav from '@sister/core/src/components/where/LetterNav.astro'
-import NameList from '@sister/core/src/components/where/NameList.astro'
+import { DEFAULT_SORT, hubPaths } from '@sister/core/src/where/hubs.mjs'
 
 export function getStaticPaths() {
-  return Object.keys(whereHubs().groups).map((group) => ({ params: { group } }))
+  return hubPaths(whereHubs())
+    .filter((p) => p.sort === DEFAULT_SORT && p.page === 1)
+    .map(({ group, pages }) => ({ params: { group }, props: { pages } }))
 }
 
-const { group } = Astro.params
-const dir = whereHubs().groups[group]
-const meta = GROUPS[group]
-const total = Object.values(dir.letters).reduce((n, rows) => n + rows.length, 0)
+const { pages } = Astro.props
 ---
 
-<Where
-  title={`${meta.label} A to Z: ${plural(total, meta.noun, meta.many)} | ${config.name}`}
-  description={`Every ${meta.noun} with a page on ${config.name}, A to Z: ${plural(total, meta.noun, meta.many)}, the busiest first.`}
-  canonical={`/directory/${group}`}
-  crumbs={[{ name: meta.label }]}
->
-  <header class="w-intro">
-    <p class="w-kicker">Directory</p>
-    <h1>{meta.label}</h1>
-    <p class="w-intro__lede">{plural(total, meta.noun, meta.many)}, A to Z. Pick a letter, or start with the busiest below.</p>
-  </header>
-  <LetterNav group={group} letters={dir.letters} />
-  <section class="w-sec" aria-labelledby="top">
-    <div class="w-sec__head"><h2 id="top">The busiest</h2></div>
-    <NameList rows={dir.top} noun={meta.count} />
-  </section>
-</Where>
+<DirectoryRank group={Astro.params.group} sort={DEFAULT_SORT} page={1} pages={pages} />

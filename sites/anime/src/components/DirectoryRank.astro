@@ -1,0 +1,56 @@
+---
+/**
+ * One page of a directory's ranked list: most popular (the directory's front
+ * page), most roles or shows, newest (src/where/hubs.mjs GROUPS sorts). Cards
+ * with a portrait or covers, the A to Z under the tabs, numbered pages.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import Pager from '@sister/core/src/components/Pager.astro'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import EntityCards from '@sister/core/src/components/where/EntityCards.astro'
+import LetterNav from '@sister/core/src/components/where/LetterNav.astro'
+import SortTabs from '@sister/core/src/components/where/SortTabs.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { DEFAULT_SORT, GROUPS, PER_RANK_PAGE, pageSlice, sortPath } from '@sister/core/src/where/hubs.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import { directoryTabs } from './directory-tabs.mjs'
+
+const { group, sort = DEFAULT_SORT, page = 1, pages = 1 } = Astro.props
+const dir = whereHubs().groups[group]
+const meta = GROUPS[group]
+const sortLabel = meta.sorts[sort]
+const ranked = dir.sorts[sort]
+const rows = pageSlice(ranked, page, PER_RANK_PAGE).map((i) => dir.rows[i])
+const start = (page - 1) * PER_RANK_PAGE
+const front = sort === DEFAULT_SORT && page === 1
+const pageWords = page > 1 ? `, page ${page}` : ''
+const name = `${meta.label}: ${sortLabel}`
+const leaders = rows.slice(0, 3).map((r) => r[0])
+const shape = group === 'studios' ? 'studio' : group === 'voice-actors' || group === 'staff' ? 'portrait' : 'cover'
+const base = sort === DEFAULT_SORT ? `/directory/${group}` : sortPath(group, sort)
+---
+
+<Where
+  title={front ? `${meta.label}: The ${plural(dir.total, meta.noun, meta.many)} on ${config.name}` : `${name}${pageWords} | ${config.name}`}
+  description={`${sortLabel} of ${plural(dir.total, meta.noun, meta.many)} on ${config.name}${leaders.length ? `, led by ${leaders.join(', ')}` : ''}. ${meta.lede}`}
+  canonical={sortPath(group, sort, page)}
+  jsonld={listJsonld(`${meta.label}, ${sortLabel.toLowerCase()}`, rows.map(([title, href]) => ({ title, href })), config.siteUrl, start)}
+  crumbs={front ? [{ name: meta.label }] : [{ name: meta.label, href: `/directory/${group}` }, { name: `${sortLabel}${pageWords}` }]}
+>
+  <HubHead kicker="Directory" title={front ? meta.label : `${meta.label}: ${sortLabel.toLowerCase()}${pageWords}`} lede={meta.lede} stats={[[dir.total.toLocaleString('en-US'), meta.many]]}>
+    <SortTabs tabs={directoryTabs(group, dir, sort)} label={`Sort ${meta.many}`} />
+    <LetterNav group={group} dir={dir} />
+  </HubHead>
+
+  <section class="w-sec" aria-labelledby="list">
+    <div class="w-sec__head">
+      <h2 id="list">{sortLabel}</h2>
+      <p class="w-sec__count">{pages > 1 ? `${(start + 1).toLocaleString('en-US')} to ${(start + rows.length).toLocaleString('en-US')} of the top ${ranked.length.toLocaleString('en-US')}` : plural(rows.length, meta.noun, meta.many)}</p>
+    </div>
+    <EntityCards rows={rows} noun={meta.count} shape={shape} rank={start + 1} eager={page === 1 ? 6 : 0} />
+    <Pager current={page} count={pages} base={base} segment={sort === DEFAULT_SORT ? `by/${sort}` : ''} label={`${meta.many}, ${sortLabel.toLowerCase()}`} />
+    {page === pages && <p class="w-sec__note w-sec__note--end">The ranked list stops at {ranked.length.toLocaleString('en-US')}. Every one of the {plural(dir.total, meta.noun, meta.many)} is in the A to Z above.</p>}
+  </section>
+</Where>

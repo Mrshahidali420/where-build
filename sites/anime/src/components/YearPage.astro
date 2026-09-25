@@ -1,35 +1,60 @@
 ---
-/** One page of the anime that started in one year, most watched first. */
+/** One page of the anime that started in one year (or the thin years folded together), most watched first. */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import Pager from '@sister/core/src/components/Pager.astro'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { PER_YEAR_PAGE, pageSlice } from '@sister/core/src/where/hubs.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import Covers from '@sister/core/src/components/where/Covers.astro'
 import { cardOfRow } from './card-row.mjs'
 
 const { year, page, pages } = Astro.props
-const rows = whereHubs().years[year]
+const hubs = whereHubs()
+const rows = hubs.years[year]
+const at = hubs.yearIndex.findIndex((y) => y.key === year)
+const entry = hubs.yearIndex[at]
+const newer = hubs.yearIndex[at - 1]
+const older = hubs.yearIndex[at + 1]
+const own = /^\d+$/.test(year)
+const name = own ? `Anime of ${year}` : `Anime ${entry.label.toLowerCase()}`
+const range = own ? '' : `${entry.from} to ${entry.to}`
 const shown = pageSlice(rows, page, PER_YEAR_PAGE)
+const start = (page - 1) * PER_YEAR_PAGE
 const base = `/year/${year}`
 const top = rows.slice(0, 3).map((r) => r[0])
 const items = shown.map(cardOfRow)
+const formats = new Map()
+for (const r of rows) formats.set(r[3] || 'Other', (formats.get(r[3] || 'Other') || 0) + 1)
+const mix = [...formats].sort((a, b) => b[1] - a[1]).slice(0, 3)
+const pageWords = page > 1 ? `, page ${page}` : ''
 ---
 
 <Where
-  title={`Anime of ${year}: All ${rows.length}${page > 1 ? `, page ${page}` : ''} | ${config.name}`}
-  description={`Every anime that began in ${year}, most watched first: ${plural(rows.length, 'show')}${top.length ? `, led by ${top.join(', ')}` : ''}. Each with its episodes, cast and staff.`}
+  title={`${name}: All ${rows.length} Shows${pageWords} | ${config.name}`}
+  description={`Every anime that began ${own ? `in ${year}` : `from ${range}`}, most watched first: ${plural(rows.length, 'show')}${top.length ? `, led by ${top.join(', ')}` : ''}. Each with its episodes, cast and staff.`}
   canonical={page > 1 ? `${base}/${page}` : base}
-  jsonld={listJsonld(`Anime of ${year}`, items, config.siteUrl)}
-  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'By year', href: '/year' }, { name: String(year) }]}
+  image={rows[0]?.[2]}
+  jsonld={listJsonld(name, items, config.siteUrl, start)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'By year', href: '/year' }, { name: `${entry.label}${pageWords}` }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">Anime by year</p>
-    <h1>Anime of {year}</h1>
-    <p class="w-intro__lede">{plural(rows.length, 'show')} began in {year}, most watched first{pages > 1 ? `. Page ${page} of ${pages}` : ''}.</p>
-  </header>
-  <Covers items={items} eager={6} />
-  <Pager current={page} count={pages} base={base} segment="" label={`${year} anime`} />
+  <HubHead
+    kicker="Anime by year"
+    title={`${name}${pageWords}`}
+    lede={`${plural(rows.length, 'show')} began ${own ? `in ${year}` : `between ${range}, years with too few shows for a page of their own`}, most watched first${top[0] ? `, led by ${top[0]}` : ''}.`}
+    stats={[[rows.length.toLocaleString('en-US'), 'shows'], ...mix.map(([format, n]) => [n.toLocaleString('en-US'), format])]}
+  >
+    <nav class="w-stepper" aria-label="Other years">
+      {older ? <a href={`/year/${older.key}`} rel="prev">{older.label}</a> : <span />}
+      <a href="/year">All years</a>
+      {newer ? <a href={`/year/${newer.key}`} rel="next">{newer.label}</a> : <span />}
+    </nav>
+  </HubHead>
+  <section class="w-sec" aria-label={name}>
+    {pages > 1 && <p class="w-sec__count w-sec__count--top">{(start + 1).toLocaleString('en-US')} to {(start + items.length).toLocaleString('en-US')} of {rows.length.toLocaleString('en-US')}</p>}
+    <Covers items={items} eager={page === 1 ? 6 : 0} />
+    <Pager current={page} count={pages} base={base} segment="" label={`${entry.label} anime`} />
+  </section>
 </Where>

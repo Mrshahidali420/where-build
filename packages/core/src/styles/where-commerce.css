@@ -218,6 +218,7 @@
 .w-stats dd {
   margin: 0.15rem 0 0;
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: var(--t-lg);
   line-height: 1.2;
   font-variant-numeric: tabular-nums;

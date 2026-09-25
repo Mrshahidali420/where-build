@@ -1,14 +1,18 @@
 ---
 /**
- * /schedule (drawn by pages/[hub].astro): every episode due in the coming week, day by day, for the shows
- * on this site. Built only when the week passes its gate (enough dated
- * episodes, packages/core/src/where/anime-hubs.mjs buildSchedule): a week the
- * data cannot fill gets no page, so the route is dynamic and its one path is
- * listed only then. Prerendered at the nightly build; the countdowns and the
- * reader's own clock times are filled in by the browser.
+ * /schedule (drawn by pages/[hub].astro): every episode due in the coming
+ * week, day by day, for the shows on this site. Built only when the week
+ * passes its gate (enough dated episodes, packages/core/src/where/anime-hubs.mjs
+ * buildSchedule), so the route lists its one path only then.
+ *
+ * Prerendered at the nightly build. The page is true in UTC as built; the
+ * browser then does what a cached page cannot: it writes each time in the
+ * reader's own clock, counts down to it, marks the reader's today and dims the
+ * days already gone.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
@@ -19,64 +23,88 @@ const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const dayWords = (day) => {
   const d = new Date(`${day}T00:00:00Z`)
-  return { weekday: WEEKDAYS[d.getUTCDay()], date: `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}` }
+  return { weekday: WEEKDAYS[d.getUTCDay()], date: `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`, n: d.getUTCDate() }
 }
 const clock = (at) => new Date(at * 1000).toISOString().slice(11, 16)
 const first = dayWords(schedule.days[0].day)
 const last = dayWords(schedule.days.at(-1).day)
 const shows = new Set(schedule.days.flatMap((d) => d.rows.map((r) => r[1]))).size
-const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
+const busiest = schedule.days.reduce((a, b) => (b.rows.length > a.rows.length ? b : a))
 const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ title, href }))
 ---
 
 <Where
   title={`Anime Airing Schedule This Week: ${first.date} to ${last.date} | ${config.name}`}
-  description={`Every anime episode airing from ${first.weekday} ${first.date} to ${last.weekday} ${last.date}: ${plural(schedule.total, 'episode')} of ${plural(shows, 'show')}, with the time each airs and a countdown.`}
+  description={`Every anime episode airing from ${first.weekday} ${first.date} to ${last.weekday} ${last.date}: ${plural(schedule.total, 'episode')} of ${plural(shows, 'show')}, with the time each airs in your time zone and a countdown.`}
   canonical="/schedule"
   jsonld={listJsonld('Anime airing this week', items, config.siteUrl)}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Airing schedule' }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">Airing schedule</p>
-    <h1>Anime airing this week</h1>
-    <p class="w-intro__lede">
-      {plural(schedule.total, 'episode')} of {plural(shows, 'show')} from {first.weekday} {first.date} to {last.weekday} {last.date}. Times are the first broadcast in Japan, in UTC, with your own clock beside each one.
-    </p>
-  </header>
+  <HubHead
+    kicker="Airing schedule"
+    title="Anime airing this week"
+    lede={`${first.weekday} ${first.date} to ${last.weekday} ${last.date}. Each time is the first broadcast in Japan, shown in your own time zone, with a countdown.`}
+    stats={[[String(schedule.total), 'episodes'], [String(shows), 'shows'], [dayWords(busiest.day).weekday.slice(0, 3), 'busiest day']]}
+  >
+    <nav class="w-daytabs" aria-label="Days of the week">
+      <ul>
+        {
+          schedule.days.map((d, i) => {
+            const w = dayWords(d.day)
+            return (
+              <li>
+                <a href={`#d-${d.day}`} data-day={d.day} class:list={[{ 'is-today': i === 0, 'is-empty': d.rows.length === 0 }]}>
+                  <span class="w-daytabs__wd">{w.weekday.slice(0, 3)}</span>
+                  <b>{w.n}</b>
+                  <small>{d.rows.length ? plural(d.rows.length, 'ep') : 'none'}</small>
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </nav>
+    <p class="w-sched__zone" id="sched-zone">Times in UTC.</p>
+  </HubHead>
 
-  <nav class="w-daynav" aria-label="Days">
-    <ul>
-      {schedule.days.map((d) => (
-        <li><a href={`#d-${d.day}`}>{dayWords(d.day).weekday.slice(0, 3)}<small>{d.rows.length}</small></a></li>
-      ))}
-    </ul>
-  </nav>
-
-  <div class="w-days">
+  <div class="w-sched">
     {
-      schedule.days.map((d) => {
+      schedule.days.map((d, i) => {
         const words = dayWords(d.day)
         return (
-          <section class="w-day" id={`d-${d.day}`} aria-labelledby={`h-${d.day}`}>
+          <section class:list={['w-sched__day', { 'is-today': i === 0 }]} id={`d-${d.day}`} data-day={d.day} aria-labelledby={`h-${d.day}`}>
             <h2 id={`h-${d.day}`}>
               {words.weekday} <span>{words.date}</span>
+              <em class="w-sched__today">Today</em>
             </h2>
             {d.rows.length ? (
-              <ol class="w-airing">
+              <ol class="w-sched__list">
                 {d.rows.map(([title, href, cover, episode, at, planned]) => (
                   <li>
-                    <time class="w-airing__time" datetime={new Date(at * 1000).toISOString()}>{clock(at)}</time>
-                    {cover ? <img class="w-thumb" src={small(cover)} alt="" width="36" height="52" loading="lazy" decoding="async" /> : <span class="w-thumb" />}
-                    <span class="w-airing__what">
-                      <a href={href}>{title}</a>
-                      <small>Episode {episode}{planned ? ` of ${planned}` : ''}</small>
-                    </span>
-                    <Countdown at={at} local={true} />
+                    <a href={href}>
+                      {cover ? (
+                        <img src={String(cover).replace('/cover/large/', '/cover/medium/')} alt="" width="64" height="91" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                      ) : (
+                        <span class="w-sched__blank" />
+                      )}
+                      <span class="w-sched__what">
+                        <time class="w-sched__clock" datetime={new Date(at * 1000).toISOString()} data-at={at}>
+                          {clock(at)} UTC
+                        </time>
+                        <b>{title}</b>
+                        <small>
+                          Episode {episode}
+                          {planned ? ` of ${planned}` : ''}
+                          {planned && episode === planned ? ', final' : episode === 1 ? ', premiere' : ''}
+                        </small>
+                      </span>
+                    </a>
+                    <Countdown at={at} />
                   </li>
                 ))}
               </ol>
             ) : (
-              <p class="w-day__none">No episodes listed for this day.</p>
+              <p class="w-sched__none">No episodes of shows on {config.name} air this day.</p>
             )}
           </section>
         )
@@ -84,3 +112,51 @@ const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ tit
     }
   </div>
 </Where>
+
+<script>
+  // The reader's own clock: each time in their zone, their today marked, the
+  // days before it dimmed. The page as built is true in UTC without this.
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const dayOf = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+  const today = dayOf(new Date())
+  const sections = new Map([...document.querySelectorAll<HTMLElement>('.w-sched__day')].map((s) => [s.dataset.day || '', s]))
+  for (const node of document.querySelectorAll<HTMLElement>('.w-sched__clock')) {
+    const at = new Date(Number(node.dataset.at) * 1000)
+    node.textContent = at.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+    // The page is cut into UTC days; an episode moves to the reader's own day
+    // when that day is on the page, so "Friday" holds only Friday here.
+    const item = node.closest('li')
+    const home = sections.get(dayOf(at))
+    if (!item || !home || home.contains(item)) continue
+    let list = home.querySelector('.w-sched__list')
+    if (!list) {
+      list = document.createElement('ol')
+      list.className = 'w-sched__list'
+      home.querySelector('.w-sched__none')?.replaceWith(list)
+    }
+    list.append(item)
+  }
+  for (const [day, section] of sections) {
+    const list = section.querySelector('.w-sched__list')
+    const items = list ? [...list.children] : []
+    items.sort((a, b) => Number(a.querySelector<HTMLElement>('[data-at]')?.dataset.at) - Number(b.querySelector<HTMLElement>('[data-at]')?.dataset.at))
+    for (const item of items) list?.append(item)
+    if (list && !items.length) {
+      const none = document.createElement('p')
+      none.className = 'w-sched__none'
+      none.textContent = 'No episodes air this day in your time zone.'
+      list.replaceWith(none)
+    }
+    const count = document.querySelector(`.w-daytabs a[data-day="${day}"] small`)
+    if (count) count.textContent = items.length ? `${items.length} ep${items.length === 1 ? '' : 's'}` : 'none'
+    count?.closest('a')?.classList.toggle('is-empty', !items.length)
+  }
+  const zone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const note = document.getElementById('sched-zone')
+  if (note && zone) note.textContent = `Times in your time zone, ${zone.replace(/_/g, ' ')}.`
+  for (const node of document.querySelectorAll<HTMLElement>('.w-daytabs a, .w-sched__day')) {
+    const day = node.dataset.day || ''
+    node.classList.toggle('is-today', day === today)
+    node.classList.toggle('is-past', day < today)
+  }
+</script>

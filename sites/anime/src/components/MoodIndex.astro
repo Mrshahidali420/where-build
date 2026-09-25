@@ -9,9 +9,20 @@ import config from '@sister/core/src/lib/site.mjs'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import CollageCards from '@sister/core/src/components/where/CollageCards.astro'
 
-const moods = whereHubs().moodIndex
-const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
+const hubs = whereHubs()
+const moods = hubs.moodIndex
+const firstSentence = (text) => (String(text || '').match(/^.*?[.!?](\s|$)/)?.[0] || '').trim()
+const items = moods.map((m) => ({
+  href: `/mood/${m.slug}`,
+  title: m.ask,
+  covers: m.covers,
+  meta: `${m.title} · ${plural(m.count, 'show')}`,
+  note: firstSentence(hubs.moods[m.slug]?.intro),
+}))
+const total = new Set(moods.flatMap((m) => hubs.moods[m.slug]?.rows.map((r) => r[1]) || [])).size
 ---
 
 <Where
@@ -21,27 +32,13 @@ const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium
   jsonld={listJsonld('Anime by mood', moods.map((m) => ({ name: m.title, href: `/mood/${m.slug}` })), config.siteUrl)}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Moods' }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">What to watch tonight</p>
-    <h1>Anime by mood</h1>
-    <p class="w-intro__lede">
-      Genres say what a show is. A mood says what you want from it tonight. Each list below is built from the
-      themes AniList tags every show with, so a show is on it because it carries them, not because we guessed.
-    </p>
-  </header>
-  <ul class="w-moods">
-    {
-      moods.map((m, i) => (
-        <li>
-          <a href={`/mood/${m.slug}`}>
-            <b>{m.ask}</b>
-            <small>{m.title}, {plural(m.count, 'show')}</small>
-            <span class="w-moods__covers" aria-hidden="true">
-              {m.covers.map((src) => <img src={small(src)} alt="" width="36" height="52" loading={i < 6 ? 'eager' : 'lazy'} decoding="async" />)}
-            </span>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+  <HubHead
+    kicker="What to watch tonight"
+    title="Anime by mood"
+    lede="Genres say what a show is. A mood says what you want from it tonight. Each list is built from the themes AniList tags every show with, so a show is on it because it carries them, not because we guessed."
+    stats={[[String(moods.length), 'moods'], [total.toLocaleString('en-US'), 'shows']]}
+  />
+  <section class="w-sec" aria-label="Moods">
+    <CollageCards items={items} eager={4} />
+  </section>
 </Where>

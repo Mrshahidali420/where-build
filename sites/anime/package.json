@@ -8,7 +8,11 @@
     "wrangler": "node ../../packages/core/scripts/make-wrangler.mjs"
   },
   "dependencies": {
+    "@fontsource/bricolage-grotesque": "^5.3.0",
     "@fontsource/dela-gothic-one": "^5.3.0",
+    "@fontsource/figtree": "^5.3.0",
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
+    "@fontsource/unbounded": "^5.3.0",
     "@fontsource/zen-kaku-gothic-new": "^5.3.0",
     "@sister/core": "*"
   },

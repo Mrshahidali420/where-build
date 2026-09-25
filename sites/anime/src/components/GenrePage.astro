@@ -1,47 +1,75 @@
 ---
-/** One page of one genre's most watched anime (the genre gate caps how deep it goes). */
+/**
+ * One page of one genre's most watched anime (the genre gate caps how deep it
+ * goes). The first page opens with the genre's newest shows.
+ */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import Pager from '@sister/core/src/components/Pager.astro'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { pageSlice } from '@sister/core/src/where/hubs.mjs'
+import { newestRows } from '@sister/core/src/where/hub-cards.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import Covers from '@sister/core/src/components/where/Covers.astro'
 import { cardOfRow } from './card-row.mjs'
 
 const { slug, page, pages } = Astro.props
-const g = whereHubs().genres[slug]
+const hubs = whereHubs()
+const g = hubs.genres[slug]
+const entry = hubs.genreIndex.find((x) => x.slug === slug)
+const start = (page - 1) * g.per
 const items = pageSlice(g.rows, page, g.per).map(cardOfRow)
+const fresh = page === 1 ? newestRows(g.rows, 12).map(cardOfRow) : []
 const base = `/genre/${slug}`
 const top = g.rows.slice(0, 3).map((r) => r[0])
-const others = whereHubs().genreIndex.filter((x) => x.slug !== slug)
+const others = hubs.genreIndex.filter((x) => x.slug !== slug)
+const pageWords = page > 1 ? `, page ${page}` : ''
 ---
 
 <Where
-  title={`${g.name} Anime: The Most Watched${page > 1 ? `, page ${page}` : ''} | ${config.name}`}
+  title={`${g.name} Anime: The Most Watched${pageWords} | ${config.name}`}
   description={`The most watched ${g.name.toLowerCase()} anime${top.length ? `, led by ${top.join(', ')}` : ''}: ${plural(g.total, 'show')} in all, each with its episode dates, cast and staff.`}
   canonical={page > 1 ? `${base}/${page}` : base}
   image={g.rows[0]?.[2]}
-  jsonld={listJsonld(`${g.name} anime`, items, config.siteUrl)}
-  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Genres', href: '/genre' }, { name: g.name }]}
+  jsonld={listJsonld(`${g.name} anime`, items, config.siteUrl, start)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Genres', href: '/genre' }, { name: `${g.name}${pageWords}` }]}
 >
-  <header class="w-intro">
-    <p class="w-kicker">Anime genre</p>
-    <h1>{g.name} anime</h1>
-    <p class="w-intro__lede">
-      {plural(g.total, 'show')} on {config.name} are filed under {g.name}. Here are the {g.rows.length.toLocaleString('en-US')} most watched{pages > 1 ? `, page ${page} of ${pages}` : ''}.
-    </p>
-  </header>
-  <Covers items={items} eager={6} />
-  <Pager current={page} count={pages} base={base} segment="" label={`${g.name} anime`} />
+  <HubHead
+    kicker="Anime genre"
+    title={`${g.name} anime${pageWords}`}
+    lede={`${entry?.note ? `${entry.note} ` : ''}${plural(g.total, 'show')} on ${config.name} are filed under ${g.name}; here are the ${g.rows.length.toLocaleString('en-US')} most watched.`}
+    stats={[[g.total.toLocaleString('en-US'), 'shows'], [g.rows.length.toLocaleString('en-US'), 'ranked here']]}
+  />
+
+  {
+    fresh.length >= 6 && (
+      <section class="w-sec" aria-labelledby="fresh">
+        <div class="w-sec__head">
+          <h2 id="fresh">Newest {g.name.toLowerCase()} anime</h2>
+          <p class="w-sec__count">Among the most watched</p>
+        </div>
+        <Covers items={fresh} eager={6} size="sm" />
+      </section>
+    )
+  }
+
+  <section class="w-sec" aria-labelledby="ranked">
+    <div class="w-sec__head">
+      <h2 id="ranked">Most watched</h2>
+      <p class="w-sec__count">{(start + 1).toLocaleString('en-US')} to {(start + items.length).toLocaleString('en-US')} of {g.rows.length.toLocaleString('en-US')}</p>
+    </div>
+    <Covers items={items} eager={fresh.length ? 0 : 6} />
+    <Pager current={page} count={pages} base={base} segment="" label={`${g.name} anime`} />
+  </section>
 
   <section class="w-sec" aria-labelledby="more">
     <div class="w-sec__head">
       <h2 id="more">Other genres</h2>
     </div>
     <ul class="w-chips w-chips--links">
-      {others.map((x) => <li><a href={`/genre/${x.slug}`}>{x.name}</a></li>)}
+      {others.map((x) => <li><a href={`/genre/${x.slug}`}>{x.name} <span>{x.total.toLocaleString('en-US')}</span></a></li>)}
     </ul>
   </section>
 </Where>

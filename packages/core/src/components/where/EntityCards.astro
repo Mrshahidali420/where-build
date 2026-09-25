@@ -1,0 +1,60 @@
+---
+/**
+ * A grid of directory cards (src/where/hub-cards.mjs rows): a portrait or a
+ * cover, the name, what the directory counts and the years it spans, and what
+ * they are best known for. A studio has no picture of its own, so it shows
+ * three covers of its most watched shows.
+ *
+ * rows   [name, href, count, image, line, pop, year, span]
+ * noun   what `count` counts ('role', 'show', 'song', 'entry')
+ * shape  'portrait' (people) or 'cover' (a show's cover stands in)
+ * eager  how many pictures load at once, the first row a wide screen paints
+ * rank   the position of the first card, to number a ranked list; 0 for none
+ */
+import { plural } from '../../where/words.mjs'
+
+const { rows = [], noun = 'show', shape = 'portrait', eager = 6, rank = 0, label } = Astro.props
+const many = noun === 'entry' ? 'entries' : undefined
+const initials = (name) =>
+  String(name)
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0] || '')
+    .join('')
+    .toUpperCase()
+---
+
+<ul class:list={['w-ecards', `w-ecards--${shape}`]} aria-label={label}>
+  {
+    rows.map(([name, href, count, image, line, , , span], i) => (
+      <li>
+        <a href={href}>
+          <span class="w-ecards__art" aria-hidden="true">
+            {Array.isArray(image) ? (
+              image.length ? (
+                <span class="w-ecards__stack">
+                  {image.map((src) => (
+                    <img src={src.replace('/cover/large/', '/cover/medium/')} alt="" width="100" height="142" loading={i < eager ? 'eager' : 'lazy'} decoding="async" />
+                  ))}
+                </span>
+              ) : (
+                <span class="w-ecards__none">{initials(name)}</span>
+              )
+            ) : image ? (
+              <img src={image} alt="" width="230" height="326" loading={i < eager ? 'eager' : 'lazy'} decoding="async" />
+            ) : (
+              <span class="w-ecards__none">{initials(name)}</span>
+            )}
+            {rank > 0 && <span class="w-ecards__rank">{rank + i}</span>}
+          </span>
+          <b>{name}</b>
+          <small class="w-ecards__count">
+            {plural(count, noun, many)}
+            {span && <span> · {span}</span>}
+          </small>
+          {line && <small class="w-ecards__line">{line}</small>}
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -215,6 +215,7 @@
   display: grid;
   place-items: center;
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: 3.5rem;
   color: var(--cobalt-bright);
   background: var(--night-sunk);
@@ -344,6 +345,7 @@
 .w-num {
   width: 3.5rem;
   font-family: var(--display);
+  font-weight: var(--display-weight);
   color: var(--cobalt-bright);
   white-space: nowrap;
 }
@@ -551,6 +553,7 @@
 }
 .w-songs__tag {
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: var(--t-sm);
   color: var(--rose);
   white-space: nowrap;
@@ -589,6 +592,7 @@
 .w-watch__pos {
   flex: none;
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: 2.25rem;
   line-height: 1;
   color: var(--rose);
@@ -1038,6 +1042,7 @@
 }
 .w-order__n {
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: var(--t-lg);
   text-align: center;
   color: var(--cobalt-bright);
@@ -1131,6 +1136,7 @@
   border-radius: var(--r-sm);
   border: 1px solid var(--line);
   font-family: var(--display);
+  font-weight: var(--display-weight);
   text-transform: uppercase;
   text-decoration: none;
 }
@@ -1175,7 +1181,7 @@
 }
 .w-doors b {
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: var(--display-weight);
   font-size: var(--t-md);
 }
 .w-doors span {
@@ -1214,7 +1220,7 @@
 .w-tiles b {
   display: block;
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: var(--display-weight);
   font-size: var(--t-md);
 }
 .w-tiles small {
@@ -1253,6 +1259,7 @@
 }
 .w-seasons__label {
   font-family: var(--display);
+  font-weight: var(--display-weight);
   color: var(--dawn-dim);
   font-variant-numeric: tabular-nums;
 }
@@ -1359,7 +1366,7 @@
 }
 .w-genres b {
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: var(--display-weight);
   font-size: var(--t-lg);
 }
 .w-genres small {
@@ -1450,6 +1457,7 @@
 }
 .w-airing__time {
   font-family: var(--display);
+  font-weight: var(--display-weight);
   color: var(--cobalt-bright);
   font-variant-numeric: tabular-nums;
 }
@@ -1598,7 +1606,7 @@
 }
 .w-onair__time b {
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: var(--display-weight);
   color: var(--dawn);
   font-variant-numeric: tabular-nums;
 }
@@ -1636,6 +1644,7 @@
   display: grid;
   place-items: center;
   font-family: var(--display);
+  font-weight: var(--display-weight);
   font-size: var(--t-xl);
   color: var(--cobalt-bright);
   background: var(--night-raised);
