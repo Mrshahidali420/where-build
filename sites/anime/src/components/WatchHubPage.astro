@@ -1,0 +1,72 @@
+---
+/**
+ * Where to watch anime: every official streaming service with enough shows
+ * here, the one carrying the most first. Each gets what it asks of a viewer
+ * (how it is paid for, what is free, where it works: platform-facts.js), how
+ * many shows here it streams and its most watched ones, each a title page.
+ * Built only when enough services pass (packages/core/src/where/platform-hub.mjs):
+ * src/pages/[hub].astro mounts it at /where-to-watch.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import Faq from '@sister/core/src/components/where/Faq.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { platformFaq } from '@sister/core/src/where/platform-hub.mjs'
+import { faqJsonld, listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import { factsFor } from '@sister/core/src/lib/platform-facts.js'
+import { platformHow } from '@sister/core/src/lib/answers.mjs'
+import { cardOfRow } from './card-row.mjs'
+
+const hub = whereHubs().platforms
+const path = '/where-to-watch'
+const services = hub.services.map((s) => ({ ...s, how: platformHow(s.name, factsFor(s.name), 'episodes'), items: s.rows.map(cardOfRow) }))
+const faq = platformFaq(hub, factsFor, config.name)
+const top = services.slice(0, 3).map((s) => s.name)
+---
+
+<Where
+  title={`Where to Watch Anime: ${services.length} Official Streaming Services | ${config.name}`}
+  description={`Where to watch anime legally: ${top.join(', ')} and ${plural(services.length - top.length, 'more service')}, with how many shows each carries, what is free and where it works.`}
+  canonical={path}
+  image={services[0]?.items[0]?.cover}
+  jsonld={[listJsonld('Anime streaming services', services.map((s) => ({ name: s.name, href: `${path}#${s.slug}` })), config.siteUrl), faqJsonld(faq, path, config.siteUrl)]}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Where to watch' }]}
+>
+  <HubHead
+    kicker="Streaming"
+    title="Where to watch anime"
+    lede={`The official services AniList lists for the ${hub.total.toLocaleString('en-US')} shows here that stream somewhere, the one with the most first. What each carries depends on your country.`}
+    stats={[[String(services.length), 'services'], [hub.total.toLocaleString('en-US'), 'shows streaming']]}
+  >
+    <ul class="w-chips w-chips--links" aria-label="Jump to a service">
+      {services.map((s) => <li><a href={`#${s.slug}`}>{s.name} <span>{s.count.toLocaleString('en-US')}</span></a></li>)}
+    </ul>
+  </HubHead>
+
+  {
+    services.map((s, i) => (
+      <section class="w-sec" aria-labelledby={s.slug}>
+        <div class="w-sec__head">
+          <h2 id={s.slug}>Anime on {s.name}</h2>
+          <p class="w-sec__count">{plural(s.count, 'show')}{s.airing ? `, ${s.airing.toLocaleString('en-US')} airing` : ''}</p>
+        </div>
+        {s.how && <p class="w-sec__note">{s.how}</p>}
+        <Covers items={s.items} size="sm" eager={i === 0 ? 6 : 0} label={`Most watched on ${s.name}`} />
+      </section>
+    ))
+  }
+
+  {
+    faq.length > 0 && (
+      <section class="w-sec" aria-labelledby="faq">
+        <div class="w-sec__head">
+          <h2 id="faq">Questions about watching anime</h2>
+        </div>
+        <Faq faq={faq} />
+      </section>
+    )
+  }
+</Where>

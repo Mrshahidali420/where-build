@@ -226,8 +226,9 @@ export function hubPaths(hubs) {
       paths.push({ path: `/genre/${g.slug}${page > 1 ? `/${page}` : ''}`, slug: g.slug, page, pages: g.pages })
     }
   }
-  // The shop, the moods and the like pages: each only when its gate built it.
+  // The shop, the streaming services, the moods and the like pages: each only when its gate built it.
   if (hubs.shop) paths.push({ path: '/shop' })
+  if (hubs.platforms) paths.push({ path: '/where-to-watch' })
   const moods = hubs.moodIndex || []
   if (moods.length) paths.push({ path: '/mood' })
   for (const m of moods) paths.push({ path: `/mood/${m.slug}`, slug: m.slug })

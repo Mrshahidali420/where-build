@@ -13,7 +13,9 @@ import SortTabs from '@sister/core/src/components/where/SortTabs.astro'
 import Covers from '@sister/core/src/components/where/Covers.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { formatGroups } from '@sister/core/src/where/hub-cards.mjs'
-import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { faqJsonld, listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { hubFaq } from '@sister/core/src/where/hub-faq.mjs'
+import Faq from '@sister/core/src/components/where/Faq.astro'
 import { plural } from '@sister/core/src/where/words.mjs'
 import { cardOfRow } from '../../../components/card-row.mjs'
 
@@ -33,6 +35,8 @@ const studios = new Set(s.rows.map((r) => r[6]).filter(Boolean)).size
 const top = s.rows.slice(0, 3).map((r) => r[0])
 const MONTHS = { WINTER: 'January', SPRING: 'April', SUMMER: 'July', FALL: 'October' }
 const isNow = hubs.home.season?.key === key
+// The questions, from the season's own rows (packages/core/src/where/hub-faq.mjs).
+const faq = hubFaq({ subject: `${s.label} anime`, rows: s.rows, site: config.name })
 ---
 
 <Where
@@ -40,7 +44,7 @@ const isNow = hubs.home.season?.key === key
   description={`Every anime of the ${s.label} season: ${plural(s.rows.length, 'show')} from ${plural(studios, 'studio')}${top.length ? `, led by ${top.join(', ')}` : ''}. Each with its episode dates, cast and staff.`}
   canonical={`/season/${key}`}
   image={s.rows[0]?.[2]}
-  jsonld={listJsonld(`${s.label} anime`, items, config.siteUrl)}
+  jsonld={[listJsonld(`${s.label} anime`, items, config.siteUrl), faqJsonld(faq, `/season/${key}`, config.siteUrl)]}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Seasons', href: '/season' }, { name: s.label }]}
 >
   <HubHead
@@ -67,5 +71,16 @@ const isNow = hubs.home.season?.key === key
         <Covers items={g.rows.map(cardOfRow)} eager={i === 0 ? 6 : 0} />
       </section>
     ))
+  }
+
+  {
+    faq.length > 0 && (
+      <section class="w-sec" aria-labelledby="faq">
+        <div class="w-sec__head">
+          <h2 id="faq">Questions about {s.label} anime</h2>
+        </div>
+        <Faq faq={faq} />
+      </section>
+    )
   }
 </Where>

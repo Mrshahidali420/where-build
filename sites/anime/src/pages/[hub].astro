@@ -2,8 +2,9 @@
 /**
  * The site's one-word hubs, each built only when its gate let it through
  * (packages/core/src/where/gates.mjs): /schedule (enough dated episodes this
- * week), /shop (enough shelvable titles) and /mood (at least one mood with
- * enough shows). A hub its gate kept out has no path here, so it is a 404,
+ * week), /shop (enough shelvable titles), /mood (at least one mood with
+ * enough shows) and /where-to-watch (enough streaming services with enough
+ * shows). A hub its gate kept out has no path here, so it is a 404,
  * and the menu, the dock and the footer leave it out (data/site-stats.json).
  * Prerendered at the nightly build from data/where-hubs.json.
  */
@@ -12,6 +13,7 @@ import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import SchedulePage from '../components/SchedulePage.astro'
 import ShopPage from '../components/ShopPage.astro'
 import MoodIndex from '../components/MoodIndex.astro'
+import WatchHubPage from '../components/WatchHubPage.astro'
 
 export function getStaticPaths() {
   const hubs = whereHubs()
@@ -19,6 +21,7 @@ export function getStaticPaths() {
     hubs.schedule && { params: { hub: 'schedule' } },
     hubs.shop && { params: { hub: 'shop' } },
     (hubs.moodIndex || []).length > 0 && { params: { hub: 'mood' } },
+    hubs.platforms && { params: { hub: 'where-to-watch' } },
   ].filter(Boolean)
 }
 
@@ -28,3 +31,4 @@ const { hub } = Astro.params
 {hub === 'schedule' && <SchedulePage />}
 {hub === 'shop' && <ShopPage />}
 {hub === 'mood' && <MoodIndex />}
+{hub === 'where-to-watch' && <WatchHubPage />}

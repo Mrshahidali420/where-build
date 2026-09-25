@@ -7,7 +7,9 @@ import HubHead from '@sister/core/src/components/where/HubHead.astro'
 import Covers from '@sister/core/src/components/where/Covers.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { PER_YEAR_PAGE, pageSlice } from '@sister/core/src/where/hubs.mjs'
-import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { faqJsonld, listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { hubFaq } from '@sister/core/src/where/hub-faq.mjs'
+import Faq from '@sister/core/src/components/where/Faq.astro'
 import { plural } from '@sister/core/src/where/words.mjs'
 import { cardOfRow } from './card-row.mjs'
 
@@ -30,6 +32,8 @@ const formats = new Map()
 for (const r of rows) formats.set(r[3] || 'Other', (formats.get(r[3] || 'Other') || 0) + 1)
 const mix = [...formats].sort((a, b) => b[1] - a[1]).slice(0, 3)
 const pageWords = page > 1 ? `, page ${page}` : ''
+// The questions, from every show of the year, on its first page only.
+const faq = page === 1 ? hubFaq({ subject: `anime from ${own ? year : range}`, rows, site: config.name }) : []
 ---
 
 <Where
@@ -37,7 +41,7 @@ const pageWords = page > 1 ? `, page ${page}` : ''
   description={`Every anime that began ${own ? `in ${year}` : `from ${range}`}, most watched first: ${plural(rows.length, 'show')}${top.length ? `, led by ${top.join(', ')}` : ''}. Each with its episodes, cast and staff.`}
   canonical={page > 1 ? `${base}/${page}` : base}
   image={rows[0]?.[2]}
-  jsonld={listJsonld(name, items, config.siteUrl, start)}
+  jsonld={[listJsonld(name, items, config.siteUrl, start), faqJsonld(faq, base, config.siteUrl)]}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'By year', href: '/year' }, { name: `${entry.label}${pageWords}` }]}
 >
   <HubHead
@@ -57,4 +61,14 @@ const pageWords = page > 1 ? `, page ${page}` : ''
     <Covers items={items} eager={page === 1 ? 6 : 0} />
     <Pager current={page} count={pages} base={base} segment="" label={`${entry.label} anime`} />
   </section>
+  {
+    faq.length > 0 && (
+      <section class="w-sec" aria-labelledby="faq">
+        <div class="w-sec__head">
+          <h2 id="faq">Questions about anime from {own ? year : range}</h2>
+        </div>
+        <Faq faq={faq} />
+      </section>
+    )
+  }
 </Where>
