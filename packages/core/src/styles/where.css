@@ -1693,8 +1693,32 @@
   font-size: var(--t-sm);
   color: var(--dawn-faint);
 }
-.w-studios a {
-  display: block;
+/* A studio's three most watched covers, fanned: AniList has no studio logos. */
+.w-studios__fan {
+  display: flex;
+  flex: none;
+  width: 76px;
+}
+.w-studios__fan img {
+  box-shadow: 0 0 0 2px var(--night);
+  transition: transform 150ms var(--ease);
+}
+.w-studios__fan img + img {
+  margin-left: -16px;
+}
+.w-studios__fan img:nth-child(1) {
+  position: relative;
+  z-index: 3;
+}
+.w-studios__fan img:nth-child(2) {
+  position: relative;
+  z-index: 2;
+}
+.w-studios a:hover .w-studios__fan img:nth-child(2) {
+  transform: translateX(4px);
+}
+.w-studios a:hover .w-studios__fan img:nth-child(3) {
+  transform: translateX(8px);
 }
 
 /* ---- not found ---- */

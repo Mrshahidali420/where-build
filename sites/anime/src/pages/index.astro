@@ -165,11 +165,16 @@ const season = home.season
             <a class="w-sec__link" href="/directory/studios">All studios</a>
           </div>
           <ul class="w-studios">
-            {home.studios.map(([name, href, count, known]) => (
+            {home.studios.map(([name, href, count, known, covers = []]) => (
               <li>
                 <a href={href}>
-                  <b>{name}</b>
-                  <small>{plural(count, 'anime', 'anime')}{known.length ? `, including ${known.join(' and ')}` : ''}</small>
+                  <span class="w-studios__fan" aria-hidden="true">
+                    {covers.map((src) => <img class="w-thumb" src={small(src)} alt="" width="44" height="62" loading="lazy" decoding="async" />)}
+                  </span>
+                  <span>
+                    <b>{name}</b>
+                    <small>{plural(count, 'anime', 'anime')}{known.length ? `, including ${known.join(' and ')}` : ''}</small>
+                  </span>
                 </a>
               </li>
             ))}

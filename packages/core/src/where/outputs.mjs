@@ -147,7 +147,9 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
     : null
   const { current, next } = currentSeason(seasons.index, now)
   const topVoices = [...voice].sort((a, b) => b.counts.roles - a.counts.roles || a.id - b.id).slice(0, HOME_ROWS)
-  const topStudios = [...studios].sort((a, b) => b.works.length - a.works.length || a.id - b.id).slice(0, HOME_ROWS)
+  // Same length as the watch orders: the two lists sit side by side on wide screens.
+  const topStudios = [...studios].sort((a, b) => b.works.length - a.works.length || a.id - b.id).slice(0, HOME_WATCH)
+  const byPop = (works) => [...works].sort((a, b) => (popularityOf.get(b.href) || 0) - (popularityOf.get(a.href) || 0))
 
   const home = {
     titles: [...titles].sort(byPopularity).slice(0, HOME_ROWS).map(cardRow),
@@ -155,12 +157,11 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
     season: current ? { ...current, rows: seasons.lists[current.key].rows.slice(0, HOME_ROWS) } : null,
     nextSeason: next,
     voice: topVoices.map((p) => [p.name, p.voiceHref, p.counts.roles, p.image || '']),
-    studios: topStudios.map((s) => [
-      s.name,
-      `/studio/${s.slug}`,
-      s.works.length,
-      [...s.works].sort((a, b) => (popularityOf.get(b.href) || 0) - (popularityOf.get(a.href) || 0)).slice(0, 2).map((w) => w.title),
-    ]),
+    // AniList has no studio logos, so a studio shows the covers of its most watched shows.
+    studios: topStudios.map((s) => {
+      const ranked = byPop(s.works)
+      return [s.name, `/studio/${s.slug}`, s.works.length, ranked.slice(0, 2).map((w) => w.title), ranked.map((w) => w.cover).filter(Boolean).slice(0, 3)]
+    }),
     watch: watchStarters(watch, popularityOf),
     years: yearIndex.filter((y) => /^\d+$/.test(y.key)).map((y) => Number(y.key)),
     counts: {
