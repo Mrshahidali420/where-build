@@ -17,6 +17,7 @@ import { genreNote } from './genre-notes.mjs'
 import { formatWord, seasonWord } from './words.mjs'
 import { seasonAt, shiftSeason, upcomingEpisodes } from './anime-hubs.mjs'
 import { shopOf } from './shop.mjs'
+import { platformsOf, popularAiring, upcomingLists } from './schedule-lists.mjs'
 import { likeHubs, moodHubs } from './hub-extras.mjs'
 
 const HOME_ROWS = 16
@@ -151,8 +152,17 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
   const { years, yearIndex } = yearHubs(titles, now)
   const seasons = seasonHubs(where.seasons || [], recordOf)
   const genres = genreHubs(where.genres || [], recordOf)
+  // A schedule row also names where the show streams; the page adds the shows
+  // airing now and the ones announced (src/where/schedule-lists.mjs).
+  const weekRow = (row) => [...airingRow(recordOf)(row), platformsOf(recordOf.get(row.id))]
   const schedule = where.schedule
-    ? { from: where.schedule.from, total: where.schedule.total, days: where.schedule.days.map((d) => ({ day: d.day, rows: d.rows.map(airingRow(recordOf)) })) }
+    ? {
+        from: where.schedule.from,
+        total: where.schedule.total,
+        days: where.schedule.days.map((d) => ({ day: d.day, rows: d.rows.map(weekRow) })),
+        popular: popularAiring(titles, now),
+        upcoming: upcomingLists(titles, now),
+      }
     : null
   const { current, next } = currentSeason(seasons.index, now)
   const topVoices = [...voice].sort((a, b) => b.counts.roles - a.counts.roles || a.id - b.id).slice(0, HOME_ROWS)

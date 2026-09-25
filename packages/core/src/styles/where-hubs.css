@@ -627,6 +627,33 @@
 .w-sched__list .countdown--soon {
   color: var(--rose);
 }
+/* where each show streams, under its episode */
+.w-sched__what .w-sched__on {
+  color: var(--dawn-dim);
+}
+.w-sched__on.is-none,
+.w-onnow__on.is-none {
+  font-style: italic;
+}
+/* the page's own sections: pills that wrap, never a row wider than a phone */
+.w-jumps--wrap ul {
+  flex-wrap: wrap;
+  overflow: visible;
+  margin-top: var(--s-5);
+}
+/* the shows airing now: two to a row on wide screens */
+.w-onnow span {
+  min-width: 0;
+}
+.w-onnow b {
+  overflow-wrap: anywhere;
+}
+@media (min-width: 700px) {
+  .w-onnow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--s-6);
+  }
+}
 
 /* the ways in of /anime: two to a row on a phone, not one long stack */
 @media (max-width: 560px) {

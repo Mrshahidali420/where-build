@@ -9,16 +9,24 @@
  * browser then does what a cached page cannot: it writes each time in the
  * reader's own clock, counts down to it, marks the reader's today and dims the
  * days already gone.
+ *
+ * Under the week: the most watched shows airing now, the anime announced but
+ * not started (packages/core/src/where/schedule-lists.mjs, each list dropped
+ * when too thin), and the questions the page answers.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
 import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import Covers from '@sister/core/src/components/where/Covers.astro'
+import Faq from '@sister/core/src/components/where/Faq.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
-import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { faqJsonld, listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { listWords } from '@sister/core/src/where/faq.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
 import Countdown from '@sister/core/src/components/Countdown.astro'
 
-const schedule = whereHubs().schedule
+const hubs = whereHubs()
+const schedule = hubs.schedule
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const dayWords = (day) => {
@@ -31,13 +39,70 @@ const last = dayWords(schedule.days.at(-1).day)
 const shows = new Set(schedule.days.flatMap((d) => d.rows.map((r) => r[1]))).size
 const busiest = schedule.days.reduce((a, b) => (b.rows.length > a.rows.length ? b : a))
 const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ title, href }))
+const asItems = (rows) => rows.map(([title, href]) => ({ title, href }))
+
+// Each announced list's heading, jump label and one line on how it is picked.
+const UPCOMING_WORDS = {
+  anticipated: { id: 'anticipated', title: 'Most anticipated anime', nav: 'Most anticipated', note: 'Not out yet, ranked by how many AniList users have each one on a list.' },
+  big: { id: 'big-releases', title: 'Big upcoming releases', nav: 'Big releases', note: 'The most followed shows and films with an exact premiere date, soonest first.' },
+  soon: { id: 'coming-soon', title: 'Coming soon', nav: 'Coming soon', note: 'Every other anime with an exact premiere date, soonest first.' },
+  movies: { id: 'movies', title: 'Upcoming anime movies', nav: 'Movies', note: 'Announced films, soonest first. A month or a year means that is all that has been announced.' },
+}
+const popular = schedule.popular || []
+const upcoming = (schedule.upcoming || []).map((list) => ({ ...UPCOMING_WORDS[list.key], rows: list.rows }))
+const onWhat = (sites) => (sites?.length ? `On ${listWords(sites)}` : 'No official stream listed yet')
+
+const today = schedule.days[0]
+const todayWords = dayWords(today.day)
+const faq = [
+  {
+    q: 'What anime airs today?',
+    a: today.rows.length
+      ? `${plural(today.rows.length, 'episode')} ${today.rows.length === 1 ? 'airs' : 'air'} on ${todayWords.weekday} ${todayWords.date} (UTC), including ${listWords(today.rows.slice(0, 5).map((r) => r[0]))}. Each one is listed above with the platforms that carry it.`
+      : `No episode of a show on ${config.name} airs on ${todayWords.weekday} ${todayWords.date} (UTC). The rest of the week is listed above.`,
+  },
+  {
+    q: 'Where can I watch these episodes legally?',
+    a: `Each show links to its own page, which lists only the official streaming platforms AniList names for it, such as Crunchyroll or Netflix. ${config.name} hosts no video and links to no unofficial streams.`,
+  },
+  {
+    q: 'What time zone are these times in?',
+    a: 'Your own. The page is built in UTC, then your browser shows each time in your time zone and moves each episode to your own day. Each time is the first broadcast in Japan.',
+  },
+  {
+    q: 'How often is this page updated?',
+    a: 'Once a day. The airing calendar comes from AniList and the page is rebuilt every day, so an episode that moves is corrected within a day.',
+  },
+  upcoming.some((u) => u.id === 'anticipated') && {
+    q: 'How are the most anticipated anime ranked?',
+    a: 'By AniList popularity: how many AniList users have the title on one of their lists. For a show that is not out yet, that mostly counts people who plan to watch it.',
+  },
+  upcoming.length > 0 && {
+    q: 'Why do some upcoming anime show only a month or a year?',
+    a: 'Because that is all that has been announced. An exact day is shown only when AniList lists one, and a month, a season or a year when that is all it has.',
+  },
+].filter(Boolean)
+
+const jumps = [
+  { href: '#week', label: 'This week' },
+  popular.length > 0 && { href: '#popular', label: 'Popular now' },
+  ...upcoming.map((u) => ({ href: `#${u.id}`, label: u.nav })),
+].filter(Boolean)
+
+const season = hubs.home?.season
+const jsonld = [
+  listJsonld('Anime airing this week', items, config.siteUrl),
+  popular.length > 0 && listJsonld('Most popular anime airing now', asItems(popular), config.siteUrl),
+  ...upcoming.map((u) => listJsonld(u.title, asItems(u.rows), config.siteUrl)),
+  faqJsonld(faq, '/schedule', config.siteUrl),
+]
 ---
 
 <Where
   title={`Anime Airing Schedule This Week: ${first.date} to ${last.date} | ${config.name}`}
   description={`Every anime episode airing from ${first.weekday} ${first.date} to ${last.weekday} ${last.date}: ${plural(schedule.total, 'episode')} of ${plural(shows, 'show')}, with the time each airs in your time zone and a countdown.`}
   canonical="/schedule"
-  jsonld={listJsonld('Anime airing this week', items, config.siteUrl)}
+  jsonld={jsonld}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Airing schedule' }]}
 >
   <HubHead
@@ -67,7 +132,21 @@ const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ tit
     <p class="w-sched__zone" id="sched-zone">Times in UTC.</p>
   </HubHead>
 
-  <div class="w-sched">
+  {
+    jumps.length > 1 && (
+      <nav class="w-jumps w-jumps--wrap" aria-label="On this page">
+        <ul>
+          {jumps.map((j) => (
+            <li>
+              <a href={j.href}>{j.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  <div class="w-sched" id="week">
     {
       schedule.days.map((d, i) => {
         const words = dayWords(d.day)
@@ -79,7 +158,7 @@ const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ tit
             </h2>
             {d.rows.length ? (
               <ol class="w-sched__list">
-                {d.rows.map(([title, href, cover, episode, at, planned]) => (
+                {d.rows.map(([title, href, cover, episode, at, planned, sites]) => (
                   <li>
                     <a href={href}>
                       {cover ? (
@@ -97,6 +176,7 @@ const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ tit
                           {planned ? ` of ${planned}` : ''}
                           {planned && episode === planned ? ', final' : episode === 1 ? ', premiere' : ''}
                         </small>
+                        <small class:list={['w-sched__on', { 'is-none': !sites?.length }]}>{onWhat(sites)}</small>
                       </span>
                     </a>
                     <Countdown at={at} />
@@ -111,6 +191,78 @@ const items = schedule.days.flatMap((d) => d.rows).map(([title, href]) => ({ tit
       })
     }
   </div>
+
+  {
+    popular.length > 0 && (
+      <section class="w-sec" id="popular" aria-labelledby="h-popular">
+        <div class="w-sec__head">
+          <h2 id="h-popular">Most popular anime airing now</h2>
+        </div>
+        <p class="w-sec__note">The shows on the most AniList lists that are still airing, with the next episode and where it streams.</p>
+        <ul class="w-starters w-onnow">
+          {popular.map(([title, href, cover, episode, at, sites]) => (
+            <li>
+              <a href={href}>
+                {cover ? <img class="w-thumb" src={cover} alt="" width="44" height="62" loading="lazy" decoding="async" /> : <span class="w-thumb" />}
+                <span>
+                  <b>{title}</b>
+                  <small>
+                    {at ? (
+                      <>
+                        Episode {episode}, <Countdown at={at} />
+                      </>
+                    ) : (
+                      'Airing, next episode date not listed'
+                    )}
+                  </small>
+                  <small class:list={['w-onnow__on', { 'is-none': !sites.length }]}>{onWhat(sites)}</small>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    upcoming.map((u) => (
+      <section class="w-sec" id={u.id} aria-labelledby={`h-${u.id}`}>
+        <div class="w-sec__head">
+          <h2 id={`h-${u.id}`}>{u.title}</h2>
+          <p class="w-sec__count">{plural(u.rows.length, 'title')}</p>
+        </div>
+        <p class="w-sec__note">{u.note}</p>
+        <Covers
+          items={u.rows.map(([title, href, cover, format, when]) => ({ title, href, cover, meta: [format, when || 'No date yet'].filter(Boolean).join(' · ') }))}
+          size="sm"
+          label={u.title}
+        />
+      </section>
+    ))
+  }
+
+  <section class="w-sec" aria-labelledby="h-faq">
+    <div class="w-sec__head">
+      <h2 id="h-faq">Common questions</h2>
+    </div>
+    <Faq faq={faq} />
+  </section>
+
+  <nav class="w-sec" aria-label="Anime by season">
+    <ul class="w-chips w-chips--links">
+      {season && (
+        <li>
+          <a href={season.path}>This season: {season.label}</a>
+        </li>
+      )}
+      {(hubs.seasonIndex || []).length > 0 && (
+        <li>
+          <a href="/season">Anime by season</a>
+        </li>
+      )}
+    </ul>
+  </nav>
 </Where>
 
 <script>

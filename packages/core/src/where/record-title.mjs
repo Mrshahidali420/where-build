@@ -239,6 +239,9 @@ export function titleRecord(t, ctx) {
     season: item.season || '',
     seasonYear: item.seasonYear || null,
     startDate: item.startDate || null,
+    // How much of startDate AniList gave ('day', 'month', 'year'), so a
+    // first-of-the-month placeholder is never printed as a real date.
+    startPrecision: item.startPrecision || null,
     startYear: item.startYear || null,
     endYear: item.endYear || null,
     episodes: item.episodes || null,
