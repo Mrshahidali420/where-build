@@ -78,10 +78,16 @@
     flex: 1 1 0;
     padding: var(--s-2) var(--s-3);
   }
-  /* "1970 to 2027" is wider than a third of a phone: let it break, never spill out */
+  /* "1970 to 2027" is wider than a third of a phone: a smaller size, and it
+     may break at its spaces, never inside a number */
   .w-hubhead__stats dd {
+    font-size: var(--t-md);
     white-space: normal;
-    overflow-wrap: anywhere;
+  }
+  /* every sort tab in sight: they wrap instead of scrolling off the edge */
+  .w-hubhead .w-tabs ul {
+    flex-wrap: wrap;
+    overflow-x: visible;
   }
 }
 
