@@ -60,14 +60,18 @@ export default defineSite({
   turnstileSiteKey: '0x4AAAAAAFDnqEYGLNby5wlj',
   indexNow: { key: 'ec506d4661c0e73b37312c89acb68d6a' },
 
-  // Amazon Associates tags. Until the owner creates WhereAnime's own
-  // (us: 'whereanime-20' and the Italian store's), the site uses the same
-  // account's manhwaindex tags on the owner's instruction of 25 Sep 2026;
-  // whereanime.com must be on that account's site list.
+  // Mail to both goes on to the owner's inbox (Cloudflare Email Routing, set
+  // up 26 Sep 2026 like manhwaindex's: SPF, DKIM, DMARC p=none).
+  email: 'hello@whereanime.com',
+  dmcaEmail: 'dmca@whereanime.com',
+
+  // Amazon Associates tags. The US store has WhereAnime's own (made 26 Sep
+  // 2026); the other stores use the same account's manhwaindex tags on the
+  // owner's instruction until he makes WhereAnime ones there.
   amazon: {
     stores: {
       ...FAMILY.amazon.stores,
-      us: 'manhwaindex-20',
+      us: 'whereanime-20',
       uk: 'manhwaindex-21',
       de: 'manhwaindex06-21',
       fr: 'manhwainde0f6-21',
