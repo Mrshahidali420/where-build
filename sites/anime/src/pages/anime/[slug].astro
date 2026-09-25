@@ -6,10 +6,10 @@
  * by the Worker from one shard record (packages/core/src/where/record-title.mjs);
  * every link in it was resolved at build time to a page that exists.
  *
- * The buy box sits in the side column right above "Where to watch", the home
- * site's order (its buy box sits above its platform list). The Amazon
- * Associates sentence is never beside it: it is in the footer and on the
- * privacy page.
+ * The buy box sits right under the head and its key facts, before the long
+ * sections, so a reader sees it without scrolling past the episode list (on
+ * a phone the side column comes last). The Amazon Associates sentence is
+ * never beside it: it is in the footer and on the privacy page.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
@@ -96,13 +96,13 @@ const picked = r.picks && picksShowFor(country) ? r.picks : null
 
 const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
 const jumps = [
+  buys.length > 0 && { id: 'own', label: 'Buy' },
   shown.length > 0 && { id: 'episodes', label: 'Episodes' },
   r.cast.length > 0 && { id: 'cast', label: 'Cast' },
   made && { id: 'staff', label: 'Staff' },
   r.songs.length > 0 && { id: 'songs', label: 'Songs' },
   r.watch && { id: 'order', label: 'Watch order' },
   r.watchOn.length > 0 && { id: 'watch', label: 'Where to watch' },
-  buys.length > 0 && { id: 'own', label: 'Buy' },
   faq.length > 0 && { id: 'faq', label: 'Questions' },
 ].filter(Boolean)
 
@@ -191,6 +191,14 @@ const listItem = {
       )
     }
   </div>
+
+  {
+    buys.length > 0 && (
+      <div id="own" class="w-own">
+        <BuyBox heading="Own it" sub={`Discs, the original books and figures for ${r.title}, from Amazon.`} rows={buys} />
+      </div>
+    )
+  }
 
   <div class="w-split">
     <div class="w-main">
@@ -393,14 +401,6 @@ const listItem = {
           </p>
         )}
       </section>
-
-      {
-        buys.length > 0 && (
-          <div id="own">
-            <BuyBox heading="Own it" sub={`Discs, the original books and figures for ${r.title}, from Amazon.`} rows={buys} />
-          </div>
-        )
-      }
 
       {
         r.watchOn.length > 0 && (

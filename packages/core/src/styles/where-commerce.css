@@ -27,6 +27,17 @@
   height: 2px;
   background: linear-gradient(90deg, var(--rose), rgb(site(rgb.rose) / 0));
 }
+/* On a title page the box sits under the head, the page's full width: its
+   rows fill two or three columns on a wide screen and stack on a phone. */
+.w-own {
+  margin: var(--s-6) 0 0;
+}
+.w-own .buys {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+}
+.w-own .buys > li {
+  min-width: 0;
+}
 .buybox__head h2 {
   font-size: var(--t-lg);
 }
