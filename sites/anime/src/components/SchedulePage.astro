@@ -171,11 +171,7 @@ const jsonld = [
                           {clock(at)} UTC
                         </time>
                         <b>{title}</b>
-                        <small>
-                          Episode {episode}
-                          {planned ? ` of ${planned}` : ''}
-                          {planned && episode === planned ? ', final' : episode === 1 ? ', premiere' : ''}
-                        </small>
+                        <small>{`Episode ${episode}${planned ? ` of ${planned}` : ''}${planned && episode === planned ? ', final' : episode === 1 ? ', premiere' : ''}`}</small>
                         <small class:list={['w-sched__on', { 'is-none': !sites?.length }]}>{onWhat(sites)}</small>
                       </span>
                     </a>
