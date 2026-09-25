@@ -46,8 +46,8 @@ export default defineSite({
   tagline: 'Episode dates, voice actors and the people behind every anime',
   description:
     'Every episode date, every voice actor, every studio and song, and the order to watch each franchise in, for anime from Japan and beyond.',
-  // The Where family pin with the anime symbol, a play button, cut out of it
-  // (packages/core/src/lib/brand.mjs). The icons, the wordmark and the share
+  // The Where family's screen shape with the anime symbol, a play button,
+  // cut out of it (packages/core/src/lib/brand.mjs). The icons, the wordmark and the share
   // image are drawn from it by packages/core/scripts/make-site-icons.mjs.
   mark: familyMark('play', 'screen'),
 
@@ -55,6 +55,10 @@ export default defineSite({
   // workers.dev dev host off (packages/core/src/lib/wrangler-config.mjs).
   domain: 'whereanime.com',
   plannedDomain: 'whereanime.com',
+  // Public keys only; the secrets are Worker secrets. The Turnstile widget
+  // "WhereAnime" is for whereanime.com; the IndexNow key is served at /<key>.txt.
+  turnstileSiteKey: '0x4AAAAAAFDnqEYGLNby5wlj',
+  indexNow: { key: 'ec506d4661c0e73b37312c89acb68d6a' },
 
   // Amazon Associates tags. Until the owner creates WhereAnime's own
   // (us: 'whereanime-20' and the Italian store's), the site uses the same

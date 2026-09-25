@@ -12,10 +12,10 @@ name: 'Deploy: WhereAnime'
 #            back to sister-data/anime/, only after a deploy that worked, so
 #            the state in R2 always matches the site that is live.
 #
-# Triggers. Only workflow_dispatch is switched on for now: the first deploys
-# are run by hand and checked. When the site is signed off, uncomment `push`
-# (a change to the core or the site deploys it) and `schedule` (the nightly
-# rebuild at 04:00 UTC, after the 03:00 credits ingest).
+# Triggers. The nightly rebuild runs since the site went live on
+# whereanime.com (26 Sep 2026), after the 03:00 credits ingest and the 03:20
+# airing ingest, so episode dates and the schedule move every day. `push`
+# stays off: changes are deployed by hand after they are checked.
 #
 # Never writes the shared catalog's bucket. The token needs Workers Scripts
 # edit and R2 edit on sister-data only.
@@ -29,8 +29,8 @@ on:
   #     - 'sites/family.mjs'
   #     - 'package-lock.json'
   #     - '.github/workflows/deploy-anime.yml'
-  # schedule:
-  #   - cron: '0 4 * * *' # nightly 04:00 UTC (site.config.mjs rebuildUtc)
+  schedule:
+    - cron: '0 4 * * *' # nightly 04:00 UTC (site.config.mjs rebuildUtc)
   workflow_dispatch:
 
 permissions:
@@ -84,3 +84,24 @@ jobs:
         env:
           PUSH: '1'
         run: node ../../packages/core/scripts/where-data.mjs push
+
+      # IndexNow (Bing, Yandex, Seznam, Naver): only pages never announced
+      # before. What went out is kept in data/indexnow-sent.json, carried from
+      # run to run in the Actions cache. A failed ping never fails the deploy.
+      - name: Restore the IndexNow sent list
+        uses: actions/cache/restore@v4
+        with:
+          path: sites/anime/data/indexnow-sent.json
+          key: indexnow-anime-${{ github.run_id }}
+          restore-keys: indexnow-anime-
+
+      - name: Announce new pages (IndexNow)
+        continue-on-error: true
+        run: node ../../packages/core/scripts/indexnow.mjs
+
+      - name: Save the IndexNow sent list
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: sites/anime/data/indexnow-sent.json
+          key: indexnow-anime-${{ github.run_id }}
