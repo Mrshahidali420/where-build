@@ -44,12 +44,14 @@ test('four sites, each on its dev address only', () => {
   }
 })
 
-test('no site carries an id: analytics, ads, shop tags, keys and databases stay empty', () => {
+test('no site carries a borrowed id: analytics, ads, shop tags and keys stay empty', () => {
   for (const site of sites) {
     for (const key of ['ga4Id', 'adsensePub', 'turnstileSiteKey', 'email', 'dmcaEmail']) assert.equal(site[key], null, `${site.key}.${key}`)
     assert.ok(Object.values(site.amazon.stores).every((tag) => tag === ''), `${site.key} amazon tags`)
     assert.equal(site.indexNow.key, null)
-    assert.equal(site.d1.id, null)
+    // A site gets its own D1 database once provisioned (WhereAnime did on 25 Sep
+    // 2026); until then the id is null. Never manhwaindex's, checked below.
+    assert.ok(site.d1.id === null || /^[0-9a-f-]{36}$/.test(site.d1.id), `${site.key}.d1.id`)
   }
   // And nothing copied from manhwaindex's config, whatever the key.
   const ids = /G-[A-Z0-9]{8,12}|ca-pub-|manhwaindex-2|0x4AAAAAAE|368b5571dfe5|a31cde34-/
