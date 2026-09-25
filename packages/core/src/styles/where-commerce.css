@@ -277,6 +277,21 @@
   font-weight: 700;
   white-space: nowrap;
 }
+/* "Based on the manga X": one plain line, the source's page on the home site. */
+.w-based {
+  margin: var(--s-3) 0 0;
+  max-width: 68ch;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--dawn-dim);
+}
+.w-based a {
+  font-weight: 700;
+}
+.w-based small {
+  font-size: var(--t-xs);
+  color: var(--dawn-faint);
+}
 .w-free {
   display: flex;
   flex-wrap: wrap;

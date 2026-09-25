@@ -58,6 +58,22 @@ export function sourceFact(comic, folder) {
 }
 
 /**
+ * The comic formats each AniList `source` of an anime can be. From the anime's
+ * side AniList files its source comic as ADAPTATION (SOURCE is rare), and the
+ * same relation also covers a comic made FROM an original anime, so the
+ * relation alone never proves which came first: the anime's own `source`
+ * must agree. An ORIGINAL anime is based on nothing.
+ */
+const SOURCE_FORMATS = {
+  MANGA: ['MANGA', 'ONE_SHOT'],
+  COMIC: ['MANGA', 'ONE_SHOT'],
+  LIGHT_NOVEL: ['NOVEL'],
+  NOVEL: ['NOVEL'],
+  WEB_NOVEL: ['NOVEL'],
+}
+export const sourceMatches = (source, format) => (SOURCE_FORMATS[source] || []).includes(format)
+
+/**
  * The cross-site cards of one anime, best first, never more than MAX_CARDS:
  *   - where to watch it legally, when it streams anywhere official
  *   - the manga or novel it was adapted from
@@ -90,11 +106,17 @@ export function crossCards(item, { base, home, comicsById }) {
       title: comic.title,
       fact: `The ${sourceFact(comic, folder)}`,
       anchor: `Where to read the ${KIND_WORDS[folder] || 'manga'}`,
+      // The title page's "based on" line reads this: set only when the show's
+      // own source agrees with the comic's format (sourceMatches).
+      ...(sourceMatches(item.source, rel.format) ? { basedOn: KIND_WORDS[folder] || 'manga' } : {}),
     })
   }
   const seen = new Set()
   return cards.filter((card) => isAllowedTarget(card.href) && !seen.has(card.href) && seen.add(card.href)).slice(0, MAX_CARDS)
 }
+
+/** The card of the comic a show is based on, when the home site has its page, or null. */
+export const basedOnCard = (cards = []) => cards.find((card) => card.basedOn) || null
 
 /**
  * The home site's page for one character, or null. The home site's character

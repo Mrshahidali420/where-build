@@ -24,6 +24,7 @@ import { faqOf } from '@sister/core/src/where/faq.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
 import { quickStats, pills, answerLine, castLanguages, dubOf } from '@sister/core/src/where/title-lines.mjs'
 import { listWords } from '@sister/core/src/where/hub-extras.mjs'
+import { basedOnCard } from '@sister/core/src/where/cross.mjs'
 import { formatWord, statusWord, seasonWord, sourceWord, partialDate, paragraphs, plural } from '@sister/core/src/where/words.mjs'
 import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
 import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
@@ -66,6 +67,8 @@ const languages = castLanguages(r)
 const english = languages.includes('English')
 // Sub or dub, said only from the cast table (null when it has no voices).
 const dub = dubOf(r)
+// The comic the show was made from, when the home site has its page (cross.mjs).
+const basedOn = basedOnCard(r.cross)
 const faq = faqOf(r)
 const path = `/anime/${r.slug}`
 const what = formatWord(r.format).toLowerCase()
@@ -175,6 +178,13 @@ const listItem = {
         <p class:list={['w-dub', { 'w-dub--yes': dub.dubbed }]}>
           {dub.line}
           {dub.dubbed && r.cast.length > 0 && <a href="#cast">See the English cast</a>}
+        </p>
+      )
+    }
+    {
+      basedOn && (
+        <p class="w-based">
+          Based on the {basedOn.basedOn} <a href={basedOn.href} rel="noopener">{basedOn.title}</a>. <small>{basedOn.anchor}, on our sister site.</small>
         </p>
       )
     }

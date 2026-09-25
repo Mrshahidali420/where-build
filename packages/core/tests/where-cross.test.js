@@ -4,7 +4,7 @@
 // (src/where/entity-slugs.mjs).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { MAX_CARDS, characterUrl, crossCards, homeBase, isAllowedTarget } from '../src/where/cross.mjs'
+import { MAX_CARDS, basedOnCard, characterUrl, crossCards, homeBase, isAllowedTarget, sourceMatches } from '../src/where/cross.mjs'
 import { assignSlugs, reservedIn } from '../src/where/entity-slugs.mjs'
 
 const BASE = 'https://home.example'
@@ -55,6 +55,20 @@ test('cards: watch-legally first, proven sources after, never more than three', 
     [`${BASE}/manga/show-manga`, `${BASE}/novel/show-novel`],
   )
   for (const card of cards) assert.equal(isAllowedTarget(card.href), true)
+})
+
+test('based on: only the comic the show\'s own source names, never one made from an original show', () => {
+  const formats = { 200: 'MANGA', 201: 'NOVEL', 202: 'MANGA', 203: 'MANGA' }
+  const withFormats = (source) => ({ ...item, source, relations: item.relations.map((r) => ({ ...r, format: formats[r.id] })) })
+  const manga = crossCards(withFormats('MANGA'), { base: BASE, home, comicsById })
+  assert.equal(basedOnCard(manga).href, `${BASE}/manga/show-manga`)
+  assert.equal(basedOnCard(manga).basedOn, 'manga')
+  assert.ok(!manga.find((c) => c.href.endsWith('show-novel')).basedOn, 'a novel is not the source of a manga-based show')
+  const novel = crossCards(withFormats('LIGHT_NOVEL'), { base: BASE, home, comicsById })
+  assert.equal(basedOnCard(novel).basedOn, 'light novel')
+  assert.equal(basedOnCard(crossCards(withFormats('ORIGINAL'), { base: BASE, home, comicsById })), null, 'an original show is based on nothing')
+  assert.equal(sourceMatches('MANGA', 'NOVEL'), false)
+  assert.equal(basedOnCard([]), null)
 })
 
 test('cards: nothing on a dev-host base, nothing without a proven page', () => {
