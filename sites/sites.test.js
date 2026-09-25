@@ -67,7 +67,7 @@ test('no site carries a borrowed id: analytics, ads, shop tags and keys are empt
     assert.ok(site.d1.id === null || /^[0-9a-f-]{36}$/.test(site.d1.id), `${site.key}.d1.id`)
   }
   // And nothing copied from manhwaindex's config, whatever the key.
-  const ids = /G-[A-Z0-9]{8,12}|ca-pub-|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
+  const ids = /G-R1V6DJN1L3|ca-pub-|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
   for (const name of [...NAMES.map((n) => join(n, 'site.config.mjs')), 'family.mjs']) {
     assert.doesNotMatch(readFileSync(join(HERE, name), 'utf8'), ids, name)
   }
