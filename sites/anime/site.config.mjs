@@ -80,7 +80,7 @@ export default defineSite({
   // to swap: the pairs are in packages/core/src/lib/font-pairs.mjs and every
   // one is installed ('dela-zen', 'unbounded-figtree', 'bricolage-jakarta').
   // tasks/font-options.png shows the three side by side.
-  fonts: fontPair('dela-zen'),
+  fonts: fontPair('unbounded-figtree'),
 
   d1: { name: 'whereanime-analytics', id: 'cf342163-4a44-42b2-b427-49196cf9d333' },
   adminSalt: 'whereanime',
