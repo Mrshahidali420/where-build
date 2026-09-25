@@ -65,21 +65,11 @@ export default defineSite({
   email: 'hello@whereanime.com',
   dmcaEmail: 'dmca@whereanime.com',
 
-  // Amazon Associates tags. The US store has WhereAnime's own (made 26 Sep
-  // 2026); the other stores use the same account's manhwaindex tags on the
-  // owner's instruction until he makes WhereAnime ones there.
-  amazon: {
-    stores: {
-      ...FAMILY.amazon.stores,
-      us: 'whereanime-20',
-      uk: 'manhwaindex-21',
-      de: 'manhwaindex06-21',
-      fr: 'manhwainde0f6-21',
-      it: 'manhwaindex04-21',
-      es: 'manhwaindex0a-21',
-      ca: 'manhwaindex01-20',
-    },
-  },
+  // Amazon Associates: one tag, the US store's own (whereanime-20, made
+  // 26 Sep 2026). The owner wants every shop link on amazon.com with it, so
+  // the other stores stay empty and every reader falls back to the US store
+  // (packages/core/src/lib/shop-links.js storeFor).
+  amazon: { stores: { ...FAMILY.amazon.stores, us: 'whereanime-20' } },
   workerName: 'whereanime',
 
   colors: {

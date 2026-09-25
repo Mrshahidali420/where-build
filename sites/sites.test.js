@@ -52,10 +52,6 @@ test('four sites, each on its dev address until it launches on its planned domai
   }
 })
 
-// The one borrowing the owner asked for: on 25 Sep 2026 he told WhereAnime to
-// use the same Associates account's manhwaindex tags until its own exist.
-const BORROWS_SHOP_TAGS = new Set(['whereanime'])
-
 test('no site carries a borrowed id: analytics, ads, shop tags and keys are empty or its own', () => {
   for (const site of sites) {
     // Before launch these stay empty; a live site may carry its own.
@@ -64,23 +60,17 @@ test('no site carries a borrowed id: analytics, ads, shop tags and keys are empt
       assert.equal(site.indexNow.key, null)
     }
     // A shop tag is empty until the owner creates it, and then it is the
-    // site's own (whereanime-20), never another site's, bar the one exception above.
-    const tagOk = (tag) => tag === '' || tag.startsWith(site.key) || (BORROWS_SHOP_TAGS.has(site.key) && tag.startsWith('manhwainde'))
-    assert.ok(Object.values(site.amazon.stores).every(tagOk), `${site.key} amazon tags`)
+    // site's own (whereanime-20), never another site's.
+    assert.ok(Object.values(site.amazon.stores).every((tag) => tag === '' || tag.startsWith(site.key)), `${site.key} amazon tags`)
     // A site gets its own D1 database once provisioned (WhereAnime did on 25 Sep
     // 2026); until then the id is null. Never manhwaindex's, checked below.
     assert.ok(site.d1.id === null || /^[0-9a-f-]{36}$/.test(site.d1.id), `${site.key}.d1.id`)
   }
   // And nothing copied from manhwaindex's config, whatever the key.
   const ids = /G-[A-Z0-9]{8,12}|ca-pub-|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
-  // The same list without the shop tags, for the site allowed to borrow them.
-  const idsBarTags = /G-[A-Z0-9]{8,12}|ca-pub-|0x4AAAAAAE|368b5571dfe5|a31cde34-/
-  for (const n of NAMES) {
-    const text = readFileSync(join(HERE, n, 'site.config.mjs'), 'utf8')
-    const key = sites.find((s) => s.key.endsWith(n))?.key
-    assert.doesNotMatch(text, BORROWS_SHOP_TAGS.has(key) ? idsBarTags : ids, n)
+  for (const name of [...NAMES.map((n) => join(n, 'site.config.mjs')), 'family.mjs']) {
+    assert.doesNotMatch(readFileSync(join(HERE, name), 'utf8'), ids, name)
   }
-  assert.doesNotMatch(readFileSync(join(HERE, 'family.mjs'), 'utf8'), ids, 'family.mjs')
 })
 
 test('every palette is its own and at least as readable as manhwaindex', () => {
