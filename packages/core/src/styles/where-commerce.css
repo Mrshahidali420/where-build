@@ -27,6 +27,17 @@
   height: 2px;
   background: linear-gradient(90deg, var(--rose), rgb(site(rgb.rose) / 0));
 }
+/* On a title page the box sits under the head, the page's full width: its
+   rows fill two or three columns on a wide screen and stack on a phone. */
+.w-own {
+  margin: var(--s-6) 0 0;
+}
+.w-own .buys {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+}
+.w-own .buys > li {
+  min-width: 0;
+}
 .buybox__head h2 {
   font-size: var(--t-lg);
 }
@@ -236,6 +247,48 @@
 .w-answer small {
   display: block;
   margin-top: var(--s-1);
+  font-size: var(--t-xs);
+  color: var(--dawn-faint);
+}
+.w-pills .w-pill--dub {
+  border-color: var(--cobalt-bright);
+  color: var(--dawn);
+}
+/* Sub or dub, in one line under the answer: lit only when a dub is listed. */
+.w-dub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-1) var(--s-3);
+  margin: var(--s-4) 0 0;
+  max-width: 68ch;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--dawn-dim);
+}
+.w-dub--yes {
+  border-color: var(--cobalt-bright);
+  color: var(--dawn);
+}
+.w-dub a {
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* "Based on the manga X": one plain line, the source's page on the home site. */
+.w-based {
+  margin: var(--s-3) 0 0;
+  max-width: 68ch;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--dawn-dim);
+}
+.w-based a {
+  font-weight: 700;
+}
+.w-based small {
   font-size: var(--t-xs);
   color: var(--dawn-faint);
 }

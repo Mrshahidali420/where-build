@@ -12,6 +12,9 @@
  *   year   what "newest" sorts by: the latest year of their work
  *   span   "1963 to 2026", or ''
  *
+ * A voice actor's card carries a ninth field, the language most of their
+ * roles are in (voiceCard).
+ *
  * Built from the page records (src/where/record-entities.mjs), so every card
  * names a page that exists. `popOf(href)` is a title's AniList popularity.
  *
@@ -40,12 +43,26 @@ export const roleWords = baseRole
 
 const newest = (list) => Math.max(0, ...yearsOf(list))
 
-/** A voice actor: roles, the best-known main role, AniList favourites. */
+/**
+ * The language most of a voice actor's roles are in ('Japanese', 'English'),
+ * or '' with no roles. A tie goes to the language met first.
+ */
+export function mainLanguage(roles) {
+  const counts = new Map()
+  for (const r of roles) if (r.language) counts.set(r.language, (counts.get(r.language) || 0) + 1)
+  return [...counts].reduce((top, entry) => (!top || entry[1] > top[1] ? entry : top), null)?.[0] || ''
+}
+
+/**
+ * A voice actor: roles, the best-known main role, AniList favourites, and
+ * (a ninth field) the language most of their roles are in, which the
+ * "English dub" list filters on.
+ */
 export function voiceCard(p, popOf) {
   const roles = p.roles || []
   const mains = roles.filter((r) => r.role === 'MAIN')
   const top = best(mains.length ? mains : roles, popOf)
-  return [p.name, p.voiceHref, p.counts.roles, pictureOf(p.image), top ? `${top.character.name} in ${top.title}` : '', p.favourites || 0, newest(roles), '']
+  return [p.name, p.voiceHref, p.counts.roles, pictureOf(p.image), top ? `${top.character.name} in ${top.title}` : '', p.favourites || 0, newest(roles), '', mainLanguage(roles)]
 }
 
 /**

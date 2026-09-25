@@ -29,7 +29,13 @@ export const MIN_YEAR = 12
 /** The sort a directory's front page shows. */
 export const DEFAULT_SORT = 'popular'
 /** Which card field a sort orders by (hub-cards.mjs): the count unless named here. */
-const SORT_FIELD = { popular: 5, newest: 6 }
+const SORT_FIELD = { popular: 5, newest: 6, english: 5 }
+/**
+ * A sort that lists only some cards: "English dub" keeps the voice actors
+ * whose roles are mostly in English (hub-cards.mjs voiceCard's ninth field),
+ * most popular first.
+ */
+const SORT_KEEP = { english: (row) => row[8] === 'English' }
 
 /**
  * The directories, by their URL folder under /directory. `sorts` are the
@@ -42,7 +48,9 @@ export const GROUPS = {
     many: 'voice actors',
     count: 'role',
     lede: 'Every voice actor with a page here, with the role each is best known for and every character they voiced.',
-    sorts: { popular: 'Most popular', roles: 'Most roles' },
+    sorts: { popular: 'Most popular', roles: 'Most roles', english: 'English dub' },
+    // A sort whose list is its own subject gets its own opening words.
+    ledes: { english: 'The voices of English dubs: voice actors whose roles here are mostly in English, the most popular first, each with the character they are best known for.' },
   },
   staff: {
     label: 'Directors and staff',
@@ -114,8 +122,10 @@ export function directory(rows, sorts = [DEFAULT_SORT], { minLetter = MIN_LETTER
   const ranked = {}
   for (const sort of sorts) {
     const field = SORT_FIELD[sort] ?? 2
+    const keep = SORT_KEEP[sort] || (() => true)
     ranked[sort] = sorted
       .map((_, i) => i)
+      .filter((i) => keep(sorted[i]))
       .sort((a, b) => (sorted[b][field] || 0) - (sorted[a][field] || 0) || (sorted[b][2] || 0) - (sorted[a][2] || 0) || a - b)
       .slice(0, rankMax)
   }
@@ -185,6 +195,8 @@ export function hubPaths(hubs) {
   const paths = []
   for (const [group, dir] of Object.entries(hubs.groups)) {
     for (const [sort, list] of Object.entries(dir.sorts || { [DEFAULT_SORT]: [] })) {
+      // A filtered list with nobody in it (no English voices yet) is no page.
+      if (sort !== DEFAULT_SORT && !list.length) continue
       const pages = pagesOf(list.length, PER_RANK_PAGE)
       for (let page = 1; page <= pages; page++) paths.push({ path: sortPath(group, sort, page), group, sort, page, pages })
     }
@@ -214,8 +226,9 @@ export function hubPaths(hubs) {
       paths.push({ path: `/genre/${g.slug}${page > 1 ? `/${page}` : ''}`, slug: g.slug, page, pages: g.pages })
     }
   }
-  // The shop, the moods and the like pages: each only when its gate built it.
+  // The shop, the streaming services, the moods and the like pages: each only when its gate built it.
   if (hubs.shop) paths.push({ path: '/shop' })
+  if (hubs.platforms) paths.push({ path: '/where-to-watch' })
   const moods = hubs.moodIndex || []
   if (moods.length) paths.push({ path: '/mood' })
   for (const m of moods) paths.push({ path: `/mood/${m.slug}`, slug: m.slug })

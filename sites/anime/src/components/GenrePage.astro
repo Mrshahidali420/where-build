@@ -11,7 +11,9 @@ import Covers from '@sister/core/src/components/where/Covers.astro'
 import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
 import { pageSlice } from '@sister/core/src/where/hubs.mjs'
 import { newestRows } from '@sister/core/src/where/hub-cards.mjs'
-import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { faqJsonld, listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { hubFaq } from '@sister/core/src/where/hub-faq.mjs'
+import Faq from '@sister/core/src/components/where/Faq.astro'
 import { plural } from '@sister/core/src/where/words.mjs'
 import { cardOfRow } from './card-row.mjs'
 
@@ -26,6 +28,8 @@ const base = `/genre/${slug}`
 const top = g.rows.slice(0, 3).map((r) => r[0])
 const others = hubs.genreIndex.filter((x) => x.slug !== slug)
 const pageWords = page > 1 ? `, page ${page}` : ''
+// The questions, from the genre's own rows, on its first page only.
+const faq = page === 1 ? hubFaq({ subject: `${g.name.toLowerCase()} anime`, rows: g.rows, total: g.total, site: config.name }) : []
 ---
 
 <Where
@@ -33,7 +37,7 @@ const pageWords = page > 1 ? `, page ${page}` : ''
   description={`The most watched ${g.name.toLowerCase()} anime${top.length ? `, led by ${top.join(', ')}` : ''}: ${plural(g.total, 'show')} in all, each with its episode dates, cast and staff.`}
   canonical={page > 1 ? `${base}/${page}` : base}
   image={g.rows[0]?.[2]}
-  jsonld={listJsonld(`${g.name} anime`, items, config.siteUrl, start)}
+  jsonld={[listJsonld(`${g.name} anime`, items, config.siteUrl, start), faqJsonld(faq, base, config.siteUrl)]}
   crumbs={[{ name: 'Anime', href: '/anime' }, { name: 'Genres', href: '/genre' }, { name: `${g.name}${pageWords}` }]}
 >
   <HubHead
@@ -63,6 +67,17 @@ const pageWords = page > 1 ? `, page ${page}` : ''
     <Covers items={items} eager={fresh.length ? 0 : 6} />
     <Pager current={page} count={pages} base={base} segment="" label={`${g.name} anime`} />
   </section>
+
+  {
+    faq.length > 0 && (
+      <section class="w-sec" aria-labelledby="faq">
+        <div class="w-sec__head">
+          <h2 id="faq">Questions about {g.name.toLowerCase()} anime</h2>
+        </div>
+        <Faq faq={faq} />
+      </section>
+    )
+  }
 
   <section class="w-sec" aria-labelledby="more">
     <div class="w-sec__head">

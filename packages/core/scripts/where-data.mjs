@@ -19,8 +19,10 @@
  * (src/where/slim.mjs), one file at a time so the full comics and character
  * files are never held together.
  *
- * push writes back only this site's own state: data/slug-registry.json and
- * public/d/manifest.json (as live-manifest.json). It refuses a registry with
+ * push writes back only this site's own state: data/slug-registry.json,
+ * public/d/manifest.json (as live-manifest.json) and where-links.json, the
+ * live anime and voice actor addresses the home site links to
+ * (src/where/where-links.mjs). It refuses a registry with
  * fewer entries than the one pulled, because the registry is append-only: a
  * smaller one would hand old addresses to new pages.
  *
@@ -45,6 +47,7 @@ import {
   slimCast,
   slimHomeRegistry,
 } from '../src/where/slim.mjs'
+import { whereLinksOf } from '../src/where/where-links.mjs'
 import config from '../src/lib/site.mjs'
 
 const DATA = join(process.cwd(), 'data')
@@ -184,6 +187,27 @@ function push() {
   putObject(config.r2.dataBucket, `${STATE}slug-registry.json`, registryFile)
   putObject(config.r2.dataBucket, `${STATE}live-manifest.json`, MANIFEST)
   console.log(`pushed ${config.r2.dataBucket}/${STATE}: registry (${entries} entries) and live-manifest.json`)
+  pushLinks()
+}
+
+/**
+ * where-links.json for the home site (src/where/where-links.mjs): only the
+ * pages this deploy's sitemap holds. Skipped, not failed, when the build left
+ * no sitemap list: the registry push above is the part that must not miss.
+ */
+function pushLinks() {
+  const pageUrlsFile = join(DATA, 'page-urls.json')
+  if (!existsSync(pageUrlsFile)) return console.log('no data/page-urls.json: where-links.json not pushed')
+  const staffFile = join(DATA, 'staff.json')
+  const links = whereLinksOf({
+    registry: readJson(join(DATA, 'slug-registry.json')),
+    pageUrls: readJson(pageUrlsFile),
+    staff: existsSync(staffFile) ? readJson(staffFile) : {},
+    builtAt: Date.now(),
+  })
+  writeJson('where-links.json', links)
+  putObject(config.r2.dataBucket, `${STATE}where-links.json`, join(DATA, 'where-links.json'))
+  console.log(`pushed ${config.r2.dataBucket}/${STATE}where-links.json: ${Object.keys(links.anime).length} anime, ${Object.keys(links.voiceActors).length} voice actors`)
 }
 
 const mode = process.argv[2]

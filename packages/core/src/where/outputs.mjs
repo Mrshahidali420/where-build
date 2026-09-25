@@ -19,6 +19,7 @@ import { seasonAt, shiftSeason, upcomingEpisodes } from './anime-hubs.mjs'
 import { shopOf } from './shop.mjs'
 import { platformsOf, popularAiring, upcomingLists } from './schedule-lists.mjs'
 import { likeHubs, moodHubs } from './hub-extras.mjs'
+import { platformHub } from './platform-hub.mjs'
 
 const HOME_ROWS = 16
 const HOME_AIRING = 10
@@ -221,6 +222,8 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
     // Built only when their gates passed (computeWhere's counts), so a hub a
     // gate kept out has no page, no menu link and no sitemap line.
     shop: where.counts?.shop ? shopOf(titles) : null,
+    // /where-to-watch: null when too few services carry enough shows (platform-hub.mjs).
+    platforms: platformHub(titles, cardRow),
     ...moodHubs(where.moods || [], recordOf, cardRow),
     like: likeHubs(where.likes || new Map(), recordOf, cardRow),
   }

@@ -11,7 +11,8 @@ import { gateOf, passesShop, WHERE_GATE_DEFAULTS } from '../src/where/gates.mjs'
 import { hubPaths } from '../src/where/hubs.mjs'
 import { likeIntro, likeHubs, moodHubs } from '../src/where/hub-extras.mjs'
 import { computeWhere } from '../src/where/compute.mjs'
-import { answerLine, quickStats, pills } from '../src/where/title-lines.mjs'
+import { answerLine, castLanguages, dubOf, quickStats, pills } from '../src/where/title-lines.mjs'
+import { faqOf } from '../src/where/faq.mjs'
 import { voiceFacts } from '../src/where/person-facts.mjs'
 
 const EMPTY = storesFrom({})
@@ -220,6 +221,41 @@ test('the quick strip holds only real numbers and the pills say airing', () => {
   assert.deepEqual(stats.map((s) => s.label), ['AniList score', 'Watching now', 'Favourites'])
   assert.equal(stats[0].value, '9.1')
   assert.equal(pills({ status: 'RELEASING', watchOn: [{ site: 'X' }] })[0].live, true)
+})
+
+test('the cast languages are only those a voice in the table speaks, Japanese first', () => {
+  const voice = (language) => ({ name: 'V', href: '/voice-actor/v', language })
+  assert.deepEqual(castLanguages({ cast: [{ voices: [voice('English')] }, { voices: [voice('Japanese')] }] }), ['Japanese', 'English'])
+  assert.deepEqual(castLanguages({ cast: [{ voices: [voice('Japanese')] }, { voices: [] }] }), ['Japanese'])
+  assert.deepEqual(castLanguages({ cast: [] }), [])
+})
+
+test('sub or dub: a dub only with an English voice, subtitled only with Japanese voices, nothing without voices', () => {
+  const voice = (name, language) => ({ name, href: `/voice-actor/${name}`, language })
+  const r = {
+    title: 'Frieren',
+    status: 'FINISHED',
+    watchOn: [{ site: 'Crunchyroll' }],
+    cast: [
+      { name: 'Frieren', role: 'MAIN', voices: [voice('Atsumi Tanezaki', 'Japanese'), voice('Mallorie Rodak', 'English')] },
+      { name: 'Fern', role: 'MAIN', voices: [voice('Kana Ichinose', 'Japanese')] },
+    ],
+  }
+  const dub = dubOf(r)
+  assert.equal(dub.dubbed, true)
+  assert.equal(dub.voiced, 1)
+  assert.match(dub.line, /^English dub: AniList lists English voices for 1 character\. It streams officially on Crunchyroll; whether a service carries the dub/)
+  assert.ok(pills(r).some((p) => p.text === 'English dub' && p.dub))
+
+  const sub = { ...r, cast: r.cast.map((c) => ({ ...c, voices: c.voices.filter((v) => v.language === 'Japanese') })) }
+  assert.equal(dubOf(sub).line, 'Subtitled only: no English dub cast listed.')
+  assert.equal(dubOf({ ...sub, status: 'NOT_YET_RELEASED' }).badge, 'No English dub yet')
+  assert.equal(dubOf({ ...r, cast: [{ name: 'X', voices: [] }] }), null, 'no voices, no claim')
+
+  const ask = (rec) => faqOf({ rows: [], key: [], songs: [], studios: [], ...rec }, 0).find((f) => /dubbed in English/.test(f.q))
+  assert.match(ask(r).a, /^Yes\. Frieren has an English dub: AniList lists English voices for 1 character, with Mallorie Rodak as Frieren\. It streams officially on Crunchyroll/)
+  assert.match(ask(sub).a, /^No English dub is listed for Frieren\./)
+  assert.equal(ask({ ...sub, status: 'NOT_YET_RELEASED' }), undefined, 'not asked before it airs')
 })
 
 test('a voice actor sheet lifts bio facts and counts roles, and the bio loses those lines', () => {

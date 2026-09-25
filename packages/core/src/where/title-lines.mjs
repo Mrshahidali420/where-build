@@ -8,6 +8,7 @@
  */
 import { formatInSentence, statusWord, seasonWord, plural } from './words.mjs'
 import { listWords } from './hub-extras.mjs'
+import { CAST_LANGUAGES } from './people.mjs'
 
 const num = (n) => Number(n).toLocaleString('en-US')
 
@@ -26,11 +27,43 @@ export function quickStats(r) {
   ].filter(Boolean)
 }
 
-/** The pills: airing or not, and how many official places stream it. */
+/** The voice languages the cast table prints, Japanese first: ['Japanese', 'English'], or fewer. */
+export function castLanguages(r) {
+  const heard = new Set((r.cast || []).flatMap((c) => (c.voices || []).map((v) => v.language)))
+  return CAST_LANGUAGES.filter((language) => heard.has(language))
+}
+
+/**
+ * Sub or dub, from the cast table and nothing else:
+ *   { dubbed: true, voiced, badge, line }  AniList lists an English voice for
+ *                                          `voiced` of the characters
+ *   { dubbed: false, badge, line }         Japanese voices only
+ *   null                                   no voices at all: nothing is claimed
+ * The line names the official streams when there are any, but never says
+ * which one carries the dub: AniList does not say, so neither does the page.
+ */
+export function dubOf(r) {
+  const languages = castLanguages(r)
+  const sites = (r.watchOn || []).map((s) => s.site)
+  if (languages.includes('English')) {
+    const voiced = (r.cast || []).filter((c) => (c.voices || []).some((v) => v.language === 'English')).length
+    const streams = sites.length
+      ? ` It streams officially on ${listWords([...sites.slice(0, 3), ...(sites.length > 3 ? [`${sites.length - 3} more`] : [])])}; whether a service carries the dub depends on the service and your country.`
+      : ''
+    return { dubbed: true, voiced, badge: 'English dub', line: `English dub: AniList lists English voices for ${plural(voiced, 'character')}.${streams}` }
+  }
+  if (!languages.includes('Japanese')) return null
+  if (r.status === 'NOT_YET_RELEASED') return { dubbed: false, badge: 'No English dub yet', line: 'No English dub cast is listed yet.' }
+  return { dubbed: false, badge: 'Subtitled only', line: 'Subtitled only: no English dub cast listed.' }
+}
+
+/** The pills: airing or not, sub or dub, and how many official places stream it. */
 export function pills(r, freeNames = []) {
   const streams = (r.watchOn || []).length
+  const dub = dubOf(r)
   return [
     { text: statusWord(r.status), live: r.status === 'RELEASING' },
+    dub ? { text: dub.badge, dub: dub.dubbed } : null,
     streams ? { text: `${plural(streams, 'official stream')}` } : null,
     freeNames.length ? { text: `Free on ${listWords(freeNames.slice(0, 2))}` } : null,
   ].filter(Boolean)

@@ -6,10 +6,10 @@
  * by the Worker from one shard record (packages/core/src/where/record-title.mjs);
  * every link in it was resolved at build time to a page that exists.
  *
- * The buy box sits in the side column right above "Where to watch", the home
- * site's order (its buy box sits above its platform list). The Amazon
- * Associates sentence is never beside it: it is in the footer and on the
- * privacy page.
+ * The buy box sits right under the head and its key facts, before the long
+ * sections, so a reader sees it without scrolling past the episode list (on
+ * a phone the side column comes last). The Amazon Associates sentence is
+ * never beside it: it is in the footer and on the privacy page.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
@@ -22,7 +22,9 @@ import { loadAnime } from '@sister/core/src/where/runtime.mjs'
 import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
-import { quickStats, pills, answerLine } from '@sister/core/src/where/title-lines.mjs'
+import { quickStats, pills, answerLine, castLanguages, dubOf } from '@sister/core/src/where/title-lines.mjs'
+import { listWords } from '@sister/core/src/where/hub-extras.mjs'
+import { basedOnCard } from '@sister/core/src/where/cross.mjs'
 import { formatWord, statusWord, seasonWord, sourceWord, partialDate, paragraphs, plural } from '@sister/core/src/where/words.mjs'
 import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
 import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
@@ -60,6 +62,13 @@ const FIRST = 12
 const shown = r.rows.slice(0, FIRST)
 const story = paragraphs(r.description)
 const voiced = r.cast.some((c) => c.voices.length > 0)
+// The languages the cast table holds: the page never says "English" without an English voice in it.
+const languages = castLanguages(r)
+const english = languages.includes('English')
+// Sub or dub, said only from the cast table (null when it has no voices).
+const dub = dubOf(r)
+// The comic the show was made from, when the home site has its page (cross.mjs).
+const basedOn = basedOnCard(r.cross)
 const faq = faqOf(r)
 const path = `/anime/${r.slug}`
 const what = formatWord(r.format).toLowerCase()
@@ -67,7 +76,7 @@ const description = truncate(
   `${r.title} (${what}${r.startYear ? `, ${r.startYear}` : ''}): ` +
     [
       r.dated ? `air dates for ${plural(r.dated, 'episode')}` : r.episodes ? plural(r.episodes, 'episode') : '',
-      voiced ? 'the Japanese and English voice cast' : '',
+      voiced && languages.length ? `the ${listWords(languages)} voice cast` : '',
       r.key.length ? 'who directed and wrote it' : '',
       r.songs.length ? 'its opening and ending songs' : '',
       r.watch ? 'its watch order' : '',
@@ -90,13 +99,13 @@ const picked = r.picks && picksShowFor(country) ? r.picks : null
 
 const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
 const jumps = [
+  buys.length > 0 && { id: 'own', label: 'Buy' },
   shown.length > 0 && { id: 'episodes', label: 'Episodes' },
   r.cast.length > 0 && { id: 'cast', label: 'Cast' },
   made && { id: 'staff', label: 'Staff' },
   r.songs.length > 0 && { id: 'songs', label: 'Songs' },
   r.watch && { id: 'order', label: 'Watch order' },
   r.watchOn.length > 0 && { id: 'watch', label: 'Where to watch' },
-  buys.length > 0 && { id: 'own', label: 'Buy' },
   faq.length > 0 && { id: 'faq', label: 'Questions' },
 ].filter(Boolean)
 
@@ -146,7 +155,7 @@ const listItem = {
 
   <div class="w-lead">
     <ul class="w-pills">
-      {pills(r, freeNames).map((pill) => <li class={pill.live ? 'w-pill--live' : undefined}>{pill.text}</li>)}
+      {pills(r, freeNames).map((pill) => <li class:list={[{ 'w-pill--live': pill.live, 'w-pill--dub': pill.dub }]}>{pill.text}</li>)}
     </ul>
     {
       stats.length > 2 && (
@@ -165,6 +174,21 @@ const listItem = {
       <small>Checked against AniList on {checkedLong}.</small>
     </p>
     {
+      dub && (
+        <p class:list={['w-dub', { 'w-dub--yes': dub.dubbed }]}>
+          {dub.line}
+          {dub.dubbed && r.cast.length > 0 && <a href="#cast">See the English cast</a>}
+        </p>
+      )
+    }
+    {
+      basedOn && (
+        <p class="w-based">
+          Based on the {basedOn.basedOn} <a href={basedOn.href} rel="noopener">{basedOn.title}</a>. <small>{basedOn.anchor}, on our sister site.</small>
+        </p>
+      )
+    }
+    {
       freeLinks.length > 0 && (
         <p class="w-free">
           <b>Watch it free on</b>
@@ -177,6 +201,14 @@ const listItem = {
       )
     }
   </div>
+
+  {
+    buys.length > 0 && (
+      <div id="own" class="w-own">
+        <BuyBox heading="Own it" sub={`Discs, the original books and figures for ${r.title}, from Amazon.`} rows={buys} />
+      </div>
+    )
+  }
 
   <div class="w-split">
     <div class="w-main">
@@ -200,7 +232,14 @@ const listItem = {
               <h2 id="cast">Cast and voice actors</h2>
               <p class="w-sec__count">{plural(r.cast.length, 'character')}</p>
             </div>
-            {voiced && <p class="w-sec__note">Japanese and English voices. A voice actor's name opens every role they have played.</p>}
+            {voiced && (
+              <p class="w-sec__note">
+                {english
+                  ? `The Japanese voice and the English dub voice side by side (English for ${dub.voiced} of ${plural(r.cast.length, 'character')}).`
+                  : 'Japanese voices. AniList lists no English dub cast for it.'}{' '}
+                A voice actor's name opens every role they have played.
+              </p>
+            )}
             <CastList cast={r.cast} title={r.title} />
           </section>
         )
@@ -372,14 +411,6 @@ const listItem = {
           </p>
         )}
       </section>
-
-      {
-        buys.length > 0 && (
-          <div id="own">
-            <BuyBox heading="Own it" sub={`Discs, the original books and figures for ${r.title}, from Amazon.`} rows={buys} />
-          </div>
-        )
-      }
 
       {
         r.watchOn.length > 0 && (

@@ -172,7 +172,7 @@ function main() {
   // The page shell reads this small file: the numbers it shows, and the hubs
   // whose gate kept them out this time, so no menu or footer link names a 404.
   const built = new Set(hubPaths(hubs).map((p) => p.path))
-  const missing = ['/schedule', '/season', '/genre', '/shop', '/mood'].filter((path) => !built.has(path))
+  const missing = ['/schedule', '/season', '/genre', '/shop', '/mood', '/where-to-watch'].filter((path) => !built.has(path))
   write('site-stats.json', { comics: 0, anime: titles.length, genres: [], missing })
   write('redirects.json', { ...redirects, ...read('manual-redirects.json', {}) })
 
