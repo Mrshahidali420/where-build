@@ -170,3 +170,18 @@ test('pictures: the AniList placeholder is no picture', () => {
   const p = { name: 'X', voiceHref: '/voice-actor/x', image: 'https://s4.anilist.co/file/anilistcdn/staff/large/default.jpg', counts: { roles: 3 }, roles: [] }
   assert.equal(voiceCard(p, () => 0)[3], '')
 })
+
+test('the home studios: one show per series, three covers, as many rows as the watch orders', async () => {
+  const { hubsOf, seriesKey } = await import('../src/where/outputs.mjs')
+  assert.equal(seriesKey('HAIKYU!! 2nd Season'), seriesKey('HAIKYU!!'))
+  assert.equal(seriesKey('The Apothecary Diaries'), 'apothecary')
+  assert.notEqual(seriesKey('ONE PIECE'), seriesKey('One-Punch Man'))
+  const work = (title, pop) => ({ title, href: `/anime/${pop}`, cover: `c${pop}` })
+  const titles = [1, 2, 3, 4].map((n) => ({ id: n, slug: String(n), title: String(n), popularity: n * 10, studios: [] }))
+  const works = [work('KONOSUBA', 4), work('KONOSUBA 2', 3), work('Mob Psycho 100', 2), work('Other', 1)]
+  const studios = Array.from({ length: 12 }, (_, i) => ({ id: i, name: `S${i}`, slug: `s${i}`, works }))
+  const { home } = hubsOf({ titles, people: [], studios, artists: [], watch: [] })
+  assert.equal(home.studios.length, 8)
+  assert.deepEqual(home.studios[0][3], ['KONOSUBA', 'Mob Psycho 100'])
+  assert.deepEqual(home.studios[0][4], ['c4', 'c2', 'c1'])
+})

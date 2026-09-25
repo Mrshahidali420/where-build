@@ -105,6 +105,15 @@ function currentSeason(index, now) {
 }
 const seasonOrder = (season) => ['WINTER', 'SPRING', 'SUMMER', 'FALL'].indexOf(season)
 
+/**
+ * A rough series key: the first real word of a title, so "HAIKYU!!" and
+ * "HAIKYU!! 2nd Season" match. A leading "The" is skipped.
+ */
+export function seriesKey(title) {
+  const words = String(title || '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, '').split(/\s+/).filter(Boolean)
+  return (words[0] === 'the' && words[1] ? words[1] : words[0]) || ''
+}
+
 /** Franchises to start: the most watched ones, each with the entry to begin at. */
 function watchStarters(watch, popularityOf) {
   return watch
@@ -149,7 +158,19 @@ export function hubsOf({ titles, people, studios, artists, watch, where = {}, ai
   const topVoices = [...voice].sort((a, b) => b.counts.roles - a.counts.roles || a.id - b.id).slice(0, HOME_ROWS)
   // Same length as the watch orders: the two lists sit side by side on wide screens.
   const topStudios = [...studios].sort((a, b) => b.works.length - a.works.length || a.id - b.id).slice(0, HOME_WATCH)
-  const byPop = (works) => [...works].sort((a, b) => (popularityOf.get(b.href) || 0) - (popularityOf.get(a.href) || 0))
+  // Most watched first, one show per series, so a studio reads "KONOSUBA and
+  // Mob Psycho 100", not "KONOSUBA and KONOSUBA 2".
+  const byPop = (works) => {
+    const seen = new Set()
+    return [...works]
+      .sort((a, b) => (popularityOf.get(b.href) || 0) - (popularityOf.get(a.href) || 0))
+      .filter((w) => {
+        const key = seriesKey(w.title)
+        if (seen.has(key)) return false
+        seen.add(key)
+        return true
+      })
+  }
 
   const home = {
     titles: [...titles].sort(byPopularity).slice(0, HOME_ROWS).map(cardRow),
