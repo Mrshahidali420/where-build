@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { directory, hubPaths, letterPath, pageSlice, sortPath, yearPlan, PER_LETTER_PAGE, PER_RANK_PAGE } from '../src/where/hubs.mjs'
-import { artistCard, formatGroups, newestRows, pictureOf, roleWords, spanOf, staffCard, studioCard, voiceCard, watchCard } from '../src/where/hub-cards.mjs'
+import { artistCard, formatGroups, mainLanguage, newestRows, pictureOf, roleWords, spanOf, staffCard, studioCard, voiceCard, watchCard } from '../src/where/hub-cards.mjs'
 
 // [name, href, count, image, line, pop, year, span]
 const card = (name, count, pop = 0, year = 0) => [name, `/x/${name.toLowerCase()}`, count, '', '', pop, year, '']
@@ -104,7 +104,31 @@ test('cards: a voice actor is known for the main role in their most watched show
       { href: '/anime/c', title: 'C', year: 2010, role: 'MAIN', character: { name: 'Lead' } },
     ],
   }
-  assert.deepEqual(voiceCard(p, popOf), ['Aoi', '/voice-actor/aoi', 3, 'aoi.jpg', 'Hero in A', 42, 2024, ''])
+  assert.deepEqual(voiceCard(p, popOf), ['Aoi', '/voice-actor/aoi', 3, 'aoi.jpg', 'Hero in A', 42, 2024, '', ''])
+})
+
+test('cards: a voice actor card carries the language most of their roles are in', () => {
+  assert.equal(mainLanguage([{ language: 'English' }, { language: 'Japanese' }, { language: 'English' }]), 'English')
+  assert.equal(mainLanguage([{ language: 'Japanese' }, { language: 'English' }]), 'Japanese', 'a tie goes to the first met')
+  assert.equal(mainLanguage([]), '')
+  const p = { name: 'Em', voiceHref: '/voice-actor/em', counts: { roles: 2 }, roles: [{ href: '/anime/a', title: 'A', year: 2024, role: 'MAIN', character: { name: 'Hero' }, language: 'English' }] }
+  assert.equal(voiceCard(p, popOf)[8], 'English')
+})
+
+test('directory: the English dub list keeps only English voices, most popular first, and is no page when empty', () => {
+  const voice = (name, pop, language) => [name, `/voice-actor/${name.toLowerCase()}`, 1, '', '', pop, 2024, '', language]
+  const rows = [voice('Abe', 5, 'Japanese'), voice('Bea', 3, 'English'), voice('Cy', 9, 'English')]
+  const dir = directory(rows, ['popular', 'roles', 'english'], { minLetter: 1 })
+  assert.deepEqual(
+    dir.sorts.english.map((i) => dir.rows[i][0]),
+    ['Cy', 'Bea'],
+  )
+  assert.equal(dir.sorts.popular.length, 3, 'the other lists keep everyone')
+  const paths = (d) => hubPaths({ groups: { 'voice-actors': d }, years: {} }).map((p) => p.path)
+  assert.ok(paths(dir).includes('/directory/voice-actors/by/english'))
+  const none = directory([voice('Abe', 5, 'Japanese')], ['popular', 'english'], { minLetter: 1 })
+  assert.ok(!paths(none).some((p) => p.includes('/by/english')), 'no English voices, no page')
+  assert.ok(paths(none).includes('/directory/voice-actors'), 'the front page stays')
 })
 
 test('cards: staff, studios, artists and watch orders', () => {

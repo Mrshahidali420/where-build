@@ -22,7 +22,8 @@ import { loadAnime } from '@sister/core/src/where/runtime.mjs'
 import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
-import { quickStats, pills, answerLine } from '@sister/core/src/where/title-lines.mjs'
+import { quickStats, pills, answerLine, castLanguages } from '@sister/core/src/where/title-lines.mjs'
+import { listWords } from '@sister/core/src/where/hub-extras.mjs'
 import { formatWord, statusWord, seasonWord, sourceWord, partialDate, paragraphs, plural } from '@sister/core/src/where/words.mjs'
 import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
 import EpisodeTable from '@sister/core/src/components/where/EpisodeTable.astro'
@@ -60,6 +61,10 @@ const FIRST = 12
 const shown = r.rows.slice(0, FIRST)
 const story = paragraphs(r.description)
 const voiced = r.cast.some((c) => c.voices.length > 0)
+// The languages the cast table holds: the page never says "English" without an English voice in it.
+const languages = castLanguages(r)
+const english = languages.includes('English')
+const dubbed = r.cast.filter((c) => c.voices.some((v) => v.language === 'English')).length
 const faq = faqOf(r)
 const path = `/anime/${r.slug}`
 const what = formatWord(r.format).toLowerCase()
@@ -67,7 +72,7 @@ const description = truncate(
   `${r.title} (${what}${r.startYear ? `, ${r.startYear}` : ''}): ` +
     [
       r.dated ? `air dates for ${plural(r.dated, 'episode')}` : r.episodes ? plural(r.episodes, 'episode') : '',
-      voiced ? 'the Japanese and English voice cast' : '',
+      voiced && languages.length ? `the ${listWords(languages)} voice cast` : '',
       r.key.length ? 'who directed and wrote it' : '',
       r.songs.length ? 'its opening and ending songs' : '',
       r.watch ? 'its watch order' : '',
@@ -200,7 +205,14 @@ const listItem = {
               <h2 id="cast">Cast and voice actors</h2>
               <p class="w-sec__count">{plural(r.cast.length, 'character')}</p>
             </div>
-            {voiced && <p class="w-sec__note">Japanese and English voices. A voice actor's name opens every role they have played.</p>}
+            {voiced && (
+              <p class="w-sec__note">
+                {english
+                  ? `The Japanese voice and the English dub voice side by side (English for ${dubbed} of ${plural(r.cast.length, 'character')}).`
+                  : 'Japanese voices. AniList lists no English dub cast for it.'}{' '}
+                A voice actor's name opens every role they have played.
+              </p>
+            )}
             <CastList cast={r.cast} title={r.title} />
           </section>
         )

@@ -11,7 +11,7 @@ import { gateOf, passesShop, WHERE_GATE_DEFAULTS } from '../src/where/gates.mjs'
 import { hubPaths } from '../src/where/hubs.mjs'
 import { likeIntro, likeHubs, moodHubs } from '../src/where/hub-extras.mjs'
 import { computeWhere } from '../src/where/compute.mjs'
-import { answerLine, quickStats, pills } from '../src/where/title-lines.mjs'
+import { answerLine, castLanguages, quickStats, pills } from '../src/where/title-lines.mjs'
 import { voiceFacts } from '../src/where/person-facts.mjs'
 
 const EMPTY = storesFrom({})
@@ -220,6 +220,13 @@ test('the quick strip holds only real numbers and the pills say airing', () => {
   assert.deepEqual(stats.map((s) => s.label), ['AniList score', 'Watching now', 'Favourites'])
   assert.equal(stats[0].value, '9.1')
   assert.equal(pills({ status: 'RELEASING', watchOn: [{ site: 'X' }] })[0].live, true)
+})
+
+test('the cast languages are only those a voice in the table speaks, Japanese first', () => {
+  const voice = (language) => ({ name: 'V', href: '/voice-actor/v', language })
+  assert.deepEqual(castLanguages({ cast: [{ voices: [voice('English')] }, { voices: [voice('Japanese')] }] }), ['Japanese', 'English'])
+  assert.deepEqual(castLanguages({ cast: [{ voices: [voice('Japanese')] }, { voices: [] }] }), ['Japanese'])
+  assert.deepEqual(castLanguages({ cast: [] }), [])
 })
 
 test('a voice actor sheet lifts bio facts and counts roles, and the bio loses those lines', () => {

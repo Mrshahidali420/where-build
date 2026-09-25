@@ -4,7 +4,10 @@ import { GROUPS, LETTERS, letterPath, sortPath } from '@sister/core/src/where/hu
 
 /** `current`: a sort key, or 'az' on a letter page. */
 export function directoryTabs(group, dir, current) {
-  const sorts = Object.entries(GROUPS[group].sorts).map(([sort, label]) => ({ label, href: sortPath(group, sort), current: sort === current }))
+  // A list with nobody in it has no page (hubs.mjs hubPaths), so no tab.
+  const sorts = Object.entries(GROUPS[group].sorts)
+    .filter(([sort]) => dir.sorts?.[sort]?.length)
+    .map(([sort, label]) => ({ label, href: sortPath(group, sort), current: sort === current }))
   const first = LETTERS.slice(1).find((letter) => dir.letters[letter]?.length) || '0'
   return [...sorts, { label: 'A to Z', href: letterPath(group, dir, first), current: current === 'az' }]
 }

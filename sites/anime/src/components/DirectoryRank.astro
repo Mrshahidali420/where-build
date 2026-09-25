@@ -21,6 +21,9 @@ const { group, sort = DEFAULT_SORT, page = 1, pages = 1 } = Astro.props
 const dir = whereHubs().groups[group]
 const meta = GROUPS[group]
 const sortLabel = meta.sorts[sort]
+// "most roles" in a sentence, but "English dub" keeps its capital.
+const sortWords = /^English/.test(sortLabel) ? sortLabel : sortLabel.toLowerCase()
+const lede = meta.ledes?.[sort] || meta.lede
 const ranked = dir.sorts[sort]
 const rows = pageSlice(ranked, page, PER_RANK_PAGE).map((i) => dir.rows[i])
 const start = (page - 1) * PER_RANK_PAGE
@@ -34,12 +37,12 @@ const base = sort === DEFAULT_SORT ? `/directory/${group}` : sortPath(group, sor
 
 <Where
   title={front ? `${meta.label}: The ${plural(dir.total, meta.noun, meta.many)} on ${config.name}` : `${name}${pageWords} | ${config.name}`}
-  description={`${sortLabel} of ${plural(dir.total, meta.noun, meta.many)} on ${config.name}${leaders.length ? `, led by ${leaders.join(', ')}` : ''}. ${meta.lede}`}
+  description={`${sortLabel} of ${plural(dir.total, meta.noun, meta.many)} on ${config.name}${leaders.length ? `, led by ${leaders.join(', ')}` : ''}. ${lede}`}
   canonical={sortPath(group, sort, page)}
-  jsonld={listJsonld(`${meta.label}, ${sortLabel.toLowerCase()}`, rows.map(([title, href]) => ({ title, href })), config.siteUrl, start)}
+  jsonld={listJsonld(`${meta.label}, ${sortWords}`, rows.map(([title, href]) => ({ title, href })), config.siteUrl, start)}
   crumbs={front ? [{ name: meta.label }] : [{ name: meta.label, href: `/directory/${group}` }, { name: `${sortLabel}${pageWords}` }]}
 >
-  <HubHead kicker="Directory" title={front ? meta.label : `${meta.label}: ${sortLabel.toLowerCase()}${pageWords}`} lede={meta.lede} stats={[[dir.total.toLocaleString('en-US'), meta.many]]}>
+  <HubHead kicker="Directory" title={front ? meta.label : `${meta.label}: ${sortWords}${pageWords}`} lede={lede} stats={[[dir.total.toLocaleString('en-US'), meta.many]]}>
     <SortTabs tabs={directoryTabs(group, dir, sort)} label={`Sort ${meta.many}`} />
     <LetterNav group={group} dir={dir} />
   </HubHead>
@@ -50,7 +53,7 @@ const base = sort === DEFAULT_SORT ? `/directory/${group}` : sortPath(group, sor
       <p class="w-sec__count">{pages > 1 ? `${(start + 1).toLocaleString('en-US')} to ${(start + rows.length).toLocaleString('en-US')} of the top ${ranked.length.toLocaleString('en-US')}` : plural(rows.length, meta.noun, meta.many)}</p>
     </div>
     <EntityCards rows={rows} noun={meta.count} shape={shape} rank={start + 1} eager={page === 1 ? 6 : 0} />
-    <Pager current={page} count={pages} base={base} segment={sort === DEFAULT_SORT ? `by/${sort}` : ''} label={`${meta.many}, ${sortLabel.toLowerCase()}`} />
+    <Pager current={page} count={pages} base={base} segment={sort === DEFAULT_SORT ? `by/${sort}` : ''} label={`${meta.many}, ${sortWords}`} />
     {page === pages && <p class="w-sec__note w-sec__note--end">The ranked list stops at {ranked.length.toLocaleString('en-US')}. Every one of the {plural(dir.total, meta.noun, meta.many)} is in the A to Z above.</p>}
   </section>
 </Where>

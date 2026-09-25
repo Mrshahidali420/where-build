@@ -8,6 +8,7 @@
  */
 import { formatInSentence, statusWord, seasonWord, plural } from './words.mjs'
 import { listWords } from './hub-extras.mjs'
+import { CAST_LANGUAGES } from './people.mjs'
 
 const num = (n) => Number(n).toLocaleString('en-US')
 
@@ -24,6 +25,12 @@ export function quickStats(r) {
     r.favourites ? { label: 'Favourites', value: num(r.favourites) } : null,
     (r.watchOn || []).length ? { label: 'Official streams', value: String(r.watchOn.length) } : null,
   ].filter(Boolean)
+}
+
+/** The voice languages the cast table prints, Japanese first: ['Japanese', 'English'], or fewer. */
+export function castLanguages(r) {
+  const heard = new Set((r.cast || []).flatMap((c) => (c.voices || []).map((v) => v.language)))
+  return CAST_LANGUAGES.filter((language) => heard.has(language))
 }
 
 /** The pills: airing or not, and how many official places stream it. */
