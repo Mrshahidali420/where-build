@@ -11,7 +11,7 @@ import { studiosOfTitle } from './studios.mjs'
 import { artistKey } from './artists.mjs'
 import { crossCards, characterUrl } from './cross.mjs'
 import { mainChain } from './franchises.mjs'
-import { picksForTitleIn } from '../lib/picks-core.js'
+import { picksForTitleIn, booksKnownIn } from '../lib/picks-core.js'
 
 /** How many cast rows a title record keeps: the credits walk fetched 25. */
 const CAST_MAX = 25
@@ -259,9 +259,13 @@ export function titleRecord(t, ctx) {
     chart: chartOf(item),
     watching: item.readers?.current || 0,
     completed: item.readers?.completed || 0,
-    // Hand-picked Amazon products: this show's own, or its source's (the
-    // manga it was made from), with `from` naming that source.
-    picks: ctx.picks ? picksForTitleIn(ctx.picks, item) : null,
+    // Amazon products: this show's own, or its source's (the manga it was
+    // made from), with `from` naming that source. Hand picks first, then the
+    // ones matched from publisher records (`byHand: false`).
+    picks: ctx.picks || ctx.productPicks ? picksForTitleIn(ctx.picks, item, ctx.productPicks) : null,
+    // False only when the show was checked and its source has no English
+    // print: the buy box then drops its book search (src/where/shop.mjs).
+    books: booksKnownIn(ctx.picks, item, ctx.productPicks),
     likeHref: ctx.likes?.has(item.id) ? `${ctx.link.title(item.id)}/like` : null,
     anilistUrl: item.anilistUrl || '',
     nextEpisode: item.nextEpisode || null,

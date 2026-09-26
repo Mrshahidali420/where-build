@@ -67,7 +67,7 @@ test('picks come from the title, else from the same story in another form', () =
   const data = { titles: { 10: [{ a: 'A1', n: 'Vol 1', t: 'book' }] }, characters: {} }
   assert.deepEqual(picksForTitleIn(data, { id: 10 }).from, null)
   const anime = { id: 20, relations: [{ relation: 'SIDE_STORY', id: 10 }, { relation: 'ADAPTATION', id: 10, title: 'The Manga' }] }
-  assert.deepEqual(picksForTitleIn(data, anime), { picks: data.titles[10], from: 'The Manga' })
+  assert.deepEqual(picksForTitleIn(data, anime), { picks: data.titles[10], byHand: true, from: 'The Manga' })
   assert.equal(picksForTitleIn(data, { id: 30, relations: [{ relation: 'CHARACTER', id: 10 }] }), null)
   assert.equal(picksForTitleIn(null, { id: 10 }), null)
 })

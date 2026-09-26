@@ -51,13 +51,19 @@ function sourceRow(source, name, country, stores) {
  * src/where/record-title.mjs). Empty when the record has no usable name.
  * Discs lead, because an anime page is about the show itself; then the
  * printed original, then figures and plushies, then posters.
+ *
+ * `r.books === false` means the show was checked and its source was never
+ * printed in English (src/lib/picks-core.js, booksKnownIn). A book search for
+ * it opens a page of unrelated books, so that row is dropped. Only a book
+ * source is judged: a game's row and an original's art books stay.
  */
 export function animeShopRows(r, country, stores) {
   const name = recordShopName(r)
   if (name.length < 2) return []
+  const noBooks = r.books === false && BOOK_SOURCES.has(r.source)
   return [
     { kind: 'discs', icon: 'disc', label: 'Blu-ray and DVD', note: 'The disc release, where one was made', cta: 'Shop discs', url: shopUrl(`${name} anime`, VIDEO, country, stores) },
-    sourceRow(r.source, name, country, stores),
+    noBooks ? null : sourceRow(r.source, name, country, stores),
     { kind: 'merch', icon: 'figure', label: 'Figures and plushies', note: 'Scale figures, plushies and collectibles', cta: 'Shop figures', url: shopUrl(`${name} anime`, TOYS, country, stores) },
     { kind: 'prints', icon: 'poster', label: 'Posters and apparel', note: 'Wall scrolls, prints, shirts and hoodies', cta: 'Shop posters', url: shopUrl(`${name} anime poster`, ALL, country, stores) },
   ].filter(Boolean)
@@ -102,7 +108,8 @@ const shelfRow = (r) => [r.title, `/anime/${r.slug}`, mediumCover(r.cover), reco
  *
  *   popular     the most watched anime
  *   books       the most watched anime adapted from a book, for the books row
- *   picked      anime with hand-picked products (their own or their source's)
+ *   picked      anime with hand-picked products (their own or their source's);
+ *               products matched from publisher records are left out
  *   faces       main characters of the most watched anime, for figure searches
  *   total       how many titles could be shelved (the gate counts this)
  */
@@ -112,7 +119,9 @@ export function shopOf(titles) {
   const shown = new Set(popular.map((r) => r.id))
   const books = usable.filter((r) => BOOK_SOURCES.has(r.source) && !shown.has(r.id)).slice(0, SHOP_BOOKS)
   const picked = usable
-    .filter((r) => r.picks?.picks?.length)
+    // The shelf is headed "chosen by hand", so matched products stay on
+    // their own title pages.
+    .filter((r) => r.picks?.picks?.length && r.picks.byHand !== false)
     .slice(0, SHOP_PICKED)
     .map((r) => ({ title: r.title, href: `/anime/${r.slug}`, cover: mediumCover(r.cover), from: r.picks.from || null, picks: r.picks.picks.slice(0, 3) }))
 

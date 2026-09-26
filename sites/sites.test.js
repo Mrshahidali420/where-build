@@ -96,17 +96,37 @@ test('no sister links to a workers.dev host', () => {
   }
 })
 
-test('hand-picked products hold ASINs and names only, never a shop tag', () => {
+// Both files: the hand picks and the products matched from publisher records
+// (packages/core/scripts/picks-from-products.mjs).
+test('hand-picked and matched products hold ASINs and names only, never a shop tag', () => {
   for (const name of NAMES) {
-    const file = join(HERE, name, 'data', 'picks.json')
-    if (!existsSync(file)) continue
-    const text = readFileSync(file, 'utf8')
-    assert.doesNotMatch(text, /tag=|"[a-z0-9]+-2[0-2]"/i, `${name}: picks.json carries a tag`)
-    const picks = JSON.parse(text)
-    for (const group of [picks.titles, picks.characters, picks.people]) {
-      for (const list of Object.values(group || {})) {
-        for (const pick of list) assert.deepEqual(Object.keys(pick).filter((k) => !['a', 'n', 't'].includes(k)), [], `${name}: ${pick.a}`)
+    for (const base of ['picks.json', 'product-picks.json']) {
+      const file = join(HERE, name, 'data', base)
+      if (!existsSync(file)) continue
+      const text = readFileSync(file, 'utf8')
+      assert.doesNotMatch(text, /tag=|"[a-z0-9]+-2[0-2]"/i, `${name}: ${base} carries a tag`)
+      const picks = JSON.parse(text)
+      for (const group of [picks.titles, picks.characters, picks.people]) {
+        for (const list of Object.values(group || {})) {
+          for (const pick of list) assert.deepEqual(Object.keys(pick).filter((k) => !['a', 'n', 't'].includes(k)), [], `${name}: ${pick.a}`)
+        }
       }
     }
+  }
+})
+
+test('matched products never shadow a hand pick, and hold three at most', () => {
+  for (const name of NAMES) {
+    const file = join(HERE, name, 'data', 'product-picks.json')
+    if (!existsSync(file)) continue
+    const matched = JSON.parse(readFileSync(file, 'utf8'))
+    const handFile = join(HERE, name, 'data', 'picks.json')
+    const hand = existsSync(handFile) ? JSON.parse(readFileSync(handFile, 'utf8')).titles || {} : {}
+    for (const [id, list] of Object.entries(matched.titles || {})) {
+      assert.equal(hand[id], undefined, `${name}: ${id} is hand-picked`)
+      assert.ok(list.length >= 1 && list.length <= 3, `${name}: ${id}`)
+      for (const pick of list) assert.match(pick.a, /^(\d{9}[\dX]|B[0-9A-Z]{9})$/, `${name}: ${id}`)
+    }
+    assert.ok(Array.isArray(matched.noEnglishBooks), `${name}: noEnglishBooks`)
   }
 })

@@ -125,6 +125,10 @@ function main() {
     // Hand-picked Amazon products (data/picks.json, kept in git beside the
     // site's config), the genre and tag matches, and the like pages.
     picks: read('picks.json', null),
+    // Products matched from publisher records for the shows nobody picked by
+    // hand, and the shows whose source has no English print
+    // (scripts/picks-from-products.mjs). Absent on a site that has none.
+    productPicks: read('product-picks.json', null),
     similar: where.similar,
     likes: where.likes,
   }

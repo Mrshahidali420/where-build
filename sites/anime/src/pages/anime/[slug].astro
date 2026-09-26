@@ -93,7 +93,8 @@ const freeLinks = r.watchOn.filter((s) => freeNames.includes(s.site))
 const stats = quickStats(r)
 
 // What to buy: Amazon searches in the reader's own store, and the products
-// picked by hand, shown only to readers on amazon.com where they were picked.
+// picked by hand (or matched from publisher records), shown only to readers
+// on amazon.com where they were picked.
 const buys = animeShopRows(r, country)
 const picked = r.picks && picksShowFor(country) ? r.picks : null
 
@@ -426,7 +427,16 @@ const listItem = {
         picked && (
           <TopPicks
             heading={`Top picks for ${picked.from || r.title}`}
-            sub={picked.from ? `Picked by hand for the ${picked.from} books and merch this show was made from.` : 'Real products on Amazon, picked by hand.'}
+            sub={
+              picked.byHand === false
+                ? picked.from
+                  ? `The ${picked.from} books and discs, found in publisher records.`
+                  : 'Real products on Amazon, found in publisher records.'
+                : picked.from
+                  ? `Picked by hand for the ${picked.from} books and merch this show was made from.`
+                  : 'Real products on Amazon, picked by hand.'
+            }
+            byHand={picked.byHand !== false}
             picks={picked.picks}
           />
         )

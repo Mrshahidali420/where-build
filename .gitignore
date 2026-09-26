@@ -14,6 +14,9 @@ sites/*/data/*
 # Hand-picked Amazon products (ASINs and short names, never a tag), kept by
 # hand like the two above. See packages/core/src/lib/picks.js.
 !sites/*/data/picks.json
+# Products matched from publisher records, same shape, written by
+# packages/core/scripts/picks-from-products.mjs. The build cannot remake it.
+!sites/*/data/product-picks.json
 sites/*/public/d/
 regress/*/dist/
 regress/*/data/

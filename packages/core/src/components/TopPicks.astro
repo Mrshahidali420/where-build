@@ -13,9 +13,11 @@
 import { BUY_ICONS } from '../lib/buy-icons.js'
 import { PICK_LABELS, pickUrl } from '../lib/picks.js'
 
-const { heading, sub, picks = [], max = 6 } = Astro.props
+// `byHand` is false for picks matched from publisher records (product-picks.json),
+// so the note never claims a person chose them.
+const { heading, sub, picks = [], max = 6, byHand = true } = Astro.props
 
-const ICON_OF = { book: 'book', figure: 'figure', plush: 'plush', poster: 'poster', apparel: 'shirt', merch: 'tag' }
+const ICON_OF = { book: 'book', disc: 'disc', figure: 'figure', plush: 'plush', poster: 'poster', apparel: 'shirt', merch: 'tag' }
 const shown = picks.slice(0, max)
 ---
 
@@ -27,7 +29,7 @@ const shown = picks.slice(0, max)
         {sub && <p>{sub}</p>}
       </div>
       <p class="buys__note">
-        Chosen by hand on Amazon. The price and the stock are
+        {byHand ? 'Chosen by hand on Amazon.' : 'The official English editions, found in publisher records.'} The price and the stock are
         Amazon's, and are right at the moment you look.
       </p>
       <ul class="picks__list">
