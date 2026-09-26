@@ -22,6 +22,7 @@ import { loadAnime } from '@sister/core/src/where/runtime.mjs'
 import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
+import { animeBuyCopy, supportLine } from '@sister/core/src/where/buy-copy.mjs'
 import { quickStats, pills, answerLine, castLanguages, dubOf } from '@sister/core/src/where/title-lines.mjs'
 import { listWords } from '@sister/core/src/where/hub-extras.mjs'
 import { basedOnCard } from '@sister/core/src/where/cross.mjs'
@@ -97,6 +98,11 @@ const stats = quickStats(r)
 // on amazon.com where they were picked.
 const buys = animeShopRows(r, country)
 const picked = r.picks && picksShowFor(country) ? r.picks : null
+// The box heading gives this show's reason to own it (src/where/buy-copy.mjs).
+// The support line is said once: in the top box, or in Top picks when the
+// top box is not drawn.
+const buyCopy = animeBuyCopy(r, buys)
+const support = supportLine(config.name)
 
 const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
 const jumps = [
@@ -206,7 +212,7 @@ const listItem = {
   {
     buys.length > 0 && (
       <div id="own" class="w-own">
-        <BuyBox heading="Own it" sub={`Discs, the original books and figures for ${r.title}, from Amazon.`} rows={buys} />
+        <BuyBox heading={buyCopy.heading} sub={buyCopy.sub} rows={buys} support={support} />
       </div>
     )
   }
@@ -438,6 +444,7 @@ const listItem = {
             }
             byHand={picked.byHand !== false}
             picks={picked.picks}
+            support={buys.length > 0 ? '' : support}
           />
         )
       }

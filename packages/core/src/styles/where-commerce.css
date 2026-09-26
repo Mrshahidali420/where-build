@@ -52,6 +52,14 @@
   line-height: 1.5;
   color: var(--dawn-faint);
 }
+/* The support line closes the box. Same quiet size as the note, so it reads
+   as a fact about the site, not a second offer. */
+.buys__support {
+  margin: var(--s-4) 0 0;
+  font-size: var(--t-xs);
+  line-height: 1.5;
+  color: var(--dawn-faint);
+}
 .buys,
 .picks__list {
   display: grid;

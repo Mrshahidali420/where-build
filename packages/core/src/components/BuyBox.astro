@@ -15,7 +15,9 @@ import { BUY_ICONS } from '../lib/buy-icons.js'
 
 // `id` is optional. The character page sets it so the Merch door on the
 // character wall can jump straight to this box.
-const { heading, sub, rows = [], id } = Astro.props
+// `support` is the one line saying purchases keep the site free. The page
+// passes it, once per page, so a second box never repeats it.
+const { heading, sub, rows = [], id, support = '' } = Astro.props
 
 const ICONS = BUY_ICONS
 ---
@@ -52,4 +54,6 @@ const ICONS = BUY_ICONS
       ))
     }
   </ul>
+
+  {support && <p class="buys__support">{support}</p>}
 </section>

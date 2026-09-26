@@ -20,6 +20,7 @@ import { plural } from '@sister/core/src/where/words.mjs'
 import { shopUrl, VIDEO, BOOKS, TOYS, ALL } from '@sister/core/src/lib/shop-links.js'
 import { BUY_ICONS } from '@sister/core/src/lib/buy-icons.js'
 import { PICK_LABELS, pickUrl } from '@sister/core/src/lib/picks.js'
+import { supportLine } from '@sister/core/src/where/buy-copy.mjs'
 
 const shop = whereHubs().shop
 const BOOK_TERMS = { MANGA: 'manga', COMIC: 'manga', LIGHT_NOVEL: 'light novel', WEB_NOVEL: 'light novel', NOVEL: 'novel' }
@@ -80,6 +81,8 @@ const items = shop.popular.map(([title, href]) => ({ title, href }))
       figures, plushies, posters and clothes. We stock nothing and ship nothing. Every link opens Amazon,
       so the price and the stock you see are theirs, right at the moment you look.
     </p>
+    {/* Said once for the whole page, not under every shelf. */}
+    <p class="buys__support">{supportLine(config.name)}</p>
     <ul class="w-shop-jump">
       {jumps.map((j) => <li><a href={`#${j.id}`}>{j.label}</a></li>)}
     </ul>
