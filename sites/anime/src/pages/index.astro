@@ -54,10 +54,26 @@ const season = home.season
       <p class="w-hero__lede">
         {plural(c.titles, 'anime', 'anime')} with the air date of each episode, the Japanese and English cast, the studio and crew, the opening and ending songs, and the order to watch each franchise in.
       </p>
-      <form class="w-hero__search" role="search" action="/search" method="get">
-        <label class="sr-only" for="hero-q">Search anime</label>
-        <input id="hero-q" name="q" type="search" placeholder="An anime, like Frieren or One Piece" autocomplete="off" required minlength="2" />
+      <!-- The header box is off on this page, so this one carries its ids and
+           gets the same suggestions dropdown (src/lib/finder-dropdown.js). -->
+      <form class="w-hero__search" id="finder" role="search" action="/search" method="get">
+        <label class="sr-only" for="finder-input">Search anime</label>
+        <input
+          id="finder-input"
+          name="q"
+          type="search"
+          placeholder="An anime, like Frieren or One Piece"
+          autocomplete="off"
+          required
+          minlength="2"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="finder-results"
+          aria-autocomplete="list"
+        />
         <button class="btn" type="submit">Search</button>
+        <ul id="finder-results" role="listbox" hidden></ul>
+        <span id="finder-status" class="sr-only" aria-live="polite"></span>
       </form>
       {asks.length > 0 && (
         <ul class="w-hero__asks" aria-label="Try">

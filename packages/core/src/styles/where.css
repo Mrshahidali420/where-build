@@ -1510,12 +1510,17 @@
   color: var(--dawn-dim);
 }
 .w-hero__search {
+  position: relative;
   display: flex;
   gap: var(--s-2);
   max-width: 34rem;
   margin-top: var(--s-5);
 }
-.w-hero__search input {
+/* The home box carries #finder-input for the dropdown; the id rules in
+   where-base.css would otherwise size it like the header box. */
+.w-hero__search input,
+.w-hero__search #finder-input {
+  width: auto;
   flex: 1;
   min-width: 0;
   height: 3.25rem;
