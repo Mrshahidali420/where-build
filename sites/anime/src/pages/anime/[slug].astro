@@ -6,10 +6,14 @@
  * by the Worker from one shard record (packages/core/src/where/record-title.mjs);
  * every link in it was resolved at build time to a page that exists.
  *
- * The buy box sits right under the head and its key facts, before the long
- * sections, so a reader sees it without scrolling past the episode list (on
- * a phone the side column comes last). The Amazon Associates sentence is
- * never beside it: it is in the footer and on the privacy page.
+ * Where to watch is the reason people land on this page, so it sits right
+ * under the head and its key facts, before the long sections: a reader sees
+ * the official streams without scrolling past the episode list. Top picks
+ * (Amazon, picked by hand) and the generic buy box follow it in that order,
+ * both still above Episodes, so buying options stay high too. Only the
+ * first Amazon box on the page carries the "keeps this site free" line; the
+ * one below it stays quiet. The Amazon Associates sentence is never beside
+ * either box: it is in the footer and on the privacy page.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
@@ -99,10 +103,13 @@ const stats = quickStats(r)
 const buys = animeShopRows(r, country)
 const picked = r.picks && picksShowFor(country) ? r.picks : null
 // The box heading gives this show's reason to own it (src/where/buy-copy.mjs).
-// The support line is said once: in the top box, or in Top picks when the
-// top box is not drawn.
+// The support line is said once, on whichever Amazon box renders first on
+// the page. Top picks now sits above the generic buy box, so it claims the
+// line when it exists; the buy box only gets it when there are no picks.
 const buyCopy = animeBuyCopy(r, buys)
 const support = supportLine(config.name)
+const topPicksSupport = picked ? support : ''
+const buyBoxSupport = picked ? '' : support
 
 const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
 const jumps = [
@@ -210,9 +217,46 @@ const listItem = {
   </div>
 
   {
+    /* Where to watch is the site's main point, so it leads the content,
+       right after the header block. Top picks and the generic buy box
+       follow it, still above Episodes, in that order. */
+  }
+  {
+    r.watchOn.length > 0 && (
+      <section class="w-sec" aria-labelledby="watch">
+        <div class="w-sec__head">
+          <h2 id="watch">Where to watch</h2>
+        </div>
+        <p class="w-sec__note">Official streams listed on AniList. What each one carries depends on your country.</p>
+        <Streams streams={r.watchOn} title={r.title} free={freeNames} />
+      </section>
+    )
+  }
+
+  {
+    picked && (
+      <TopPicks
+        heading={`Top picks for ${picked.from || r.title}`}
+        sub={
+          picked.byHand === false
+            ? picked.from
+              ? `The ${picked.from} books and discs, found in publisher records.`
+              : 'Real products on Amazon, found in publisher records.'
+            : picked.from
+              ? `Picked by hand for the ${picked.from} books and merch this show was made from.`
+              : 'Real products on Amazon, picked by hand.'
+        }
+        byHand={picked.byHand !== false}
+        picks={picked.picks}
+        support={topPicksSupport}
+      />
+    )
+  }
+
+  {
     buys.length > 0 && (
       <div id="own" class="w-own">
-        <BuyBox heading={buyCopy.heading} sub={buyCopy.sub} rows={buys} support={support} />
+        <BuyBox heading={buyCopy.heading} sub={buyCopy.sub} rows={buys} support={buyBoxSupport} />
       </div>
     )
   }
@@ -418,36 +462,6 @@ const listItem = {
           </p>
         )}
       </section>
-
-      {
-        r.watchOn.length > 0 && (
-          <section class="w-box" aria-labelledby="watch">
-            <h2 id="watch">Where to watch</h2>
-            <p class="w-box__note">Official streams listed on AniList. What each one carries depends on your country.</p>
-            <Streams streams={r.watchOn} title={r.title} free={freeNames} />
-          </section>
-        )
-      }
-
-      {
-        picked && (
-          <TopPicks
-            heading={`Top picks for ${picked.from || r.title}`}
-            sub={
-              picked.byHand === false
-                ? picked.from
-                  ? `The ${picked.from} books and discs, found in publisher records.`
-                  : 'Real products on Amazon, found in publisher records.'
-                : picked.from
-                  ? `Picked by hand for the ${picked.from} books and merch this show was made from.`
-                  : 'Real products on Amazon, picked by hand.'
-            }
-            byHand={picked.byHand !== false}
-            picks={picked.picks}
-            support={buys.length > 0 ? '' : support}
-          />
-        )
-      }
 
       {
         r.trailer && (
