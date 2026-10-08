@@ -20,12 +20,12 @@ test('no domain: the dev address only, and robots.txt runs the Worker first', ()
   assert.equal(devOnly.siteUrl, 'https://fixture.tests.workers.dev')
 })
 
-test('a domain: custom domains for the apex and www, the dev address off, assets first', () => {
+test('a domain: zone routes for the apex and www, the dev address off, assets first', () => {
   const config = wranglerConfig(fixture)
   assert.equal(config.workers_dev, false)
   assert.deepEqual(config.routes, [
-    { pattern: 'example.com', custom_domain: true },
-    { pattern: 'www.example.com', custom_domain: true },
+    { pattern: 'example.com/*', zone_name: 'example.com' },
+    { pattern: 'www.example.com/*', zone_name: 'example.com' },
   ])
   assert.equal('run_worker_first' in config.assets, false)
 })

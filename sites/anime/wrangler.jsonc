@@ -8,12 +8,12 @@
   "workers_dev": false,
   "routes": [
     {
-      "pattern": "whereanime.com",
-      "custom_domain": true
+      "pattern": "whereanime.com/*",
+      "zone_name": "whereanime.com"
     },
     {
-      "pattern": "www.whereanime.com",
-      "custom_domain": true
+      "pattern": "www.whereanime.com/*",
+      "zone_name": "whereanime.com"
     }
   ],
   "assets": {

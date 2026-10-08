@@ -11,7 +11,7 @@
  *                 static file is marked noindex by the host rule in
  *                 public/_headers, which Workers static assets honour, so the
  *                 Worker does not have to run for them.
- *   domain set    custom domains for the apex and www, workers_dev off (the
+ *   domain set    zone routes for the apex and www, workers_dev off (the
  *                 old dev address then answers 404), and no run_worker_first:
  *                 static files go straight from the asset store, at no cost.
  *
@@ -30,9 +30,12 @@ export function wranglerConfig(site) {
     workers_dev: !site.domain,
   }
   if (site.domain) {
+    // Zone routes, not custom domains: from 7 Oct 2026 custom domains were
+    // handed 188.114.96.0/20 IPs that some networks cannot reach. The zone
+    // needs proxied AAAA 100:: records for the apex and www.
     config.routes = [
-      { pattern: site.domain, custom_domain: true },
-      { pattern: `www.${site.domain}`, custom_domain: true },
+      { pattern: `${site.domain}/*`, zone_name: site.domain },
+      { pattern: `www.${site.domain}/*`, zone_name: site.domain },
     ]
   }
   config.assets = {
