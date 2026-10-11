@@ -14,6 +14,9 @@
  * first Amazon box on the page carries the "keeps this site free" line; the
  * one below it stays quiet. The Amazon Associates sentence is never beside
  * either box: it is in the footer and on the privacy page.
+ *
+ * What viewers think (stars and approved reviews, read live from D1) and the
+ * comments close the main column, after the questions.
  */
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
@@ -45,6 +48,10 @@ import Covers from '@sister/core/src/components/where/Covers.astro'
 import BuyBox from '@sister/core/src/components/BuyBox.astro'
 import TopPicks from '@sister/core/src/components/TopPicks.astro'
 import MyListButton from '@sister/core/src/components/MyListButton.astro'
+import Ratings from '@sister/core/src/components/Ratings.astro'
+import Comments from '@sister/core/src/components/Comments.astro'
+import { aggregateJsonld, reviewsJsonld } from '@sister/core/src/lib/reviews.mjs'
+import { readTitleReviews, EDGE_HEADER, DEGRADED_EDGE_SECONDS } from '@sister/core/src/lib/reviews-read.js'
 
 let r
 try {
@@ -54,6 +61,14 @@ try {
   return unavailable(Astro, e)
 }
 if (!r) return notFound(Astro)
+
+// Our own viewers' stars and the reviews the owner approved, read live from
+// D1 so an approval shows without a build (packages/core/src/lib/reviews-read.js).
+// It can never fail or hang the page: no answer in time reads as no ratings.
+const voices = await readTitleReviews(envOf(Astro)?.ANALYTICS, r.id)
+// A page drawn while the database did not answer is kept at the edge for a
+// minute, not a day, so a slow moment is not frozen in.
+if (!voices.ok) Astro.response.headers.set(EDGE_HEADER, String(DEGRADED_EDGE_SECONDS))
 
 // Records built before a field existed simply lack it.
 r.related ||= []
@@ -121,7 +136,18 @@ const jumps = [
   r.watch && { id: 'order', label: 'Watch order' },
   r.watchOn.length > 0 && { id: 'watch', label: 'Where to watch' },
   faq.length > 0 && { id: 'faq', label: 'Questions' },
+  { id: 'reader-ratings', label: 'Reviews' },
 ].filter(Boolean)
+
+// Only our own viewers' votes are marked up, and only from five of them
+// (SCHEMA_FROM); the AniList score belongs to another site and never is. The
+// reviews are the approved ones the page draws.
+const readerRating = aggregateJsonld(voices.rating)
+const titleJsonld = {
+  ...animeJsonld(r, config.siteUrl),
+  ...(readerRating ? { aggregateRating: readerRating } : {}),
+  ...(voices.reviews.length ? { review: reviewsJsonld(voices.reviews) } : {}),
+}
 
 const ended = r.endYear && r.endYear !== r.startYear ? `${partialDate(r.startDate) || r.startYear} to ${r.endYear}` : partialDate(r.startDate)
 const factRows = [
@@ -160,7 +186,7 @@ const listItem = {
   canonical={path}
   image={r.cover}
   preloadImage={r.cover}
-  jsonld={[animeJsonld(r, config.siteUrl), faqJsonld(faq, path, config.siteUrl)]}
+  jsonld={[titleJsonld, faqJsonld(faq, path, config.siteUrl)]}
   crumbs={[{ name: 'Anime', href: '/anime' }, ...(r.startYear ? [{ name: String(r.startYear), href: `/year/${r.startYear}` }] : []), { name: r.title }]}
 >
   <TitleHead record={r} jumps={jumps}>
@@ -424,6 +450,24 @@ const listItem = {
           </section>
         )
       }
+
+      <Ratings
+        id={r.id}
+        kind="anime"
+        slug={r.slug}
+        title={r.title}
+        rating={voices.rating}
+        reviews={voices.reviews}
+        frame="w-sec"
+        people="viewers"
+        about="the show"
+      />
+
+      <Comments page={`anime/${r.slug}`} title={r.title} frame="w-sec" />
+
+      <p class="report-line">
+        Something wrong on this page? <a href={`/feedback?page=${encodeURIComponent(path)}`}>Tell us</a>.
+      </p>
     </div>
 
     <aside class="w-aside" aria-label={`About ${r.title}`}>

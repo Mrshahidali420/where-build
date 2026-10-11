@@ -1,0 +1,37 @@
+---
+/**
+ * "Something wrong on this page? Tell us." The form every title page links
+ * to with its own address already filled in (?page=). It lands in the
+ * owner's /my-admin/messages (packages/core/src/components/MessageForm.astro).
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import MessageForm from '@sister/core/src/components/MessageForm.astro'
+---
+
+<Where
+  title={`Send feedback | ${config.name}`}
+  description={`Tell ${config.name} about a wrong air date, a missing voice actor, a dead link or anything on a page that looks off. Every message is read.`}
+  canonical="/feedback"
+  crumbs={[{ name: 'Feedback' }]}
+>
+  <header class="w-intro">
+    <h1>Send feedback</h1>
+  </header>
+  <div class="prose">
+    <p>
+      A wrong air date, a missing voice actor, a dead link, or an idea for the site. Every message is read by the
+      person who runs it.
+    </p>
+  </div>
+
+  <MessageForm kind="feedback" send="Send feedback" pageHint="/anime/frieren" />
+
+  <div class="prose">
+    <p>
+      Writing about something else? Use the <a href="/contact">contact form</a>. Copyright notices go to the
+      <a href="/dmca">copyright page</a>.
+    </p>
+  </div>
+</Where>

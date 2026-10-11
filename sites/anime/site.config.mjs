@@ -33,6 +33,7 @@ const DOCK = [
 const LEGAL = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
+  { href: '/feedback', label: 'Send feedback' },
   { href: '/privacy', label: 'Privacy' },
   { href: '/dmca', label: 'Copyright and DMCA' },
 ]

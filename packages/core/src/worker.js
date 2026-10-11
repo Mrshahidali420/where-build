@@ -16,9 +16,16 @@ import { cleanRow, INSERT_SQL } from './lib/beacon-rows.js'
 import { passProblem, readBeacon, beaconPlace, sign } from './lib/beacon-pass.js'
 import { rejectCounter, writeRejects } from './lib/reject-count.js'
 import { devGuard, withNoindex } from './lib/dev-guard.js'
+import { handleVote, handleReview, forgetSenders } from './lib/reviews-api.js'
+import { EDGE_HEADER } from './lib/reviews-read.js'
+import { handleMessage, forgetMessageSenders } from './lib/messages-api.js'
+import { handleComment, handleCommentsRead, forgetCommentSenders } from './lib/comments-api.js'
 import { isDevHost } from './lib/define-site.mjs'
 
 // How long the edge keeps a rendered page. The data changes once a day.
+// A page that carries live numbers may ask for less with the EDGE_HEADER
+// header (a title page drawn while the ratings could not be read: one
+// minute); it can never ask for more.
 const CACHE_SECONDS = 86400
 
 // The answer pages that hang under a title or a character page, and a Where
@@ -172,6 +179,15 @@ async function issuePass(request, env, ctx) {
   })
 }
 
+// Where the rating stars and the review form post.
+const VOTE_PATH = '/_vote'
+const REVIEW_PATH = '/_review'
+// Where the feedback and contact forms post.
+const MESSAGE_PATH = '/_message'
+// Where a page's comment form posts, and where the page reads its comments.
+const COMMENT_PATH = '/_comment'
+const COMMENTS_PATH = '/_comments'
+
 /** One site's Worker, around that site's Astro build. */
 export function makeWorker(site, { astro, redirects, shards }) {
   // Every build writes a new builtAt. It goes in the cache key, so a page kept
@@ -210,6 +226,17 @@ export function makeWorker(site, { astro, redirects, shards }) {
       return recordEvent(request, env, ctx)
     }
 
+    // A reader's star tap and a written review (src/lib/reviews-api.js). Both
+    // answer 405 to anything but POST, inside the handler.
+    if (url.pathname === VOTE_PATH) return handleVote(request, env, { site })
+    if (url.pathname === REVIEW_PATH) return handleReview(request, env, { site })
+    // A message from one of the site's forms (src/lib/messages-api.js).
+    if (url.pathname === MESSAGE_PATH) return handleMessage(request, env, { site })
+    // A page comment, and a page's approved comments, kept at the edge for
+    // five minutes (src/lib/comments-api.js).
+    if (url.pathname === COMMENT_PATH) return handleComment(request, env, { site })
+    if (url.pathname === COMMENTS_PATH) return handleCommentsRead(request, env, ctx, { cache: caches.default, site })
+
     // The admin pages read the database on every request, so they are
     // rendered fresh every time and never kept by the edge.
     if (path === '/my-admin' || path.startsWith('/my-admin/')) {
@@ -240,7 +267,10 @@ export function makeWorker(site, { astro, redirects, shards }) {
     const type = response.headers.get('content-type') || ''
     if (response.status === 200 && type.includes('text/html')) {
       const kept = new Response(response.body, response)
-      kept.headers.set('cache-control', `public, max-age=0, s-maxage=${CACHE_SECONDS}`)
+      const asked = Number(kept.headers.get(EDGE_HEADER))
+      const seconds = asked > 0 && asked < CACHE_SECONDS ? Math.floor(asked) : CACHE_SECONDS
+      kept.headers.delete(EDGE_HEADER)
+      kept.headers.set('cache-control', `public, max-age=0, s-maxage=${seconds}`)
       ctx.waitUntil(cache.put(cacheKey, kept.clone()))
       return kept
     }
@@ -262,6 +292,11 @@ export function makeWorker(site, { astro, redirects, shards }) {
      */
     async scheduled(controller, env, ctx) {
       ctx.waitUntil(runRollup(env && env.ANALYTICS))
+      // Blank the two-day-old hashes that stop repeat votes, reviews, messages
+      // and comments.
+      ctx.waitUntil(forgetSenders(env && env.ANALYTICS))
+      ctx.waitUntil(forgetMessageSenders(env && env.ANALYTICS))
+      ctx.waitUntil(forgetCommentSenders(env && env.ANALYTICS))
     },
   }
 }

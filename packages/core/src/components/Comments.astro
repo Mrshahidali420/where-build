@@ -1,0 +1,57 @@
+---
+/**
+ * The "Comments" section under a title page.
+ *
+ * The page is kept at the edge for a day, so the comments are not in it. The
+ * script (comments.js) reads the approved ones from /_comments?page=<key>
+ * once the reader scrolls near them; the Worker keeps that answer at the edge
+ * for five minutes. They are drawn with textContent only. The form posts to /_comment with a fresh Turnstile
+ * ticket; nothing shows until the owner approves it at /my-admin/comments.
+ * The rules are the title-page reviews' (src/lib/comments.mjs).
+ *
+ * Without JavaScript the section says so and the form is not shown.
+ *
+ * props: page (the page's key, "<kind>/<slug>"), title, frame (the page's
+ *   own section class, as in Ratings.astro)
+ */
+import '../styles/reviews.css'
+import '../styles/comments.css'
+import config from '../lib/site.mjs'
+import { MAX_COMMENT, MAX_COMMENT_NAME } from '../lib/comments.mjs'
+
+const { page, title, frame = '' } = Astro.props
+const sitekey = config.turnstileSiteKey || ''
+---
+
+<section class:list={[frame, 'gc']} id="comments" aria-labelledby="gc-h" data-page-comments data-page={page}>
+  {frame ? (
+    <div class={`${frame}__head`}>
+      <h2 id="gc-h">Comments</h2>
+    </div>
+  ) : (
+    <h2 id="gc-h">Comments</h2>
+  )}
+  <p class="gc__status" data-gc-status>Comments need JavaScript to load.</p>
+  <ol class="gc__list" data-gc-list aria-label={`Comments on ${title}`} hidden></ol>
+
+  <form class="review-form gc__form" data-gc-form data-key={sitekey} novalidate hidden>
+    <h3 class="gc__form-h" data-gc-form-h>Add a comment</h3>
+    <p class="gc__replying" data-gc-replying hidden>
+      <span data-gc-replying-text></span>
+      <button type="button" class="gc__cancel" data-gc-cancel>Cancel reply</button>
+    </p>
+    <label for="gc-name">Name</label>
+    <input id="gc-name" name="name" maxlength={MAX_COMMENT_NAME} autocomplete="nickname" required />
+    <label for="gc-body">Comment</label>
+    <textarea id="gc-body" name="body" rows="5" maxlength={MAX_COMMENT} required></textarea>
+    <p class="review-form__count" data-gc-count>0 / {MAX_COMMENT}</p>
+    <div class="rate__check" data-gc-check></div>
+    <p class="review-form__said" role="status" aria-live="polite" data-gc-said></p>
+    <p class="review-form__note">Comments are read before they go live. No links.</p>
+    <button type="submit">Send comment</button>
+  </form>
+</section>
+
+<script>
+  import './comments.js'
+</script>

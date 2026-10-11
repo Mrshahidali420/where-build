@@ -609,3 +609,35 @@ footer { color: var(--faint); font-size: 12px; margin: 28px 0 40px; line-height:
   /* After a full-width lead card, an odd one out at the end takes the row. */
   .kpis:has(.hero) .kpi:last-child:nth-child(even) { grid-column: 1 / -1; }
 }
+
+/* The owner's buttons (ReviewList.astro, MessageList.astro, CommentList.astro).
+   Each row is what a reader wrote with its buttons under it, full width on a
+   phone so a thumb cannot miss. */
+.taps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.taps li { border: 1px solid var(--line); border-left: 3px solid var(--line-2); border-radius: 10px; padding: 10px 12px; }
+.taps li.tone-good { border-left-color: var(--good); }
+.taps li.tone-bad { border-left-color: var(--bad); }
+.taps li.tone-amber { border-left-color: var(--amber); }
+.taps .name { display: grid; gap: 2px; min-width: 0; }
+.taps .name > a, .taps .name > span:first-child { overflow-wrap: anywhere; font-weight: 600; }
+.taps .sub { color: var(--faint); font-size: 12.5px; line-height: 1.4; }
+.acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+.acts button { margin: 0; flex: 1 1 140px; width: auto; min-height: 48px; }
+.acts button.quiet { background: transparent; color: var(--text); border: 1px solid var(--line-2); }
+.acts button:disabled { opacity: .55; cursor: progress; }
+.saved { margin: 6px 0 0; font-size: 13px; color: var(--good); min-height: 0; }
+.saved:empty { display: none; }
+.saved.bad { color: var(--bad); }
+
+/* Reviews tab (src/pages/my-admin/reviews.astro): the waiting count beside
+   the tab name is a plain number in the accent colour, the review text sits
+   under its title, and a row that was approved or deleted fades back. */
+nav.tabs a .tab-count { margin-left: 6px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.reviews-admin .review-body { margin: 8px 0 0; white-space: pre-line; overflow-wrap: anywhere; line-height: 1.5; }
+.reviews-admin li.done { opacity: .6; }
+
+/* Messages and Comments tabs: what a reader wrote keeps its own line breaks,
+   exactly as written. */
+.messages-admin .message-body { white-space: pre-wrap; }
+.comments-admin .comment-body { white-space: pre-wrap; }
+.comments-admin .reply-to { font-style: italic; }

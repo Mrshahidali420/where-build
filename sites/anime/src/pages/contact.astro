@@ -1,12 +1,14 @@
 ---
 /**
- * How to reach the people behind the site. The address comes from the config
- * (email); until the site has its own domain and mailbox, messages go through
- * the home site's contact page, which the same people read.
+ * How to reach the people behind the site: a form that lands in the owner's
+ * /my-admin/messages (packages/core/src/components/MessageForm.astro), and
+ * the address from the config (email). Until a site has its own mailbox the
+ * home site's contact page is named instead, which the same people read.
  */
 export const prerender = true
 import Where from '@sister/core/src/layouts/Where.astro'
 import config from '@sister/core/src/lib/site.mjs'
+import MessageForm from '@sister/core/src/components/MessageForm.astro'
 import { homeBase } from '@sister/core/src/where/cross.mjs'
 
 const home = homeBase(config)
@@ -17,10 +19,19 @@ const home = homeBase(config)
     <h1>Contact</h1>
   </header>
   <div class="prose">
-    <p>Spotted a wrong air date, a missing voice actor or a credit on the wrong person? Tell us and we will look at it.</p>
+    <p>
+      Spotted a wrong air date, a missing voice actor or a credit on the wrong person? The
+      <a href="/feedback">feedback form</a> is the quickest way to say so. For everything else, write here.
+    </p>
+  </div>
+
+  <MessageForm kind="contact" />
+
+  <div class="prose">
+    <h2>By email</h2>
     {
       config.email ? (
-        <p>Write to <a href={`mailto:${config.email}`}>{config.email}</a>. Please include the address of the page.</p>
+        <p>Or write to <a href={`mailto:${config.email}`}>{config.email}</a>. Please include the address of the page.</p>
       ) : home ? (
         <p>
           Until {config.name} has its own mailbox, send your message through the

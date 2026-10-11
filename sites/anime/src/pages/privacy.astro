@@ -18,7 +18,10 @@ const amazon = Object.values(config.amazon.stores).some(Boolean)
     <h1>Privacy</h1>
   </header>
   <div class="prose">
-    <p>{config.name} has no accounts and no logins. It never asks for your name or e-mail.</p>
+    <p>
+      {config.name} has no accounts and no logins. It only learns a name or an e-mail address when you choose to
+      type one into a form (see <a href="#ratings">ratings, reviews and comments</a> and <a href="#messages">messages</a>).
+    </p>
     <h2>What a visit records</h2>
     <p>
       The site counts its own visits in its own database on Cloudflare: the page address and title, the site
@@ -69,6 +72,46 @@ const amazon = Object.values(config.amazon.stores).some(Boolean)
     <p>
       The AniList import asks AniList for a public list straight from your browser. The username you type goes to
       AniList, never to us, and AniList's own privacy policy covers that request.
+    </p>
+    <h2 id="ratings">Ratings, reviews and comments</h2>
+    <p>
+      An anime's page lets you rate it from one to five stars, write a short review and leave a comment. All three
+      are optional and need no account.
+    </p>
+    <ul>
+      <li>
+        A star rating stores the anime, the number of stars and the day. A review stores the anime, the name you
+        type, your words, the optional score and the time it was sent. A comment stores the page, the name you
+        type, your words and the time. Reviews and comments are read by us before they appear, and only approved
+        ones are ever shown, with the name you gave.
+      </li>
+      <li>
+        We do not store your IP address. To stop the same person voting twice on one day, or sending more than a
+        few reviews or comments a day, we keep a scrambled one-way code made from your IP address and the day (for
+        a vote, also your browser name and the anime). It cannot be turned back into the address, and it is wiped
+        after two days.
+      </li>
+      <li>
+        Your browser remembers which anime you rated, under the key <code>mi_rated</code>, so the stars show your
+        vote next time. Clearing the site's data in your browser removes it.
+      </li>
+      <li>
+        Before a rating, a review or a comment is accepted, Cloudflare Turnstile checks that a real browser sent
+        it.{config.email && (
+          <>
+            {' '}To have something you wrote taken down, write to <a href={`mailto:${config.email}`}>{config.email}</a>
+            {' '}with the page and the words you used.
+          </>
+        )}
+      </li>
+    </ul>
+    <h2 id="messages">Messages</h2>
+    <p>
+      The <a href="/contact">contact</a> and <a href="/feedback">feedback</a> forms store what you type: your message,
+      the topic, the page you name, and your name and e-mail address if you give them. Only the person who runs the
+      site reads them; nothing from a form is ever shown on the site or shared, and we never add you to a mailing
+      list. The same one-way code limits how many messages one address can send in a day, and Turnstile checks
+      each one.
     </p>
     <h2>Links out</h2>
     <p>

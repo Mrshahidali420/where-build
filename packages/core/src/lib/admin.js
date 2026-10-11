@@ -77,6 +77,29 @@ function sameText(a, b) {
   return diff === 0
 }
 
+/** One cookie's value out of a raw Cookie header, or ''. */
+export function cookieFrom(header, name = COOKIE) {
+  for (const part of String(header || '').split(';')) {
+    const at = part.indexOf('=')
+    if (at > 0 && part.slice(0, at).trim() === name) return part.slice(at + 1).trim()
+  }
+  return ''
+}
+
+/**
+ * The same door as gate(), for a request that is not a page: the admin
+ * buttons' endpoints. True only when ADMIN_SECRET is set and the request
+ * carries the cookie gate() hands out after the right word. There is no
+ * other way in: no header, no query string, no second secret.
+ */
+export async function isOwner(request, env) {
+  const secret = env?.ADMIN_SECRET || ''
+  if (!secret) return false
+  const given = cookieFrom(request.headers.get('cookie'))
+  if (!given) return false
+  return sameText(given, await fingerprint(secret))
+}
+
 /** Ask the database one question. A broken query gives an empty answer, never
  * a broken page. */
 export async function ask(db, sql, ...args) {

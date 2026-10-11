@@ -133,3 +133,126 @@ CREATE TABLE IF NOT EXISTS daily_rejects (
 CREATE TABLE IF NOT EXISTS rollup_log (day TEXT PRIMARY KEY, ran_at INTEGER, rows INTEGER);
 
 CREATE INDEX IF NOT EXISTS total_pages_views ON total_pages(views DESC);
+
+-- ---------------------------------------------------------------- readers
+-- What readers write: star votes and reviews (0005-reviews.sql), messages
+-- from the forms (0006-messages.sql) and page comments (0007-comments.sql).
+-- No IP address is stored anywhere; see each migration for the rules.
+
+-- One row per accepted star vote. UNIQUE blunts repeat voting: the same
+-- browser on the same address can vote once per title per day. A blanked
+-- (NULL) voter never collides, so old days keep their votes.
+CREATE TABLE IF NOT EXISTS rating_votes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  anilist_id INTEGER NOT NULL CHECK (anilist_id > 0),
+  stars INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
+  day TEXT NOT NULL,
+  voter TEXT,
+  created_at TEXT NOT NULL,
+  UNIQUE (anilist_id, day, voter));
+
+-- The night job finds the hashes still to blank without walking every vote.
+CREATE INDEX IF NOT EXISTS rating_votes_day ON rating_votes(day) WHERE voter IS NOT NULL;
+
+-- The running total per title, so a title page reads one row instead of
+-- every vote. It is recounted from rating_votes in the same batch as each
+-- vote, so it can never drift from the votes themselves.
+CREATE TABLE IF NOT EXISTS rating_totals (
+  anilist_id INTEGER PRIMARY KEY CHECK (anilist_id > 0),
+  votes INTEGER NOT NULL DEFAULT 0,
+  total INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT NOT NULL);
+
+-- Written reviews. Every one starts as 'pending' and nothing pending is ever
+-- shown on the site; the owner approves or deletes it on /my-admin/reviews.
+-- body is plain text that passed the link and spam checks in
+-- src/lib/reviews.mjs, and it is escaped again wherever it is drawn. kind,
+-- slug and title are copied from the catalog at the moment of writing, so the
+-- admin list reads as names without a catalog in the Worker.
+CREATE TABLE IF NOT EXISTS reviews (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  anilist_id INTEGER NOT NULL CHECK (anilist_id > 0),
+  kind TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  title TEXT NOT NULL DEFAULT '',
+  name TEXT NOT NULL DEFAULT 'A reader',
+  body TEXT NOT NULL,
+  stars INTEGER CHECK (stars IS NULL OR stars BETWEEN 1 AND 5),
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved')),
+  created_at TEXT NOT NULL,
+  approved_at TEXT);
+
+-- The title page asks "approved reviews of this title, newest first".
+CREATE INDEX IF NOT EXISTS reviews_title ON reviews(anilist_id, status, approved_at DESC);
+-- The admin tab asks "everything pending" and counts it for the tab badge.
+CREATE INDEX IF NOT EXISTS reviews_status ON reviews(status, created_at DESC);
+
+-- How many reviews one address sent today, for the daily limit. A separate
+-- counter, so deleting a spam review does not hand its sender a fresh slot.
+-- Rows older than two days are thrown away by the night job.
+CREATE TABLE IF NOT EXISTS review_sends (
+  day TEXT NOT NULL,
+  sender TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (day, sender)) WITHOUT ROWID;
+
+-- The name and page of every title that has star votes, so /my-admin/reviews
+-- lists "Solo Leveling" instead of "AniList #151807". The Worker holds no
+-- catalog to look ids up in, so the vote copies them in, as a review does.
+CREATE TABLE IF NOT EXISTS rated_titles (
+  anilist_id INTEGER PRIMARY KEY CHECK (anilist_id > 0),
+  kind TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  title TEXT NOT NULL DEFAULT '');
+
+-- The owner's log: one line per change made from /my-admin (a review, a
+-- message or a comment approved, marked or deleted), written in the same
+-- batch as the change (src/lib/admin-log.mjs).
+CREATE TABLE IF NOT EXISTS admin_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  at TEXT NOT NULL,
+  action TEXT NOT NULL,
+  anilist_id INTEGER,
+  section TEXT NOT NULL DEFAULT '',
+  note TEXT NOT NULL DEFAULT '');
+
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL CHECK (kind IN ('feedback', 'contact', 'sponsor')),
+  name TEXT NOT NULL DEFAULT '',
+  email TEXT NOT NULL DEFAULT '',
+  topic TEXT NOT NULL DEFAULT '',
+  page TEXT NOT NULL DEFAULT '',
+  company TEXT NOT NULL DEFAULT '',
+  website TEXT NOT NULL DEFAULT '',
+  budget TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'done')),
+  day TEXT NOT NULL,
+  sender TEXT,
+  created_at TEXT NOT NULL);
+
+-- The admin tab asks "everything new, newest first" and counts it for the
+-- tab badge and the pause.
+CREATE INDEX IF NOT EXISTS messages_status ON messages(status, created_at DESC);
+-- The daily limit and the night job find a day's hashes without a full walk.
+CREATE INDEX IF NOT EXISTS messages_day ON messages(day) WHERE sender IS NOT NULL;
+
+CREATE TABLE IF NOT EXISTS page_comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  page TEXT NOT NULL,
+  parent_id INTEGER,
+  name TEXT NOT NULL,
+  body TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved')),
+  day TEXT NOT NULL,
+  sender TEXT,
+  created_at TEXT NOT NULL,
+  approved_at TEXT);
+
+-- A page asks for its approved comments, oldest first; the admin tab
+-- and the pause count the pending ones.
+CREATE INDEX IF NOT EXISTS page_comments_page ON page_comments(page, status, created_at);
+CREATE INDEX IF NOT EXISTS page_comments_status ON page_comments(status, created_at DESC);
+-- The daily limit and the night job find a day's hashes without a full walk.
+CREATE INDEX IF NOT EXISTS page_comments_day ON page_comments(day) WHERE sender IS NOT NULL;
