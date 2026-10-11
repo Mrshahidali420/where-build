@@ -20,13 +20,35 @@
  * ({ heading, sub }), trial, support.
  */
 import { pickUrl } from '../../lib/picks.js'
-import { shelfCards, pickKicker, artOf } from '../../where/shop-shelf.mjs'
+import { shelfCards, pickKicker, artOf, artFor, objectOf } from '../../where/shop-shelf.mjs'
 import '../../styles/where-shelf.css'
 
 const { id = 'own', record, picked = null, buys = [], buyCopy = {}, trial = null, support = '' } = Astro.props
 const picks = picked?.picks || []
 const heading = picks.length ? `Top picks for ${picked.from || record.title}` : buyCopy.heading
-const { cards, rest } = shelfCards({ r: record, buys, picks, trial, art: artOf(record), pickUrl })
+const art = artOf(record)
+const { cards: shelf, rest } = shelfCards({ r: record, buys, picks, trial, art, pickUrl })
+// Extra hand picks are cards like the rest, drawn as the nearest object.
+const more = rest.map((pick) => {
+  const object = objectOf(pick.t)
+  return {
+    aff: `pick_${pick.t}`,
+    src: 'pick',
+    url: pickUrl(pick.a),
+    object,
+    strip: 'Blu-ray',
+    art: artFor(object, art),
+    kicker: pickKicker(pick, record),
+    label: pick.n,
+    note: null,
+    cta: 'View on Amazon',
+    tab: null,
+    lead: false,
+  }
+})
+// The trial stays the last card.
+const last = shelf.at(-1)
+const cards = last?.src === 'trial' ? [...shelf.slice(0, -1), ...more, last] : [...shelf, ...more]
 const initials = String(record.title || '').slice(0, 40)
 ---
 
@@ -73,27 +95,6 @@ const initials = String(record.title || '').slice(0, 40)
           </li>
         ))}
       </ul>
-
-      {rest.length > 0 && (
-        <ul class="shelf__more" aria-label="More real products">
-          {rest.map((pick) => (
-            <li>
-              <a href={pickUrl(pick.a)} rel="nofollow sponsored noopener" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="pick">
-                <span class="shelf__more-what">
-                  <span class="shelf__kicker">{pickKicker(pick, record)}</span>
-                  <span class="buy__label">{pick.n}</span>
-                </span>
-                <span class="shelf__more-go">
-                  Amazon
-                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-                    <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
 
       <p class="w-shop__note">Each link opens Amazon, where the price and stock are always current.{support && ` ${support}`}</p>
     </section>

@@ -12,9 +12,10 @@
   Blu-ray blue, the black of a frame or a bezel and the paper of a page, are
   named once here.
 
-  Desktop: a grid, three to six across. Phone: a scroll-snap row whose first
-  card is wider, so the reader sees there is more to the right. The stage has
-  a fixed height and every picture its own box, so nothing moves as art loads.
+  Every item is the same spotlight card: the drawn object on the left, the kind,
+  name, note and button on the right. Two cards a row on a PC, one under the
+  other on a phone, and nothing scrolls sideways. An odd last card spans the
+  row. --h is the height of the drawn object on every card.
 */
 
 .w-shop {
@@ -22,7 +23,7 @@
   --shelf-blue-edge: #17489a;
   --shelf-black: #0c0c11;
   --shelf-paper: #ece3d2;
-  --shelf-floor: 1.7rem;
+  --h: 165px;
   --shelf-shadow: rgb(0 0 0 / 0.85);
 }
 .w-shop .w-sec__note {
@@ -36,30 +37,31 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--s-3);
 }
 .shelf__item {
   display: flex;
   min-width: 0;
 }
+.shelf__item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
 .shelf__card {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
   width: 100%;
-  overflow: hidden;
-  border: 1px solid var(--line-soft);
-  border-radius: var(--r-md);
-  background: var(--night-raised);
+  min-width: 0;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cobalt) 55%, transparent), color-mix(in srgb, var(--cobalt) 12%, transparent));
   color: inherit;
   text-decoration: none;
   transition:
     border-color 160ms var(--ease),
     transform 220ms var(--ease);
-}
-.shelf__item--lead .shelf__card {
-  border-color: var(--line);
-  box-shadow: inset 0 2px 0 var(--rose);
 }
 .shelf__card:hover {
   border-color: var(--rose-soft);
@@ -73,30 +75,14 @@
   outline-offset: 3px;
 }
 
-/* The stage: a wall, then the shelf the object stands on. */
+/* The stage: the object alone, on the left of its card. */
 .shelf__stage {
-  position: relative;
   display: flex;
-  align-items: flex-end;
+  flex: 0 0 11rem;
+  align-items: center;
   justify-content: center;
-  height: 11rem;
-  padding: var(--s-4) var(--s-4) 0;
-  background: linear-gradient(
-    to bottom,
-    var(--raised-2) 0 calc(100% - var(--shelf-floor)),
-    var(--night-sunk) calc(100% - var(--shelf-floor))
-  );
-  border-bottom: 1px solid var(--line-soft);
+  min-height: calc(var(--h) + 1rem);
   perspective: 700px;
-}
-.shelf__stage::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--shelf-floor);
-  height: 1px;
-  background: var(--cobalt-line);
 }
 
 /* ---- every object ---- */
@@ -104,7 +90,6 @@
 .obj {
   position: relative;
   display: block;
-  margin-bottom: 1.1rem;
   transition: transform 280ms var(--ease);
 }
 .obj__face {
@@ -139,7 +124,7 @@
 
 /* A book: the cover turned a little, a hinge shade on the spine, page edges. */
 .obj--book {
-  height: 8.6rem;
+  height: var(--h);
   aspect-ratio: 2 / 3;
   transform: rotateY(-16deg);
   transform-origin: left center;
@@ -189,9 +174,9 @@
 
 /* A keep case, the disc half out of its right side. */
 .obj--case {
-  height: 8.4rem;
+  height: var(--h);
   aspect-ratio: 0.79;
-  margin-right: 2rem;
+  margin-right: 1.6rem;
 }
 .obj--case .obj__face {
   display: flex;
@@ -242,9 +227,9 @@
 
 /* A record sleeve: the cover cropped square, the record half out of it. */
 .obj--sleeve {
-  height: 7.4rem;
+  height: calc(var(--h) * 0.88);
   aspect-ratio: 1;
-  margin-right: 2.2rem;
+  margin-right: 1.8rem;
 }
 .obj--sleeve .obj__face {
   height: 100%;
@@ -265,11 +250,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 8.9rem;
+  height: var(--h);
 }
 .obj--stand .obj__face {
   flex: 1 1 auto;
-  width: 5.7rem;
+  width: calc(var(--h) * 0.6);
   border: 3px solid rgb(245 236 221 / 0.85);
   border-radius: 2.85rem 2.85rem 8px 8px;
   transition: transform 280ms var(--ease);
@@ -285,7 +270,7 @@
   position: relative;
   z-index: 0;
   display: block;
-  width: 7.4rem;
+  width: calc(var(--h) * 0.78);
   height: 1.15rem;
   margin-top: -0.4rem;
   border-radius: 50%;
@@ -305,9 +290,8 @@
 
 /* A print: the portrait on a paper mat in a black frame, hung on the wall. */
 .obj--frame {
-  height: 7.6rem;
+  height: calc(var(--h) * 0.92);
   aspect-ratio: 3 / 4;
-  margin-bottom: 2.4rem;
 }
 .obj--frame .obj__face {
   height: 100%;
@@ -324,7 +308,7 @@
 
 /* A shirt: the portrait printed on the chest. */
 .obj--tee {
-  width: 8.2rem;
+  width: calc(var(--h) * 0.95);
   aspect-ratio: 1;
   filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.55));
 }
@@ -357,7 +341,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 12.5rem;
+  max-width: calc(var(--h) * 1.05);
 }
 .obj--screen .obj__face {
   width: 100%;
@@ -404,14 +388,14 @@
   transform: scale(1.12);
 }
 
-/* ---- the words under each object ---- */
+/* ---- the words beside each object ---- */
 
 .shelf__text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: var(--s-3) var(--s-4) var(--s-4);
+  display: grid;
+  flex: 1 1 0;
+  justify-items: start;
+  gap: 0.5rem;
+  min-width: 0;
 }
 .shelf__kicker {
   color: var(--rose-soft);
@@ -421,28 +405,29 @@
   text-transform: uppercase;
 }
 .shelf .shelf__label {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  max-width: 100%;
   color: var(--dawn);
-  font-size: var(--t-base);
+  font-family: var(--display);
+  font-size: 1.2rem;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 .shelf__note {
   color: var(--dawn-faint);
   font-size: var(--t-xs);
   line-height: 1.4;
 }
+/* The one filled button on every card. */
 .shelf__go {
   display: inline-flex;
   align-items: center;
-  align-self: flex-start;
   gap: 0.35rem;
-  margin-top: auto;
-  padding-top: var(--s-2);
-  color: var(--rose);
+  margin-top: var(--s-1, 0.25rem);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-sm);
+  background: var(--rose);
+  color: var(--night);
   font-size: var(--t-sm);
   font-weight: 700;
 }
@@ -450,73 +435,15 @@
   flex: none;
   transition: transform 200ms var(--ease);
 }
+.shelf__card:hover .shelf__go {
+  background: var(--rose-soft);
+}
 .shelf__card:hover .shelf__go svg {
   transform: translateX(3px);
 }
-/* The lead card's words are the one filled button in the row. */
-.shelf__item--lead .shelf__go {
-  align-self: stretch;
-  justify-content: center;
-  padding: var(--s-2);
-  white-space: nowrap;
-  font-size: var(--t-xs);
-  border-radius: var(--r-sm);
-  background: var(--rose);
-  color: var(--night);
-}
-.shelf__item--lead .shelf__note {
-  margin-bottom: var(--s-2);
-}
-.shelf__item--lead .shelf__card:hover .shelf__go {
-  background: var(--rose-soft);
-}
 
-/* ---- the other picks, and the note that closes the section ---- */
+/* ---- the note that closes the section ---- */
 
-.shelf__more {
-  list-style: none;
-  margin: var(--s-4) 0 0;
-  padding: 0;
-  border-top: 1px solid var(--line-soft);
-}
-.shelf__more a {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--s-4);
-  min-height: 3rem;
-  padding: var(--s-3) var(--s-2);
-  border-bottom: 1px solid var(--line-soft);
-  color: var(--dawn);
-  text-decoration: none;
-  transition: background-color 0.15s var(--ease);
-}
-.shelf__more a:hover {
-  background: color-mix(in srgb, var(--rose) 8%, transparent);
-}
-.shelf__more a:focus-visible {
-  outline: 2px solid var(--rose);
-  outline-offset: 2px;
-}
-.shelf__more-what {
-  display: grid;
-  gap: 0.2rem;
-  min-width: 0;
-}
-.shelf__more .buy__label {
-  font-size: var(--t-sm);
-  font-weight: 500;
-  line-height: 1.35;
-}
-.shelf__more-go {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--rose);
-  font-size: var(--t-xs);
-  font-weight: 700;
-  white-space: nowrap;
-}
 .w-shop__note {
   margin: var(--s-4) 0 0;
   font-size: var(--t-xs);
@@ -524,35 +451,24 @@
   color: var(--dawn-faint);
 }
 
-/* ---- phones: one row that scrolls, the first card wider ---- */
+/* ---- phones: one card under the other ---- */
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
+  .w-shop {
+    --h: 132px;
+  }
   .shelf {
-    display: flex;
-    padding-bottom: var(--s-3);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
+    grid-template-columns: minmax(0, 1fr);
   }
-  .shelf__item {
-    flex: 0 0 max(46%, 9.5rem);
-    scroll-snap-align: start;
+  .shelf__card {
+    gap: 1.1rem;
+    padding: 1.1rem;
   }
-  .shelf__item--lead {
-    flex-basis: 74%;
+  .shelf__stage {
+    flex-basis: 8.4rem;
   }
-  .shelf__item--lead .shelf__stage {
-    height: 12.5rem;
-  }
-  .shelf__item--lead .obj--book {
-    height: 10rem;
-  }
-  .shelf__item--lead .obj--case {
-    height: 9.8rem;
-  }
-  .shelf__item--lead .obj--stand {
-    height: 10.2rem;
+  .shelf .shelf__label {
+    font-size: 1.02rem;
   }
   .shelf__card:hover {
     transform: none;
