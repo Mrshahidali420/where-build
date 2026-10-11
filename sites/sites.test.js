@@ -130,3 +130,47 @@ test('matched products never shadow a hand pick, and hold three at most', () => 
     assert.ok(Array.isArray(matched.noEnglishBooks), `${name}: noEnglishBooks`)
   }
 })
+
+// The hand picks were made for manhwaindex and are reused here. A pick holds
+// an ASIN only, so the tag is written when the link is built, from this
+// site's own config. Every Amazon link the title page's shop shelf can draw
+// is built here from the real data files and must carry whereanime-20.
+test('every shop shelf link on whereanime carries its own tag, never manhwaindex\'s', async () => {
+  process.env.SITE_CONFIG = join(HERE, 'anime', 'site.config.mjs')
+  const core = (path) => import(pathToFileURL(join(HERE, '..', 'packages', 'core', 'src', path)).href)
+  const { shelfCards, primeTrial } = await core('where/shop-shelf.mjs')
+  const { animeShopRows } = await core('where/shop.mjs')
+  const { storeFor } = await core('lib/shop-links.js')
+  const { pickUrlFor, picksForTitleIn } = await core('lib/picks-core.js')
+  assert.equal(storeFor('US').tag, 'whereanime-20')
+  const pickUrl = (asin) => pickUrlFor(asin, storeFor('US').tag)
+  const data = (name) => JSON.parse(readFileSync(join(HERE, 'anime', 'data', name), 'utf8'))
+  const [hand, matched, formats] = [data('picks.json'), data('product-picks.json'), data('pick-isbn-formats.json')]
+  const ebooks = new Set(formats.ebook)
+  const ids = new Set([...Object.keys(hand.titles), ...Object.keys(matched.titles)])
+  let links = 0
+  for (const id of ids) {
+    const r = {
+      id: Number(id), title: 'A Show', format: 'TV', status: 'FINISHED', episodes: 12, source: 'MANGA', popularity: 900000,
+      songs: [{ type: 'OP', title: 'Song' }], cast: [], key: [], watchOn: [],
+    }
+    const picked = picksForTitleIn(hand, r, matched, formats)
+    for (const country of ['US', 'GB', 'DE', 'JP', 'IT', '']) {
+      const { cards, rest } = shelfCards({ r, buys: animeShopRows(r, country), picks: picked?.picks || [], trial: primeTrial(r, country), pickUrl })
+      assert.equal(cards.at(-1).aff, 'trial-prime')
+      for (const url of [...cards.map((c) => c.url), ...rest.map((p) => pickUrl(p.a))]) {
+        const link = new URL(url)
+        assert.equal(link.hostname, 'www.amazon.com', url)
+        assert.equal(link.searchParams.get('tag'), 'whereanime-20', url)
+        assert.doesNotMatch(url, /manhwaindex/i, url)
+        links++
+      }
+    }
+    for (const pick of picked?.picks || []) assert.ok(!ebooks.has(String(pick.a).toUpperCase()), `${id}: ${pick.a} is an e-book ISBN`)
+  }
+  assert.ok(links > 1000, 'the data files were read')
+  // And no data file kept in git names manhwaindex's tag.
+  for (const name of ['picks.json', 'product-picks.json', 'pick-isbn-formats.json']) {
+    assert.doesNotMatch(readFileSync(join(HERE, 'anime', 'data', name), 'utf8'), /manhwaindex-2|manhwaindex\d+-2/i, name)
+  }
+})

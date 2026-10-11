@@ -286,7 +286,7 @@ export function titleRecord(t, ctx) {
     // Amazon products: this show's own, or its source's (the manga it was
     // made from), with `from` naming that source. Hand picks first, then the
     // ones matched from publisher records (`byHand: false`).
-    picks: ctx.picks || ctx.productPicks ? picksForTitleIn(ctx.picks, item, ctx.productPicks) : null,
+    picks: ctx.picks || ctx.productPicks ? picksForTitleIn(ctx.picks, item, ctx.productPicks, ctx.pickFormats) : null,
     // False only when the show was checked and its source has no English
     // print: the buy box then drops its book search (src/where/shop.mjs).
     books: booksKnownIn(ctx.picks, item, ctx.productPicks),

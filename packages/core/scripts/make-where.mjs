@@ -156,6 +156,9 @@ function main() {
     // hand, and the shows whose source has no English print
     // (scripts/picks-from-products.mjs). Absent on a site that has none.
     productPicks: read('product-picks.json', null),
+    // The e-book ISBNs no pick may link (src/lib/picks-core.js). Absent on a
+    // site that has none.
+    pickFormats: read('pick-isbn-formats.json', null),
     similar: where.similar,
     likes: where.likes,
   }

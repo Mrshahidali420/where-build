@@ -8,12 +8,12 @@
  *
  * Where to watch is the reason people land on this page, so it sits right
  * under the head and its key facts, before the long sections: a reader sees
- * the official streams without scrolling past the episode list. Top picks
- * (Amazon, picked by hand) and the generic buy box follow it in that order,
- * both still above Episodes, so buying options stay high too. Only the
- * first Amazon box on the page carries the "keeps this site free" line; the
- * one below it stays quiet. The Amazon Associates sentence is never beside
- * either box: it is in the footer and on the privacy page.
+ * the official streams without scrolling past the episode list. The shop
+ * shelf follows it, still above Episodes: the product picked for the show
+ * when there is one, a card per Amazon search the show earns, and the Prime
+ * trial (src/components/where/Shop.astro). It says the "keeps this site
+ * free" line once. The Amazon Associates sentence is never beside it: it is
+ * in the footer and on the privacy page.
  *
  * What viewers think (stars and approved reviews, read live from D1) and the
  * comments close the main column, after the questions.
@@ -29,6 +29,7 @@ import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
 import { glanceOf } from '@sister/core/src/where/title-glance.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
+import { primeTrial } from '@sister/core/src/where/shop-shelf.mjs'
 import { showsBuyBox } from '@sister/core/src/where/title-depth.mjs'
 import { castNote, similarNote } from '@sister/core/src/where/page-text.mjs'
 import { animeBuyCopy, supportLine } from '@sister/core/src/where/buy-copy.mjs'
@@ -47,8 +48,7 @@ import Streams from '@sister/core/src/components/where/Streams.astro'
 import Trailer from '@sister/core/src/components/where/Trailer.astro'
 import Faq from '@sister/core/src/components/where/Faq.astro'
 import Covers from '@sister/core/src/components/where/Covers.astro'
-import BuyBox from '@sister/core/src/components/BuyBox.astro'
-import TopPicks from '@sister/core/src/components/TopPicks.astro'
+import Shop from '@sister/core/src/components/where/Shop.astro'
 import MyListButton from '@sister/core/src/components/MyListButton.astro'
 import Ratings from '@sister/core/src/components/Ratings.astro'
 import Comments from '@sister/core/src/components/Comments.astro'
@@ -123,18 +123,19 @@ const stats = quickStats(r)
 // A near-empty page draws no search box (src/where/title-depth.mjs).
 const buys = showsBuyBox(r) ? animeShopRows(r, country) : []
 const picked = r.picks && picksShowFor(country) ? r.picks : null
-// The box heading gives this show's reason to own it (src/where/buy-copy.mjs).
-// The support line is said once, on whichever Amazon box renders first on
-// the page. Top picks now sits above the generic buy box, so it claims the
-// line when it exists; the buy box only gets it when there are no picks.
+// The shelf heading gives this show's reason to own it (src/where/buy-copy.mjs),
+// and the support line is said once, under the shelf.
 const buyCopy = animeBuyCopy(r, buys)
 const support = supportLine(config.name)
-const topPicksSupport = picked ? support : ''
-const buyBoxSupport = picked ? '' : support
+// One shelf holds it all (src/where/shop-shelf.mjs): the real product first,
+// a card per search row, then the Prime trial. A page with no row and no
+// product draws no shelf, so the trial never stands alone as an advert.
+const shelved = buys.length > 0 || Boolean(picked)
+const trial = shelved ? primeTrial(r, country) : null
 
 const made = r.studios.length > 0 || r.key.length > 0 || r.crew.length > 0
 const jumps = [
-  buys.length > 0 && { id: 'own', label: 'Buy' },
+  shelved && { id: 'own', label: 'Buy' },
   shown.length > 0 && { id: 'episodes', label: 'Episodes' },
   r.cast.length > 0 && { id: 'cast', label: 'Cast' },
   made && { id: 'staff', label: 'Staff' },
@@ -249,8 +250,8 @@ const listItem = {
 
   {
     /* Where to watch is the site's main point, so it leads the content,
-       right after the header block. Top picks and the generic buy box
-       follow it, still above Episodes, in that order. */
+       right after the header block. The shop shelf follows it, still
+       above the glance paragraph and Episodes. */
   }
   {
     r.watchOn.length > 0 && (
@@ -264,33 +265,7 @@ const listItem = {
     )
   }
 
-  {
-    picked && (
-      <TopPicks
-        heading={`Top picks for ${picked.from || r.title}`}
-        sub={
-          picked.byHand === false
-            ? picked.from
-              ? `The ${picked.from} books and discs, found in publisher records.`
-              : 'Real products on Amazon, found in publisher records.'
-            : picked.from
-              ? `Picked by hand for the ${picked.from} books and merch this show was made from.`
-              : 'Real products on Amazon, picked by hand.'
-        }
-        byHand={picked.byHand !== false}
-        picks={picked.picks}
-        support={topPicksSupport}
-      />
-    )
-  }
-
-  {
-    buys.length > 0 && (
-      <div id="own" class="w-own">
-        <BuyBox heading={buyCopy.heading} sub={buyCopy.sub} rows={buys} support={buyBoxSupport} />
-      </div>
-    )
-  }
+  {shelved && <Shop id="own" record={r} picked={picked} buys={buys} buyCopy={buyCopy} trial={trial} support={support} />}
 
   <div class="w-split">
     <div class="w-main">

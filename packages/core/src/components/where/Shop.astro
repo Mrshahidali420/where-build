@@ -1,0 +1,101 @@
+---
+/**
+ * The shop shelf of a title page: every Amazon link of the show, as a row of
+ * drawn objects a scrolling reader stops on.
+ *
+ * Each card holds an object made in CSS around art the record already has
+ * (the cover, the banner, a main character's portrait): a Blu-ray case with
+ * the disc sliding out, a book with a spine and page edges, a record sleeve,
+ * a figure on its display base, a framed print, a screen. Never an Amazon
+ * product photo and never a price.
+ *
+ * What each card is (object, words, link, tracking names) is worked out in
+ * src/where/shop-shelf.mjs. Every link keeps data-aff (the shop kind),
+ * data-aff-src (pick, buybox, trial) and a .buy__label, which is what the
+ * click tracker (src/layouts/counter-script.js) reads.
+ *
+ * The Amazon Associates sentence stays in the footer and on /privacy only.
+ *
+ * props: id, record, picked ({ picks, from } or null), buys, buyCopy
+ * ({ heading, sub }), trial, support.
+ */
+import { pickUrl } from '../../lib/picks.js'
+import { shelfCards, pickKicker, artOf } from '../../where/shop-shelf.mjs'
+import '../../styles/where-shelf.css'
+
+const { id = 'own', record, picked = null, buys = [], buyCopy = {}, trial = null, support = '' } = Astro.props
+const picks = picked?.picks || []
+const heading = picks.length ? `Top picks for ${picked.from || record.title}` : buyCopy.heading
+const { cards, rest } = shelfCards({ r: record, buys, picks, trial, art: artOf(record), pickUrl })
+const initials = String(record.title || '').slice(0, 40)
+---
+
+{
+  cards.length > 0 && (
+    <section class="w-sec w-shop" aria-labelledby={id}>
+      <div class="w-sec__head w-shop__head">
+        <h2 id={id}>{heading}</h2>
+      </div>
+      {buyCopy.sub && <p class="w-sec__note">{buyCopy.sub}</p>}
+
+      <ul class="shelf" aria-label={`Shop ${record.title} on Amazon`}>
+        {cards.map((card) => (
+          <li class:list={['shelf__item', { 'shelf__item--lead': card.lead }]}>
+            <a class="shelf__card" href={card.url} rel="nofollow sponsored noopener" target="_blank" data-aff={card.aff} data-aff-src={card.src}>
+              <span class="shelf__stage" aria-hidden="true">
+                <span class={`obj obj--${card.object}`}>
+                  {(card.object === 'case' || card.object === 'sleeve') && <span class="obj__disc" />}
+                  <span class="obj__face">
+                    {card.object === 'case' && <span class="obj__strip">{card.strip}</span>}
+                    {card.art ? (
+                      <img src={card.art} alt="" width="230" height="345" loading="lazy" decoding="async" />
+                    ) : (
+                      <span class="obj__type">{initials}</span>
+                    )}
+                    {card.object === 'screen' && <span class="obj__play" />}
+                  </span>
+                  {card.tab && <span class="obj__tab">{card.tab}</span>}
+                  {(card.object === 'stand' || card.object === 'screen') && <span class="obj__base" />}
+                </span>
+              </span>
+              <span class="shelf__text">
+                {card.kicker && <span class="shelf__kicker">{card.kicker}</span>}
+                <span class="buy__label shelf__label">{card.label}</span>
+                {card.note && <span class="shelf__note">{card.note}</span>}
+                <span class="shelf__go">
+                  {card.cta}
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                    <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {rest.length > 0 && (
+        <ul class="shelf__more" aria-label="More real products">
+          {rest.map((pick) => (
+            <li>
+              <a href={pickUrl(pick.a)} rel="nofollow sponsored noopener" target="_blank" data-aff={`pick_${pick.t}`} data-aff-src="pick">
+                <span class="shelf__more-what">
+                  <span class="shelf__kicker">{pickKicker(pick, record)}</span>
+                  <span class="buy__label">{pick.n}</span>
+                </span>
+                <span class="shelf__more-go">
+                  Amazon
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                    <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <p class="w-shop__note">Each link opens Amazon, where the price and stock are always current.{support && ` ${support}`}</p>
+    </section>
+  )
+}

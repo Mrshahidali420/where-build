@@ -494,8 +494,8 @@ document.addEventListener('click', function (event) {
     shop_kind: kind || '',
     target: url.href,
     dwell: miVisible(),
-    // Where an Amazon link sat: pick, buybox, shop or themes. It says
-    // which of the four places earns, which the kind alone cannot.
+    // Where an Amazon link sat: pick, buybox, shop, themes or trial. It
+    // says which of the five places earns, which the kind alone cannot.
     detail: kind ? link.getAttribute('data-aff-src') || '' : '',
   })
 })

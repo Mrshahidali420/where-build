@@ -17,6 +17,9 @@ sites/*/data/*
 # Products matched from publisher records, same shape, written by
 # packages/core/scripts/picks-from-products.mjs. The build cannot remake it.
 !sites/*/data/product-picks.json
+# The e-book ISBNs no pick may link (amazon.com/dp/<e-book ISBN> is a 404),
+# checked on Open Library. See packages/core/src/lib/picks-core.js.
+!sites/*/data/pick-isbn-formats.json
 # The pages Google showed in the last 90 days, made by hand from Search
 # Console (scripts/build-index-keep.mjs). No page on it is ever noindexed.
 !sites/*/data/index-keep.json

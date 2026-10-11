@@ -46,14 +46,34 @@ export function pickUrlFor(asin, tag) {
 
 const listIn = (data, id) => data?.titles?.[String(id)] || null
 
+/*
+ * The ISBNs Open Library says are e-book editions (data/pick-isbn-formats.json,
+ * `ebook`). A Kindle book sells under a B0 ASIN, so amazon.com/dp/<that ISBN>
+ * is Amazon's 404 page. Such a pick is never shown.
+ */
+const ebookSets = new WeakMap()
+function ebookSet(formats) {
+  if (!formats) return null
+  if (!ebookSets.has(formats)) ebookSets.set(formats, new Set((formats.ebook || []).map((isbn) => String(isbn).toUpperCase())))
+  return ebookSets.get(formats)
+}
+/** The picks of one list that open a real product page; null when none is left. */
+function sellable(list, formats) {
+  const ebooks = ebookSet(formats)
+  if (!list || !ebooks) return list
+  const kept = list.filter((pick) => !ebooks.has(String(pick.a).toUpperCase()))
+  return kept.length ? kept : null
+}
+
 // The picks in one file for this title, or else for the same story in
 // another form, with `from` naming that other title.
-function storyPicksIn(data, item) {
-  const own = listIn(data, item.id)
+function storyPicksIn(data, item, formats) {
+  const kept = (id) => sellable(listIn(data, id), formats)
+  const own = kept(item.id)
   if (own) return { picks: own, from: null }
   for (const relation of SAME_STORY) {
-    const rel = (item.relations || []).find((r) => r.relation === relation && listIn(data, r.id))
-    if (rel) return { picks: listIn(data, rel.id), from: rel.title || null }
+    const rel = (item.relations || []).find((r) => r.relation === relation && kept(r.id))
+    if (rel) return { picks: kept(rel.id), from: rel.title || null }
   }
   return null
 }
@@ -71,12 +91,14 @@ function storyPicksIn(data, item) {
  * ones: the manga of a hand-picked anime keeps the anime's picks rather than
  * its own single matched volume. `byHand` says which file they came from,
  * because the card must not claim a person chose what a script matched.
+ *
+ * `formats` is the e-book skip list; without it every pick is kept.
  */
-export function picksForTitleIn(hand, item, products) {
+export function picksForTitleIn(hand, item, products, formats = null) {
   if (!item) return null
-  const chosen = storyPicksIn(hand, item)
+  const chosen = storyPicksIn(hand, item, formats)
   if (chosen) return { ...chosen, byHand: true }
-  const matched = storyPicksIn(products, item)
+  const matched = storyPicksIn(products, item, formats)
   return matched ? { ...matched, byHand: false } : null
 }
 
