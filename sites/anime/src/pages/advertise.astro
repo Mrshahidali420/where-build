@@ -1,0 +1,65 @@
+---
+/**
+ * Sponsored spots and listing requests. The form lands in the owner's
+ * /my-admin/messages as a "sponsor" message
+ * (packages/core/src/components/MessageForm.astro). Every word that names the
+ * site comes from the config.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import MessageForm from '@sister/core/src/components/MessageForm.astro'
+---
+
+<Where
+  title={`Advertise or get listed | ${config.name}`}
+  description={`Sponsored spots and listing requests on ${config.name} for streaming services, studios, shops, events and creators in anime. Every paid spot is labeled Sponsored.`}
+  canonical="/advertise"
+  crumbs={[{ name: 'Advertise' }]}
+>
+  <header class="w-intro">
+    <h1>Advertise or get listed</h1>
+  </header>
+  <div class="prose">
+    <p>For anyone whose work belongs next to anime: the shows, the people who make them and the places to watch them.</p>
+
+    <h2>Who it is for</h2>
+    <ul>
+      <li>Streaming services, studios and official distributors.</li>
+      <li>Shops that sell discs, books, figures, merch or art.</li>
+      <li>Events, conventions and fan meetups.</li>
+      <li>Creators: artists, musicians, voice actors and video makers.</li>
+    </ul>
+
+    <h2>What is on offer</h2>
+    <ul>
+      <li><strong>A sponsored spot</strong>: a clearly marked space on chosen pages or sections.</li>
+      <li>
+        <strong>A listing request</strong>: ask for a streaming service, a show or a page to be added or corrected.
+        Official services are listed for free.
+      </li>
+      <li><strong>A partnership</strong>: something else that helps viewers. Tell us the idea.</li>
+    </ul>
+
+    <h2>The rules</h2>
+    <ul>
+      <li>Every paid placement is labeled <strong>Sponsored</strong>.</li>
+      <li>
+        Paid spots are kept apart from the official where to watch lists. No one can pay to appear in those lists or
+        to appear first.
+      </li>
+      <li>It must be about anime.</li>
+      <li>Piracy, adult, gambling and crypto offers are refused.</li>
+    </ul>
+    <p>Write below. You get a reply by email, usually within a few days.</p>
+  </div>
+
+  <MessageForm kind="sponsor" send="Send request" />
+
+  <div class="prose">
+    <p>
+      Not about advertising? Use the <a href="/contact">contact form</a>, or the
+      <a href="/feedback">feedback form</a> for a mistake on a page.
+    </p>
+  </div>
+</Where>

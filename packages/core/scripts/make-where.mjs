@@ -47,7 +47,7 @@ const DATA = join(ROOT, 'data')
 const OUT = join(ROOT, 'public', 'd')
 const SHRINK_LIMIT = 0.02
 // The site's own pages that are not entity pages; the sitemap lists them.
-const EXTRA_PAGES = ['/about', '/contact', '/privacy', '/dmca']
+const EXTRA_PAGES = ['/about', '/contact', '/feedback', '/advertise', '/privacy', '/dmca']
 
 const read = (name, empty) => readData(DATA, name, empty)
 const write = (name, value) => writeFileAtomic(join(DATA, name), JSON.stringify(value))
