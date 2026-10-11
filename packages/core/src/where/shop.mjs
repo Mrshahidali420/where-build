@@ -13,7 +13,7 @@
  *
  * Pure: `stores` defaults to the site's own, and a test hands in its own.
  */
-import { shopUrl, shopName, shortName, VIDEO, BOOKS, TOYS, ALL } from '../lib/shop-links.js'
+import { shopUrl, shopName, shortName, VIDEO, BOOKS, TOYS, ALL, FIGURE_POPULARITY } from '../lib/shop-links.js'
 import { mediumCover } from '../lib/list-row.js'
 
 /**
@@ -34,23 +34,77 @@ const GAME_SOURCES = new Set(['VIDEO_GAME', 'GAME', 'VISUAL_NOVEL'])
 /** The name a shop knows a record by: its English title, else its romaji. */
 export const recordShopName = (r) => shopName({ title: r?.title, titleRomaji: r?.romaji })
 
+/** How many AniList members a show needs before figures of it are likely to exist. */
+export const MERCH_FROM = 10000
+/** Posters and apparel are made for fewer shows than figures are. */
+export const PRINTS_FROM = FIGURE_POPULARITY
+/** Formats that are sold on disc as a matter of course; a web series needs an audience first. */
+const DISC_FORMATS = new Set(['TV', 'TV_SHORT', 'MOVIE', 'OVA', 'SPECIAL'])
+
+const creatorOf = (r) => (r.key || []).find((k) => k.label === 'Original creator')?.people?.[0]?.name || ''
+const popular = (r, from) => (r.popularity || 0) >= from
+
+/** Whether a disc of this show can exist yet: it has aired, in a format that gets one. */
+function hasDiscs(r) {
+  if (r.status === 'NOT_YET_RELEASED') return false
+  return DISC_FORMATS.has(r.format) || (r.format === 'ONA' && popular(r, MERCH_FROM))
+}
+
+/** What the disc row says about this show: the film, the whole run, or the volumes so far. */
+function discNote(r) {
+  if (r.format === 'MOVIE') return r.startYear ? `The ${r.startYear} film on disc, where one was made` : 'The film on disc, where one was made'
+  if (r.status === 'RELEASING') return 'The first volumes, as they come out'
+  if (r.episodes > 1) return `All ${r.episodes} episodes, where a set was made`
+  return 'The disc release, where one was made'
+}
+
 /** A book row for this source, or null when the source is not sold as a book. */
-function sourceRow(source, name, country, stores) {
-  const known = SOURCE_ROWS[source]
+function sourceRow(r, name, country, stores) {
+  const known = SOURCE_ROWS[r.source]
   if (known) {
-    return { kind: 'books', icon: 'book', label: known.label, note: known.note, cta: 'Shop books', url: shopUrl(`${name} ${known.terms}`, BOOKS, country, stores) }
+    // An original anime only has art books once it has an audience.
+    if (r.source === 'ORIGINAL' && !popular(r, MERCH_FROM)) return null
+    const creator = r.source === 'ORIGINAL' ? '' : creatorOf(r)
+    return { kind: 'books', icon: 'book', label: known.label, note: creator ? `${known.note}, by ${creator}` : known.note, cta: 'Shop books', url: shopUrl(`${name} ${known.terms}`, BOOKS, country, stores) }
   }
-  if (GAME_SOURCES.has(source)) {
+  if (GAME_SOURCES.has(r.source)) {
     return { kind: 'games', icon: 'disc', label: 'The game it came from', note: 'The original game and its editions', cta: 'Shop games', url: shopUrl(`${name} game`, ALL, country, stores) }
   }
   return null
 }
 
+/** The soundtrack row, named after the first opening (else the first song) the page lists. */
+function musicRow(r, name, country, stores) {
+  const songs = r.songs || []
+  const song = songs.find((s) => s.type === 'OP') || songs[0]
+  if (!song?.title) return null
+  const by = song.artists?.[0]?.name
+  return { kind: 'music', icon: 'music', label: 'Soundtrack and theme songs', note: `With “${song.title}”${by ? ` by ${by}` : ''}`, cta: 'Shop music', url: shopUrl(`${name} soundtrack`, ALL, country, stores) }
+}
+
+/** The figures row, named after the show's first two main characters when it has them. */
+function merchRow(r, name, country, stores) {
+  const mains = (r.cast || []).filter((c) => c.role === 'MAIN' && c.name).slice(0, 2).map((c) => c.name)
+  const note = mains.length ? `${mains.join(' and ')}, as scale figures and plushies` : 'Scale figures, plushies and collectibles'
+  return { kind: 'merch', icon: 'figure', label: 'Figures and plushies', note, cta: 'Shop figures', url: shopUrl(`${name} anime`, TOYS, country, stores) }
+}
+
 /**
  * The buy rows of one anime title page (a title shard record,
  * src/where/record-title.mjs). Empty when the record has no usable name.
- * Discs lead, because an anime page is about the show itself; then the
- * printed original, then figures and plushies, then posters.
+ * Each row is there because this record earns it, and its note is written
+ * from the record:
+ *
+ *   discs    the show has aired, in a format that is sold on disc
+ *   books    the source is sold as books (and was not checked and found
+ *            unprinted), or the game it came from
+ *   music    the page lists a theme song
+ *   merch    enough people follow the show for figures to exist
+ *   prints   the same, for the few shows big enough for posters and apparel
+ *
+ * Discs lead, because an anime page is about the show itself. A show that
+ * earns no row at all still gets the figures search, so the box never
+ * renders empty where the page draws it.
  *
  * `r.books === false` means the show was checked and its source was never
  * printed in English (src/lib/picks-core.js, booksKnownIn). A book search for
@@ -61,12 +115,14 @@ export function animeShopRows(r, country, stores) {
   const name = recordShopName(r)
   if (name.length < 2) return []
   const noBooks = r.books === false && BOOK_SOURCES.has(r.source)
-  return [
-    { kind: 'discs', icon: 'disc', label: 'Blu-ray and DVD', note: 'The disc release, where one was made', cta: 'Shop discs', url: shopUrl(`${name} anime`, VIDEO, country, stores) },
-    noBooks ? null : sourceRow(r.source, name, country, stores),
-    { kind: 'merch', icon: 'figure', label: 'Figures and plushies', note: 'Scale figures, plushies and collectibles', cta: 'Shop figures', url: shopUrl(`${name} anime`, TOYS, country, stores) },
-    { kind: 'prints', icon: 'poster', label: 'Posters and apparel', note: 'Wall scrolls, prints, shirts and hoodies', cta: 'Shop posters', url: shopUrl(`${name} anime poster`, ALL, country, stores) },
+  const rows = [
+    hasDiscs(r) ? { kind: 'discs', icon: 'disc', label: 'Blu-ray and DVD', note: discNote(r), cta: 'Shop discs', url: shopUrl(`${name} anime`, VIDEO, country, stores) } : null,
+    noBooks ? null : sourceRow(r, name, country, stores),
+    musicRow(r, name, country, stores),
+    popular(r, MERCH_FROM) ? merchRow(r, name, country, stores) : null,
+    popular(r, PRINTS_FROM) ? { kind: 'prints', icon: 'poster', label: 'Posters and apparel', note: 'Wall scrolls, prints, shirts and hoodies', cta: 'Shop posters', url: shopUrl(`${name} anime poster`, ALL, country, stores) } : null,
   ].filter(Boolean)
+  return rows.length ? rows : [merchRow(r, name, country, stores)]
 }
 
 /**

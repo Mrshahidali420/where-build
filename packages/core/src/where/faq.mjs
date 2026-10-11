@@ -100,7 +100,7 @@ function streamAnswer(r) {
   if (!sites.length) return null
   return {
     q: `Where can I watch ${r.title}?`,
-    a: `${r.title} is listed on ${listWords(sites.slice(0, 5))}${sites.length > 5 ? ` and ${plural(sites.length - 5, 'more service')}` : ''}. What each one offers depends on your country.`,
+    a: `${r.title} is listed on ${listWords(sites.slice(0, 5))}${sites.length > 5 ? ` and ${plural(sites.length - 5, 'more service')}` : ''}, as AniList records them.`,
   }
 }
 
@@ -139,9 +139,26 @@ function sequelAnswer(r) {
   return { q: `Does ${r.title} have a sequel?`, a: `Yes. ${sequel.title}${sequel.year ? ` (${sequel.year})` : ''} follows ${r.title}.` }
 }
 
-/** The page's questions, the rarest first, never more than six. */
+/**
+ * The page's questions, the rarest first, never more than six. Each carries
+ * the `key` of the fact it answers, so the page's "at a glance" paragraph
+ * (title-glance.mjs) can leave out what a question already says.
+ */
 export function faqOf(r, now = Math.floor(Date.now() / 1000)) {
-  return [nextAnswer(r, now), sequelAnswer(r), orderAnswer(r), songAnswer(r), dubAnswer(r), voiceAnswer(r), streamAnswer(r), sourceAnswer(r), makersAnswer(r), episodesAnswer(r, now)]
-    .filter(Boolean)
+  const answers = [
+    ['next', nextAnswer(r, now)],
+    ['sequel', sequelAnswer(r)],
+    ['order', orderAnswer(r)],
+    ['song', songAnswer(r)],
+    ['dub', dubAnswer(r)],
+    ['voice', voiceAnswer(r)],
+    ['stream', streamAnswer(r)],
+    ['source', sourceAnswer(r)],
+    ['makers', makersAnswer(r)],
+    ['episodes', episodesAnswer(r, now)],
+  ]
+  return answers
+    .filter(([, answer]) => answer)
     .slice(0, MAX)
+    .map(([key, answer]) => ({ key, ...answer }))
 }

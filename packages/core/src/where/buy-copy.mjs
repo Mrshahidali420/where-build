@@ -20,35 +20,49 @@
 export const supportLine = (siteName) =>
   `Buying through these links helps keep ${siteName} free, at no extra cost to you.`
 
+import { listWords } from './hub-extras.mjs'
+import { plural } from './words.mjs'
+
 const lowerFirst = (text) => text.charAt(0).toLowerCase() + text.slice(1)
+const upperFirst = (text) => text.charAt(0).toUpperCase() + text.slice(1)
+
+/** How each row is named inside a sentence; a source row keeps its own label. */
+const ROW_WORDS = { music: 'the soundtrack', merch: 'figures', prints: 'posters' }
 
 /**
  * What sits beside the discs, named from the rows the box really holds, so
- * the words never promise a manga row that was dropped.
+ * the words never promise a manga row or a figure row that was dropped.
  */
 function extrasOf(rows) {
-  const source = rows.find((row) => row.kind === 'books' || row.kind === 'games')
-  return source ? `Figures, posters and ${lowerFirst(source.label)}` : 'Figures and posters'
+  return rows.filter((row) => row.kind !== 'discs').map((row) => ROW_WORDS[row.kind] || lowerFirst(row.label || ''))
+    .filter(Boolean)
 }
 
-/** Heading and sub for the buy box of one anime title record. */
+/** What a disc of this show can honestly promise, from its format, status and episode count. */
+function discLine(r) {
+  if (r.format === 'MOVIE') return `A film${r.startYear ? ` from ${r.startYear}` : ''} fits on one disc, yours to rewatch with no subscription, where a release was made.`
+  if (r.status === 'RELEASING') return 'It is still airing, so any disc release may only cover the early episodes for now.'
+  if (r.status === 'FINISHED' && r.episodes > 1) {
+    return `${upperFirst(plural(r.episodes, 'episode'))} finished${r.endYear ? ` in ${r.endYear}` : ''}, so a Blu-ray or DVD set can hold the whole run, where one was made.`
+  }
+  return 'A Blu-ray or DVD lets you rewatch it with no subscription, where a disc release was made.'
+}
+
+/**
+ * Heading and sub for the buy box of one anime title record. `rows` are the
+ * rows the box holds (src/where/shop.mjs animeShopRows): the heading only
+ * talks about a shelf when there is a disc row to put on it.
+ */
 export function animeBuyCopy(r, rows = []) {
-  const heading = `Keep ${r.title} on your shelf`
+  const discs = rows.some((row) => row.kind === 'discs')
   const extras = extrasOf(rows)
-  if (r.status === 'RELEASING') {
-    return {
-      heading,
-      sub: `It is still airing, so any disc release may only cover the early episodes for now. ${extras} are here too.`,
-    }
+  const list = listWords(extras)
+  if (!discs) {
+    const heading = `Own a piece of ${r.title}`
+    const unaired = r.status === 'NOT_YET_RELEASED'
+    if (!list) return { heading, sub: unaired ? 'Discs come after the broadcast.' : '' }
+    return { heading, sub: unaired ? `Discs come after the broadcast. Until then, this box points at ${list}.` : `This box points at ${list}.` }
   }
-  if (r.status === 'NOT_YET_RELEASED') {
-    return {
-      heading,
-      sub: `Discs come after the broadcast. Until then, ${lowerFirst(extras)} are the way to own a piece of it.`,
-    }
-  }
-  return {
-    heading,
-    sub: `A Blu-ray or DVD lets you rewatch it with no subscription, where a disc release was made. ${extras} sit alongside.`,
-  }
+  const also = list ? ` This box also holds ${list}.` : ''
+  return { heading: `Keep ${r.title} on your shelf`, sub: `${discLine(r)}${also}` }
 }

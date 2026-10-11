@@ -71,7 +71,8 @@ test('booksKnown: false only for a checked show with no book anywhere in its sto
 })
 
 test('the source-books row goes for a checked-empty show; games and art books stay', () => {
-  const kinds = (r) => animeShopRows({ title: 'Some Show', ...r }, 'US', EMPTY).map((row) => row.kind)
+  // A finished TV series with a big audience earns every row its source allows.
+  const kinds = (r) => animeShopRows({ title: 'Some Show', format: 'TV', status: 'FINISHED', popularity: 500000, ...r }, 'US', EMPTY).map((row) => row.kind)
   assert.deepEqual(kinds({ source: 'MANGA', books: false }), ['discs', 'merch', 'prints'])
   assert.deepEqual(kinds({ source: 'LIGHT_NOVEL', books: false }), ['discs', 'merch', 'prints'])
   assert.deepEqual(kinds({ source: 'MANGA', books: true }), ['discs', 'books', 'merch', 'prints'])

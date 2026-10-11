@@ -27,6 +27,7 @@ import { picksShowFor } from '@sister/core/src/lib/picks.js'
 import { loadAnime } from '@sister/core/src/where/runtime.mjs'
 import { animeJsonld, faqJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { faqOf } from '@sister/core/src/where/faq.mjs'
+import { glanceOf } from '@sister/core/src/where/title-glance.mjs'
 import { animeShopRows } from '@sister/core/src/where/shop.mjs'
 import { showsBuyBox } from '@sister/core/src/where/title-depth.mjs'
 import { castNote, similarNote } from '@sister/core/src/where/page-text.mjs'
@@ -92,6 +93,8 @@ const dub = dubOf(r)
 // The comic the show was made from, when the home site has its page (cross.mjs).
 const basedOn = basedOnCard(r.cross)
 const faq = faqOf(r)
+// What the record holds, in sentences, minus what a question already says (title-glance.mjs).
+const glance = glanceOf(r, { answered: faq.map((f) => f.key) })
 const path = `/anime/${r.slug}`
 const what = formatWord(r.format).toLowerCase()
 const description = truncate(
@@ -291,6 +294,19 @@ const listItem = {
 
   <div class="w-split">
     <div class="w-main">
+      {
+        glance.length > 0 && (
+          <section class="w-sec" aria-labelledby="glance">
+            <div class="w-sec__head">
+              <h2 id="glance">{r.title} at a glance</h2>
+            </div>
+            <div class="w-prose">
+              <p>{glance.join(' ')}</p>
+            </div>
+          </section>
+        )
+      }
+
       {
         shown.length > 0 && (
           <section class="w-sec" aria-labelledby="episodes">

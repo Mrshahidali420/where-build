@@ -20,15 +20,51 @@ const TAGGED = storesFrom({ us: 'fixture-us' })
 
 // ------------------------------------------------------------------ buy rows
 
+// A finished TV series with a big audience: it earns every row its source allows.
+const BIG = { format: 'TV', status: 'FINISHED', popularity: 500000 }
+
 test('a manga-based anime gets discs, the manga, figures and posters', () => {
-  const rows = animeShopRows({ title: 'Frieren: Beyond Journey’s End', source: 'MANGA' }, 'US', EMPTY)
+  const rows = animeShopRows({ ...BIG, title: 'Frieren: Beyond Journey’s End', source: 'MANGA' }, 'US', EMPTY)
   assert.deepEqual(rows.map((r) => r.kind), ['discs', 'books', 'merch', 'prints'])
   assert.match(new URL(rows[1].url).searchParams.get('k'), /manga$/)
   for (const row of rows) assert.equal(new URL(row.url).searchParams.has('tag'), false, 'no tag until the owner has one')
 })
 
+test('each buy row is there because the record earns it', () => {
+  const kinds = (r) => animeShopRows({ title: 'Some Show', ...r }, 'US', EMPTY).map((row) => row.kind)
+  const song = { type: 'OP', title: 'Run', artists: [{ name: 'Band A' }] }
+  assert.deepEqual(kinds({ format: 'OVA', status: 'FINISHED', popularity: 300 }), ['discs'], 'an obscure OVA: the disc only')
+  assert.deepEqual(kinds({ format: 'TV', status: 'NOT_YET_RELEASED', popularity: 300, source: 'MANGA' }), ['books'], 'no disc before it airs')
+  assert.deepEqual(kinds({ format: 'ONA', status: 'FINISHED', popularity: 300 }), ['merch'], 'a small web series still gets one search')
+  assert.deepEqual(kinds({ format: 'ONA', status: 'FINISHED', popularity: 20000 }), ['discs', 'merch'])
+  assert.deepEqual(kinds({ format: 'MOVIE', status: 'FINISHED', popularity: 300, songs: [song] }), ['discs', 'music'])
+  assert.deepEqual(kinds({ format: 'TV', status: 'FINISHED', popularity: 300, source: 'ORIGINAL' }), ['discs'], 'no art books for a show few have seen')
+  assert.deepEqual(kinds({ ...BIG, source: 'MANGA', songs: [song] }), ['discs', 'books', 'music', 'merch', 'prints'])
+})
+
+test('the notes of the buy rows are written from the record', () => {
+  const record = {
+    ...BIG,
+    title: 'Some Show',
+    source: 'MANGA',
+    episodes: 25,
+    key: [{ label: 'Original creator', people: [{ name: 'Aki Mori' }] }],
+    songs: [{ type: 'ED', title: 'Home', artists: [] }, { type: 'OP', title: 'Run', artists: [{ name: 'Band A' }] }],
+    cast: [{ role: 'MAIN', name: 'Rin' }, { role: 'SUPPORTING', name: 'Extra' }, { role: 'MAIN', name: 'Sora' }],
+  }
+  const note = (r, kind) => animeShopRows(r, 'US', EMPTY).find((row) => row.kind === kind)?.note
+  assert.equal(note(record, 'discs'), 'All 25 episodes, where a set was made')
+  assert.equal(note(record, 'books'), 'Printed volumes of the original manga, by Aki Mori')
+  assert.equal(note(record, 'music'), 'With “Run” by Band A')
+  assert.equal(note(record, 'merch'), 'Rin and Sora, as scale figures and plushies')
+  assert.equal(note({ ...record, format: 'MOVIE', startYear: 2016 }, 'discs'), 'The 2016 film on disc, where one was made')
+  assert.equal(note({ ...record, status: 'RELEASING' }, 'discs'), 'The first volumes, as they come out')
+  assert.equal(note({ ...record, key: [], cast: [], songs: [{ type: 'ED', title: 'Home' }] }, 'music'), 'With “Home”')
+  assert.equal(note({ ...record, key: [] }, 'books'), 'Printed volumes of the original manga')
+})
+
 test('the books row follows the source: light novel, novel, game, original, none', () => {
-  const kindsOf = (source) => animeShopRows({ title: 'Some Show', source }, 'US', EMPTY)
+  const kindsOf = (source) => animeShopRows({ ...BIG, title: 'Some Show', source }, 'US', EMPTY)
   assert.match(new URL(kindsOf('LIGHT_NOVEL')[1].url).searchParams.get('k'), /light novel$/)
   assert.equal(kindsOf('VIDEO_GAME')[1].kind, 'games')
   assert.equal(kindsOf('ORIGINAL')[1].label, 'Art books and guides')
@@ -36,9 +72,9 @@ test('the books row follows the source: light novel, novel, game, original, none
 })
 
 test('a real tag is carried on every buy row', () => {
-  for (const row of animeShopRows({ title: 'Naruto', source: 'MANGA' }, 'US', TAGGED)) {
-    assert.equal(new URL(row.url).searchParams.get('tag'), 'fixture-us')
-  }
+  const rows = animeShopRows({ ...BIG, title: 'Naruto', source: 'MANGA', songs: [{ type: 'OP', title: 'Go' }] }, 'US', TAGGED)
+  assert.equal(rows.length, 5)
+  for (const row of rows) assert.equal(new URL(row.url).searchParams.get('tag'), 'fixture-us')
 })
 
 test('no usable name, no rows', () => {

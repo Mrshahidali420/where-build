@@ -12,6 +12,7 @@
 import { freeSplit } from '../lib/answers.mjs'
 import { answerLine, dubOf } from './title-lines.mjs'
 import { faqOf } from './faq.mjs'
+import { glanceOf } from './title-glance.mjs'
 import { animeShopRows } from './shop.mjs'
 import { animeBuyCopy, supportLine } from './buy-copy.mjs'
 import { showsBuyBox } from './title-depth.mjs'
@@ -54,6 +55,7 @@ export function titleText(r, { siteName = '', now } = {}) {
     watchOn.length ? `${listWords(watchOn.slice(0, 3).map((w) => w.site))}${watchOn.length > 3 ? ` and ${watchOn.length - 3} more` : ''}, as listed on AniList. What each one carries depends on your country.` : '',
     buy ? `${buy.heading}. ${buy.sub} ${buys.map((row) => `${row.label}. ${row.note}.`).join(' ')}` : '',
     buy && !r.picks ? supportLine(siteName) : '',
+    ...glanceOf(r, { now, answered: faq.map((f) => f.key) }),
     castNote(r),
     (r.recs || []).length ? `What AniList members recommend to people who liked ${r.title}.` : '',
     (r.similar || []).length ? similarNote(r) : '',

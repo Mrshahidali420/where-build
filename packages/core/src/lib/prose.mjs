@@ -16,7 +16,7 @@
  */
 
 // Tags that must never reach a page, whatever AniList says about them.
-const BLOCKED_TAGS = new Set([
+export const BLOCKED_TAGS = new Set([
   'Ecchi', 'Nudity', 'Sexual Content', 'Boys Love', 'Girls Love', 'Yaoi', 'Yuri',
   'Incest', 'Lolicon', 'Shotacon', 'Tentacles', 'Prostitution', 'Rape',
   'Sexual Abuse', 'Netorare', 'Netorase', 'Harem', 'Reverse Harem', 'Fetish',
