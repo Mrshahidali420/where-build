@@ -147,6 +147,7 @@ export default defineSite({
           { href: '/season', label: 'Seasons' },
           { href: '/genre', label: 'Genres' },
           { href: '/year', label: 'Anime by year' },
+          { href: '/a-z', label: 'A to Z index' },
           { href: '/mood', label: 'Anime by mood' },
           { href: '/where-to-watch', label: 'Where to watch' },
           { href: '/shop', label: 'Anime shop' },

@@ -76,6 +76,7 @@ r.related ||= []
 r.recs ||= []
 r.similar ||= []
 r.watchOn ||= []
+const dubs = r.dubs || []
 
 const country = countryOf(Astro)
 // The first twelve episodes are listed here; the rest are on /episodes.
@@ -314,6 +315,23 @@ const listItem = {
               <p class="w-sec__note">{castNote(r)}</p>
             )}
             <CastList cast={r.cast} title={r.title} />
+            {dubs.length > 0 && (
+              <>
+                <h3 class="w-sub">Voices in other languages</h3>
+                <dl class="w-sheet w-sheet--wide">
+                  {dubs.map((group) => (
+                    <div>
+                      <dt>{group.language}</dt>
+                      <dd>
+                        {group.voices.map((v, i) => (
+                          <Fragment>{i > 0 && ', '}<a href={v.href}>{v.name}</a></Fragment>
+                        ))}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
+            )}
           </section>
         )
       }

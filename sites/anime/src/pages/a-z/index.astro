@@ -1,0 +1,119 @@
+---
+/**
+ * The A to Z index: every letter page of the titles and of each directory,
+ * page by page, on one sheet. The footer links here, so any title, person,
+ * studio, artist or watch order is three clicks from any page: this index,
+ * the letter page that holds it, the page itself.
+ */
+export const prerender = true
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { GROUPS, LETTERS, PER_AZ_PAGE, PER_LETTER_PAGE, azPath } from '@sister/core/src/where/hubs.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+
+const hubs = whereHubs()
+const pagesOf = (count, per) => Math.max(1, Math.ceil(count / per))
+const letterRows = (dir, per, pathOf) =>
+  LETTERS.filter((letter) => dir.letters[letter]?.length).map((letter) => ({
+    mark: letter === '0' ? ['#', ...(dir.merged || []).map((l) => l.toUpperCase())].join(' ') : letter.toUpperCase(),
+    count: dir.letters[letter].length,
+    pages: Array.from({ length: pagesOf(dir.letters[letter].length, per) }, (_, i) => pathOf(letter, i + 1)),
+  }))
+
+const sections = [
+  { id: 'anime', label: 'Anime', many: 'anime', total: hubs.az.total, rows: letterRows(hubs.az, PER_AZ_PAGE, azPath) },
+  ...Object.entries(GROUPS)
+    .filter(([group]) => hubs.groups[group]?.total)
+    .map(([group, meta]) => ({
+      id: group,
+      label: meta.label,
+      many: meta.many,
+      total: hubs.groups[group].total,
+      rows: letterRows(hubs.groups[group], PER_LETTER_PAGE, (letter, page) => `/directory/${group}/${letter}${page > 1 ? `/${page}` : ''}`),
+    })),
+]
+---
+
+<Where
+  title={`A to Z Index of Every Page | ${config.name}`}
+  description={`Every anime, voice actor, staff member, studio, song artist and watch order on ${config.name}, by first letter: ${sections.map((s) => `${s.total.toLocaleString('en-US')} ${s.many}`).join(', ')}.`}
+  canonical="/a-z"
+  crumbs={[{ name: 'A to Z' }]}
+>
+  <HubHead kicker="Index" title="A to Z" lede={`Everything on ${config.name} by first letter. Pick a letter; a long letter is split into numbered pages.`} />
+
+  {
+    sections.map((section) => (
+      <section class="w-sec" aria-labelledby={`az-${section.id}`}>
+        <div class="w-sec__head">
+          <h2 id={`az-${section.id}`}>{section.label}</h2>
+          <p class="w-sec__count">{plural(section.total, section.many, section.many)}</p>
+        </div>
+        <ul class="az">
+          {section.rows.map((row) => (
+            <li>
+              <a class="az__letter" href={row.pages[0]} aria-label={`${section.label} under ${row.mark}`}>{row.mark}</a>
+              <span class="az__count">{row.count.toLocaleString('en-US')}</span>
+              {row.pages.length > 1 && (
+                <span class="az__pages">
+                  {row.pages.slice(1).map((href, i) => (
+                    <a href={href} aria-label={`${section.label} under ${row.mark}, page ${i + 2}`}>{i + 2}</a>
+                  ))}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Where>
+
+<style>
+  .az {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 3 16rem;
+    column-gap: var(--s-6);
+  }
+  .az li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    break-inside: avoid;
+  }
+  .az__letter {
+    min-width: 2.2ch;
+    font-family: var(--display);
+    font-size: var(--t-sm);
+    color: var(--dawn);
+    text-decoration: none;
+  }
+  .az__letter:hover,
+  .az__pages a:hover {
+    color: var(--rose);
+  }
+  .az__count {
+    font-size: var(--t-sm);
+    color: var(--dawn-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .az__pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem 0.55rem;
+    margin-left: auto;
+    font-size: var(--t-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  .az__pages a {
+    color: var(--dawn-dim);
+    text-decoration: none;
+  }
+</style>

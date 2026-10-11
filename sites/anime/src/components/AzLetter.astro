@@ -1,0 +1,50 @@
+---
+/**
+ * One page of the A to Z of every title: names only, each with its year and
+ * format, PER_AZ_PAGE to a page (packages/core/src/where/hubs.mjs).
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import Pager from '@sister/core/src/components/Pager.astro'
+import HubHead from '@sister/core/src/components/where/HubHead.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { PER_AZ_PAGE, pageSlice } from '@sister/core/src/where/hubs.mjs'
+import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+
+const { letter, page, pages } = Astro.props
+const az = whereHubs().az
+const all = az.letters[letter]
+const rows = pageSlice(all, page, PER_AZ_PAGE).map((i) => az.rows[i])
+const start = (page - 1) * PER_AZ_PAGE
+const folded = letter === '0' ? (az.merged || []).map((l) => l.toUpperCase()) : []
+const mark = letter === '0' ? ['#', ...folded].join(', ') : letter.toUpperCase()
+const heading = `Anime A to Z: ${mark}`
+const pageWords = page > 1 ? `, page ${page}` : ''
+const base = `/a-z/${letter}`
+---
+
+<Where
+  title={`${heading}${pageWords} | ${config.name}`}
+  description={`${plural(all.length, 'anime', 'anime')} under ${mark}, by name: ${rows.slice(0, 3).map((r) => r[0]).join(', ')} and more, each with its episode dates, cast and staff.`}
+  canonical={page > 1 ? `${base}/${page}` : base}
+  jsonld={listJsonld(heading, rows.map(([title, href]) => ({ title, href })), config.siteUrl, start)}
+  crumbs={[{ name: 'A to Z', href: '/a-z' }, { name: `${mark}${pageWords}` }]}
+>
+  <HubHead kicker="Anime A to Z" title={`${heading}${pageWords}`} lede={`${plural(all.length, 'anime', 'anime')} under ${mark}, by name.`} stats={[[all.length.toLocaleString('en-US'), 'anime']]} />
+
+  <section class="w-sec" aria-label={heading}>
+    {pages > 1 && <p class="w-sec__count w-sec__count--top">{(start + 1).toLocaleString('en-US')} to {(start + rows.length).toLocaleString('en-US')} of {all.length.toLocaleString('en-US')}</p>}
+    <ul class="w-names">
+      {
+        rows.map(([title, href, year, format]) => (
+          <li>
+            <a href={href}>{title}</a>
+            <span>{[year || '', format].filter(Boolean).join(', ')}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <Pager current={page} count={pages} base={base} segment="" label={`anime under ${mark}`} />
+  </section>
+</Where>

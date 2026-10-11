@@ -21,6 +21,7 @@
  * pulled from R2), like the core's shrink guard. ALLOW_SHRINK=1 overrides it.
  */
 import { rmSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { join } from 'node:path'
 import { writeFileAtomic } from '../src/lib/write-atomic.mjs'
 import { reslugAll } from '../src/lib/reslug.mjs'
@@ -31,6 +32,8 @@ import { byProminence, crewByTitle, voicesByTitle } from '../src/where/people.mj
 import { assignSlugs } from '../src/where/entity-slugs.mjs'
 import { makeLinker, ROUTES } from '../src/where/linker.mjs'
 import { noindexSets } from '../src/where/thin.mjs'
+import { dubLinks } from '../src/where/dub-links.mjs'
+import { stampText, nextLastmod, lastmodOf } from '../src/where/lastmod.mjs'
 import { loadIndexKeep } from '../src/lib/index-keep.js'
 import { homeBase } from '../src/where/cross.mjs'
 import { titleRecord } from '../src/where/record-title.mjs'
@@ -128,8 +131,13 @@ function main() {
   const titleById = new Map(where.titles.map((t) => [t.item.id, t.item]))
   const franchiseOf = new Map()
   for (const f of where.franchises.values()) for (const id of f.ids) franchiseOf.set(id, f)
+  const link = makeLinker(slugs, where.pages, hidden)
   const ctx = {
-    link: makeLinker(slugs, where.pages, hidden),
+    link,
+    // Other-language voices each title names, so their pages get a link from a title.
+    dubs: dubLinks(where.titles.map((t) => t.item), data.credits, (id) => !!link.voice(id)),
+    // How many pages already show each title under "You may also like".
+    similarUsed: new Map(),
     hidden,
     pages: where.pages,
     credits: data.credits,
@@ -191,7 +199,22 @@ function main() {
   const hubs = hubsOf({ titles, people, studios, artists, watch, where, airing: data.airing?.schedule || [] })
   write('where-hubs.json', hubs)
   write('search-rows.json', searchRowsOf(titles))
-  write('page-urls.json', pageUrlsOf({ titles, people, studios, artists, watch, hubs, extra: EXTRA_PAGES }))
+  // The day each record page last changed (src/where/lastmod.mjs), for the sitemap.
+  const stamp = (record) => createHash('sha1').update(stampText(record)).digest('hex').slice(0, 10)
+  const stamps = [
+    ...titles.map((t) => [`/anime/${t.slug}`, stamp(t)]),
+    ...people.flatMap((p) => {
+      const s = stamp(p)
+      return [p.voicePage && [p.voiceHref, s], p.staffPage && [p.staffHref, s]].filter(Boolean)
+    }),
+    ...studios.map((r) => [`/studio/${r.slug}`, stamp(r)]),
+    ...artists.map((r) => [`/artist/${r.slug}`, stamp(r)]),
+    ...watch.map((r) => [`/watch-order/${r.slug}`, stamp(r)]),
+  ]
+  const changed = nextLastmod(read('lastmod.json', {}), stamps, new Date().toISOString().slice(0, 10))
+  write('lastmod.json', changed)
+  console.log(`  lastmod: ${stamps.length} pages, ${Object.values(changed).filter((row) => row[1]).length} with a known date`)
+  write('page-urls.json', pageUrlsOf({ titles, people, studios, artists, watch, hubs, extra: EXTRA_PAGES, lastmod: (path) => lastmodOf(changed, path) }))
   // The page shell reads this small file: the numbers it shows, and the hubs
   // whose gate kept them out this time, so no menu or footer link names a 404.
   const built = new Set(hubPaths(hubs).map((p) => p.path))

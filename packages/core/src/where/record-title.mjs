@@ -12,6 +12,7 @@ import { artistKey } from './artists.mjs'
 import { crossCards, characterUrl } from './cross.mjs'
 import { mainChain } from './franchises.mjs'
 import { picksForTitleIn, booksKnownIn } from '../lib/picks-core.js'
+import { capPicks } from './link-spread.mjs'
 
 /** How many cast rows a title record keeps: the credits walk fetched 25. */
 const CAST_MAX = 25
@@ -62,7 +63,25 @@ function castOf(item, row, ctx) {
   return rows
     .filter((c) => c.name)
     .slice(0, CAST_MAX)
-    .map(({ id, ...c }) => ({ ...c, face: id ? characterUrl(id, ctx.cross) : null }))
+    // The character's page on the home site is linked only from a row with no
+    // voice actor page to open here: a row that has one keeps the reader on this site.
+    .map(({ id, ...c }) => ({ ...c, face: id && !c.voices.some((v) => v.href) ? characterUrl(id, ctx.cross) : null }))
+}
+
+/**
+ * The voices in other languages this page names (src/where/dub-links.mjs),
+ * grouped by language: [{ language, voices: [{ name, href }] }].
+ */
+function dubsOf(item, ctx) {
+  const groups = new Map()
+  for (const { id, language } of ctx.dubs?.get(item.id) || []) {
+    const name = nameOf(ctx, id)
+    const href = ctx.link.voice(id)
+    if (!name || !href) continue
+    if (!groups.has(language)) groups.set(language, [])
+    groups.get(language).push({ name, href })
+  }
+  return [...groups].map(([language, voices]) => ({ language, voices }))
 }
 
 function songsOf(item, ctx) {
@@ -193,19 +212,24 @@ export function recsOf(item, ctx, related = []) {
 /**
  * "You may also like": the closest shows by genre and tag (ctx.similar,
  * src/where/similar.mjs) that the page does not already show as related or
- * recommended, each with the genres it shares.
+ * recommended, each with the genres it shares. No show fills a place on more
+ * than the cap's worth of pages (src/where/link-spread.mjs capPicks):
+ * ctx.similarUsed counts them, title after title.
  */
 export function similarCardsOf(item, ctx, shown = []) {
   const skip = new Set(shown.map((c) => c.href))
-  const out = []
+  const rows = []
   for (const match of ctx.similar?.get(item.id) || []) {
-    if (out.length >= SIMILAR_CARDS) break
     const card = cardOf(ctx, match.id)
     if (!card || skip.has(card.href)) continue
     skip.add(card.href)
-    out.push({ ...card, shared: match.genres.slice(0, 3) })
+    rows.push({ ...card, shared: match.genres.slice(0, 3) })
   }
-  return out
+  const used = ctx.similarUsed
+  if (!used) return rows.slice(0, SIMILAR_CARDS)
+  const picks = capPicks(rows, { usedOf: (id) => used.get(id) || 0, shown: SIMILAR_CARDS })
+  for (const pick of picks) used.set(pick.id, (used.get(pick.id) || 0) + 1)
+  return picks
 }
 const SIMILAR_CARDS = 6
 
@@ -276,6 +300,7 @@ export function titleRecord(t, ctx) {
     key,
     crew,
     cast: castOf(item, row, ctx),
+    dubs: dubsOf(item, ctx),
     songs: songsOf(item, ctx),
     watch: watchOf(item, ctx),
     cross: crossCards(item, ctx.cross),

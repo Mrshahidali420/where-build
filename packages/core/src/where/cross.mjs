@@ -74,26 +74,15 @@ const SOURCE_FORMATS = {
 export const sourceMatches = (source, format) => (SOURCE_FORMATS[source] || []).includes(format)
 
 /**
- * The cross-site cards of one anime, best first, never more than MAX_CARDS:
- *   - where to watch it legally, when it streams anywhere official
- *   - the manga or novel it was adapted from
+ * The cross-site cards of one anime, never more than MAX_CARDS: the manga or
+ * novel it was adapted from, a kind this site does not hold. The show's own
+ * page on the home site is not linked: this site says where it streams itself.
  * ctx: { base, home, comicsById } (see homeBase, data/home-registry.json,
  * data/linked-comics.json).
  */
 export function crossCards(item, { base, home, comicsById }) {
   if (!base) return []
   const cards = []
-  const own = home.t[String(item.id)]
-  const services = new Set((item.watchLinks || []).map((link) => link.site).filter(Boolean)).size
-  if (own && own[0] === 'anime' && services > 0) {
-    cards.push({
-      href: `${base}/anime/${own[1]}`,
-      cover: item.cover || null,
-      title: `Where to watch ${item.title} legally`,
-      fact: `Streaming on ${plural(services, 'official service')}`,
-      anchor: 'See where to watch',
-    })
-  }
   for (const rel of item.relations || []) {
     if (rel.type !== 'MANGA' || (rel.relation !== 'ADAPTATION' && rel.relation !== 'SOURCE')) continue
     const comic = comicsById.get(rel.id)

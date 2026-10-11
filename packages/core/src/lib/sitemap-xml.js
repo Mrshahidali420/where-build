@@ -46,6 +46,19 @@ const imageTag = (u) =>
     ? `<image:image><image:loc>${xml(u.image)}</image:loc><image:title>${xml(u.caption)}</image:title></image:image>`
     : ''
 
+/**
+ * A URL's <lastmod>: its own date when it carries one, nothing when it says
+ * it has none (lastmod: null, a Where site's page whose last change is not
+ * known), and the build day for a source that does not track dates at all.
+ */
+export const lastmodTag = (u, day) => (u.lastmod === undefined ? `<lastmod>${day}</lastmod>` : u.lastmod ? `<lastmod>${xml(u.lastmod)}</lastmod>` : '')
+
+/** The newest date among a file's URLs: undefined when they are not tracked, '' when none is known. */
+export function newestLastmod(urls) {
+  if (urls.some((u) => u.lastmod === undefined)) return undefined
+  return urls.reduce((best, u) => (u.lastmod && u.lastmod > best ? u.lastmod : best), '')
+}
+
 export function urlsetXml(urls) {
   const day = today()
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -53,7 +66,7 @@ export function urlsetXml(urls) {
 ${urls
   .map(
     (u) =>
-      `  <url><loc>${xml(u.loc)}</loc><lastmod>${day}</lastmod><priority>${u.priority}</priority>${imageTag(u)}</url>`,
+      `  <url><loc>${xml(u.loc)}</loc>${lastmodTag(u, day)}<priority>${u.priority}</priority>${imageTag(u)}</url>`,
   )
   .join('\n')}
 </urlset>

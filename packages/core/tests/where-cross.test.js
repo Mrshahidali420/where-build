@@ -44,16 +44,15 @@ test('the home base is null unless it is a real domain', () => {
   assert.equal(homeBase({ sisterSites: { manhwa: null } }), null)
 })
 
-test('cards: watch-legally first, proven sources after, never more than three', () => {
+test('cards: proven sources only, never the show\'s own page on the home site, never more than three', () => {
   const cards = crossCards(item, { base: BASE, home, comicsById })
   assert.equal(MAX_CARDS, 3)
-  assert.equal(cards.length, 3)
-  assert.equal(cards[0].href, `${BASE}/anime/show`)
-  assert.match(cards[0].fact, /2 official services/)
   assert.deepEqual(
-    cards.slice(1).map((c) => c.href),
+    cards.slice(0, 2).map((c) => c.href),
     [`${BASE}/manga/show-manga`, `${BASE}/novel/show-novel`],
   )
+  assert.ok(cards.length <= MAX_CARDS)
+  assert.ok(!cards.some((c) => c.href === `${BASE}/anime/show`))
   for (const card of cards) assert.equal(isAllowedTarget(card.href), true)
 })
 

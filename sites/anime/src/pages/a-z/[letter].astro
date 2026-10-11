@@ -1,0 +1,17 @@
+---
+/** One letter of the A to Z of every title, first page. Deeper pages: [letter]/[page].astro. */
+export const prerender = true
+import AzLetter from '../../components/AzLetter.astro'
+import { whereHubs } from '@sister/core/src/where/hub-data.mjs'
+import { hubPaths } from '@sister/core/src/where/hubs.mjs'
+
+export function getStaticPaths() {
+  return hubPaths(whereHubs())
+    .filter((p) => p.azLetter && p.page === 1)
+    .map(({ azLetter, pages }) => ({ params: { letter: azLetter }, props: { page: 1, pages } }))
+}
+
+const { page, pages } = Astro.props
+---
+
+<AzLetter letter={Astro.params.letter} page={page} pages={pages} />

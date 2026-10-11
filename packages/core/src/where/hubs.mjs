@@ -22,6 +22,8 @@ export const PER_RANK_PAGE = 48
 export const RANK_MAX = 480
 /** A letter with fewer names than this is folded into the "#" page. */
 export const MIN_LETTER = 12
+/** Titles on one page of the A to Z of every title: names only, so a page holds many. */
+export const PER_AZ_PAGE = 200
 export const PER_YEAR_PAGE = 60
 /** A year with fewer shows than this is folded into an "earlier years" page. */
 export const MIN_YEAR = 12
@@ -190,6 +192,9 @@ export function yearPlan(counts, { min = MIN_YEAR, current }) {
   }
 }
 
+/** One page of the titles' A to Z. */
+export const azPath = (letter, page = 1) => `/a-z/${letter}${page > 1 ? `/${page}` : ''}`
+
 /** Every hub page a set of hubs builds: [{ path, ...params }]. */
 export function hubPaths(hubs) {
   const paths = []
@@ -205,6 +210,15 @@ export function hubPaths(hubs) {
       for (let page = 1; page <= pages; page++) {
         paths.push({ path: `/directory/${group}/${letter}${page > 1 ? `/${page}` : ''}`, group, letter, page, pages })
       }
+    }
+  }
+  // The A to Z index: one page that links every letter page of every
+  // directory and of the titles, so any page is three clicks from the front.
+  if (hubs.az) {
+    paths.push({ path: '/a-z' })
+    for (const [azLetter, rows] of Object.entries(hubs.az.letters)) {
+      const pages = pagesOf(rows.length, PER_AZ_PAGE)
+      for (let page = 1; page <= pages; page++) paths.push({ path: azPath(azLetter, page), azLetter, page, pages })
     }
   }
   if (Object.keys(hubs.years).length) paths.push({ path: '/year' })

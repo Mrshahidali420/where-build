@@ -135,6 +135,9 @@ async function pullState(tmp) {
   const manifestFile = await fetchOptional(bucket, `${STATE}live-manifest.json`, tmp)
   const live = manifestFile ? readJson(manifestFile) : null
   if (live) writeJson('live-manifest.json', live)
+  // The day each page last changed (src/where/lastmod.mjs). Missing on the first run: every date starts unknown.
+  const lastmodFile = await fetchOptional(bucket, `${STATE}lastmod.json`, tmp)
+  if (lastmodFile) writeJson('lastmod.json', readJson(lastmodFile))
 
   if (registryFile) {
     const registry = readJson(registryFile)
@@ -186,6 +189,8 @@ function push() {
   if (entries < pulled) fail(`refusing to push a registry of ${entries} entries over R2's ${pulled}: it only ever grows`)
   putObject(config.r2.dataBucket, `${STATE}slug-registry.json`, registryFile)
   putObject(config.r2.dataBucket, `${STATE}live-manifest.json`, MANIFEST)
+  const lastmodFile = join(DATA, 'lastmod.json')
+  if (existsSync(lastmodFile)) putObject(config.r2.dataBucket, `${STATE}lastmod.json`, lastmodFile)
   console.log(`pushed ${config.r2.dataBucket}/${STATE}: registry (${entries} entries) and live-manifest.json`)
   pushLinks()
 }

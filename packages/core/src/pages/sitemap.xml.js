@@ -1,6 +1,6 @@
 export const prerender = true
 import { SITE, getSitemapParts } from '../lib/sitemap-parts.js'
-import { today } from '../lib/sitemap-xml.js'
+import { today, lastmodTag, newestLastmod } from '../lib/sitemap-xml.js'
 
 // The site has ~18,000 pages. One giant file is slow for a crawler to read,
 // so /sitemap.xml is an index that points at one file per section.
@@ -10,7 +10,7 @@ export async function GET() {
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapParts
-  .map((part) => `  <sitemap><loc>${SITE}/sitemap-${part.name}.xml</loc><lastmod>${day}</lastmod></sitemap>`)
+  .map((part) => `  <sitemap><loc>${SITE}/sitemap-${part.name}.xml</loc>${lastmodTag({ lastmod: newestLastmod(part.urls) }, day)}</sitemap>`)
   .join('\n')}
 </sitemapindex>
 `

@@ -8,7 +8,6 @@
 import { CATEGORIES, OTHER, categoryOf } from './roles.mjs'
 import { collaboratorsOf, costarsOf } from './people.mjs'
 import { regularsOf, studiosOfTitle } from './studios.mjs'
-import { characterUrl } from './cross.mjs'
 import { mainChain } from './franchises.mjs'
 
 const byYearDesc = (a, b) => (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title)
@@ -41,7 +40,8 @@ function rolesOf(person, ctx) {
     if (!show || !known?.[0]) continue
     rows.push({
       ...show,
-      character: { name: known[0], image: known[1] || '', face: characterUrl(role.characterId, ctx.cross) },
+      // No link out for the character: the row's own link is the show, on this site.
+      character: { name: known[0], image: known[1] || '' },
       role: role.role,
       language: role.language,
     })

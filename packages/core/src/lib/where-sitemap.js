@@ -21,6 +21,8 @@ export const sitemapParts = groups.flatMap((group) =>
     group.urls.map((u) => ({
       loc: `${config.siteUrl}${u.path}`,
       priority: group.priority,
+      // The day the page last changed, or null (no <lastmod>) when it is not known.
+      lastmod: u.lastmod || null,
       ...(u.image ? { image: u.image, caption: u.caption } : {}),
     })),
   ),

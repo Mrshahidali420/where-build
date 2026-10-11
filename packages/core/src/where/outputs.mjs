@@ -212,6 +212,8 @@ export function hubsOf({ titles, people, studios, artists: everyArtist, watch, w
   }
   return {
     groups,
+    // Every title by name: [title, href, year, format] (the /a-z pages).
+    az: directory(titles.map((t) => [t.title, `/anime/${t.slug}`, t.startYear || 0, formatWord(t.format)]), []),
     years,
     yearIndex,
     seasons: seasons.lists,
@@ -239,8 +241,13 @@ export function searchRowsOf(titles) {
 const portrait = (image, name) => (image ? { image, caption: `${name} portrait` } : {})
 
 /** The sitemap: one group per page type, in crawl order. A noindexed page is left out. */
-export function pageUrlsOf({ titles, people, studios, artists, watch, hubs, extra = [] }) {
-  const group = (name, priority, urls) => ({ name, priority, urls })
+export function pageUrlsOf({ titles, people, studios, artists, watch, hubs, extra = [], lastmod = () => '' }) {
+  // A record page carries the day it last changed, when that is known (src/where/lastmod.mjs).
+  const dated = (url) => {
+    const day = lastmod(url.path)
+    return day ? { ...url, lastmod: day } : url
+  }
+  const group = (name, priority, urls) => ({ name, priority, urls: urls.map(dated) })
   return {
     groups: [
       group('core', '0.9', [{ path: '/' }, ...extra.map((path) => ({ path }))]),

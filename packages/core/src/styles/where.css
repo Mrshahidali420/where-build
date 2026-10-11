@@ -1938,3 +1938,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* A smaller heading inside a section (voices in other languages under the cast). */
+.w-sub {
+  margin: var(--s-6) 0 var(--s-3);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dawn-dim);
+}
