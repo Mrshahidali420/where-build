@@ -15,7 +15,8 @@ const facts = [
   ['Active', years.length ? (years.length > 1 ? `${years[0]} to ${years[1]}` : `Since ${years[0]}`) : ''],
   ['Work', (p.occupations || []).join(', ')],
 ].filter(([, value]) => value)
-const other = page === 'voice' ? p.staffHref && { href: p.staffHref, label: `Crew credits of ${p.name}` } : p.voiceHref && { href: p.voiceHref, label: `Voice roles of ${p.name}` }
+// The person's other page, unless it is noindexed (src/where/thin.mjs).
+const other = page === 'voice' ? p.staffHref && !p.noindexStaff && { href: p.staffHref, label: `Crew credits of ${p.name}` } : p.voiceHref && !p.noindexVoice && { href: p.voiceHref, label: `Voice roles of ${p.name}` }
 ---
 
 <header class="w-head w-head--person">

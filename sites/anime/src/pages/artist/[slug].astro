@@ -28,6 +28,7 @@ const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium
   title={`${a.name}: Anime Openings and Endings | ${config.name}`}
   description={`Every anime song by ${a.name}: ${plural(ops, 'opening')} and ${plural(eds, 'ending')} across ${plural(shows, 'anime', 'anime')}${known.length ? `, including “${known.join('”, “')}”` : ''}.`}
   canonical={`/artist/${a.slug}`}
+  noindex={!!a.noindex}
   jsonld={[{ '@type': 'MusicGroup', name: a.name, url: `${config.siteUrl}/artist/${a.slug}` }, listJsonld(`Anime songs by ${a.name}`, a.songs.map((s) => ({ title: s.title, href: s.anime.href })), config.siteUrl)]}
   crumbs={[{ name: 'Song artists', href: '/directory/artists' }, { name: a.name }]}
 >

@@ -84,7 +84,7 @@ export function personRecord(person, slug, ctx) {
   const voicePage = ctx.pages.voice.has(person.id)
   const staffPage = ctx.pages.staff.has(person.id)
   const collaborators = staffPage
-    ? collaboratorsOf(person, ctx.crewByTitle, (id) => ctx.pages.staff.has(id))
+    ? collaboratorsOf(person, ctx.crewByTitle, (id) => ctx.pages.staff.has(id) && !ctx.hidden?.staff.has(id))
         .map(({ id, count }) => ({ name: ctx.staff[String(id)]?.name || '', href: ctx.link.staff(id), count }))
         .filter((c) => c.name)
     : []
@@ -107,8 +107,11 @@ export function personRecord(person, slug, ctx) {
     voicePage,
     staffPage,
     counts: { roles: person.voiceRoleCount, shows: person.staffWorkCount },
-    voiceHref: voicePage ? ctx.link.voice(person.id) : null,
-    staffHref: staffPage ? ctx.link.staff(person.id) : null,
+    voiceHref: voicePage ? ctx.link.own.voice(person.id) : null,
+    staffHref: staffPage ? ctx.link.own.staff(person.id) : null,
+    // Set by the thin-page rule (src/where/thin.mjs): the page answers noindex.
+    ...(ctx.hidden?.voice.has(person.id) ? { noindexVoice: true } : {}),
+    ...(ctx.hidden?.staff.has(person.id) ? { noindexStaff: true } : {}),
     roles: voicePage ? rolesOf(person, ctx) : [],
     works: staffPage ? worksOf(person, ctx) : [],
     collaborators,
@@ -137,7 +140,7 @@ export function artistRecord(artist, slug, ctx) {
     })
     .filter(Boolean)
     .sort((a, b) => (b.anime.year || 0) - (a.anime.year || 0) || a.anime.title.localeCompare(b.anime.title) || a.type.localeCompare(b.type) || a.seq - b.seq)
-  return { key: artist.key, slug, name: artist.name, songs }
+  return { key: artist.key, slug, name: artist.name, songs, ...(ctx.hidden?.artist.has(artist.key) ? { noindex: true } : {}) }
 }
 
 /** A franchise in release order, with its main story marked. */

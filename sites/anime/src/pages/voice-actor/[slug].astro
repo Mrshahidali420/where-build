@@ -41,6 +41,7 @@ const rest = p.roles.slice(ROLES_OPEN)
   title={`${p.name}: Voice Roles and Characters | ${config.name}`}
   description={`Every anime character ${p.name} voices${best.length ? `, including ${best.join(', ')}` : ''}: ${lede}`}
   canonical={p.voiceHref}
+  noindex={!!p.noindexVoice}
   image={p.image || undefined}
   jsonld={personJsonld(p, p.voiceHref, config.siteUrl)}
   crumbs={[{ name: 'Voice actors', href: '/directory/voice-actors' }, { name: p.name }]}

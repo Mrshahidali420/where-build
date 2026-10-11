@@ -35,6 +35,7 @@ const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
   title={`${p.name}: Anime Staff Credits | ${config.name}`}
   description={`The anime ${p.name} worked on${known.length ? `, including ${known.join(', ')}` : ''}, by role, with the people they work with most.`}
   canonical={p.staffHref}
+  noindex={!!p.noindexStaff}
   image={p.image || undefined}
   jsonld={personJsonld(p, p.staffHref, config.siteUrl)}
   crumbs={[{ name: 'Staff', href: '/directory/staff' }, { name: p.name }]}

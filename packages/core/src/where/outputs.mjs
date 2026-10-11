@@ -135,12 +135,14 @@ function watchStarters(watch, popularityOf) {
  * where: computeWhere's { schedule, seasons, genres, now }.
  * Every row names a page that exists: each list holds only records with a page.
  */
-export function hubsOf({ titles, people, studios, artists, watch, where = {}, airing = [] }) {
+export function hubsOf({ titles, people, studios, artists: everyArtist, watch, where = {}, airing = [] }) {
   const now = where.now || Math.floor(Date.now() / 1000)
   const recordOf = new Map(titles.map((t) => [t.id, t]))
   const popularityOf = new Map(titles.map((t) => [`/anime/${t.slug}`, t.popularity || 0]))
-  const voice = people.filter((p) => p.voicePage)
-  const crew = people.filter((p) => p.staffPage)
+  // A noindexed page (src/where/thin.mjs) is in no directory and no front page list.
+  const voice = people.filter((p) => p.voicePage && !p.noindexVoice)
+  const crew = people.filter((p) => p.staffPage && !p.noindexStaff)
+  const artists = everyArtist.filter((a) => !a.noindex)
   const popOf = (href) => popularityOf.get(href) || 0
   const dir = (group, rows) => directory(rows, Object.keys(GROUPS[group].sorts))
   const groups = {
@@ -236,7 +238,7 @@ export function searchRowsOf(titles) {
 
 const portrait = (image, name) => (image ? { image, caption: `${name} portrait` } : {})
 
-/** The sitemap: one group per page type, in crawl order. */
+/** The sitemap: one group per page type, in crawl order. A noindexed page is left out. */
 export function pageUrlsOf({ titles, people, studios, artists, watch, hubs, extra = [] }) {
   const group = (name, priority, urls) => ({ name, priority, urls })
   return {
@@ -245,10 +247,10 @@ export function pageUrlsOf({ titles, people, studios, artists, watch, hubs, extr
       group('hubs', '0.5', hubPaths(hubs).map(({ path }) => ({ path }))),
       group('anime', '0.8', titles.map((t) => ({ path: `/anime/${t.slug}`, image: t.cover, caption: `Cover of ${t.title}` }))),
       group('episodes', '0.6', titles.filter((t) => t.episodesPage).map((t) => ({ path: `/anime/${t.slug}/episodes` }))),
-      group('voice-actors', '0.7', people.filter((p) => p.voicePage).map((p) => ({ path: p.voiceHref, ...portrait(p.image, p.name) }))),
-      group('staff', '0.6', people.filter((p) => p.staffPage).map((p) => ({ path: p.staffHref, ...portrait(p.image, p.name) }))),
+      group('voice-actors', '0.7', people.filter((p) => p.voicePage && !p.noindexVoice).map((p) => ({ path: p.voiceHref, ...portrait(p.image, p.name) }))),
+      group('staff', '0.6', people.filter((p) => p.staffPage && !p.noindexStaff).map((p) => ({ path: p.staffHref, ...portrait(p.image, p.name) }))),
       group('studios', '0.7', studios.map((s) => ({ path: `/studio/${s.slug}` }))),
-      group('artists', '0.6', artists.map((a) => ({ path: `/artist/${a.slug}` }))),
+      group('artists', '0.6', artists.filter((a) => !a.noindex).map((a) => ({ path: `/artist/${a.slug}` }))),
       group('watch-orders', '0.7', watch.map((w) => ({ path: `/watch-order/${w.slug}` }))),
     ],
   }

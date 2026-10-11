@@ -29,7 +29,9 @@ import { TITLE_SHARDS, titleKey } from '../src/lib/shard-key.js'
 import { computeWhere } from '../src/where/compute.mjs'
 import { byProminence, crewByTitle } from '../src/where/people.mjs'
 import { assignSlugs } from '../src/where/entity-slugs.mjs'
-import { makeLinker } from '../src/where/linker.mjs'
+import { makeLinker, ROUTES } from '../src/where/linker.mjs'
+import { noindexSets } from '../src/where/thin.mjs'
+import { loadIndexKeep } from '../src/lib/index-keep.js'
 import { homeBase } from '../src/where/cross.mjs'
 import { titleRecord } from '../src/where/record-title.mjs'
 import { personRecord, studioRecord, artistRecord, franchiseRecord } from '../src/where/record-entities.mjs'
@@ -108,11 +110,27 @@ function main() {
   const { redirects, slugs, lists, added } = address(where, registry)
   since('addresses')
 
+  // The thin person and artist pages Google shows to nobody (src/where/thin.mjs).
+  // No keep list (data/index-keep.json), no noindex: the rule only counts.
+  const hidden = noindexSets({
+    people: lists.people,
+    artists: lists.artists,
+    pages: where.pages,
+    pathOf: {
+      voice: (id) => `/${ROUTES.voice}/${slugs.person.get(id)}`,
+      staff: (id) => `/${ROUTES.staff}/${slugs.person.get(id)}`,
+      artist: (key) => `/${ROUTES.artist}/${slugs.artist.get(key)}`,
+    },
+    keep: loadIndexKeep(ROOT),
+  })
+  since('thin pages')
+
   const titleById = new Map(where.titles.map((t) => [t.item.id, t.item]))
   const franchiseOf = new Map()
   for (const f of where.franchises.values()) for (const id of f.ids) franchiseOf.set(id, f)
   const ctx = {
-    link: makeLinker(slugs, where.pages),
+    link: makeLinker(slugs, where.pages, hidden),
+    hidden,
     pages: where.pages,
     credits: data.credits,
     staff: data.staff,
@@ -198,6 +216,7 @@ function main() {
   const mb = (n) => `${(n / 1048576).toFixed(1)} MB`
   for (const [name, s] of Object.entries(sizes)) console.log(`${name.padEnd(8)} ${s.records} records in ${s.files} shards, ${mb(s.bytes)}, biggest file ${mb(s.biggest)}`)
   console.log(`gates      ${JSON.stringify(where.counts)}`)
+  console.log(`thin pages rule ${hidden.on ? 'ON' : 'OFF (no keep list: nothing is noindexed)'} ${JSON.stringify(hidden.counts)}`)
   console.log(`registry   ${registrySize(registry)} entries (${added} new entity addresses), ${Object.keys(redirects).length} redirects`)
 }
 

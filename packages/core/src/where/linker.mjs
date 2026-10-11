@@ -21,12 +21,20 @@ export const ROUTES = {
  * slugs: { title: Map(id -> slug), person: Map(id -> slug), studio: Map(id ->
  * slug), artist: Map(key -> slug), watch: Map(anchorId -> slug) }
  * pages: computeWhere's `pages` (the ids that passed each gate)
+ * hidden: the noindexed pages (src/where/thin.mjs noindexSets). No other page
+ *   links to one, so voice, staff and artist answer null for them; `own`
+ *   still gives a page its own address.
  */
-export function makeLinker(slugs, pages) {
+export function makeLinker(slugs, pages, hidden = {}) {
   const at = (folder, slug) => (slug ? `/${folder}/${slug}` : null)
-  const voice = (id) => (pages.voice.has(id) ? at(ROUTES.voice, slugs.person.get(id)) : null)
-  const staff = (id) => (pages.staff.has(id) ? at(ROUTES.staff, slugs.person.get(id)) : null)
+  const shown = (type, key) => !hidden[type]?.has(key)
+  const ownVoice = (id) => (pages.voice.has(id) ? at(ROUTES.voice, slugs.person.get(id)) : null)
+  const ownStaff = (id) => (pages.staff.has(id) ? at(ROUTES.staff, slugs.person.get(id)) : null)
+  const ownArtist = (key) => (pages.artist.has(key) ? at(ROUTES.artist, slugs.artist.get(key)) : null)
+  const voice = (id) => (shown('voice', id) ? ownVoice(id) : null)
+  const staff = (id) => (shown('staff', id) ? ownStaff(id) : null)
   return {
+    own: { voice: ownVoice, staff: ownStaff, artist: ownArtist },
     title: (id) => at(ROUTES.title, slugs.title.get(id)),
     episodes: (id) => {
       const page = at(ROUTES.title, slugs.title.get(id))
@@ -39,7 +47,7 @@ export function makeLinker(slugs, pages) {
     /** A voice credit: the voice page, else the staff page. */
     cast: (id) => voice(id) || staff(id),
     studio: (id) => (pages.studio.has(id) ? at(ROUTES.studio, slugs.studio.get(id)) : null),
-    artist: (key) => (pages.artist.has(key) ? at(ROUTES.artist, slugs.artist.get(key)) : null),
+    artist: (key) => (shown('artist', key) ? ownArtist(key) : null),
     watch: (anchorId) => (pages.watch.has(anchorId) ? at(ROUTES.watch, slugs.watch.get(anchorId)) : null),
   }
 }
