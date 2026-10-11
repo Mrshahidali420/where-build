@@ -148,15 +148,22 @@ test('faq: every answer comes from the record, and a question without data is le
   const faq = faqOf(record(), 0)
   assert.deepEqual(
     faq.map((f) => f.q),
-    ['How many episodes does Show have?', 'Who voices Hero in Show?', 'Is Show dubbed in English?', 'Who made Show?', 'What is the opening song of Show?'],
+    ['What is the opening song of Show?', 'Is Show dubbed in English?', 'Who voices Hero in Show?', 'Who made Show?', 'How many episodes does Show have?'],
   )
-  assert.match(faq[0].a, /12 episodes/)
-  assert.equal(faq[1].a, 'Hero is voiced by Aoi in Japanese and by Ann in the English dub.')
-  assert.equal(faq[2].a, 'Yes. Show has an English dub: AniList lists English voices for 1 character, with Ann as Hero.')
+  assert.match(faq[4].a, /12 episodes/)
+  assert.equal(faq[2].a, 'Hero is voiced by Aoi in Japanese and by Ann in the English dub.')
+  assert.equal(faq[1].a, 'Yes. Show has an English dub: AniList lists English voices for 1 character, with Ann as Hero.')
   assert.equal(faq[3].a, 'Show was animated by Studio A and directed by Dee.')
+  // The question takes the shape of the data, and a one-episode show is not asked how long it is.
+  assert.deepEqual(faqOf(record({ cast: [], key: [], songs: [], episodes: 1 }), 0).map((f) => f.q), ['Which studio animated Show?'])
+  assert.deepEqual(faqOf(record({ cast: [], studios: [], songs: [], episodes: 1 }), 0).map((f) => f.q), ['Who directed Show?'])
+  const more = faqOf(record({ source: 'ORIGINAL', related: [{ relation: 'Sequel', title: 'Show 2', year: 2022 }] }), 0)
+  assert.equal(more[0].a, 'Yes. Show 2 (2022) follows Show.')
+  assert.ok(more.some((f) => f.q === 'Is Show based on a manga?'))
+  assert.equal(more.length, 6)
   const airing = faqOf(record({ status: 'RELEASING', episodes: null, nextEpisode: { number: 8, at: 2000 }, rows: [[1, '', 500], [2, '', 900], [3, '', 3000]] }), 1000)
-  assert.equal(airing[0].a, 'Show is still airing. 2 episodes have aired so far.')
-  assert.match(airing[1].q, /episode 8/)
+  assert.equal(airing.at(-1).a, 'Show is still airing. 2 episodes have aired so far.')
+  assert.match(airing[0].q, /episode 8/)
   const bare = faqOf(record({ cast: [], studios: [], key: [], songs: [], episodes: null, status: 'CANCELLED' }), 0)
   assert.deepEqual(bare, [])
 })

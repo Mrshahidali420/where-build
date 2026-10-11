@@ -10,12 +10,13 @@
  * Pure.
  */
 import { freeSplit } from '../lib/answers.mjs'
-import { answerLine, castLanguages, dubOf } from './title-lines.mjs'
+import { answerLine, dubOf } from './title-lines.mjs'
 import { faqOf } from './faq.mjs'
 import { animeShopRows } from './shop.mjs'
 import { animeBuyCopy, supportLine } from './buy-copy.mjs'
 import { showsBuyBox } from './title-depth.mjs'
 import { plural } from './words.mjs'
+import { listWords } from './hub-extras.mjs'
 import { voiceFacts, voiceLede, staffLede, artistLede, voiceLines, staffLines, artistLines } from './person-facts.mjs'
 
 const join = (parts) => parts.filter(Boolean).join(' ')
@@ -23,11 +24,21 @@ const join = (parts) => parts.filter(Boolean).join(' ')
 /** The cast note of a title page, or '' when the cast has no voices. */
 export function castNote(r) {
   const cast = r.cast || []
-  if (!cast.some((c) => c.voices.length > 0)) return ''
-  const dub = dubOf(r)
-  return castLanguages(r).includes('English')
-    ? `The Japanese voice and the English dub voice side by side (English for ${dub.voiced} of ${plural(cast.length, 'character')}).`
-    : 'Japanese voices. AniList lists no English dub cast for it.'
+  const voicedIn = (language) => cast.filter((c) => (c.voices || []).some((v) => v.language === language)).length
+  const japanese = voicedIn('Japanese')
+  const english = voicedIn('English')
+  if (!japanese && !english) return ''
+  const of = plural(cast.length, 'character')
+  if (japanese && english) return `Japanese voices for ${japanese} and English dub voices for ${english} of ${of}.`
+  return `${japanese ? 'Japanese' : 'English'} voices for ${japanese || english} of ${of}.`
+}
+
+/** The note over "You may also like": the genres the picks share with this show, by name. */
+export function similarNote(r) {
+  const counts = new Map()
+  for (const card of r.similar || []) for (const genre of card.shared || []) counts.set(genre, (counts.get(genre) || 0) + 1)
+  const top = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 3).map(([genre]) => genre)
+  return top.length ? `Picked for what they share with ${r.title}: ${listWords(top)}.` : `Shows close to ${r.title} in genre and theme.`
 }
 
 /** r: a title record. siteName: the config's name. now: unix seconds. */
@@ -39,13 +50,13 @@ export function titleText(r, { siteName = '', now } = {}) {
   const faq = faqOf(r, now)
   const site = join([
     answerLine(r, freeNames),
-    watchOn.length ? 'Official streams listed on AniList. What each one carries depends on your country.' : '',
+    dubOf(r)?.dubbed ? dubOf(r).line : '',
+    watchOn.length ? `${listWords(watchOn.slice(0, 3).map((w) => w.site))}${watchOn.length > 3 ? ` and ${watchOn.length - 3} more` : ''}, as listed on AniList. What each one carries depends on your country.` : '',
     buy ? `${buy.heading}. ${buy.sub} ${buys.map((row) => `${row.label}. ${row.note}.`).join(' ')}` : '',
     buy && !r.picks ? supportLine(siteName) : '',
     castNote(r),
-    (r.songs || []).length ? 'Each song opens a search for it on YouTube, Spotify or Amazon.' : '',
     (r.recs || []).length ? `What AniList members recommend to people who liked ${r.title}.` : '',
-    (r.similar || []).length ? 'Shows that share its genres and themes, the most watched first.' : '',
+    (r.similar || []).length ? similarNote(r) : '',
     ...faq.map((f) => `${f.q} ${f.a}`),
   ])
   const names = [r.title, r.romaji, ...(r.studios || []).map((s) => s.name), ...watchOn.map((w) => w.site)]

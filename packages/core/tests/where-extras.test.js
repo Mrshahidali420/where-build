@@ -213,7 +213,7 @@ test('the answer line says what the show is and where it streams', () => {
   const line = answerLine(r, ['Crunchyroll'])
   assert.match(line, /^Frieren is a finished TV series by MADHOUSE, 28 episodes, first aired Fall 2023\./)
   assert.match(line, /streams officially on Crunchyroll, and Crunchyroll has a free tier\./)
-  assert.match(answerLine({ ...r, status: 'NOT_YET_RELEASED', watchOn: [] }), /an upcoming TV series.*due Fall 2023\. No official stream/)
+  assert.match(answerLine({ ...r, status: 'NOT_YET_RELEASED', watchOn: [] }), /an upcoming TV series.*due Fall 2023\.$/)
 })
 
 test('the quick strip holds only real numbers and the pills say airing', () => {
@@ -254,7 +254,7 @@ test('sub or dub: a dub only with an English voice, subtitled only with Japanese
 
   const ask = (rec) => faqOf({ rows: [], key: [], songs: [], studios: [], ...rec }, 0).find((f) => /dubbed in English/.test(f.q))
   assert.match(ask(r).a, /^Yes\. Frieren has an English dub: AniList lists English voices for 1 character, with Mallorie Rodak as Frieren\. It streams officially on Crunchyroll/)
-  assert.match(ask(sub).a, /^No English dub is listed for Frieren\./)
+  assert.equal(ask(sub), undefined, 'no dub on record, no question')
   assert.equal(ask({ ...sub, status: 'NOT_YET_RELEASED' }), undefined, 'not asked before it airs')
 })
 

@@ -80,7 +80,8 @@ const STATUS_WORDS = {
 
 /**
  * One sentence that answers what the reader came for: what the show is, how
- * long, when, where it streams, and what this page holds.
+ * long, when, and where it streams. A show with no stream on record gets no
+ * second sentence: the page says what it knows, not what it lacks.
  */
 export function answerLine(r, freeNames = []) {
   const what = formatInSentence(r.format)
@@ -95,12 +96,6 @@ export function answerLine(r, freeNames = []) {
   const sites = (r.watchOn || []).map((s) => s.site)
   const where = sites.length
     ? ` It streams officially on ${listWords(sites.slice(0, 3))}${sites.length > 3 ? ` and ${sites.length - 3} more` : ''}${freeNames.length ? `, and ${listWords(freeNames.slice(0, 2))} ${freeNames.length === 1 ? 'has' : 'have'} a free tier` : ''}.`
-    : ' No official stream is listed for it yet.'
-  const holds = [
-    r.dated ? 'every dated episode' : '',
-    (r.cast || []).some((c) => c.voices?.length) ? 'the voice cast' : '',
-    (r.key || []).length || (r.crew || []).length ? 'the staff' : '',
-    (r.songs || []).length ? 'its songs' : '',
-  ].filter(Boolean)
-  return `${first}${where}${holds.length ? ` Below: ${listWords(holds)}.` : ''}`
+    : ''
+  return `${first}${where}`
 }

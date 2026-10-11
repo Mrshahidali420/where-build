@@ -42,3 +42,21 @@ test('title depth: counts the blocks a record really has', () => {
   assert.equal(dataBlocks({ cast: [{ voices: [{}] }], songs: [{}], watchOn: [{}], dated: 3, watch: {}, key: [{}], description: 'word '.repeat(40) }), 7)
   assert.equal(dataBlocks({ cast: [{ voices: [] }], description: 'short' }), 0)
 })
+
+test('the buy box is left off a near-empty title page, unless real products were picked', async () => {
+  const { showsBuyBox } = await import('../src/where/title-depth.mjs')
+  const full = { format: 'TV', cast: [{ voices: [{}] }], songs: [{}] }
+  assert.equal(showsBuyBox(full), true)
+  assert.equal(showsBuyBox({ format: 'TV', songs: [{}] }), false)
+  assert.equal(showsBuyBox({ ...full, format: 'MUSIC' }), false)
+  assert.equal(showsBuyBox({ format: 'MUSIC', picks: { picks: [{}] } }), true)
+})
+
+test('title notes are built from the record', async () => {
+  const { castNote, similarNote } = await import('../src/where/page-text.mjs')
+  const voice = (language) => ({ name: 'V', language })
+  assert.equal(castNote({ cast: [{ voices: [voice('Japanese'), voice('English')] }, { voices: [voice('Japanese')] }] }), 'Japanese voices for 2 and English dub voices for 1 of 2 characters.')
+  assert.equal(castNote({ cast: [{ voices: [voice('Japanese')] }] }), 'Japanese voices for 1 of 1 character.')
+  assert.equal(castNote({ cast: [{ voices: [] }] }), '')
+  assert.equal(similarNote({ title: 'Show', similar: [{ shared: ['Action', 'Drama'] }, { shared: ['Action'] }] }), 'Picked for what they share with Show: Action and Drama.')
+})

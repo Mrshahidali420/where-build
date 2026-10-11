@@ -3,11 +3,14 @@
  * facts the same page prints (its episodes, air dates, cast, credits, songs,
  * watch order and official streams). The page shows them folded, and the same
  * list becomes its FAQPage structured data, so the two can never disagree.
- * A question with no answer in the data is left out, never guessed.
+ * A question with no answer in the data is left out, never guessed, and so is
+ * one whose answer is only "nothing is listed" or "one episode". The rarest
+ * questions come first, so the six a page shows are the ones its own data
+ * earns, and a full page does not spend them on what every page could say.
  *
  * Pure: a title record (src/where/record-title.mjs) in, [{ q, a }] out.
  */
-import { airDate, partialDate, plural, seasonWord } from './words.mjs'
+import { airDate, partialDate, plural, seasonWord, sourceWord } from './words.mjs'
 import { dubOf } from './title-lines.mjs'
 
 const MAX = 6
@@ -26,7 +29,8 @@ const keyOf = (r, label) => r.key.find((k) => k.label === label)?.people || []
 function episodesAnswer(r, now) {
   const aired = r.rows.filter(([, , at]) => at > 0 && at <= now).length
   const first = partialDate(r.startDate)
-  if (r.status === 'FINISHED' && r.episodes) {
+  // One episode is in the page's first line already; it is not a question.
+  if (r.status === 'FINISHED' && r.episodes > 1) {
     const span = first && r.endYear ? ` It first aired on ${first} and finished in ${r.endYear}.` : first ? ` It first aired on ${first}.` : ''
     return { q: `How many episodes does ${r.title} have?`, a: `${r.title} has ${plural(r.episodes, 'episode')}.${span}` }
   }
@@ -68,7 +72,7 @@ function dubAnswer(r) {
   const dub = dubOf(r)
   if (!dub || r.status === 'NOT_YET_RELEASED') return null
   const q = `Is ${r.title} dubbed in English?`
-  if (!dub.dubbed) return { q, a: `No English dub is listed for ${r.title}. AniList lists only its Japanese voice cast, so it is watched in Japanese with subtitles.` }
+  if (!dub.dubbed) return null
   const lead = r.cast.find((c) => c.role === 'MAIN' && c.voices.some((v) => v.language === 'English'))
   const en = lead ? listWords(lead.voices.filter((v) => v.language === 'English').map((v) => v.name)) : ''
   const sites = (r.watchOn || []).map((w) => w.site)
@@ -85,8 +89,10 @@ function makersAnswer(r) {
   const directors = names(keyOf(r, 'Director'))
   const creator = names(keyOf(r, 'Original creator'))
   if (!studios && !directors) return null
+  // The question is the one the data answers: the studio, the director, or both.
+  const q = studios && directors ? `Who made ${r.title}?` : studios ? `Which studio animated ${r.title}?` : `Who directed ${r.title}?`
   const parts = [studios && `animated by ${studios}`, directors && `directed by ${directors}`].filter(Boolean).join(' and ')
-  return { q: `Who made ${r.title}?`, a: `${r.title} was ${parts}${creator ? `, based on the work of ${creator}` : ''}.` }
+  return { q, a: `${r.title} was ${parts}${creator ? `, based on the work of ${creator}` : ''}.` }
 }
 
 function streamAnswer(r) {
@@ -117,9 +123,25 @@ function songAnswer(r) {
   return { q: `What is the opening song of ${r.title}?`, a: `${lead} "${first.title}"${by ? ` by ${by}` : ''}.` }
 }
 
-/** The page's questions, most asked first, never more than six. */
+/** What the show was made from, when AniList says, with the creator when credited. */
+function sourceAnswer(r) {
+  const creator = names(keyOf(r, 'Original creator'))
+  if (r.source === 'ORIGINAL') return { q: `Is ${r.title} based on a manga?`, a: `No. ${r.title} is an original anime: it was not adapted from a manga, a novel or a game.` }
+  const word = sourceWord(r.source)
+  if (!word || !creator) return null
+  return { q: `What is ${r.title} based on?`, a: `${r.title} is based on the ${word.toLowerCase()} by ${creator}.` }
+}
+
+/** The sequel, when AniList relates one that has a page here. */
+function sequelAnswer(r) {
+  const sequel = (r.related || []).find((rel) => rel.relation === 'Sequel')
+  if (!sequel) return null
+  return { q: `Does ${r.title} have a sequel?`, a: `Yes. ${sequel.title}${sequel.year ? ` (${sequel.year})` : ''} follows ${r.title}.` }
+}
+
+/** The page's questions, the rarest first, never more than six. */
 export function faqOf(r, now = Math.floor(Date.now() / 1000)) {
-  return [episodesAnswer(r, now), nextAnswer(r, now), voiceAnswer(r), dubAnswer(r), makersAnswer(r), orderAnswer(r), songAnswer(r), streamAnswer(r)]
+  return [nextAnswer(r, now), sequelAnswer(r), orderAnswer(r), songAnswer(r), dubAnswer(r), voiceAnswer(r), streamAnswer(r), sourceAnswer(r), makersAnswer(r), episodesAnswer(r, now)]
     .filter(Boolean)
     .slice(0, MAX)
 }

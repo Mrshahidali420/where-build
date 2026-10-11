@@ -19,5 +19,15 @@ export const BLOCKS = {
 /** How many of the seven blocks this record has. */
 export const dataBlocks = (r) => Object.values(BLOCKS).filter((has) => has(r)).length
 
-/** The buy box is drawn on every title page (the rule that narrows it lives in showsBuyBox). */
-export const showsBuyBox = () => true
+/** A page with fewer blocks than this is near-empty. */
+export const NEAR_EMPTY_BELOW = 2
+
+/**
+ * Whether a title page draws its Amazon search box. A near-empty page (a
+ * music video with a cover and one line) does not: the box would be most of
+ * the page. Real products picked for the show still earn it.
+ */
+export function showsBuyBox(r) {
+  if (r.picks) return true
+  return r.format !== 'MUSIC' && dataBlocks(r) >= NEAR_EMPTY_BELOW
+}
