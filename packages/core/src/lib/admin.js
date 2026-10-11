@@ -60,9 +60,21 @@ export async function gate(Astro, env) {
   return {
     db,
     secret,
-    signedIn: Astro.cookies.get(COOKIE)?.value === wanted,
+    signedIn: sameText(Astro.cookies.get(COOKIE)?.value || '', wanted),
     wrongWord: false,
   }
+}
+
+/**
+ * Two strings compared in time that does not depend on where they differ,
+ * so the answer time cannot be used to guess the fingerprint one character
+ * at a time.
+ */
+function sameText(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
 }
 
 /** Ask the database one question. A broken query gives an empty answer, never

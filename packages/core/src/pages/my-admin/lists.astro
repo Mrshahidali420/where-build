@@ -11,6 +11,7 @@ import Hint from '../../components/admin/Hint.astro'
 import BarList from '../../components/admin/BarList.astro'
 import Columns from '../../components/admin/Columns.astro'
 import Kpi from '../../components/admin/Kpi.astro'
+import WeekStrip from '../../components/admin/WeekStrip.astro'
 import Split from '../../components/admin/Split.astro'
 import { envOf } from '../../lib/runtime.js'
 import { gate, rangeOf, num } from '../../lib/admin.js'
@@ -131,6 +132,8 @@ const anyUse = usage.some((row) => row.value > 0)
   wrongWord={wrongWord}
   note={`${range.label}. What readers do with My list and the For you feed. Counts only: list names and AniList usernames are never sent.`}
 >
+  {signedIn && <WeekStrip db={db} fields={['views', 'visits', 'clicks']} />}
+
   <section class="kpis" aria-label="My list at a glance">
     <Kpi label="Titles saved" value={count('list_add')} spark={savesTrend.map((d) => d.saves)} tone="violet" hero />
     <Kpi label="People who saved" value={people('list_add')} />
