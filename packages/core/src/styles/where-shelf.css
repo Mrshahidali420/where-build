@@ -391,9 +391,12 @@
 /* ---- the words beside each object ---- */
 
 .shelf__text {
-  display: grid;
+  /* A column, not a grid: .buy__label carries grid-area from the old buy box,
+     which would pull the name out of order in a grid. */
+  display: flex;
+  flex-direction: column;
   flex: 1 1 0;
-  justify-items: start;
+  align-items: flex-start;
   gap: 0.5rem;
   min-width: 0;
 }
@@ -405,6 +408,8 @@
   text-transform: uppercase;
 }
 .shelf .shelf__label {
+  grid-area: auto;
+  align-self: flex-start;
   max-width: 100%;
   color: var(--dawn);
   font-family: var(--display);
