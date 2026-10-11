@@ -37,8 +37,7 @@ export function titleLinks(r) {
 export function personLinks(p) {
   const voice = p.voicePage ? hrefs(p.roles) : []
   const staff = p.staffPage ? [...(p.works || []).flatMap((g) => hrefs(g.items)), ...hrefs(p.collaborators)] : []
-  const extra = [...hrefs(p.costars), ...hrefs(p.studios)]
-  return { internal: [...voice, ...staff, ...extra], outside: p.voicePage ? (p.roles || []).filter((r) => r.character?.face).length : 0 }
+  return { internal: [...voice, ...staff], outside: p.voicePage ? (p.roles || []).filter((r) => r.character?.face).length : 0 }
 }
 
 const blankStat = () => ({ pages: 0, noindex: 0, noTitleLink: 0, noLink: 0, oneLink: 0, max: 0, top: '' })
@@ -87,8 +86,8 @@ export function linkGraph({ titles = [], people = [], studios = [], artists = []
   for (const p of people) {
     const links = personLinks(p)
     // One record, up to two pages: the voice page carries the roles, the staff page the works.
-    if (p.voicePage) walk(p.voiceHref, { internal: [...hrefs(p.roles), ...hrefs(p.costars), ...hrefs(p.studios)], outside: links.outside }, false)
-    if (p.staffPage) walk(p.staffHref, { internal: [...(p.works || []).flatMap((g) => hrefs(g.items)), ...hrefs(p.collaborators), ...hrefs(p.studios)] }, false)
+    if (p.voicePage) walk(p.voiceHref, { internal: [...hrefs(p.roles), ...hrefs(p.costars), ...hrefs(p.voiceStudios)], outside: links.outside }, false)
+    if (p.staffPage) walk(p.staffHref, { internal: [...(p.works || []).flatMap((g) => hrefs(g.items)), ...hrefs(p.collaborators), ...hrefs(p.staffStudios)] }, false)
   }
   for (const s of studios) walk(`/studio/${s.slug}`, { internal: [...hrefs(s.works), ...hrefs(s.directors), ...hrefs(s.composers)] }, false)
   for (const a of artists) walk(`/artist/${a.slug}`, { internal: (a.songs || []).map((song) => song.anime?.href).filter(Boolean) }, false)

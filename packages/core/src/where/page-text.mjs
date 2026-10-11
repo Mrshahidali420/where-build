@@ -56,14 +56,16 @@ export function titleText(r, { siteName = '', now } = {}) {
 export function voiceText(p) {
   const glance = voiceFacts(p)
   const sheet = glance.rows.length > 2 ? glance.rows.map(([label, value]) => `${label}: ${value}.`).join(' ') : ''
-  const site = join([voiceLede(p), sheet, ...voiceLines(p), 'Newest show first.'])
+  const names = (rows, noun) => (rows || []).map((row) => `${row.name}: ${plural(row.count, noun)}.`).join(' ')
+  const site = join([voiceLede(p), sheet, ...voiceLines(p), names(p.costars, 'shared show'), names(p.voiceStudios, 'show')])
   return { site, other: glance.bio || '', names: [p.name] }
 }
 
 /** p: a person record with a staff page. */
 export function staffText(p) {
   const groups = (p.works || []).map((g) => `${g.label}: ${plural(g.items.length, 'anime', 'anime')}.`).join(' ')
-  const site = join([staffLede(p), groups, ...staffLines(p), (p.collaborators || []).length ? 'Works most often with.' : ''])
+  const names = (rows, noun) => (rows || []).map((row) => `${row.name}: ${plural(row.count, noun)}.`).join(' ')
+  const site = join([staffLede(p), groups, ...staffLines(p), names(p.collaborators, 'shared show'), names(p.staffStudios, 'show')])
   return { site, other: p.bio || '', names: [p.name] }
 }
 

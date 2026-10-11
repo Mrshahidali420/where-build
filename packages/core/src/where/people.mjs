@@ -120,3 +120,34 @@ export function crewByTitle(people) {
   }
   return map
 }
+
+/** titleId -> Set of the ids of everyone who voices in it, for costarsOf. */
+export function voicesByTitle(people) {
+  const map = new Map()
+  for (const person of people.values()) {
+    for (const role of person.voice) {
+      if (!map.has(role.titleId)) map.set(role.titleId, new Set())
+      map.get(role.titleId).add(person.id)
+    }
+  }
+  return map
+}
+
+/**
+ * The voice actors this one shares the most shows with: only those with a
+ * page, only a real pattern (at least `min` shared shows), most shared first.
+ */
+export function costarsOf(person, byTitle, hasPage, { min = 3, max = 6 } = {}) {
+  const shared = new Map()
+  for (const titleId of new Set(person.voice.map((v) => v.titleId))) {
+    for (const otherId of byTitle.get(titleId) || []) {
+      if (otherId === person.id || !hasPage(otherId)) continue
+      shared.set(otherId, (shared.get(otherId) || 0) + 1)
+    }
+  }
+  return [...shared]
+    .filter(([, count]) => count >= min)
+    .sort((a, b) => b[1] - a[1] || a[0] - b[0])
+    .slice(0, max)
+    .map(([id, count]) => ({ id, count }))
+}

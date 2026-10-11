@@ -27,7 +27,7 @@ import { reslugAll } from '../src/lib/reslug.mjs'
 import { loadRegistry, saveRegistry, newRegistry, registrySize, registryHash } from '../src/lib/slug-registry.mjs'
 import { TITLE_SHARDS, titleKey } from '../src/lib/shard-key.js'
 import { computeWhere } from '../src/where/compute.mjs'
-import { byProminence, crewByTitle } from '../src/where/people.mjs'
+import { byProminence, crewByTitle, voicesByTitle } from '../src/where/people.mjs'
 import { assignSlugs } from '../src/where/entity-slugs.mjs'
 import { makeLinker, ROUTES } from '../src/where/linker.mjs'
 import { noindexSets } from '../src/where/thin.mjs'
@@ -139,6 +139,7 @@ function main() {
     titleById,
     franchiseOf,
     crewByTitle: crewByTitle(where.people),
+    voicesByTitle: voicesByTitle(where.people),
     cross: { base: homeBase(config), home: data.home, cast: data.cast, comicsById: new Map(data.comics.map((c) => [c.id, c])) },
     // Hand-picked Amazon products (data/picks.json, kept in git beside the
     // site's config), the genre and tag matches, and the like pages.

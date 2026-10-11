@@ -17,7 +17,8 @@ import { castRoleWord, plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
 import RoleRows from '@sister/core/src/components/where/RoleRows.astro'
 import Bio from '@sister/core/src/components/where/Bio.astro'
-import { voiceFacts, voiceLede } from '@sister/core/src/where/person-facts.mjs'
+import NameList from '@sister/core/src/components/where/NameList.astro'
+import { voiceFacts, voiceLede, voiceLines } from '@sister/core/src/where/person-facts.mjs'
 
 let p
 try {
@@ -35,6 +36,10 @@ const open = p.roles.slice(0, ROLES_OPEN)
 // The character page's facts sheet, for a person: bio facts, role numbers.
 const glance = voiceFacts(p)
 const rest = p.roles.slice(ROLES_OPEN)
+// Sentences worked out from this person's own roles; none when the record holds too little.
+const lines = voiceLines(p)
+const costars = p.costars || []
+const studios = p.voiceStudios || []
 ---
 
 <Where
@@ -66,12 +71,24 @@ const rest = p.roles.slice(ROLES_OPEN)
     )
   }
 
+  {
+    lines.length > 0 && (
+      <section class="w-sec" aria-labelledby="career">
+        <div class="w-sec__head">
+          <h2 id="career">{p.name}'s career in anime</h2>
+        </div>
+        <div class="prose">
+          <p>{lines.join(' ')}</p>
+        </div>
+      </section>
+    )
+  }
+
   <section class="w-sec" aria-labelledby="roles">
     <div class="w-sec__head">
       <h2 id="roles">Roles</h2>
-      <p class="w-sec__count">{plural(p.roles.length, 'role')}</p>
+      <p class="w-sec__count">{plural(p.roles.length, 'role')}, newest show first</p>
     </div>
-    <p class="w-sec__note">Newest show first. A character's name opens their profile on our sister site.</p>
     <RoleRows roles={open} roleWord={castRoleWord} />
     {
       rest.length > 0 && (
@@ -82,6 +99,28 @@ const rest = p.roles.slice(ROLES_OPEN)
       )
     }
   </section>
+
+  {
+    costars.length > 0 && (
+      <section class="w-sec" aria-labelledby="with">
+        <div class="w-sec__head">
+          <h2 id="with">Most often in the same cast</h2>
+        </div>
+        <NameList rows={costars} noun="shared show" />
+      </section>
+    )
+  }
+
+  {
+    studios.length > 0 && (
+      <section class="w-sec" aria-labelledby="studios">
+        <div class="w-sec__head">
+          <h2 id="studios">Studios {p.name} has voiced for most</h2>
+        </div>
+        <NameList rows={studios} noun="show" />
+      </section>
+    )
+  }
 
   <Bio text={glance.bio} source={p.anilistUrl} heading={`About ${p.name}`} />
 </Where>

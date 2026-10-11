@@ -6,8 +6,8 @@
  * Pure.
  */
 import { CATEGORIES, OTHER, categoryOf } from './roles.mjs'
-import { collaboratorsOf } from './people.mjs'
-import { regularsOf } from './studios.mjs'
+import { collaboratorsOf, costarsOf } from './people.mjs'
+import { regularsOf, studiosOfTitle } from './studios.mjs'
 import { characterUrl } from './cross.mjs'
 import { mainChain } from './franchises.mjs'
 
@@ -78,6 +78,52 @@ function worksOf(person, ctx) {
 
 const clip = (list, max) => (list || []).slice(0, max)
 
+const popularityOf = (ctx, id) => ctx.titleById.get(id)?.popularity || 0
+
+/** The studios behind the most of these shows: a real pattern only (2+ shows), most first. */
+function studiosWith(titleIds, ctx, { min = 2, max = 5 } = {}) {
+  const counts = new Map()
+  for (const titleId of new Set(titleIds)) {
+    if (!ctx.titleById.has(titleId)) continue
+    for (const studio of studiosOfTitle(ctx.credits, titleId)) {
+      const entry = counts.get(studio.id) || { id: studio.id, name: studio.name, count: 0 }
+      entry.count++
+      counts.set(studio.id, entry)
+    }
+  }
+  return [...counts.values()]
+    .filter((entry) => entry.count >= min)
+    .sort((a, b) => b.count - a.count || a.id - b.id)
+    .slice(0, max)
+    .map(({ id, name, count }) => ({ name, href: ctx.link.studio(id), count }))
+}
+
+/** The role in the most watched show: a main character when they have one. */
+function voiceKnownOf(person, ctx) {
+  const named = person.voice.filter((v) => ctx.titleById.has(v.titleId) && ctx.cast[String(v.characterId)]?.[0])
+  const mains = named.filter((v) => v.role === 'MAIN')
+  const best = [...(mains.length ? mains : named)].sort((a, b) => popularityOf(ctx, b.titleId) - popularityOf(ctx, a.titleId) || a.titleId - b.titleId)[0]
+  if (!best) return null
+  return { character: ctx.cast[String(best.characterId)][0], title: ctx.titleById.get(best.titleId).title, href: ctx.link.title(best.titleId), main: best.role === 'MAIN' }
+}
+
+/** The most watched show they worked on, with every role they held on it. */
+function staffKnownOf(person, ctx) {
+  const best = [...person.crew].filter((c) => ctx.titleById.has(c.titleId)).sort((a, b) => popularityOf(ctx, b.titleId) - popularityOf(ctx, a.titleId) || a.titleId - b.titleId)[0]
+  if (!best) return null
+  const roles = [...new Set(person.crew.filter((c) => c.titleId === best.titleId).map((c) => c.role))].slice(0, 3)
+  return { title: ctx.titleById.get(best.titleId).title, href: ctx.link.title(best.titleId), roles }
+}
+
+/** The voice actors they share the most shows with, each with a page other pages may link to. */
+function costarRows(person, ctx) {
+  if (!ctx.voicesByTitle) return []
+  const linked = (id) => ctx.pages.voice.has(id) && !ctx.hidden?.voice.has(id)
+  return costarsOf(person, ctx.voicesByTitle, linked)
+    .map(({ id, count }) => ({ name: ctx.staff[String(id)]?.name || '', href: ctx.link.voice(id), count }))
+    .filter((c) => c.name)
+}
+
 /** A person: voice roles when they have a voice page, crew work when they have a staff page. */
 export function personRecord(person, slug, ctx) {
   const info = person.info || {}
@@ -115,6 +161,12 @@ export function personRecord(person, slug, ctx) {
     roles: voicePage ? rolesOf(person, ctx) : [],
     works: staffPage ? worksOf(person, ctx) : [],
     collaborators,
+    // The facts the page says in words (src/where/person-facts.mjs).
+    voiceKnown: voicePage ? voiceKnownOf(person, ctx) : null,
+    costars: voicePage ? costarRows(person, ctx) : [],
+    voiceStudios: voicePage ? studiosWith(person.voice.map((v) => v.titleId), ctx) : [],
+    staffKnown: staffPage ? staffKnownOf(person, ctx) : null,
+    staffStudios: staffPage ? studiosWith(person.crew.map((c) => c.titleId), ctx) : [],
   }
 }
 

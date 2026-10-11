@@ -9,7 +9,7 @@ import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
 import { loadArtist } from '@sister/core/src/where/runtime.mjs'
 import { listJsonld } from '@sister/core/src/where/jsonld.mjs'
 import { plural } from '@sister/core/src/where/words.mjs'
-import { artistCounts, artistLede } from '@sister/core/src/where/person-facts.mjs'
+import { artistCounts, artistLede, artistLines } from '@sister/core/src/where/person-facts.mjs'
 
 let a
 try {
@@ -21,6 +21,7 @@ if (!a) return notFound(Astro)
 
 const { ops, eds, shows } = artistCounts(a)
 const known = [...new Set(a.songs.map((s) => s.title))].slice(0, 3)
+const lines = artistLines(a)
 const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium/')
 ---
 
@@ -37,6 +38,13 @@ const small = (url) => String(url || '').replace('/cover/large/', '/cover/medium
     <h1>{a.name}</h1>
     <p class="w-intro__lede">{artistLede(a)}</p>
   </header>
+  {
+    lines.length > 0 && (
+      <div class="prose">
+        <p>{lines.join(' ')}</p>
+      </div>
+    )
+  }
 
   <section class="w-sec" aria-labelledby="songs">
     <div class="w-sec__head">

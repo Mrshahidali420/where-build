@@ -14,7 +14,7 @@ import { plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
 import WorkRows from '@sister/core/src/components/where/WorkRows.astro'
 import NameList from '@sister/core/src/components/where/NameList.astro'
-import { staffLede, leadWork } from '@sister/core/src/where/person-facts.mjs'
+import { staffLede, leadWork, staffLines } from '@sister/core/src/where/person-facts.mjs'
 import Bio from '@sister/core/src/components/where/Bio.astro'
 
 let p
@@ -28,6 +28,8 @@ if (!p || !p.staffPage) return notFound(Astro)
 const OPEN = 20
 const lead = leadWork(p)
 const lede = staffLede(p)
+const lines = staffLines(p)
+const studios = p.staffStudios || []
 const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
 ---
 
@@ -41,6 +43,19 @@ const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
   crumbs={[{ name: 'Staff', href: '/directory/staff' }, { name: p.name }]}
 >
   <PersonHead person={p} page="staff" lede={lede} />
+
+  {
+    lines.length > 0 && (
+      <section class="w-sec" aria-labelledby="career">
+        <div class="w-sec__head">
+          <h2 id="career">{p.name}'s work in anime</h2>
+        </div>
+        <div class="prose">
+          <p>{lines.join(' ')}</p>
+        </div>
+      </section>
+    )
+  }
 
   {
     p.works.map((group) => (
@@ -67,6 +82,17 @@ const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
           <h2 id="with">Works most often with</h2>
         </div>
         <NameList rows={p.collaborators} noun="shared show" />
+      </section>
+    )
+  }
+
+  {
+    studios.length > 0 && (
+      <section class="w-sec" aria-labelledby="studios">
+        <div class="w-sec__head">
+          <h2 id="studios">Studios {p.name} has worked with most</h2>
+        </div>
+        <NameList rows={studios} noun="show" />
       </section>
     )
   }
