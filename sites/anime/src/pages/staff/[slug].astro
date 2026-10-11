@@ -14,6 +14,7 @@ import { plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
 import WorkRows from '@sister/core/src/components/where/WorkRows.astro'
 import NameList from '@sister/core/src/components/where/NameList.astro'
+import { staffLede, leadWork } from '@sister/core/src/where/person-facts.mjs'
 import Bio from '@sister/core/src/components/where/Bio.astro'
 
 let p
@@ -25,10 +26,8 @@ try {
 if (!p || !p.staffPage) return notFound(Astro)
 
 const OPEN = 20
-const lead = [...p.works].sort((a, b) => b.items.length - a.items.length)[0]
-// What the group says about the person, as the end of "most of all ...".
-const AS = { created: 'as a creator', directed: 'as a director', wrote: 'as a writer', designed: 'as a designer', composed: 'in music and songs', animated: 'as an animator', sound: 'in sound', produced: 'as a producer' }
-const lede = `Credited on ${plural(p.counts.shows, 'anime', 'anime')}` + (lead && AS[lead.key] ? `, most of all ${AS[lead.key]}.` : '.')
+const lead = leadWork(p)
+const lede = staffLede(p)
 const known = lead ? lead.items.slice(0, 3).map((w) => w.title) : []
 ---
 

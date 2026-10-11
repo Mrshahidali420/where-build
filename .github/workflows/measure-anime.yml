@@ -1,0 +1,65 @@
+name: 'Measure: WhereAnime'
+
+# Builds the WhereAnime shards from R2 and measures them
+# (packages/core/scripts/measure-where.mjs): words per page type, near-twin
+# pages, repeated sentences, noindexed pages and the internal link graph.
+# Read-only: it never deploys and never writes to R2.
+#
+#   gh workflow run measure-anime.yml -f label=baseline
+on:
+  workflow_dispatch:
+    inputs:
+      label:
+        description: 'Label for this run'
+        required: false
+        default: 'ci'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: measure-anime
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+      LABEL: ${{ github.event.inputs.label || 'ci' }}
+    defaults:
+      run:
+        working-directory: sites/anime
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+        working-directory: .
+
+      - name: Pull data and state from R2
+        run: node ../../packages/core/scripts/where-data.mjs pull
+
+      # The shards only, no page build. Nothing is pushed back.
+      - name: Build the shards
+        run: SITE_CONFIG="$PWD/site.config.mjs" node --max-old-space-size=6000 ../../packages/core/scripts/make-where.mjs
+
+      - name: Measure
+        run: |
+          SITE_CONFIG="$PWD/site.config.mjs" node --max-old-space-size=6000 ../../packages/core/scripts/measure-where.mjs --label "$LABEL" | tee measure.md
+          cat measure.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: measure-json
+          path: tasks/measure/*.json
+          if-no-files-found: ignore
+          retention-days: 30

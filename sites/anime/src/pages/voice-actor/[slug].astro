@@ -17,7 +17,7 @@ import { castRoleWord, plural } from '@sister/core/src/where/words.mjs'
 import PersonHead from '@sister/core/src/components/where/PersonHead.astro'
 import RoleRows from '@sister/core/src/components/where/RoleRows.astro'
 import Bio from '@sister/core/src/components/where/Bio.astro'
-import { voiceFacts } from '@sister/core/src/where/person-facts.mjs'
+import { voiceFacts, voiceLede } from '@sister/core/src/where/person-facts.mjs'
 
 let p
 try {
@@ -28,14 +28,9 @@ try {
 if (!p || !p.voicePage) return notFound(Astro)
 
 const ROLES_OPEN = 40
-const shows = new Set(p.roles.map((r) => r.href)).size
 const mains = p.roles.filter((r) => r.role === 'MAIN')
-const languages = [...new Set(p.roles.map((r) => r.language))]
 const best = mains.slice(0, 3).map((r) => r.character.name)
-const lede =
-  `${plural(p.roles.length, 'role')} in ${plural(shows, 'anime', 'anime')}` +
-  (mains.length ? `, ${mains.length} of them main characters` : '') +
-  (languages.length === 1 ? `, in ${languages[0]}.` : '.')
+const lede = voiceLede(p)
 const open = p.roles.slice(0, ROLES_OPEN)
 // The character page's facts sheet, for a person: bio facts, role numbers.
 const glance = voiceFacts(p)
