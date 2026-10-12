@@ -83,3 +83,27 @@ its 35,000 to 45,000 estimate and needs tightening before Phase 4.
   manhwaindex's; they need tokens once the sister pages are designed.
 - make-shards, search slices and the sitemap must learn `ownedKinds`.
 - Fonts are shared placeholders (Saira) in `sites/family.mjs`.
+
+## Facebook Pages: later (added 12 Oct 2026)
+
+Covers both Pages (WhereAnime and Manhwa Index). The poster, templates, reels
+and Amazon comment line are live; see `tasks/facebook-posting-plan.md`.
+
+- [ ] Confirm the first real reel went out on each Page (the publish path was
+      untested when reels were switched on).
+- [ ] Better reels: the owner accepted the first version "for now". Improve the
+      motion, the music choice and the card designs.
+- [ ] Auto-reply to comments, few and varied (`pages_read_user_content` and
+      `pages_manage_engagement` are already in the tokens).
+- [ ] Facebook stats tab in `/my-admin`: posts, reach, link clicks per Page
+      (`read_insights` is in the tokens; check which metrics Meta still serves).
+- [ ] Tag official pages (@Crunchyroll and others). Needs the Page Mentions
+      feature and Meta app review.
+- [ ] Raise `FB_POSTS_PER_DAY` above 24 step by step, only while the ledger's
+      health record shows no Facebook warning.
+- [ ] Check what switching the Meta app "Index Poster" to Live needs.
+- [ ] Instagram and Threads posting from the same app.
+- [ ] Weak taglines on single-title cards ("It is completed at 15 chapters").
+- [ ] Fact cards by year, season and genre rank: the catalog rank rows carry
+      no usable scope yet.
+- [ ] "New volume" posts on Manhwa Index: the catalog has no volume dates.
