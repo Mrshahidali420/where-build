@@ -13,14 +13,13 @@ import { seasonTag, tagOf, uniqueTags } from '../story.mjs'
 import { clip, isDrawable, listMore, listOf } from '../text.mjs'
 import { dateOf, labelOfDate, nextWeekOf, shortWeekdayOf } from '../when.mjs'
 import { INNER } from '../render/parts.mjs'
-import { byPopularity, ctaOf, uniqueBy } from './shared.mjs'
+import { byPopularity, ctaOf, START_WITH_ONE, uniqueBy } from './shared.mjs'
 
 export const MIN_POPULARITY = 500
 export const MIN_ROWS = 3
 export const MAX_ROWS = 6
 /** Row heights: the space the rows share, and the least and most one row takes. */
-const ROW = { space: 796, min: 132, max: 226, roomy: 186 }
-const CTA = 'Dates and where to watch the top pick: link in the first comment'
+const ROW = { space: 796, min: 132, max: 262, roomy: 186 }
 
 const rowOf = ({ row, title }) => ({
   day: shortWeekdayOf(row.at * 1000),
@@ -28,6 +27,28 @@ const rowOf = ({ row, title }) => ({
   title: clip(title.title, 58),
   note: [title.noun, title.studio].filter(Boolean).join(' · '),
 })
+
+/** The post for these shows (most popular first). A show whose cover turned out blank can be left out. */
+function toPost(all, week) {
+  const shown = all.slice(0, MAX_ROWS)
+  const byDay = [...shown].sort((x, y) => x.row.at - y.row.at)
+  const lead = all[0].title
+  return {
+    item: `week:${week.from}`,
+    title: null,
+    path: lead.path,
+    label: `${lead.title}: dates and where to watch`,
+    names: all.slice(0, 3).map(({ title }) => title.title),
+    tags: uniqueTags([...all.slice(0, 3).map(({ title }) => tagOf(title.title)), seasonTag(lead.season), '#NewAnime', '#anime']),
+    art: { thumbs: byDay.map(({ title }) => title.image) },
+    view: { range: `${labelOfDate(week.from)} to ${labelOfDate(week.to)}`, rows: byDay.map(rowOf), total: all.length },
+    without: (blank) => {
+      const drop = new Set(blank.map((i) => byDay[i]))
+      const rest = all.filter((entry) => !drop.has(entry))
+      return rest.length >= MIN_ROWS ? toPost(rest, week) : null
+    },
+  }
+}
 
 function find(data, { now }) {
   const week = nextWeekOf(now)
@@ -40,27 +61,13 @@ function find(data, { now }) {
       .sort((x, y) => byPopularity(x.title, y.title)),
     ({ row }) => row.mediaId,
   )
-  if (all.length < MIN_ROWS) return []
-  const shown = all.slice(0, MAX_ROWS).sort((x, y) => x.row.at - y.row.at)
-  const lead = all[0].title
-  return [
-    {
-      item: `week:${week.from}`,
-      title: null,
-      path: lead.path,
-      label: `${lead.title}: dates and where to watch`,
-      names: all.slice(0, 3).map(({ title }) => title.title),
-      tags: uniqueTags([...all.slice(0, 3).map(({ title }) => tagOf(title.title)), seasonTag(lead.season), '#NewAnime', '#anime']),
-      art: { thumbs: shown.map(({ title }) => title.image) },
-      view: { range: `${labelOfDate(week.from)} to ${labelOfDate(week.to)}`, rows: shown.map(rowOf), total: all.length },
-    },
-  ]
+  return all.length < MIN_ROWS ? [] : [toPost(all, week)]
 }
 
 const captions = [
-  (p) => ({ hook: `🗓️ ${p.view.total} anime start next week, ${p.view.range}.`, facts: [`Among them: ${listOf(p.names)}.`, 'The days are on the image.'], cta: ctaOf('list', 0) }),
-  (p) => ({ hook: `🚨 Next week's premieres are in 🚨`, facts: [`${p.view.range}: ${listMore(p.names, p.view.total)}.`], cta: ctaOf('list', 1) }),
-  (p) => ({ hook: `✨ New anime from ${p.view.range}.`, facts: [`${listOf(p.names)} lead the list.`, `${p.view.total} first episodes in all.`], cta: ctaOf('list', 2) }),
+  (p) => ({ hook: `🗓️ ${p.view.total} anime start next week, ${p.view.range}.`, facts: [`Among them: ${listOf(p.names)}.`, 'The days are on the image.'], cta: ctaOf('first', 0) }),
+  (p) => ({ hook: `🚨 Next week's premieres are in 🚨`, facts: [`${p.view.range}: ${listMore(p.names, p.view.total)}.`], cta: ctaOf('first', 1) }),
+  (p) => ({ hook: `✨ New anime from ${p.view.range}.`, facts: [`${listOf(p.names)} lead the list.`, `${p.view.total} first episodes in all.`], cta: ctaOf('first', 2) }),
 ]
 
 const questions = [() => 'Which of these are you going to watch?', () => 'Which premiere are you most excited for?', (p) => `Is ${p.names[0]} on your list?`]
@@ -78,7 +85,7 @@ function template(v, k) {
   const size = rowSizes(v.rows.length)
   return k.page(
     t,
-    { cta: CTA },
+    { cta: START_WITH_ONE },
     k.row({ justifyContent: 'space-between', alignItems: 'flex-end' }, k.kicker('New anime', { color: t.pop }), k.kicker(v.range, { color: t.soft })),
     k.display({ fontSize: 80, fontWeight: k.f.displayBlack, lineHeight: 1, marginTop: 18 }, 'COMING'),
     k.display({ fontSize: 80, fontWeight: k.f.displayBlack, lineHeight: 1, color: t.pop }, 'NEXT WEEK'),

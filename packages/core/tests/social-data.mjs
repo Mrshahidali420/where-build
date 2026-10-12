@@ -53,6 +53,7 @@ const NEXT_MONDAY = NOW + 7 * DAY
 export function sampleItems() {
   return [
     classic(),
+    classic({ id: 101, slug: 'iron-coast', title: 'Iron Coast', episodes: 24, score: 80, popularity: 90000, ranks: [{ rank: 30, type: 'POPULAR', allTime: true, year: null, context: 'most popular all time' }], characters: [] }),
     anime(), // Frieren: episode 7 in three hours
     anime({ id: 3, slug: 'weekly-3', title: 'Weekly Show', nextEpisode: { number: 5, at: (NOW + 3 * DAY) / 1000 } }),
     ...Array.from({ length: 6 }, (_, n) => upcoming(n)),

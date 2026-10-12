@@ -11,12 +11,11 @@
  */
 import { seasonTag, tagOf, uniqueTags } from '../story.mjs'
 import { clip, compact, isDrawable, listOf } from '../text.mjs'
-import { ctaOf, usable } from './shared.mjs'
+import { ctaOf, START_WITH_ONE, usable } from './shared.mjs'
 
 export const TOP = 5
 const SEASON_NAME = { WINTER: 'Winter', SPRING: 'Spring', SUMMER: 'Summer', FALL: 'Fall' }
 const LEAD = { width: 270, height: 366 }
-const CTA = 'Dates and where to watch number one: link in the first comment'
 const THUMB = { width: 62, height: 86 }
 const ROW_HEIGHT = 94
 
@@ -60,9 +59,9 @@ function toPost(scope) {
 const find = (data) => scopesOf(data.titles).map(toPost)
 
 const captions = [
-  (p) => ({ hook: `🔥 ${p.lead.title} is the most anticipated ${p.noun} right now.`, facts: [`${p.lead.count} AniList users plan to watch it.`, `Next come ${listOf(p.names.slice(1, 4))}.`], cta: ctaOf('list', 0) }),
-  (p) => ({ hook: `🏆 The most anticipated ${p.plural}, by AniList planning lists.`, facts: [`${listOf(p.names)}.`], cta: ctaOf('list', 1) }),
-  (p) => ({ hook: `👀 Which ${p.plural} are people waiting for?`, facts: [`${p.lead.title} leads with ${p.lead.count} AniList users planning to watch, ahead of ${listOf(p.names.slice(1, 3))}.`], cta: ctaOf('list', 2) }),
+  (p) => ({ hook: `🔥 ${p.lead.title} is the most anticipated ${p.noun} right now.`, facts: [`${p.lead.count} AniList users plan to watch it.`, `Next come ${listOf(p.names.slice(1, 4))}.`], cta: ctaOf('first', 0) }),
+  (p) => ({ hook: `🏆 The most anticipated ${p.plural}, by AniList planning lists.`, facts: [`${listOf(p.names)}.`], cta: ctaOf('first', 1) }),
+  (p) => ({ hook: `👀 Which ${p.plural} are people waiting for?`, facts: [`${p.lead.title} leads with ${p.lead.count} AniList users planning to watch, ahead of ${listOf(p.names.slice(1, 3))}.`], cta: ctaOf('first', 2) }),
 ]
 
 const questions = [() => 'Which of these five are you waiting for?', (p) => `Is ${p.lead.title} your number one too?`, () => 'Which one is missing from this list?']
@@ -72,7 +71,7 @@ function template(v, k) {
   const [lead, ...rest] = v.rows
   return k.page(
     t,
-    { cta: CTA },
+    { cta: START_WITH_ONE },
     k.kicker(v.heading, { color: t.soft }),
     k.display({ fontSize: 78, fontWeight: k.f.displayBlack, lineHeight: 1, marginTop: 16 }, 'MOST'),
     k.display({ fontSize: 78, fontWeight: k.f.displayBlack, lineHeight: 1, color: t.pop }, 'ANTICIPATED'),

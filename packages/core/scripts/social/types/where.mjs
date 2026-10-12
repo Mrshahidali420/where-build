@@ -14,7 +14,7 @@ import { INNER } from '../render/parts.mjs'
 import { aboutOf, byPopularity, ctaOf, keyFacts, onPlatform, placeRows, placesColumn, placesHead, single, usable } from './shared.mjs'
 
 export const MIN_POPULARITY = 15_000
-const COVER = { width: 500, height: 712 }
+const COVER = { width: 520, height: 740 }
 const SIDE = INNER - COVER.width - 40
 const CTA = 'Every official place to watch it: link in the first comment'
 
@@ -56,6 +56,8 @@ function toPost(title) {
       ...length,
       about: aboutOf(title),
       meta: [title.noun, !byYear && title.year].filter(Boolean).join(' · '),
+      // One line under the title: the story in a sentence, or else what the page counts.
+      tagline: title.tagline || [stateOf(title), free > 0 && `${free} of its ${title.places.length} official ${title.places.length === 1 ? 'site is' : 'sites are'} free to start.`].filter(Boolean).join(' ') || null,
     },
   }
 }
@@ -89,6 +91,7 @@ function template(v, k) {
       placesColumn(v, k, t, { width: SIDE, height: COVER.height }),
     ),
     k.display({ ...k.clamp(2), fontSize: fitSize(v.title, [[14, 84], [24, 68], [40, 54], [80, 42]]), marginTop: 30, maxWidth: INNER }, v.title),
+    k.tagline(v.tagline, t, { marginTop: 10 }),
     k.fill(),
   )
 }

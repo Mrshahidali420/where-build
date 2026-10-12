@@ -114,12 +114,15 @@ test('types: what each one says comes from the record', () => {
 
 test('facts: only what the record states, and a fact it lacks is never offered', () => {
   const entry = data.byId.get(100)
-  assert.deepEqual(factsOf(entry).map((f) => [f.kind, f.figure]), [['rated', '#7'], ['score', '88%'], ['run', '124'], ['original', 'Original']])
+  assert.deepEqual(factsOf(entry).map((f) => [f.kind, f.figure]), [['rated', '#7'], ['run', '124'], ['score', '8.8']]) // strongest first
   // A rank for one year is not an all-time rank, a short run is not a long one.
   const plain = sampleData().byId.get(2)
-  assert.deepEqual(factsOf(plain).map((f) => f.kind), ['score'])
-  assert.deepEqual(factsOf({ ...plain, score: 60 }), [])
-  assert.match(factsOf(entry)[0].say[0], /^Steel Harbor is number 7 among the highest rated anime of all time on AniList\.$/)
+  assert.deepEqual(factsOf(plain), []) // a good score is not a strong fact: no card
+  assert.deepEqual(factsOf({ ...plain, score: 90, rating: '9.0' }).map((f) => [f.kind, f.figure]), [['score', '9.0']])
+  // The sentence on the image names the title, and a rank outside the top 50 is not offered.
+  assert.ok(factsOf(entry).every((f) => f.line.includes('Steel Harbor')))
+  assert.deepEqual(factsOf({ ...plain, ranks: [{ rank: 51, type: 'POPULAR' }] }), [])
+  assert.match(factsOf(entry)[0].say[0], /^Steel Harbor is the number 7 highest rated anime of all time on AniList\.$/)
   assert.ok(classic().ranks.some((r) => !r.allTime)) // the fixture does carry a yearly rank
 })
 

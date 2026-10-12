@@ -115,6 +115,10 @@ the owner before a type goes live (repo variable `FB_POST_TYPES`).
   from the site's own picks and tag. Off by default.
 - Manhwa Index genre rankings now link the site's genre page.
 
+### Refinement round (12 Oct 2026)
+
+Fifteen points from the coordinator's own review, both sites, one commit each. Bugs: new-title takes only running series; next-month in date order; blank covers found and left out of grids; no line ends on a separator and a short last word is tied to the one before; the synopsis never ends loose; the title hashtag drops season and part suffixes. Content: fact cards scored and named; the episode card leads with the title; a one-line tagline under titles; scores under the three "read next" picks; the comment line and the Amazon line say what the link really is. Polish: portraits capped at 400 px; no kind three times in a row; the most useful fact on line 2 of the caption. Not done on purpose: a title is never dropped from a ranking for a blank cover (the ranking would be wrong), and yearly, seasonal and genre ranks are not used for facts (the record does not hold them reliably).
+
 ### Later
 
 - Tagging official pages in posts (@Crunchyroll and the like). Not built: it

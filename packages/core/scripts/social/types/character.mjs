@@ -14,7 +14,8 @@ import { aboutOf, byPopularity, ctaOf, keyFacts, single, streamsLine, top } from
 export const MIN_POPULARITY = 30_000
 /** At most this many characters from one title are offered. */
 const PER_TITLE = 2
-const PORTRAIT = { width: 410, height: 615 }
+/** AniList portraits are 230 px wide: shown at 400 at most, so never stretched past 1.75 times. */
+const PORTRAIT = { width: 400, height: 600 }
 const CTA = 'Full cast and where to watch: link in the first comment'
 const BLOCK_SHIFT = 26
 const NAME_STEPS = [[9, 124], [12, 100], [16, 80], [22, 62], [40, 50]]
@@ -80,9 +81,9 @@ function template(v, k) {
     ),
     v.sites.length > 0 &&
       k.col(
-        { marginTop: 40, borderTop: `2px solid ${t.line}`, paddingTop: 18 },
+        { marginTop: 54, borderTop: `2px solid ${t.line}`, paddingTop: 22 },
         k.kicker('Where to watch', { color: t.soft, fontSize: 21, letterSpacing: 3 }),
-        k.display({ fontSize: 34, marginTop: 8 }, v.sites.join(' · ')),
+        k.display({ fontSize: v.sites.join(' · ').length > 32 ? 34 : 46, marginTop: 10 }, v.sites.join(' · ')),
       ),
     k.fill(),
   )

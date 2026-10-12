@@ -12,7 +12,7 @@ import { seasonTag, tagOf, uniqueTags } from '../story.mjs'
 import { clip, fitSize, isDrawable, listMore, listOf } from '../text.mjs'
 import { nextMonthOf } from '../when.mjs'
 import { INNER } from '../render/parts.mjs'
-import { byPopularity, ctaOf } from './shared.mjs'
+import { byPopularity, ctaOf, START_WITH_ONE } from './shared.mjs'
 
 export const MIN_POPULARITY = 500
 export const MIN_CELLS = 3
@@ -21,7 +21,6 @@ const PER_ROW = 3
 const GAP = 30
 const CELL = Math.floor((INNER - GAP * (PER_ROW - 1)) / PER_ROW)
 const COVER_HEIGHT = 318
-const CTA = 'Dates and where to watch the top pick: link in the first comment'
 /** The month name's size by its length ("May" to "September"). */
 const MONTH_STEPS = [[5, 150], [7, 128], [8, 112], [9, 98]]
 
@@ -33,29 +32,40 @@ const cellOf = (title, month) => ({
   date: title.start.precision === 'day' && title.start.day ? `${title.start.day} ${month.name.slice(0, 3)}` : month.name,
 })
 
+/** The day a title starts, for ordering: a date known only to the month goes after the dated ones. */
+const dayOf = (title) => (title.start.precision === 'day' && title.start.day ? title.start.day : LAST)
+const LAST = 99
+
+/** The post for these titles (most popular first): the six most followed, in date order. A blank cover can be left out. */
+function toPost(all, month) {
+  const shown = all.slice(0, MAX_CELLS).sort((x, y) => dayOf(x) - dayOf(y) || byPopularity(x, y))
+  return {
+    item: `month:${month.year}-${month.month}`,
+    title: null,
+    path: all[0].path,
+    label: `${all[0].title}: dates and where to watch`,
+    names: all.slice(0, 3).map((t) => t.title),
+    tags: uniqueTags([...all.slice(0, 3).map((t) => tagOf(t.title)), seasonTag(all[0].season), '#NewAnime', '#anime']),
+    art: { thumbs: shown.map((t) => t.image) },
+    view: { month: month.name, year: month.year, cells: shown.map((t) => cellOf(t, month)), total: all.length },
+    without: (blank) => {
+      const drop = new Set(blank.map((i) => shown[i]))
+      const rest = all.filter((t) => !drop.has(t))
+      return rest.length >= MIN_CELLS ? toPost(rest, month) : null
+    },
+  }
+}
+
 function find(data, { now }) {
   const month = nextMonthOf(now)
   const all = data.titles.filter((t) => startsIn(t, month) && t.popularity >= MIN_POPULARITY && isDrawable(t.title)).sort(byPopularity)
-  if (all.length < MIN_CELLS) return []
-  const shown = all.slice(0, MAX_CELLS)
-  return [
-    {
-      item: `month:${month.year}-${month.month}`,
-      title: null,
-      path: all[0].path,
-      label: `${all[0].title}: dates and where to watch`,
-      names: all.slice(0, 3).map((t) => t.title),
-      tags: uniqueTags([...all.slice(0, 3).map((t) => tagOf(t.title)), seasonTag(all[0].season), '#NewAnime', '#anime']),
-      art: { thumbs: shown.map((t) => t.image) },
-      view: { month: month.name, year: month.year, cells: shown.map((t) => cellOf(t, month)), total: all.length },
-    },
-  ]
+  return all.length < MIN_CELLS ? [] : [toPost(all, month)]
 }
 
 const captions = [
-  (p) => ({ hook: `🗓️ ${p.view.total} anime are set to start in ${p.view.month}.`, facts: [`The most followed on AniList so far: ${listOf(p.names)}.`], cta: ctaOf('list', 0) }),
-  (p) => ({ hook: `✨ Coming in ${p.view.month} ✨`, facts: [`${listMore(p.names, p.view.total)}.`, 'The dates are on the image.'], cta: ctaOf('list', 1) }),
-  (p) => ({ hook: `👀 ${p.view.month} on the anime calendar.`, facts: [`${listOf(p.names)} lead the list.`, `${p.view.total} new shows in all.`], cta: ctaOf('list', 2) }),
+  (p) => ({ hook: `🗓️ ${p.view.total} anime are set to start in ${p.view.month}.`, facts: [`The most followed on AniList so far: ${listOf(p.names)}.`], cta: ctaOf('first', 0) }),
+  (p) => ({ hook: `✨ Coming in ${p.view.month} ✨`, facts: [`${listMore(p.names, p.view.total)}.`, 'The dates are on the image.'], cta: ctaOf('first', 1) }),
+  (p) => ({ hook: `👀 ${p.view.month} on the anime calendar.`, facts: [`${listOf(p.names)} lead the list.`, `${p.view.total} new shows in all.`], cta: ctaOf('first', 2) }),
 ]
 
 const questions = [(p) => `Which ${p.view.month} anime are you waiting for?`, () => 'Which of these is going on your watchlist?', (p) => `Are you waiting for ${p.names[0]}?`]
@@ -74,7 +84,7 @@ function template(v, k) {
   const rows = [v.cells.slice(0, PER_ROW), v.cells.slice(PER_ROW)].filter((r) => r.length)
   return k.page(
     t,
-    { cta: CTA },
+    { cta: START_WITH_ONE },
     k.row({ justifyContent: 'space-between' }, k.kicker('New anime in', { color: t.ink }), k.kicker(v.year, { color: t.soft })),
     k.display({ fontSize: fitSize(v.month, MONTH_STEPS), fontWeight: k.f.displayBlack, lineHeight: 1, marginTop: 10, marginLeft: -4 }, v.month.toUpperCase()),
     k.rule(t.ink, 4, { marginTop: 18 }),

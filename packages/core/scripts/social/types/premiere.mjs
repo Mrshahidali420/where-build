@@ -13,7 +13,7 @@ import { dayMonthOf, nearDay, timeOf, weekdayOf } from '../when.mjs'
 import { aboutOf, byPopularity, ctaOf, keyFacts, single, streamsLine, top, uniqueBy, usable } from './shared.mjs'
 
 export const MIN_POPULARITY = 1000
-const COVER = { width: 360, height: 504 }
+const COVER = { width: 390, height: 546 }
 const ABOUT_WIDTH = 640
 const FRAME_SHIFT = 20
 const CTA = 'Episode dates and where to watch: link in the first comment'
@@ -24,7 +24,7 @@ function toPost(title, row, now) {
     ...single(title),
     item: String(title.id),
     label: 'Episode dates and where to watch',
-    facts: [title.studio && sentence(`Animation by ${title.studio}`), streamsLine(top(title.platforms)), ...keyFacts(title)],
+    facts: [streamsLine(top(title.platforms)), title.studio && sentence(`Animation by ${title.studio}`), ...keyFacts(title)],
     art: { hero: title.image },
     view: {
       title: clip(title.title, 70),
@@ -32,7 +32,9 @@ function toPost(title, row, now) {
       date: `${weekdayOf(at)} ${dayMonthOf(at)}`,
       time: `${timeOf(at)} ET`,
       platforms: top(title.platforms),
-      about: aboutOf(title, { status: false }),
+      // With a tagline the alt title gives way, so the poster still fits.
+      about: aboutOf(title, { status: false, alt: !title.tagline }),
+      tagline: title.tagline,
     },
   }
 }
@@ -70,6 +72,7 @@ function template(v, k) {
         k.art(v.art.hero, COVER.width, COVER.height, { position: 'absolute', left: 0, top: 0 }),
       ),
       k.display({ ...k.clamp(2), fontSize: fitSize(v.title, [[16, 58], [32, 48], [52, 40], [70, 34]]), marginTop: 28, width: 880, textAlign: 'center' }, v.title),
+      k.tagline(v.tagline, t, { marginTop: 10, width: 860, textAlign: 'center' }),
       k.about(v.about, t, { size: 24, width: ABOUT_WIDTH, style: { marginTop: 18 } }),
       v.platforms.length > 0 && k.body({ fontSize: 26, color: t.soft, marginTop: 12 }, `Streams on ${v.platforms.join(', ')}`),
     ),
