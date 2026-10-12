@@ -8,7 +8,10 @@
  *   1. /search/tv by its name, its other name and its name without "Season 2"
  *      and the like: an animated show whose name is close enough (NAME_MATCH)
  *   2. that show's seasons: the one whose first air date is within
- *      SEASON_DAYS of the title's own start date
+ *      SEASON_DAYS of the title's own start date; or, when the show itself
+ *      started with the title (a long runner such as One Piece, which TMDB
+ *      cuts into seasons and AniList does not), the whole show: its stills
+ *      are then taken from the season airing now (`whole: true`)
  *
  * Only one show and one season may be left; on any doubt there is no match
  * (then Kitsu is asked instead). A miss is tried again after MISS_DAYS.
@@ -52,6 +55,8 @@ export function likeness(a, b) {
 /** The names a title is searched by. */
 export const namesOf = (title) => [...new Set([title.title, title.alt, baseTitle(title.title), title.alt && baseTitle(title.alt)].filter(Boolean))]
 
+const dayGap = (date, start) => Math.abs(Date.parse(date) - start) / DAY_MS
+
 /** The title's start as a time, or null when the catalog does not give the day. */
 function startOf(title) {
   const s = title.start
@@ -62,12 +67,14 @@ function startOf(title) {
 export function seasonOf(show, title) {
   const start = startOf(title)
   if (!start) return null
-  const near = (show?.seasons || []).filter((s) => s.season_number >= 1 && s.air_date && Math.abs(Date.parse(s.air_date) - start) <= SEASON_DAYS * DAY_MS)
+  const near = (show?.seasons || []).filter((s) => s.season_number >= 1 && s.air_date && dayGap(s.air_date, start) <= SEASON_DAYS)
   return near.length === 1 ? near[0] : null
 }
 
-/** Search TMDB for a title: { id, season } or null. */
-export async function findShow(get, title) {
+const seasonsText = (show) => (show.seasons || []).map((s) => `${s.season_number} ${s.air_date || '?'}`).join(', ')
+
+/** Search TMDB for a title: { id, season } or { id, whole: true } or null. note() hears why a title is not matched. */
+export async function findShow(get, title, note = () => {}) {
   if (!FORMATS.has(title.format) || !startOf(title)) return null
   const names = namesOf(title)
   const ids = new Set()
@@ -78,12 +85,19 @@ export async function findShow(get, title) {
       if (animated && names.some((n) => likeness(n, show.name) >= NAME_MATCH || likeness(n, show.original_name) >= NAME_MATCH)) ids.add(show.id)
     }
   }
+  if (!ids.size) note('no animated TMDB show of that name')
   const matches = []
   for (const id of [...ids].slice(0, 3)) {
     const show = await get(`/tv/${id}`)
     const season = seasonOf(show, title)
-    if (season) matches.push({ id, season: season.season_number })
+    // An airing title whose season is not the one airing now runs on through TMDB's later seasons: the whole show.
+    const runsOn = season && title.status === 'RELEASING' && show.last_episode_to_air?.season_number > season.season_number
+    if (season && !runsOn) matches.push({ id, season: season.season_number })
+    else if (runsOn) matches.push({ id, whole: true })
+    else if (show?.first_air_date && dayGap(show.first_air_date, startOf(title)) <= SEASON_DAYS) matches.push({ id, whole: true })
+    else note(`${show?.name} (${id}) first aired ${show?.first_air_date}; no season near ${new Date(startOf(title)).toISOString().slice(0, 10)} (seasons: ${seasonsText(show || {})})`)
   }
+  if (matches.length > 1) note(`${matches.length} TMDB shows fit; none taken`)
   return matches.length === 1 ? matches[0] : null
 }
 

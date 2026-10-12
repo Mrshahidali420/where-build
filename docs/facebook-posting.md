@@ -323,8 +323,10 @@ Frames from the episodes themselves.
 - **TMDB match** (`stills/match.mjs`): searched by the title's names; only
   an animated show whose name is close (letter-pair likeness 0.8 or more),
   and in it the one season that first aired within 45 days of the title's
-  start. Anything else, including a film or a show TMDB numbers straight
-  through (no season of its own for the part), is no match. Matches are
+  start. A long runner (One Piece, Detective Conan: one catalog title,
+  many TMDB seasons) is matched as the whole show: its stills come from the
+  season airing now, and the episode numbers are counted back from the
+  catalog's coming episode. Anything else, including a film, is no match. Matches are
   kept in the ledger (`tmdbIds`) for good, misses for 14 days, so a title
   is searched once. Requests are one every 100 ms (TMDB allows about 40 a
   second), and a "too many" answer is waited out.

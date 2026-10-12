@@ -125,7 +125,30 @@ test('loader: no match on TMDB, or no key, and Kitsu gives the stills; a census 
   const out = await loadStills({ now: NOW, titles: [FRIEREN], fetch, sharp, key: KEY, book, wait: noWait, census: true, say: (l) => lines.push(l) })
   assert.equal(out[0].source, 'Kitsu')
   assert.equal(book.data.tmdbIds['7'].miss, true)
-  assert.match(lines.find((l) => l.startsWith('Stills census')), /^Stills census: 1 airing or premiering shows; 1\+ still 1/)
+  assert.match(lines.find((l) => l.startsWith('Stills census')), /Airing or premiering: 1 shows; 1\+ still 1/)
+  assert.match(lines.find((l) => l.includes('Sousou no Frieren')), /no animated TMDB show of that name/)
   const plain = await loadStills({ now: NOW, titles: [FRIEREN], fetch, sharp, wait: noWait })
   assert.equal(plain[0].source, 'Kitsu')
+})
+
+test('long runner: the whole show is matched, stills come from the season airing now, counted the catalog way', async () => {
+  const runner = { id: 21, title: 'ONE PIECE', format: 'TV', start: { year: 1999, month: 10, day: 20 }, status: 'RELEASING', popularity: 600000, malId: null, nextEpisode: { number: 1151, at: NOW + 2 * HOUR } }
+  const show = { id: 37854, name: 'One Piece', first_air_date: '1999-10-20', last_episode_to_air: { season_number: 23, episode_number: 10 }, seasons: [{ season_number: 1, air_date: '1999-10-20' }, { season_number: 23, air_date: '2026-04-05' }] }
+  const fetch = async (url) => {
+    const u = new URL(url)
+    if (u.hostname === 'image.tmdb.org') {
+      const bytes = await frame(Number(u.pathname.match(/\/op(\d+)\.jpg$/)[1]))
+      return { ok: true, arrayBuffer: async () => bytes }
+    }
+    if (u.pathname === '/3/search/tv') return json({ results: [{ id: 37854, name: 'One Piece', original_name: 'ワンピース', genre_ids: [16, 10759] }] })
+    if (u.pathname === '/3/tv/37854') return json(show)
+    const episode = u.pathname.match(/\/season\/23\/episode\/(\d+)\/images$/)
+    return json(episode && Number(episode[1]) >= 9 ? { stills: [{ file_path: `/op${episode[1]}.jpg`, width: 1920, height: 1080, aspect_ratio: 1.778, iso_639_1: null }] } : { stills: [] })
+  }
+  const get = tmdbClient(KEY, { fetch, wait: noWait })
+  assert.deepEqual(await findShow(get, runner), { id: 37854, whole: true })
+  const out = await loadStills({ now: NOW, titles: [runner], fetch, sharp, key: KEY, book: memoryBook(), wait: noWait })
+  assert.deepEqual(out[0].stills.map((s) => s.number), [1149, 1150])
+  // No coming episode to count from: nothing, rather than a wrong number.
+  assert.deepEqual(await loadStills({ now: NOW, titles: [{ ...runner, nextEpisode: null }], fetch, sharp, key: KEY, book: memoryBook(), wait: noWait }), [])
 })

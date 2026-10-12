@@ -84,8 +84,8 @@ test('shows: soon-airing first, then airing, then the best-known finished ones; 
   // In turns, a few an hour: over enough hours every show comes round, the unpopular one never.
   const seen = new Set(Array.from({ length: 6 }, (_, h) => showsFor(list, NOW + h * HOUR, 3).map((s) => s.id)).flat())
   assert.deepEqual([...seen].sort(), [1, 2, 3, 5, 6])
-  // A census: every airing or premiering show, no finished one.
-  assert.deepEqual(showsFor(list, NOW, 3, { census: true }).map((s) => s.id).sort(), [2, 3, 5, 6])
+  // A census: every airing or premiering show, the less-followed ones too, no finished one.
+  assert.deepEqual(showsFor(list, NOW, 3, { census: true }).map((s) => s.id).sort(), [2, 3, 4, 5, 6])
   assert.equal(showsFor([], NOW).length, 0)
 })
 
