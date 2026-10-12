@@ -323,6 +323,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103674985503689",
    "commentId": "122103674985503689_1737753720615427"
+  },
+  {
+   "key": "2026-10-12|where:14749|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:14749",
+   "title": "Oreshura",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "14749",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791813210715,
+   "status": "claimed"
   }
  ],
  "health": {
