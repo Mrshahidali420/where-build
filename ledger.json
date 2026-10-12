@@ -2355,6 +2355,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104088853503689",
    "commentId": "122104088853503689_1135844729255118"
+  },
+  {
+   "key": "2026-10-12|where:18671|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:18671",
+   "title": "Love, Chunibyo & Other Delusions - Heart Throb -",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "18671",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791846610232,
+   "status": "claimed"
   }
  ],
  "health": {
