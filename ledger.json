@@ -847,6 +847,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103783153503689",
    "commentId": "122103783153503689_2341422189938673"
+  },
+  {
+   "key": "2026-10-12|onair:118123|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:118123",
+   "title": "Holo no Graffiti",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "118123",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791821958218,
+   "status": "claimed"
   }
  ],
  "health": {
