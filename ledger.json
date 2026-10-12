@@ -739,6 +739,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103765417503689",
    "commentId": "122103765417503689_2033720087333361"
+  },
+  {
+   "key": "2026-10-12|fact:fact:1564:run|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:1564:run",
+   "title": "Pokémon the Series: Ruby and Sapphire",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:1564:run",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791820143720,
+   "status": "claimed"
   }
  ],
  "health": {
