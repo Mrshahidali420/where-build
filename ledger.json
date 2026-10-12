@@ -1682,6 +1682,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103971877503689",
    "commentId": "122103971877503689_1830497725038712"
+  },
+  {
+   "key": "2026-10-12|fact:fact:98635:rated|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:98635:rated",
+   "title": "ReLIFE: Final Arc",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:98635:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791835655738,
+   "status": "claimed"
   }
  ],
  "health": {
