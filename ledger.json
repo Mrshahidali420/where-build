@@ -68,5 +68,16 @@
    "postId": "1329988470202923_122103535191503689",
    "commentId": "122103535191503689_1716082156120385"
   }
- ]
+ ],
+ "health": {
+  "signals": [],
+  "peak": {
+   "pct": 1,
+   "source": "x-business-use-case-usage",
+   "at": 1791801894584
+  },
+  "cut": null,
+  "blockedUntil": 0,
+  "halted": null
+ }
 }
