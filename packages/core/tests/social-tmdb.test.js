@@ -7,7 +7,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import sharp from 'sharp'
 import { bestStill, stillUrl, tmdbClient } from '../scripts/social/stills/tmdb.mjs'
-import { cachedMatch, findShow, likeness, MISS_DAYS, seasonOf } from '../scripts/social/stills/match.mjs'
+import { airsAlong, cachedMatch, findShow, likeness, MISS_DAYS, seasonOf } from '../scripts/social/stills/match.mjs'
 import { loadStills } from '../scripts/social/stills/load.mjs'
 import { NOW, HOUR, DAY } from './social-kit.mjs'
 
@@ -151,4 +151,31 @@ test('long runner: the whole show is matched, stills come from the season airing
   assert.deepEqual(out[0].stills.map((s) => s.number), [1149, 1150])
   // No coming episode to count from: nothing, rather than a wrong number.
   assert.deepEqual(await loadStills({ now: NOW, titles: [{ ...runner, nextEpisode: null }], fetch, sharp, key: KEY, book: memoryBook(), wait: noWait }), [])
+})
+
+test('sequel inside an earlier season: taken while it airs alongside, its own episodes only', async () => {
+  const day = (ms) => new Date(ms).toISOString().slice(0, 10)
+  const next = { number: 3, at: NOW + 2 * HOUR }
+  const sequel = { id: 31, title: 'Blue Box Season 2', format: 'TV', start: { year: 2026, month: 10, day: 1 }, status: 'RELEASING', popularity: 45000, nextEpisode: next }
+  const show = { id: 207347, name: 'Blue Box', first_air_date: '2024-10-03', seasons: [{ season_number: 1, air_date: '2024-10-03' }], last_episode_to_air: { season_number: 1, episode_number: 27, air_date: day(next.at - 7 * DAY) } }
+  assert.equal(airsAlong(show, sequel), true)
+  assert.equal(airsAlong({ ...show, last_episode_to_air: { ...show.last_episode_to_air, air_date: '2025-03-20' } }, sequel), false)
+  assert.equal(airsAlong(show, { ...sequel, status: 'FINISHED' }), false)
+  const fetch = async (url) => {
+    const u = new URL(url)
+    if (u.hostname === 'image.tmdb.org') {
+      const bytes = await frame(Number(u.pathname.match(/\/bb(\d+)\.jpg$/)[1]))
+      return { ok: true, arrayBuffer: async () => bytes }
+    }
+    if (u.pathname === '/3/search/tv') return json({ results: [{ id: 207347, name: 'Blue Box', original_name: 'アオのハコ', genre_ids: [16, 18] }] })
+    if (u.pathname === '/3/tv/207347') return json(show)
+    const episode = u.pathname.match(/\/season\/1\/episode\/(\d+)\/images$/)
+    return json({ stills: [{ file_path: `/bb${episode[1]}.jpg`, width: 1920, height: 1080, aspect_ratio: 1.778, iso_639_1: null }] })
+  }
+  const notes = []
+  assert.deepEqual(await findShow(tmdbClient(KEY, { fetch, wait: noWait }), sequel, (n) => notes.push(n)), { id: 207347, whole: true })
+  const out = await loadStills({ now: NOW, titles: [sequel], fetch, sharp, key: KEY, book: memoryBook(), wait: noWait })
+  // TMDB's episodes 26 and 27 are the sequel's 1 and 2; season 1's own episodes are never taken.
+  assert.deepEqual(out[0].stills.map((s) => s.number), [1, 2])
+  assert.match((await findShow(tmdbClient(KEY, { fetch, wait: noWait }), { ...sequel, format: 'MOVIE' }, (n) => notes.push(n))) ?? notes.at(-1), /not a series/)
 })

@@ -326,7 +326,13 @@ Frames from the episodes themselves.
   start. A long runner (One Piece, Detective Conan: one catalog title,
   many TMDB seasons) is matched as the whole show: its stills come from the
   season airing now, and the episode numbers are counted back from the
-  catalog's coming episode. Anything else, including a film, is no match. Matches are
+  catalog's coming episode. A sequel TMDB files inside an earlier season
+  (Blue Box Season 2 as episodes 26 on of season 1) is taken the same way,
+  but only while it airs and only when TMDB's last episode came out within
+  two days of the catalog's; only the sequel's own episodes are used, and
+  once it has finished it gets no TMDB stills. Names are searched in
+  English, romaji and Japanese. Anything else, including a film, is no
+  match. Matches are
   kept in the ledger (`tmdbIds`) for good, misses for 14 days, so a title
   is searched once. Requests are one every 100 ms (TMDB allows about 40 a
   second), and a "too many" answer is waited out.

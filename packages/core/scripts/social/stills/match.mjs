@@ -12,6 +12,10 @@
  *      started with the title (a long runner such as One Piece, which TMDB
  *      cuts into seasons and AniList does not), the whole show: its stills
  *      are then taken from the season airing now (`whole: true`)
+ *   3. a sequel TMDB files inside an earlier season (Blue Box Season 2 as
+ *      episodes 26 on of season 1): taken as the whole show too, but only
+ *      while it airs and only when TMDB's last aired episode came out the
+ *      day the catalog's last one did (within AIRED_DAYS)
  *
  * Only one show and one season may be left; on any doubt there is no match
  * (then Kitsu is asked instead). A miss is tried again after MISS_DAYS.
@@ -24,6 +28,9 @@ export const NAME_MATCH = 0.8
 /** A season is the title's when it started within this many days of the title. */
 export const SEASON_DAYS = 45
 export const MISS_DAYS = 14
+/** TMDB's last aired episode and the catalog's must be this close, in days. */
+export const AIRED_DAYS = 2
+const WEEK_DAYS = 7
 /** Titles remembered: plenty for every airing and well-known show. */
 export const CACHE_MAX = 3000
 const ANIMATION = 16
@@ -53,7 +60,7 @@ export function likeness(a, b) {
 }
 
 /** The names a title is searched by. */
-export const namesOf = (title) => [...new Set([title.title, title.alt, baseTitle(title.title), title.alt && baseTitle(title.alt)].filter(Boolean))]
+export const namesOf = (title) => [...new Set([title.title, title.alt, baseTitle(title.title), title.alt && baseTitle(title.alt), title.native].filter(Boolean))]
 
 const dayGap = (date, start) => Math.abs(Date.parse(date) - start) / DAY_MS
 
@@ -75,7 +82,8 @@ const seasonsText = (show) => (show.seasons || []).map((s) => `${s.season_number
 
 /** Search TMDB for a title: { id, season } or { id, whole: true } or null. note() hears why a title is not matched. */
 export async function findShow(get, title, note = () => {}) {
-  if (!FORMATS.has(title.format) || !startOf(title)) return null
+  if (!FORMATS.has(title.format)) return note(`a ${title.format || 'title of unknown format'}, not a series`), null
+  if (!startOf(title)) return note('no start date in the catalog'), null
   const names = namesOf(title)
   const ids = new Set()
   for (const name of names) {
@@ -95,6 +103,7 @@ export async function findShow(get, title, note = () => {}) {
     if (season && !runsOn) matches.push({ id, season: season.season_number })
     else if (runsOn) matches.push({ id, whole: true })
     else if (show?.first_air_date && dayGap(show.first_air_date, startOf(title)) <= SEASON_DAYS) matches.push({ id, whole: true })
+    else if (airsAlong(show, title)) matches.push({ id, whole: true })
     else note(`${show?.name} (${id}) first aired ${show?.first_air_date}; no season near ${new Date(startOf(title)).toISOString().slice(0, 10)} (seasons: ${seasonsText(show || {})})`)
   }
   if (matches.length > 1) note(`${matches.length} TMDB shows fit; none taken`)
@@ -103,6 +112,14 @@ export async function findShow(get, title, note = () => {}) {
 
 /** The last episode of a season that has aired, by TMDB's show details, or null. */
 export const lastAired = (show, season) => (show?.last_episode_to_air?.season_number === season ? show.last_episode_to_air.episode_number : null)
+
+/** True when the title airs now and TMDB's last episode of the show came out when the catalog's last one did. */
+export function airsAlong(show, title) {
+  const aired = show?.last_episode_to_air?.air_date
+  if (title.status !== 'RELEASING' || !title.nextEpisode?.at || !aired) return false
+  // The catalog knows the coming episode; the one before it aired about a week earlier.
+  return dayGap(aired, title.nextEpisode.at - WEEK_DAYS * DAY_MS) <= AIRED_DAYS
+}
 
 /** The kept match of a title: a match, 'miss' (still fresh), or undefined (search again). */
 export function cachedMatch(cache, title, now) {

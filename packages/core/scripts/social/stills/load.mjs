@@ -85,13 +85,15 @@ const lastOf = (numbers) => numbers.at(-1)
  * count from it is skipped.
  */
 async function episodesOf(get, show, title) {
-  const firstSeason = show.whole ? 1 : show.season
-  if (title.status === 'FINISHED') return { season: firstSeason, numbers: range(1, PER_SHOW), offset: 0 }
+  // A finished whole-show match may be a sequel inside an earlier season: its first episodes are not known.
+  if (title.status === 'FINISHED') return show.whole ? { season: 0, numbers: [], offset: 0 } : { season: show.season, numbers: range(1, PER_SHOW), offset: 0 }
   const details = await get(`/tv/${show.id}`)
   const aired = details?.last_episode_to_air
   if (show.whole) {
     if (!aired || !title.nextEpisode) return { season: 0, numbers: [], offset: 0 }
-    return { season: aired.season_number, numbers: range(Math.max(1, aired.episode_number - PER_SHOW + 1), aired.episode_number), offset: title.nextEpisode.number - 1 - aired.episode_number }
+    const offset = title.nextEpisode.number - 1 - aired.episode_number
+    // Only episodes that are this title's own (a sequel filed inside an earlier season starts part way).
+    return { season: aired.season_number, numbers: range(Math.max(1, aired.episode_number - PER_SHOW + 1, 1 - offset), aired.episode_number), offset }
   }
   const last = lastAired(details, show.season) ?? (title.nextEpisode ? title.nextEpisode.number - 1 : 0)
   return { season: show.season, numbers: range(Math.max(1, last - PER_SHOW + 1), last), offset: 0 }
