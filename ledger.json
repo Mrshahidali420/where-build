@@ -829,6 +829,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103778641503689",
    "commentId": "122103778641503689_1738758967192654"
+  },
+  {
+   "key": "2026-10-12|where:21861|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:21861",
+   "title": "Blue Exorcist: Kyoto Saga",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21861",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791821657120,
+   "status": "claimed"
   }
  ],
  "health": {
