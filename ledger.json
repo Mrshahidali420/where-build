@@ -901,6 +901,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103797019503689",
    "commentId": "122103797019503689_4517901925205737"
+  },
+  {
+   "key": "2026-10-12|where:9989|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:9989",
+   "title": "Anohana: The Flower We Saw That Day",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "9989",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791822861579,
+   "status": "claimed"
   }
  ],
  "health": {
