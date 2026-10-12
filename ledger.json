@@ -2314,6 +2314,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104082877503689",
    "commentId": "122104082877503689_2353554118513269"
+  },
+  {
+   "key": "2026-10-12|fact:fact:20996:rated|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:20996:rated",
+   "title": "Gintama Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:20996:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791846008668,
+   "status": "claimed"
   }
  ],
  "health": {
