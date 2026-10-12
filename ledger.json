@@ -793,6 +793,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103773499503689",
    "commentId": "122103773499503689_1499671738667682"
+  },
+  {
+   "key": "2026-10-12|character:char:127221|whereanime",
+   "day": "2026-10-12",
+   "slug": "character:char:127221",
+   "title": "Rascal Does Not Dream of Bunny Girl Senpai",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:127221",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791821054744,
+   "status": "claimed"
   }
  ],
  "health": {
