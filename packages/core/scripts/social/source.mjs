@@ -135,6 +135,8 @@ export function toEntry(item, slugs, upcoming = new Map(), shopFor = null) {
     ranks: (item.ranks || []).filter((r) => r?.allTime && r.rank > 0).map((r) => ({ rank: r.rank, type: r.type })),
     cast: castOf(item),
     id: item.id,
+    // MyAnimeList's id: Kitsu's stills are found by it (stills/kitsu.mjs).
+    malId: item.malId || null,
     slug,
     title: item.title,
     path: `/anime/${slug}`,

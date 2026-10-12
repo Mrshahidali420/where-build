@@ -79,7 +79,7 @@ export function sampleSchedule() {
 export function sampleData(now = NOW) {
   const items = sampleItems()
   const data = buildData(items, now, Object.fromEntries(items.map((i) => [i.id, i.slug])), sampleSchedule())
-  return { ...data, birthdays: sampleBirthdays(now), art: sampleArt(data.byId.get(100)) }
+  return { ...data, birthdays: sampleBirthdays(now), art: sampleArt(data.byId.get(100)), stills: sampleStills(2) }
 }
 
 /** Pictures as art/load.mjs hands them over: one fan art and one cosplay of the first title. */
@@ -112,4 +112,10 @@ export function walk(node, found = { texts: [], images: [] }) {
   if (node.type === 'img') found.images.push(node.props)
   walk(node.props?.children, found)
   return found
+}
+
+/** Six checked episode stills of one airing title, as stills/load.mjs gives them. */
+export function sampleStills(titleId) {
+  const still = (n) => ({ id: `kitsu:${n}`, number: n, url: `https://media.kitsu.app/episodes/thumbnails/${n}/original.jpg`, ratio: 16 / 9, hash: n.toString(16).padStart(16, '0') })
+  return [{ titleId, finished: false, stills: Array.from({ length: 6 }, (_, i) => still(i + 1)) }]
 }

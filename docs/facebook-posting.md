@@ -303,6 +303,28 @@ whole, with the character's name above it and who made it under it.
 - **Fails soft:** if Danbooru does not answer, there are no art posts that
   hour.
 
+### `stills`, `scenes` and `collage` (off until named)
+
+Frames from the episodes themselves.
+
+- **`stills`:** one large frame from the newest episode of an airing show,
+  with the title, the episode number and where to watch it.
+- **`scenes`:** two wide frames stacked with a thin line between them, then
+  "Scenes from <title>". A finished show uses frames from its first
+  episodes, so nothing is spoiled.
+- **`collage`:** for a show whose next episode airs today or tomorrow: one
+  big frame and four small ones below, a header with the episode and its
+  time, then the labelled lines. Needs five good frames.
+- **Source:** Kitsu (kitsu.io) episode thumbnails, no key, matched to our
+  titles through the MyAnimeList id. Each hour three popular shows are
+  looked at (airing soon first, then airing, then the best-known finished
+  ones).
+- **Checks** (`stills/quality.mjs`): at least 960 pixels wide; not soft, not
+  mostly black, no letterbox bars; near-identical frames are dropped by a
+  picture fingerprint. Many Kitsu frames are only 640 wide and are dropped,
+  so a show often has none.
+- **Fails soft:** if Kitsu does not answer, no frame posts that hour.
+
 ## Reels (off until you switch them on)
 
 A reel is a short vertical video (1080x1920, 8 to 20 seconds, with music and slide sounds) made

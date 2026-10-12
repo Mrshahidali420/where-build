@@ -1,0 +1,268 @@
+{
+ "recorded": "2026-10-12, kitsu.io, Frieren (MAL 52991), trimmed",
+ "mapping": {
+  "data": [
+   {
+    "id": "332791",
+    "type": "mappings"
+   }
+  ],
+  "included": [
+   {
+    "id": "46474",
+    "type": "anime",
+    "attributes": {
+     "episodeCount": 28,
+     "canonicalTitle": "Sousou no Frieren"
+    }
+   }
+  ]
+ },
+ "episodes": {
+  "meta": {
+   "count": 28
+  },
+  "data": [
+   {
+    "id": "353471",
+    "type": "episodes",
+    "attributes": {
+     "number": 1,
+     "canonicalTitle": "The Journey's End",
+     "airdate": "2023-09-29",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/353471/thumbnail/586ff8f159af3cefedfe7c48d454c982.png"
+     }
+    }
+   },
+   {
+    "id": "353472",
+    "type": "episodes",
+    "attributes": {
+     "number": 2,
+     "canonicalTitle": "It Didn't Have to Be Magic...",
+     "airdate": "2023-09-29",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/353472/thumbnail/4ea4ed39d5342b4f32e1c6b7f4a7183f.png"
+     }
+    }
+   },
+   {
+    "id": "356650",
+    "type": "episodes",
+    "attributes": {
+     "number": 3,
+     "canonicalTitle": "Killing Magic",
+     "airdate": "2023-09-29",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356650/thumbnail/4747c5c35cf4f7c6ce781937beffbb14.png"
+     }
+    }
+   },
+   {
+    "id": "356901",
+    "type": "episodes",
+    "attributes": {
+     "number": 4,
+     "canonicalTitle": "The Land Where Souls Rest",
+     "airdate": "2023-09-29",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356901/thumbnail/316546a9cde01b95320e8182c4446667.png"
+     }
+    }
+   },
+   {
+    "id": "356902",
+    "type": "episodes",
+    "attributes": {
+     "number": 5,
+     "canonicalTitle": "Phantoms of the Dead",
+     "airdate": "2023-10-06",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356902/thumbnail/6c3fec0bf76e67911a32b80a222db9bd.jpg"
+     }
+    }
+   },
+   {
+    "id": "356903",
+    "type": "episodes",
+    "attributes": {
+     "number": 6,
+     "canonicalTitle": "The Hero of the Village",
+     "airdate": "2023-10-13",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356903/thumbnail/cb3aa4f1368ecad34c72a8c5f098257b.jpg"
+     }
+    }
+   },
+   {
+    "id": "356904",
+    "type": "episodes",
+    "attributes": {
+     "number": 7,
+     "canonicalTitle": "Like a Fairy Tale",
+     "airdate": "2023-10-20",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356904/thumbnail/4e15cec0bcf202ec3118183cb92ff002.jpg"
+     }
+    }
+   },
+   {
+    "id": "356905",
+    "type": "episodes",
+    "attributes": {
+     "number": 8,
+     "canonicalTitle": "Frieren the Slayer",
+     "airdate": "2023-10-27",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356905/thumbnail/95686f5614ee4c90d0602d229251631f.jpg"
+     }
+    }
+   },
+   {
+    "id": "356906",
+    "type": "episodes",
+    "attributes": {
+     "number": 9,
+     "canonicalTitle": "Aura the Guillotine",
+     "airdate": "2023-11-03",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356906/thumbnail/8787a8bc118242ace3fc69d170eec960.jpg"
+     }
+    }
+   },
+   {
+    "id": "356907",
+    "type": "episodes",
+    "attributes": {
+     "number": 10,
+     "canonicalTitle": "A Powerful Mage",
+     "airdate": "2023-11-10",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356907/thumbnail/1fbe3a517fa505fecd2724ce8d5fbaaf.jpg"
+     }
+    }
+   },
+   {
+    "id": "356908",
+    "type": "episodes",
+    "attributes": {
+     "number": 11,
+     "canonicalTitle": "Winter in the Northern Lands",
+     "airdate": "2023-11-17",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356908/thumbnail/84c7b1e6e866c3c517688ce0c3de9269.jpg"
+     }
+    }
+   },
+   {
+    "id": "356909",
+    "type": "episodes",
+    "attributes": {
+     "number": 12,
+     "canonicalTitle": "A Real Hero",
+     "airdate": "2023-11-24",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356909/thumbnail/97302f2a07f2c27b9e86e843937be6ae.jpg"
+     }
+    }
+   },
+   {
+    "id": "356910",
+    "type": "episodes",
+    "attributes": {
+     "number": 13,
+     "canonicalTitle": "Aversion to One's Own Kind",
+     "airdate": "2023-12-01",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356910/thumbnail/7b71b9f177951cc5f6e738f8bd7b0ef1.png"
+     }
+    }
+   },
+   {
+    "id": "356911",
+    "type": "episodes",
+    "attributes": {
+     "number": 14,
+     "canonicalTitle": "Privilege of the Young",
+     "airdate": "2023-12-08",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356911/thumbnail/23baae6c771f026a004806f721bbcc08.jpg"
+     }
+    }
+   },
+   {
+    "id": "356912",
+    "type": "episodes",
+    "attributes": {
+     "number": 15,
+     "canonicalTitle": "Smells Like Trouble",
+     "airdate": "2023-12-15",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356912/thumbnail/a6dbf5f3f2ee96ffcd63aacff0dbb536.jpg"
+     }
+    }
+   },
+   {
+    "id": "356913",
+    "type": "episodes",
+    "attributes": {
+     "number": 16,
+     "canonicalTitle": "Long-Lived Friends",
+     "airdate": "2023-12-22",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356913/thumbnail/f5308b30a957fa02bf9f7f3aacf037a8.jpg"
+     }
+    }
+   },
+   {
+    "id": "356914",
+    "type": "episodes",
+    "attributes": {
+     "number": 17,
+     "canonicalTitle": "Take Care",
+     "airdate": "2024-01-05",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356914/thumbnail/6c93387eeab9429da0319c9a0b8e6715.jpg"
+     }
+    }
+   },
+   {
+    "id": "356915",
+    "type": "episodes",
+    "attributes": {
+     "number": 18,
+     "canonicalTitle": "First-Class Mage Exam",
+     "airdate": "2024-01-12",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356915/thumbnail/3ce4b0da7fe88c4566e73b27a897b441.jpg"
+     }
+    }
+   },
+   {
+    "id": "356916",
+    "type": "episodes",
+    "attributes": {
+     "number": 19,
+     "canonicalTitle": "Well-Laid Plans",
+     "airdate": "2024-01-19",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356916/thumbnail/98b0a9783bb6971f33db0669286f304f.jpg"
+     }
+    }
+   },
+   {
+    "id": "356917",
+    "type": "episodes",
+    "attributes": {
+     "number": 20,
+     "canonicalTitle": "Necessary Killing",
+     "airdate": "2024-01-26",
+     "thumbnail": {
+      "original": "https://media.kitsu.app/episode/356917/thumbnail/7061a21caae5fafa4ef086a2ac4153ec.png"
+     }
+    }
+   }
+  ]
+ }
+}

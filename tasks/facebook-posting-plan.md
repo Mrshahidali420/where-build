@@ -167,7 +167,7 @@ query a day, kept in the ledger). Episode and premiere captions gained the
 
 Scene screenshots, episode-preview collages, fan art and cosplay posts need
 images we do not hold. Fan art and cosplay: built (below). Scenes, collages
-and stills: next.
+and stills: built (below).
 
 ### Fan art and cosplay (12 Oct 2026)
 
@@ -179,6 +179,14 @@ one post in eight. Sources looked at and not used: waifu.im and nekos.best
 (random art with no series, so no title page to link), Safebooru (refused
 connections), Wikimedia (owner said no). Cosplay sources that need a key,
 not built: Flickr, Reddit, DeviantArt.
+
+### Stills, scenes and collage (12 Oct 2026)
+
+Built on Kitsu episode thumbnails (no key), checked for size (960 wide),
+softness, black frames and letterbox bars, twins dropped by fingerprint.
+Looked at and not used: Danbooru `screencap` (a handful per show), YouTube
+trailer frames (only 480 wide besides the one cover frame), Jikan (did not
+answer). TMDB (key) is the best next source for episode stills.
 
 ### Later
 
