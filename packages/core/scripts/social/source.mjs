@@ -26,6 +26,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { gunzipSync } from 'node:zlib'
 import { BLOCKED_TAGS } from '../../src/lib/prose.mjs'
+import { dayOf } from './ledger.mjs'
 
 export { BLOCKED_TAGS }
 
@@ -139,6 +140,8 @@ function attachRecs(candidate, byId) {
  * NEW: episodes airing in the next AIRING_HOURS (most popular first), then
  * series still airing that AniList updated in the last RUNNING_DAYS.
  * OLD: the most popular anime.
+ * TODAY: the episodes still to air on this posting day, most popular first;
+ * the picker puts them before everything else when the day is short of room.
  */
 export function buildPools(items, now, slugs, schedule = []) {
   const upcoming = nextEpisodes(schedule, now)
@@ -155,7 +158,9 @@ export function buildPools(items, now, slugs, schedule = []) {
     .filter((c) => !airingIds.has(c.id) && c.status === 'RELEASING' && c.updatedAt >= now - RUNNING_DAYS * DAY_MS && c.popularity >= MIN_POPULARITY.running)
     .sort(byPop)
   const old = withRecs.filter((c) => c.popularity >= MIN_POPULARITY.old).sort(byPop).slice(0, OLD_POOL)
-  return { new: alternate(airing, running), old }
+  const day = dayOf(now)
+  const today = airing.filter((c) => dayOf(c.nextEpisode.at) === day)
+  return { new: alternate(airing, running), old, today }
 }
 
 const readJsonFile = (file) => JSON.parse(readFileSync(file, 'utf8'))
