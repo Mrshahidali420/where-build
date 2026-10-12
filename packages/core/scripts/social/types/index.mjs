@@ -10,9 +10,11 @@
 import airtime from './airtime.mjs'
 import anticipated from './anticipated.mjs'
 import birthday from './birthday.mjs'
+import cosplay from './cosplay.mjs'
 import character from './character.mjs'
 import episode from './episode.mjs'
 import fact from './fact.mjs'
+import fanart from './fanart.mjs'
 import nextMonth from './next-month.mjs'
 import nextWeek from './next-week.mjs'
 import onair from './onair.mjs'
@@ -22,7 +24,7 @@ import reelNextWeek from './reel-next-week.mjs'
 import reelToday from './reel-today.mjs'
 import where from './where.mjs'
 
-export const TYPES = [airtime, premiere, episode, onair, nextWeek, nextMonth, anticipated, birthday, character, fact, where]
+export const TYPES = [airtime, premiere, episode, onair, nextWeek, nextMonth, anticipated, birthday, character, fact, where, fanart, cosplay]
 
 export const TYPE_KEYS = TYPES.map((type) => type.key)
 

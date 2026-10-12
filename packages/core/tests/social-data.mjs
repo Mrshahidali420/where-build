@@ -78,8 +78,16 @@ export function sampleSchedule() {
 /** The data the types read, built the way the poster builds it. */
 export function sampleData(now = NOW) {
   const items = sampleItems()
-  return { ...buildData(items, now, Object.fromEntries(items.map((i) => [i.id, i.slug])), sampleSchedule()), birthdays: sampleBirthdays(now) }
+  const data = buildData(items, now, Object.fromEntries(items.map((i) => [i.id, i.slug])), sampleSchedule())
+  return { ...data, birthdays: sampleBirthdays(now), art: sampleArt(data.byId.get(100)) }
 }
+
+/** Pictures as art/load.mjs hands them over: one fan art and one cosplay of the first title. */
+export function sampleArt(title) {
+  const picture = (n, over = {}) => ({ source: 'danbooru', id: `danbooru:${n}`, hash: `h${n}`, image: `https://cdn.donmai.us/original/${n}.jpg`, rating: 'g', ecchi: false, tags: ['1girl'], characters: ['mira_vale'], series: [], artist: 'Artist One', credit: { name: 'Artist One', url: `https://x.com/a/${n}` }, title, character: 'Mira Vale', ...over })
+  return { fanart: [picture(1)], cosplay: [picture(2, { character: null })] }
+}
+
 
 /** Today's birthdays as birthdays.mjs hands them over: one lead of Steel Harbor. */
 export const sampleBirthdays = (now = NOW) => ({ day: dateOf(now), list: [{ id: 901, name: 'Mira Vale', image: `${FACE}/b901-x.png`, favourites: 5000, mediaId: 100, voice: 'Voice 901' }] })

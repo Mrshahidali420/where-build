@@ -166,8 +166,19 @@ query a day, kept in the ledger). Episode and premiere captions gained the
 ### Needs an image source
 
 Scene screenshots, episode-preview collages, fan art and cosplay posts need
-images we do not hold. Not built in this round; the source decision comes
-first.
+images we do not hold. Fan art and cosplay: built (below). Scenes, collages
+and stills: next.
+
+### Fan art and cosplay (12 Oct 2026)
+
+Owner decision: build them, licence aside; a credit line in the first
+comment. Danbooru is the source (no key): character fan art matched to our
+titles, and its `cosplay_photo` posts. Rated general or sensitive only,
+nudity and minors gated out, ecchi-leaning at most one in four, art at most
+one post in eight. Sources looked at and not used: waifu.im and nekos.best
+(random art with no series, so no title page to link), Safebooru (refused
+connections), Wikimedia (owner said no). Cosplay sources that need a key,
+not built: Flickr, Reddit, DeviantArt.
 
 ### Later
 

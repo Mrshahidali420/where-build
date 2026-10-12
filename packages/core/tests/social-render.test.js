@@ -30,9 +30,10 @@ const kit = kitOf(THEME, {})
 const data = sampleData()
 const postsOf = (type) => type.find(data, { now: NOW })
 
-test('types: the eleven WhereAnime types are there, each with its own name and design', () => {
-  assert.deepEqual([...TYPE_KEYS].sort(), ['airtime', 'anticipated', 'birthday', 'character', 'episode', 'fact', 'next-month', 'next-week', 'onair', 'premiere', 'where'])
-  assert.equal(new Set(TYPES.map((t) => t.template)).size, TYPES.length)
+test('types: the thirteen WhereAnime types are there, each with its own name and design', () => {
+  assert.deepEqual([...TYPE_KEYS].sort(), ['airtime', 'anticipated', 'birthday', 'character', 'cosplay', 'episode', 'fact', 'fanart', 'next-month', 'next-week', 'onair', 'premiere', 'where'])
+  // Fan art and cosplay share one design (types/art-card.mjs): a picture and its credit.
+  assert.equal(new Set(TYPES.map((t) => t.template)).size, TYPES.length - 1)
   for (const type of TYPES) {
     assert.ok(type.name && type.gapDays > 0 && type.captions.length >= 3, type.key)
     assert.equal(typeof type.find, 'function')
