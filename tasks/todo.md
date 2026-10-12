@@ -89,7 +89,7 @@ its 35,000 to 45,000 estimate and needs tightening before Phase 4.
 Covers both Pages (WhereAnime and Manhwa Index). The poster, templates, reels
 and Amazon comment line are live; see `tasks/facebook-posting-plan.md`.
 
-- [ ] Confirm the first real reel went out on each Page (the publish path was
+- [x] Confirm the first real reel went out on each Page (the publish path was
       untested when reels were switched on).
 - [ ] Better reels: the owner accepted the first version "for now". Improve the
       motion, the music choice and the card designs.
