@@ -1646,6 +1646,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103962595503689",
    "commentId": "122103962595503689_1432705302358731"
+  },
+  {
+   "key": "2026-10-12|onair:195571|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:195571",
+   "title": "The Vermilion Mask",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "195571",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791835053261,
+   "status": "claimed"
   }
  ],
  "health": {
