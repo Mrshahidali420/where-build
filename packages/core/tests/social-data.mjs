@@ -114,8 +114,8 @@ export function walk(node, found = { texts: [], images: [] }) {
   return found
 }
 
-/** Six checked episode stills of one airing title, as stills/load.mjs gives them. */
-export function sampleStills(titleId) {
+/** Checked episode stills (six by default) of one airing title, as stills/load.mjs gives them. */
+export function sampleStills(titleId, count = 6) {
   const still = (n) => ({ id: `kitsu:${n}`, number: n, url: `https://media.kitsu.app/episodes/thumbnails/${n}/original.jpg`, ratio: 16 / 9, hash: n.toString(16).padStart(16, '0') })
-  return [{ titleId, finished: false, stills: Array.from({ length: 6 }, (_, i) => still(i + 1)) }]
+  return [{ titleId, finished: false, stills: Array.from({ length: count }, (_, i) => still(i + 1)) }]
 }

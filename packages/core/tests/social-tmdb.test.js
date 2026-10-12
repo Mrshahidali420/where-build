@@ -1,0 +1,131 @@
+// TMDB as the first source of episode stills (stills/tmdb.mjs, match.mjs,
+// load.mjs): the reader, the match of a title to a show and season, the
+// pick of a still, the kept ids, and the fall back to Kitsu. Answers are
+// fixtures in TMDB's shape; no network.
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import sharp from 'sharp'
+import { bestStill, stillUrl, tmdbClient } from '../scripts/social/stills/tmdb.mjs'
+import { cachedMatch, findShow, likeness, MISS_DAYS, seasonOf } from '../scripts/social/stills/match.mjs'
+import { loadStills } from '../scripts/social/stills/load.mjs'
+import { NOW, HOUR, DAY } from './social-kit.mjs'
+
+const KEY = 'test-key-not-real'
+const REC = JSON.parse(readFileSync(new URL('./fixtures/tmdb-frieren.json', import.meta.url), 'utf8'))
+const KITSU = JSON.parse(readFileSync(new URL('./fixtures/kitsu-frieren.json', import.meta.url), 'utf8'))
+const noWait = async () => {}
+const json = (body, status = 200) => ({ ok: status < 300, status, headers: { get: () => null }, json: async () => body })
+
+const FRIEREN = { id: 7, title: 'Sousou no Frieren 2nd Season', alt: "Frieren: Beyond Journey's End Season 2", format: 'TV', start: { year: 2026, month: 1, day: 16 }, status: 'RELEASING', popularity: 500000, malId: 52991, nextEpisode: { number: 5, at: NOW + 2 * HOUR } }
+
+/** A made-up frame that passes the picture checks: grain, and a bright block whose place the seed sets. */
+async function frame(seed) {
+  const [width, height] = [1280, 720]
+  const left = (seed * 233) % (width - 320)
+  const pixels = Buffer.alloc(width * height * 3)
+  let n = seed
+  for (let i = 0; i < pixels.length; i += 1) {
+    n = (n * 1103515245 + 12345) & 0x7fffffff
+    const x = Math.floor(i / 3) % width
+    pixels[i] = (x >= left && x < left + 320 ? 150 : 40) + (n % 90)
+  }
+  return sharp(pixels, { raw: { width, height, channels: 3 } }).jpeg().toBuffer()
+}
+
+/** TMDB and its picture host from the fixture; every address asked is noted. */
+function tmdb({ search = REC.search } = {}) {
+  const asked = []
+  const fetch = async (url) => {
+    const u = new URL(url)
+    asked.push(u.pathname)
+    if (u.hostname !== 'api.themoviedb.org' && u.hostname !== 'kitsu.io') {
+      const episode = Number(u.pathname.match(/\/e(\d+)\.jpg$/)?.[1])
+      const bytes = await frame(episode || [...u.pathname].reduce((sum, c) => (sum * 31 + c.charCodeAt(0)) % 65521, 7))
+      return { ok: true, arrayBuffer: async () => bytes }
+    }
+    if (u.hostname === 'kitsu.io') return json(url.includes('/mappings') ? KITSU.mapping : KITSU.episodes)
+    assert.equal(u.searchParams.get('api_key'), KEY)
+    if (u.pathname === '/3/search/tv') return json(search)
+    if (u.pathname === '/3/tv/209867') return json(REC.show)
+    const episode = u.pathname.match(/\/episode\/(\d+)\/images$/)
+    if (episode) return json(REC.images[episode[1]] || { stills: [] })
+    return json({}, 404)
+  }
+  return { fetch, asked }
+}
+
+function memoryBook(data = { v: 1, entries: [] }) {
+  let state = { data, version: 1 }
+  return {
+    read: async () => state,
+    write: async (next, version) => (version === state.version ? ((state = { data: next, version: version + 1 }), true) : false),
+    get data() {
+      return state.data
+    },
+  }
+}
+
+test('reader: the key goes in the address, "too many" is waited out, an error never shows the address', async () => {
+  let calls = 0
+  const waits = []
+  const get = tmdbClient(KEY, { wait: async (ms) => waits.push(ms), fetch: async () => (calls++ < 1 ? { ok: false, status: 429, headers: { get: () => '2' } } : json({ fine: true })) })
+  assert.deepEqual(await get('/tv/1'), { fine: true })
+  assert.ok(waits.includes(2000))
+  const failing = tmdbClient(KEY, { wait: noWait, fetch: async () => ({ ok: false, status: 401, headers: { get: () => null } }) })
+  await assert.rejects(failing('/tv/1'), (error) => error.message === 'TMDB answered 401' && !error.message.includes(KEY))
+  assert.equal(await tmdbClient(KEY, { wait: noWait, fetch: async () => json({}, 404) })('/tv/1'), null)
+})
+
+test('still: the widest wide frame without words, never a small or square one', () => {
+  assert.equal(bestStill(REC.images['3']).file_path, '/e3.jpg')
+  assert.equal(bestStill({ stills: [{ file_path: '/a.jpg', width: 1280, aspect_ratio: 1.33 }, { file_path: '/b.jpg', width: 960, aspect_ratio: 1.778 }] }), null)
+  assert.equal(stillUrl('/e3.jpg'), 'https://image.tmdb.org/t/p/w1280/e3.jpg')
+})
+
+test('match: names alike, the season that started with the title, and nothing on doubt', async () => {
+  assert.ok(likeness("Frieren: Beyond Journey's End", "Frieren: Beyond Journey's End") === 1)
+  assert.ok(likeness('Sousou no Frieren', 'Dungeon Meshi') < 0.5)
+  const { fetch } = tmdb()
+  const get = tmdbClient(KEY, { fetch, wait: noWait })
+  assert.deepEqual(await findShow(get, FRIEREN), { id: 209867, season: 2 })
+  // The first season by its own date; no season near a date; a film; no day known.
+  assert.equal(seasonOf(REC.show, { start: { year: 2023, month: 9, day: 29 } }).season_number, 1)
+  assert.equal(seasonOf(REC.show, { start: { year: 2025, month: 4, day: 1 } }), null)
+  assert.equal(await findShow(get, { ...FRIEREN, format: 'MOVIE' }), null)
+  assert.equal(await findShow(get, { ...FRIEREN, start: { year: 2026 } }), null)
+  // A name that is only like another show's: no match.
+  assert.equal(await findShow(tmdbClient(KEY, { fetch: tmdb({ search: { results: [{ id: 5, name: 'Dungeon Meshi', original_name: 'x', genre_ids: [16] }] } }).fetch, wait: noWait }), FRIEREN), null)
+})
+
+test('kept ids: a match is kept for good, a miss is tried again after a while', () => {
+  const cache = { 7: { id: 209867, season: 2, at: NOW }, 8: { miss: true, at: NOW - (MISS_DAYS + 1) * DAY }, 9: { miss: true, at: NOW } }
+  assert.equal(cachedMatch(cache, { id: 7 }, NOW).id, 209867)
+  assert.equal(cachedMatch(cache, { id: 8 }, NOW), undefined)
+  assert.equal(cachedMatch(cache, { id: 9 }, NOW), 'miss')
+  assert.equal(cachedMatch(cache, { id: 10 }, NOW), undefined)
+})
+
+test('loader: TMDB stills of the last aired episodes, the match kept, no second search', async () => {
+  const book = memoryBook()
+  const first = tmdb()
+  const out = await loadStills({ now: NOW, titles: [FRIEREN], fetch: first.fetch, sharp, key: KEY, book, wait: noWait })
+  assert.equal(out[0].source, 'TMDB')
+  assert.deepEqual(out[0].stills.map((s) => s.number), [1, 2, 3, 4])
+  assert.deepEqual({ ...book.data.tmdbIds['7'], at: 0 }, { id: 209867, season: 2, at: 0 })
+  const again = tmdb()
+  await loadStills({ now: NOW + HOUR, titles: [FRIEREN], fetch: again.fetch, sharp, key: KEY, book, wait: noWait })
+  assert.ok(!again.asked.includes('/3/search/tv'))
+})
+
+test('loader: no match on TMDB, or no key, and Kitsu gives the stills; a census counts the shows', async () => {
+  const lines = []
+  const book = memoryBook()
+  const { fetch } = tmdb({ search: { results: [] } })
+  const out = await loadStills({ now: NOW, titles: [FRIEREN], fetch, sharp, key: KEY, book, wait: noWait, census: true, say: (l) => lines.push(l) })
+  assert.equal(out[0].source, 'Kitsu')
+  assert.equal(book.data.tmdbIds['7'].miss, true)
+  assert.match(lines.find((l) => l.startsWith('Stills census')), /^Stills census: 1 airing or premiering shows; 1\+ still 1/)
+  const plain = await loadStills({ now: NOW, titles: [FRIEREN], fetch, sharp, wait: noWait })
+  assert.equal(plain[0].source, 'Kitsu')
+})

@@ -188,6 +188,11 @@ Looked at and not used: Danbooru `screencap` (a handful per show), YouTube
 trailer frames (only 480 wide besides the one cover frame), Jikan (did not
 answer). TMDB (key) is the best next source for episode stills.
 
+TMDB added the same day (key `TMDB_API_KEY`, repo secret): first source,
+Kitsu as the fall back. Strict name and season-date match, kept in the
+ledger; the collage gains an eight-frame grid. The credit sentence TMDB
+asks for is in docs/facebook-posting.md (site credits only, never posts).
+
 ### Later
 
 - Tagging official pages in posts (@Crunchyroll and the like). Not built: it

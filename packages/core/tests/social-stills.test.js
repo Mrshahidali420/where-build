@@ -79,9 +79,13 @@ test('twins: the same frame twice is shown once', async () => {
 
 test('shows: soon-airing first, then airing, then the best-known finished ones; popular only', () => {
   const t = (id, over) => ({ id, malId: id, popularity: 200000, status: 'RELEASING', episodes: 12, ...over })
-  const list = [t(1, { status: 'FINISHED' }), t(2), t(3, { nextEpisode: { at: NOW + 2 * HOUR } }), t(4, { popularity: MIN_POPULARITY - 1 }), t(5, { malId: null })]
-  const order = showsFor(list, Math.floor(NOW / HOUR) * HOUR - (Math.floor(NOW / HOUR) * 3 % 3) * HOUR, 3).map((s) => s.id)
-  assert.deepEqual([...order].sort(), [1, 2, 3])
+  const soon = { nextEpisode: { at: NOW + 2 * HOUR } }
+  const list = [t(1, { status: 'FINISHED' }), t(2), t(3, soon), t(4, { popularity: MIN_POPULARITY - 1 }), t(5, { malId: null }), t(6, { status: 'NOT_YET_RELEASED', ...soon })]
+  // In turns, a few an hour: over enough hours every show comes round, the unpopular one never.
+  const seen = new Set(Array.from({ length: 6 }, (_, h) => showsFor(list, NOW + h * HOUR, 3).map((s) => s.id)).flat())
+  assert.deepEqual([...seen].sort(), [1, 2, 3, 5, 6])
+  // A census: every airing or premiering show, no finished one.
+  assert.deepEqual(showsFor(list, NOW, 3, { census: true }).map((s) => s.id).sort(), [2, 3, 5, 6])
   assert.equal(showsFor([], NOW).length, 0)
 })
 
@@ -99,7 +103,7 @@ test('loader: checked stills of the shows of the hour; a source that fails gives
 
 function withStills(count, over = {}) {
   const data = sampleData()
-  return { ...data, stills: [{ ...sampleStills(2)[0], stills: sampleStills(2)[0].stills.slice(0, count) }], ...over }
+  return { ...data, stills: sampleStills(2, count), ...over }
 }
 
 test('types: one still, two scenes, a collage of five; each finds, words and draws', () => {
@@ -122,4 +126,14 @@ test('types: one still, two scenes, a collage of five; each finds, words and dra
   done.stills[0].finished = true
   assert.equal(stills.find(done, { now: NOW }).length, 0)
   assert.deepEqual(scenes.find(done, { now: NOW })[0].episodes, [1, 2])
+})
+
+test('collage: eight good frames make the grid of eight, oldest first', () => {
+  const post = collage.find(withStills(9), { now: NOW })[0]
+  assert.equal(post.view.grid, true)
+  assert.deepEqual(post.range, [2, 9])
+  const art = { thumbs: post.art.thumbs.map(() => FAKE) }
+  const { images } = walk(collage.template({ ...post.view, art }, KIT))
+  assert.equal(images.length, 8)
+  assert.equal(collage.find(withStills(7), { now: NOW })[0].view.grid, false)
 })

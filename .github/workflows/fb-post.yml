@@ -135,6 +135,10 @@ jobs:
           WRANGLER_SEND_METRICS: 'false'
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          # Episode stills for the stills, scenes and collage types (stills/tmdb.mjs). Unset = Kitsu only.
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          # A hand dry run that names a stills type counts every airing show's stills (stills/load.mjs).
+          STILLS_CENSUS: ${{ inputs.dry_run && contains(inputs.types, 'stills') && '1' || '' }}
           FB_POST_ENABLED: ${{ vars.FB_POST_ENABLED }}
           # The cap for any 24 hours (unset = 24, at most 288), and the least minutes between two posts (5 at least).
           FB_POSTS_PER_DAY: ${{ vars.FB_POSTS_PER_DAY }}

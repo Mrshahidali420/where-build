@@ -315,15 +315,36 @@ Frames from the episodes themselves.
 - **`collage`:** for a show whose next episode airs today or tomorrow: one
   big frame and four small ones below, a header with the episode and its
   time, then the labelled lines. Needs five good frames.
-- **Source:** Kitsu (kitsu.io) episode thumbnails, no key, matched to our
-  titles through the MyAnimeList id. Each hour three popular shows are
-  looked at (airing soon first, then airing, then the best-known finished
-  ones).
+  With eight good frames it is a grid of eight instead (two across).
+- **Sources, in order:** TMDB first (`stills/tmdb.mjs`, key in the repo
+  secret `TMDB_API_KEY`), Kitsu (kitsu.io, no key) when TMDB has no match
+  or no good still. Each hour three popular shows are looked at (airing
+  soon first, then airing, then the best-known finished ones).
+- **TMDB match** (`stills/match.mjs`): searched by the title's names; only
+  an animated show whose name is close (letter-pair likeness 0.8 or more),
+  and in it the one season that first aired within 45 days of the title's
+  start. Anything else, including a film or a show TMDB numbers straight
+  through (no season of its own for the part), is no match. Matches are
+  kept in the ledger (`tmdbIds`) for good, misses for 14 days, so a title
+  is searched once. Requests are one every 100 ms (TMDB allows about 40 a
+  second), and a "too many" answer is waited out.
+- **TMDB still:** only frames without a language (no words), at least 1280
+  wide, between 1.7 and 1.8 wide to high; fetched at 1280 wide.
 - **Checks** (`stills/quality.mjs`): at least 960 pixels wide; not soft, not
   mostly black, no letterbox bars; near-identical frames are dropped by a
-  picture fingerprint. Many Kitsu frames are only 640 wide and are dropped,
-  so a show often has none.
-- **Fails soft:** if Kitsu does not answer, no frame posts that hour.
+  picture fingerprint. Many Kitsu frames are only 640 wide and are dropped.
+- **Census:** a hand dry run that names a stills type (`-f types=stills,...`)
+  looks at every airing and premiering show instead of three, and logs a
+  "Stills census" line: how many have 1, 2, 5 and 8 good stills.
+- **Fails soft:** if a source does not answer, that show has no frames that
+  hour.
+
+#### Site credits
+
+TMDB asks every product that uses its API to say so. The sentence for the
+site's credits or about page (never on posts or comments):
+
+> This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 ## Reels (off until you switch them on)
 

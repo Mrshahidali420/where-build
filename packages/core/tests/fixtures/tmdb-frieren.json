@@ -1,0 +1,141 @@
+{
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "id": 209867,
+    "name": "Frieren: Beyond Journey's End",
+    "original_name": "葬送のフリーレン",
+    "first_air_date": "2023-09-29",
+    "genre_ids": [
+     16,
+     10759,
+     10765
+    ],
+    "origin_country": [
+     "JP"
+    ]
+   },
+   {
+    "id": 555001,
+    "name": "Frieren",
+    "original_name": "Frieren",
+    "first_air_date": "2019-02-01",
+    "genre_ids": [
+     18
+    ],
+    "origin_country": [
+     "DE"
+    ]
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 2
+ },
+ "show": {
+  "id": 209867,
+  "name": "Frieren: Beyond Journey's End",
+  "first_air_date": "2023-09-29",
+  "last_episode_to_air": {
+   "season_number": 2,
+   "episode_number": 4,
+   "air_date": "2026-02-06"
+  },
+  "seasons": [
+   {
+    "season_number": 0,
+    "air_date": "2023-09-29",
+    "episode_count": 3,
+    "name": "Specials"
+   },
+   {
+    "season_number": 1,
+    "air_date": "2023-09-29",
+    "episode_count": 28,
+    "name": "Season 1"
+   },
+   {
+    "season_number": 2,
+    "air_date": "2026-01-16",
+    "episode_count": 10,
+    "name": "Season 2"
+   }
+  ]
+ },
+ "images": {
+  "1": {
+   "id": 1,
+   "stills": [
+    {
+     "aspect_ratio": 1.778,
+     "file_path": "/e1.jpg",
+     "height": 1080,
+     "iso_639_1": null,
+     "vote_average": 5.3,
+     "vote_count": 2,
+     "width": 1920
+    }
+   ]
+  },
+  "2": {
+   "id": 2,
+   "stills": [
+    {
+     "aspect_ratio": 1.778,
+     "file_path": "/e2.jpg",
+     "height": 1080,
+     "iso_639_1": null,
+     "vote_average": 5.3,
+     "vote_count": 2,
+     "width": 1920
+    },
+    {
+     "aspect_ratio": 1.333,
+     "file_path": "/e2-old.jpg",
+     "height": 1080,
+     "iso_639_1": null,
+     "vote_average": 5.3,
+     "vote_count": 2,
+     "width": 1280
+    }
+   ]
+  },
+  "3": {
+   "id": 3,
+   "stills": [
+    {
+     "aspect_ratio": 1.778,
+     "file_path": "/e3-en.jpg",
+     "height": 1080,
+     "iso_639_1": "en",
+     "vote_average": 5.3,
+     "vote_count": 2,
+     "width": 1920
+    },
+    {
+     "aspect_ratio": 1.778,
+     "file_path": "/e3.jpg",
+     "height": 1080,
+     "iso_639_1": null,
+     "vote_average": 5.3,
+     "vote_count": 2,
+     "width": 1920
+    }
+   ]
+  },
+  "4": {
+   "id": 4,
+   "stills": [
+    {
+     "aspect_ratio": 1.778,
+     "file_path": "/e4.jpg",
+     "height": 1080,
+     "iso_639_1": null,
+     "vote_average": 5.3,
+     "vote_count": 2,
+     "width": 1920
+    }
+   ]
+  }
+ }
+}

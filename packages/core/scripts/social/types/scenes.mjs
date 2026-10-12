@@ -1,8 +1,8 @@
 /**
  * "Scenes": two frames of a show, one above the other, from edge to edge.
  *
- * Data: Kitsu's stills of the show's last two episodes that have one
- * (stills/load.mjs). One post per newest episode. The frames carry no
+ * Data: the stills of the show's last two episodes that have one (TMDB, else Kitsu,
+ * stills/load.mjs). One post per newest episode. The frames carry no
  * words over them: the title, a short line and the brand sit in a band
  * under them.
  */

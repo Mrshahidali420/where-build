@@ -2,7 +2,7 @@
  * "Episode still": one large frame of the newest episode of a show, with the
  * title, the episode and where it streams.
  *
- * Data: Kitsu's still of the latest episode (stills/load.mjs), for a show
+ * Data: the still of the latest episode (TMDB, else Kitsu; stills/load.mjs), for a show
  * many people follow. One post per episode.
  */
 import { clip, fitSize } from '../text.mjs'
