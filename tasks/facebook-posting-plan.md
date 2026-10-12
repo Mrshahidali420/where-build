@@ -135,6 +135,18 @@ One failed post does not stop the chain; a refused token or five failures in a
 row do. Manhwa Index runs two-hour links so each one restores a fresh catalog
 cache; WhereAnime reads R2 again every hour inside a five-and-a-half-hour link.
 
+### Task B: reels, built and gated off (12 Oct 2026)
+
+Five reel types (WhereAnime: airing today, coming next week, top 5 most
+anticipated; Manhwa Index: top 5 ranking, "if you liked X, read these").
+Slides are drawn with the post renderer at 1080x1920 and put together with
+ffmpeg (H.264, yuv420p, 30 fps, a silent AAC track, 8 to 20 seconds). They
+publish through the Reels Publishing API, then the site link goes on the reel
+as the first comment. Not live: no reel name is in `FB_POST_TYPES`, and none
+is published until the samples have been looked at. Limits when they are
+switched on: 3 a day unless `FB_REELS_PER_DAY` says otherwise (10 at most),
+inside the cap, never two in a row.
+
 ### Later
 
 - Tagging official pages in posts (@Crunchyroll and the like). Not built: it

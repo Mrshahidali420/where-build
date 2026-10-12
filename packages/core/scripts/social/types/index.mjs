@@ -15,8 +15,17 @@ import nextMonth from './next-month.mjs'
 import nextWeek from './next-week.mjs'
 import onair from './onair.mjs'
 import premiere from './premiere.mjs'
+import reelAnticipated from './reel-anticipated.mjs'
+import reelNextWeek from './reel-next-week.mjs'
+import reelToday from './reel-today.mjs'
 import where from './where.mjs'
 
 export const TYPES = [premiere, episode, onair, nextWeek, nextMonth, anticipated, character, fact, where]
 
 export const TYPE_KEYS = TYPES.map((type) => type.key)
+
+/** The reels (reel/): short vertical videos made from slides. Gated like every type, by name. */
+export const REELS = [reelToday, reelNextWeek, reelAnticipated]
+
+/** Every kind a run can be asked for by name. */
+export const KINDS = [...TYPES, ...REELS]

@@ -34,6 +34,7 @@ function toPost(title, row, now) {
   return {
     ...single(title),
     item: `${title.id}:${row.episode}`,
+    at,
     label: 'Episode dates and where to watch',
     facts: [title.studio && sentence(`Animation by ${title.studio}`), ...keyFacts(title)],
     art: { hero: title.image },
