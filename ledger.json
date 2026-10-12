@@ -249,6 +249,24 @@
    "status": "posted",
    "postId": "1329988470202923_122103659883503689",
    "commentId": "122103659883503689_1796514044835801"
+  },
+  {
+   "reel": true,
+   "key": "2026-10-12|reel-anticipated:anticipated:all|whereanime",
+   "day": "2026-10-12",
+   "slug": "reel-anticipated:anticipated:all",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:all",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791811990472,
+   "track": "happy-adventure.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
