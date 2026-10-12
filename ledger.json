@@ -1908,6 +1908,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104017117503689",
    "commentId": "122104017117503689_1850532996131880"
+  },
+  {
+   "key": "2026-10-12|fact:fact:98291:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:98291:popular",
+   "title": "Tsuredure Children",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:98291:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791839302196,
+   "status": "claimed"
   }
  ],
  "health": {
