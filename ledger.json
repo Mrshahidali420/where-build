@@ -231,6 +231,22 @@
    "status": "posted",
    "postId": "1820875628935024",
    "commentId": "1820875628935024_1444298444303487"
+  },
+  {
+   "key": "2026-10-12|onair:186541|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:186541",
+   "title": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "186541",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791811689377,
+   "status": "claimed"
   }
  ],
  "health": {
