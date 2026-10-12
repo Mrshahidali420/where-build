@@ -305,6 +305,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103669699503689",
    "commentId": "122103669699503689_1715875423881459"
+  },
+  {
+   "key": "2026-10-12|fact:fact:176301:rated|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:176301:rated",
+   "title": "The Apothecary Diaries Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:176301:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791812894125,
+   "status": "claimed"
   }
  ],
  "health": {
