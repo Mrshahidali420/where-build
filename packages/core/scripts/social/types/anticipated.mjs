@@ -9,14 +9,16 @@
  * Image: a ranking. Number one with its cover and a very large numeral, then
  * four rows with the numeral, a small cover, the title and the count.
  */
+import { seasonTag, tagOf, uniqueTags } from '../story.mjs'
 import { clip, compact, isDrawable, listOf } from '../text.mjs'
-import { usable } from './shared.mjs'
+import { ctaOf, usable } from './shared.mjs'
 
 export const TOP = 5
 const SEASON_NAME = { WINTER: 'Winter', SPRING: 'Spring', SUMMER: 'Summer', FALL: 'Fall' }
-const LEAD = { width: 280, height: 380 }
+const LEAD = { width: 270, height: 366 }
+const CTA = 'Dates and where to watch number one: link in the first comment'
 const THUMB = { width: 62, height: 86 }
-const ROW_HEIGHT = 104
+const ROW_HEIGHT = 94
 
 const byPlanning = (x, y) => y.planning - x.planning
 
@@ -46,6 +48,7 @@ function toPost(scope) {
     path: five[0].path,
     label: `${five[0].title}: dates and where to watch`,
     names: five.map((t) => t.title),
+    tags: uniqueTags([...five.slice(0, 3).map((t) => tagOf(t.title)), seasonTag(scope.key.startsWith('season:') ? five[0].season : null), '#UpcomingAnime', '#anime']),
     lead: { title: five[0].title, count: compact(five[0].planning) },
     noun: scope.noun,
     plural: scope.plural,
@@ -57,16 +60,19 @@ function toPost(scope) {
 const find = (data) => scopesOf(data.titles).map(toPost)
 
 const captions = [
-  (p) => [`${p.lead.title} is the most anticipated ${p.noun} right now: ${p.lead.count} AniList users plan to watch it.`, `Next come ${listOf(p.names.slice(1, 4))}.`],
-  (p) => [`The most anticipated ${p.plural}, by AniList planning lists: ${listOf(p.names)}.`],
-  (p) => [`Which ${p.plural} are people waiting for?`, `${p.lead.title} leads with ${p.lead.count} AniList users planning to watch, ahead of ${listOf(p.names.slice(1, 3))}.`],
+  (p) => ({ hook: `🔥 ${p.lead.title} is the most anticipated ${p.noun} right now.`, facts: [`${p.lead.count} AniList users plan to watch it.`, `Next come ${listOf(p.names.slice(1, 4))}.`], cta: ctaOf('list', 0) }),
+  (p) => ({ hook: `🏆 The most anticipated ${p.plural}, by AniList planning lists.`, facts: [`${listOf(p.names)}.`], cta: ctaOf('list', 1) }),
+  (p) => ({ hook: `👀 Which ${p.plural} are people waiting for?`, facts: [`${p.lead.title} leads with ${p.lead.count} AniList users planning to watch, ahead of ${listOf(p.names.slice(1, 3))}.`], cta: ctaOf('list', 2) }),
 ]
+
+const questions = [() => 'Which of these five are you waiting for?', (p) => `Is ${p.lead.title} your number one too?`, () => 'Which one is missing from this list?']
 
 function template(v, k) {
   const t = k.tone('dark')
   const [lead, ...rest] = v.rows
   return k.page(
     t,
+    { cta: CTA },
     k.kicker(v.heading, { color: t.soft }),
     k.display({ fontSize: 78, fontWeight: k.f.displayBlack, lineHeight: 1, marginTop: 16 }, 'MOST'),
     k.display({ fontSize: 78, fontWeight: k.f.displayBlack, lineHeight: 1, color: t.pop }, 'ANTICIPATED'),
@@ -101,4 +107,4 @@ function template(v, k) {
   )
 }
 
-export default { key: 'anticipated', name: 'Most anticipated', urgent: false, gapDays: 21, titleGap: false, window: 1, find, captions, tags: () => ['anime', 'upcominganime'], template }
+export default { key: 'anticipated', name: 'Most anticipated', urgent: false, gapDays: 21, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, template }

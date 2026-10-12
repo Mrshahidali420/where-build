@@ -181,6 +181,38 @@ The images use the site's own fonts and colours and are made on the runner
 (`packages/core/scripts/social/render/`), with no browser. The words on them
 come from the same catalog as the pages; a fact the record lacks is left out.
 
+## What every post carries
+
+A post exists to send people to the site, so each one is built the same way:
+
+- **The image** shows quick context as labelled lines (score, genre, status,
+  alt title), has a thin line round the cover so it stands off the page, and
+  ends on one line that points at the first comment.
+- **The caption**: a hook with an emoji, a short synopsis from the record (cut
+  at a sentence end, no credits, no spoiler text), the key facts, a question
+  that names the title, the line about the first comment, then up to seven
+  hashtags built from the record (title, platform, season, sub-genre, kind,
+  genre, one or two community tags). A part the record lacks is left out.
+- **The first comment**: the site link, always first, so the preview card is
+  the site.
+
+### The Amazon line in the first comment (off)
+
+Set the repo variable `FB_AFFILIATE_COMMENT` to `true` and the first comment
+gets a second line for titles the site has a product for:
+
+```
+Where to watch it: https://.../the-title?utm_source=facebook...
+Get the book on Amazon: https://www.amazon.com/dp/XXXXXXXXXX?tag=whereanime-20
+```
+
+- The link is the same product the title page shows (`packages/core/scripts/social/shop.mjs` reads the
+  site's own picks and its own tag). A title with no pick gets no Amazon line;
+  nothing is ever a search link.
+- The tag is always `whereanime-20`. A test fails if any other tag could be written.
+- Nothing else is added to the post or the comment about it.
+- Any other value, or no variable, keeps the comment to the one site line.
+
 ## How it chooses
 
 - Episodes first. When there are at least as many episodes still to air today

@@ -7,28 +7,29 @@
  * their own type). The same title comes back at most once in four weeks.
  *
  * Image: a cream band with the headline, the cover standing across the edge
- * of the band, the next episode and the title on the night half.
+ * of the band, the next episode, the title and the rating, genres and other
+ * name on the night half.
  */
 import { clip, fitSize } from '../text.mjs'
 import { dateOf, DAY_MS, timeOf, weekdayOf } from '../when.mjs'
 import { H, INNER, PAD, W } from '../render/parts.mjs'
-import { byPopularity, streamsLine, TITLE_MAX, top, usable } from './shared.mjs'
+import { aboutOf, byPopularity, ctaOf, keyFacts, onPlatform, single, streamsLine, TITLE_MAX, top, usable } from './shared.mjs'
 
 export const MIN_POPULARITY = 8000
 const WEEK_MS = 7 * DAY_MS
 const BAND = 470
 const COVER = { width: 440, height: 620, top: 160 }
+const CTA = 'Episode dates and where to watch: link in the first comment'
 
 function toPost(title) {
   const at = title.nextEpisode.at
   return {
+    ...single(title),
     item: String(title.id),
-    title: title.title,
-    path: title.path,
     label: 'Episode dates and where to watch',
-    genre: title.genres[0],
+    facts: keyFacts(title),
     art: { hero: title.image },
-    view: { title: clip(title.title, TITLE_MAX), number: title.nextEpisode.number, weekday: weekdayOf(at), time: `${timeOf(at)} ET`, platforms: top(title.platforms) },
+    view: { title: clip(title.title, TITLE_MAX), number: title.nextEpisode.number, weekday: weekdayOf(at), time: `${timeOf(at)} ET`, platforms: top(title.platforms), about: aboutOf(title, { alt: false }) },
   }
 }
 
@@ -41,11 +42,15 @@ function find(data, { now }) {
     .map(toPost)
 }
 
+const next = (v) => `Episode ${v.number} arrives on ${v.weekday} at ${v.time}.`
+
 const captions = [
-  (p) => [`${p.title} is airing now.`, `Episode ${p.view.number} arrives on ${p.view.weekday} at ${p.view.time}.`, streamsLine(p.view.platforms)],
-  (p) => [`Keeping up with ${p.title}?`, `Episode ${p.view.number} is next, on ${p.view.weekday} at ${p.view.time}.`, streamsLine(p.view.platforms, 'Watch it on')],
-  (p) => [`On air this season: ${p.title}.`, `The next episode, number ${p.view.number}, is set for ${p.view.weekday} at ${p.view.time}.`, streamsLine(p.view.platforms, 'Official streams:')],
+  (p) => ({ hook: `📺 ${p.title} is airing right now.`, facts: [next(p.view), streamsLine(p.view.platforms), ...p.facts], cta: ctaOf('episode', 0) }),
+  (p) => ({ hook: `👀 Keeping up with ${p.title}?`, facts: [`Episode ${p.view.number} is next, on ${p.view.weekday} at ${p.view.time}.`, streamsLine(p.view.platforms, 'Watch it on'), ...p.facts], cta: ctaOf('episode', 1) }),
+  (p) => ({ hook: `🔥 On air this season: ${p.title}.`, facts: [`The next episode, number ${p.view.number}, is set for ${p.view.weekday} at ${p.view.time}.`, streamsLine(p.view.platforms, 'Official streams:'), ...p.facts], cta: ctaOf('episode', 2) }),
 ]
+
+const questions = [(p) => onPlatform(p, 'Are you following'), (p) => `Is ${p.title} one of your picks this season?`, (p) => `What do you expect from episode ${p.view.number} of ${p.title}?`]
 
 function template(v, k) {
   const light = k.tone('light')
@@ -71,12 +76,14 @@ function template(v, k) {
         k.body({ fontSize: 32, color: dark.soft, marginTop: 12 }, v.weekday),
         k.body({ fontSize: 32, color: dark.soft }, v.time),
       ),
-      k.display({ ...k.clamp(3), fontSize: fitSize(v.title, [[18, 70], [36, 58], [60, 46], [90, 38]]), maxWidth: INNER }, v.title),
-      v.platforms.length > 0 && k.body({ fontSize: 30, color: dark.soft, marginTop: 14 }, `Streams on ${v.platforms.join(', ')}`),
+      k.display({ ...k.clamp(2), fontSize: fitSize(v.title, [[18, 66], [36, 54], [60, 44], [90, 36]]), maxWidth: INNER }, v.title),
+      v.platforms.length > 0 && k.body({ fontSize: 28, color: dark.soft, marginTop: 10 }, `Streams on ${v.platforms.join(', ')}`),
+      k.about(v.about, dark, { size: 23, style: { marginTop: 14 } }),
       k.fill(),
+      k.cta(CTA, dark),
       k.brand(dark),
     ),
   )
 }
 
-export default { key: 'onair', name: 'Airing right now', urgent: false, gapDays: 28, titleGap: false, window: 15, find, captions, tags: (p) => ['anime', p.genre], template }
+export default { key: 'onair', name: 'Airing right now', urgent: false, gapDays: 28, titleGap: false, window: 15, find, captions, questions, tags: (p) => p.tags, template }

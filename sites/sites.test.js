@@ -174,3 +174,34 @@ test('every shop shelf link on whereanime carries its own tag, never manhwaindex
     assert.doesNotMatch(readFileSync(join(HERE, 'anime', 'data', name), 'utf8'), /manhwaindex-2|manhwaindex\d+-2/i, name)
   }
 })
+
+// The Facebook Page poster adds an Amazon line to its first comment when the
+// repo variable FB_AFFILIATE_COMMENT is true (packages/core/scripts/social/
+// shop.mjs). It builds the link from the same picks and the same store as the
+// title page, so it must carry whereanime-20 too, and never manhwaindex's tag.
+test('every Amazon link the Facebook poster can write carries whereanime-20, never manhwaindex\'s', async () => {
+  process.env.SITE_CONFIG = join(HERE, 'anime', 'site.config.mjs')
+  const social = (path) => import(pathToFileURL(join(HERE, '..', 'packages', 'core', 'scripts', 'social', path)).href)
+  const { shopFinder } = await social('shop.mjs')
+  const { commentFor } = await social('site.mjs')
+  const dir = join(HERE, 'anime', 'data')
+  const find = shopFinder({ dir })
+  const data = (name) => JSON.parse(readFileSync(join(dir, name), 'utf8'))
+  const ids = new Set([...Object.keys(data('picks.json').titles), ...Object.keys(data('product-picks.json').titles)])
+  let links = 0
+  for (const id of ids) {
+    const shop = find({ id: Number(id), relations: [] })
+    if (!shop) continue
+    const comment = commentFor({ label: 'Where to watch it', path: '/anime/x', shop }, { affiliate: true })
+    const [siteLine, shopLine, ...more] = comment.split('\n')
+    assert.deepEqual(more, [])
+    assert.match(siteLine, /^Where to watch it: https:\/\/whereanime\.com\/anime\/x\?/)
+    const link = new URL(shopLine.split(': ').at(-1))
+    assert.equal(link.hostname, 'www.amazon.com', shopLine)
+    assert.match(link.pathname, /^\/dp\//, shopLine)
+    assert.equal(link.searchParams.get('tag'), 'whereanime-20', shopLine)
+    assert.doesNotMatch(comment, /manhwaindex|associate/i, comment)
+    links++
+  }
+  assert.ok(links > 500, `only ${links} links were checked`)
+})

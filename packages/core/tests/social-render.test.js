@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { captionFor } from '../scripts/social/plan.mjs'
-import { checkText } from '../scripts/social/text.mjs'
+import { checkText, MAX_POST, MAX_POST_TAGS } from '../scripts/social/text.mjs'
 import { kitOf, contain, toneOf, W, H } from '../scripts/social/render/parts.mjs'
 import { loadArt, loadFonts, renderPost, WIDTH, HEIGHT } from '../scripts/social/render/engine.mjs'
 import { TYPES, TYPE_KEYS } from '../scripts/social/types/index.mjs'
@@ -49,7 +49,13 @@ test('types: every type finds a post in the sample data, and every wording passe
       for (let turn = 0; turn < type.captions.length; turn += 1) {
         const made = captionFor({ ...type, captions: [type.captions[turn]] }, post, 0, BLOCKED)
         assert.ok(made, `${type.key} wording ${turn + 1} failed for ${post.item}`)
-        assert.equal(checkText(made.caption, { blockedTags: BLOCKED }), null)
+        assert.equal(checkText(made.caption, { blockedTags: BLOCKED, max: MAX_POST, emoji: 4, maxTags: MAX_POST_TAGS }), null)
+        // Hook, then a question, then the line about the first comment, then the hashtags.
+        const parts = made.caption.split('\n\n')
+        assert.match(parts[0], /\p{Extended_Pictographic}/u, `${type.key}: the hook opens with an emoji`)
+        assert.ok(parts.at(-3).endsWith('?'), `${type.key}: ${made.caption}`)
+        assert.match(parts.at(-2), /^👇 .*first comment/)
+        assert.match(parts.at(-1), /^#\S+( #\S+)*$/)
         seen.add(made.caption)
       }
       assert.equal(seen.size, type.captions.length, `${type.key}: the wordings must differ`)
@@ -64,6 +70,7 @@ test('types: every image tree is whole (the right size, no missing text, sized p
       assert.deepEqual([tree.props.style.width, tree.props.style.height], [W, H], type.key)
       const { texts, images } = walk(tree)
       assert.ok(texts.includes('Fixture Index') && texts.includes('example.com'), `${type.key}: the site name and address close every image`)
+      assert.ok(texts.some((text) => /link in the first comment$/.test(text)), `${type.key}: every image points at the first comment`)
       for (const text of texts) assert.doesNotMatch(text, /undefined|null|NaN|\[object/, `${type.key}: ${text}`)
       for (const image of images) assert.ok(image.width > 0 && image.height > 0 && image.src, `${type.key}: a picture without a size`)
       // A missing small picture leaves a flat panel, never a hole in the tree.

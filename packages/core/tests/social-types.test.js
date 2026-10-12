@@ -247,7 +247,8 @@ test('run: a switched-on type draws its picture, claims, sends the file, then co
   assert.equal(await h.go(), 0)
   assert.deepEqual(h.calls, { loadTypes: 1, render: 1 })
   assert.equal(order[0][1], 'jpeg-bytes')
-  assert.match(order[0][2], /^Episode \d+ of .+ (airs|aired) today at /)
+  assert.match(order[0][2], /^🚨 New episode alert 🚨 .+ episode \d+ (airs|aired) today at /)
+  assert.match(order[0][2], /\?\n\n👇 .+first comment\.\n\n#\S+/)
   assert.doesNotMatch(order[0][2], /https?:/)
   assert.match(order[1][2], /^Episode dates and where to watch: https:\/\/.+\/anime\/.+utm_source=facebook/)
   const [entry] = h.store.snapshot().entries

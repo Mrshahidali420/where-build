@@ -9,16 +9,18 @@
  * Image: a printed schedule. One row per show: the day, a small cover, the
  * title. Hairlines between rows, nothing else.
  */
+import { seasonTag, tagOf, uniqueTags } from '../story.mjs'
 import { clip, isDrawable, listMore, listOf } from '../text.mjs'
 import { dateOf, labelOfDate, nextWeekOf, shortWeekdayOf } from '../when.mjs'
 import { INNER } from '../render/parts.mjs'
-import { byPopularity, uniqueBy } from './shared.mjs'
+import { byPopularity, ctaOf, uniqueBy } from './shared.mjs'
 
 export const MIN_POPULARITY = 500
 export const MIN_ROWS = 3
 export const MAX_ROWS = 6
 /** Row heights: the space the rows share, and the least and most one row takes. */
-const ROW = { space: 852, min: 142, max: 236, roomy: 190 }
+const ROW = { space: 796, min: 132, max: 226, roomy: 186 }
+const CTA = 'Dates and where to watch the top pick: link in the first comment'
 
 const rowOf = ({ row, title }) => ({
   day: shortWeekdayOf(row.at * 1000),
@@ -48,6 +50,7 @@ function find(data, { now }) {
       path: lead.path,
       label: `${lead.title}: dates and where to watch`,
       names: all.slice(0, 3).map(({ title }) => title.title),
+      tags: uniqueTags([...all.slice(0, 3).map(({ title }) => tagOf(title.title)), seasonTag(lead.season), '#NewAnime', '#anime']),
       art: { thumbs: shown.map(({ title }) => title.image) },
       view: { range: `${labelOfDate(week.from)} to ${labelOfDate(week.to)}`, rows: shown.map(rowOf), total: all.length },
     },
@@ -55,10 +58,12 @@ function find(data, { now }) {
 }
 
 const captions = [
-  (p) => [`${p.view.total} anime start next week, ${p.view.range}.`, `Among them: ${listOf(p.names)}.`, 'The days are on the image.'],
-  (p) => [`Next week's premieres, ${p.view.range}: ${listMore(p.names, p.view.total)}.`],
-  (p) => [`New anime from ${p.view.range}: ${listOf(p.names)}.`, `${p.view.total} first episodes in all.`],
+  (p) => ({ hook: `🗓️ ${p.view.total} anime start next week, ${p.view.range}.`, facts: [`Among them: ${listOf(p.names)}.`, 'The days are on the image.'], cta: ctaOf('list', 0) }),
+  (p) => ({ hook: `🚨 Next week's premieres are in 🚨`, facts: [`${p.view.range}: ${listMore(p.names, p.view.total)}.`], cta: ctaOf('list', 1) }),
+  (p) => ({ hook: `✨ New anime from ${p.view.range}.`, facts: [`${listOf(p.names)} lead the list.`, `${p.view.total} first episodes in all.`], cta: ctaOf('list', 2) }),
 ]
+
+const questions = [() => 'Which of these are you going to watch?', () => 'Which premiere are you most excited for?', (p) => `Is ${p.names[0]} on your list?`]
 
 /** Rows share the space under the headline: few rows are tall, six are compact. */
 function rowSizes(count) {
@@ -73,6 +78,7 @@ function template(v, k) {
   const size = rowSizes(v.rows.length)
   return k.page(
     t,
+    { cta: CTA },
     k.row({ justifyContent: 'space-between', alignItems: 'flex-end' }, k.kicker('New anime', { color: t.pop }), k.kicker(v.range, { color: t.soft })),
     k.display({ fontSize: 80, fontWeight: k.f.displayBlack, lineHeight: 1, marginTop: 18 }, 'COMING'),
     k.display({ fontSize: 80, fontWeight: k.f.displayBlack, lineHeight: 1, color: t.pop }, 'NEXT WEEK'),
@@ -95,4 +101,4 @@ function template(v, k) {
   )
 }
 
-export default { key: 'next-week', name: 'Coming next week', urgent: false, gapDays: 300, titleGap: false, window: 1, find, captions, tags: () => ['anime', 'newanime'], template }
+export default { key: 'next-week', name: 'Coming next week', urgent: false, gapDays: 300, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, template }

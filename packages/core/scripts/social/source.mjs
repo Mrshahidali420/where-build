@@ -25,8 +25,10 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { gunzipSync } from 'node:zlib'
+import { freeSplit } from '../../src/lib/answers.mjs'
 import { BLOCKED_TAGS } from '../../src/lib/prose.mjs'
 import { dayOf } from './ledger.mjs'
+import { storyOf } from './story.mjs'
 
 export { BLOCKED_TAGS }
 
@@ -57,6 +59,22 @@ export function platformsOf(links = []) {
   return out
 }
 
+/**
+ * Every official site the title page lists, one per site name, the ones an
+ * English speaker can use first: [{ site, language, free }]. `free` is the
+ * site's own "free to start" fact (src/lib/answers.mjs freeSplit).
+ */
+export function placesOf(links = []) {
+  const usable = links.filter((link) => link?.site && link.url)
+  const free = new Set(freeSplit(usable).free.map((row) => row.link.site))
+  const english = (link) => !link.language || /english/i.test(link.language)
+  const bySite = new Map()
+  for (const link of [...usable.filter(english), ...usable.filter((l) => !english(l))]) {
+    if (!bySite.has(link.site)) bySite.set(link.site, { site: link.site, language: english(link) ? null : link.language, free: free.has(link.site) })
+  }
+  return [...bySite.values()]
+}
+
 export const isSafe = (item) =>
   !item.isAdult && ![...(item.genres || []), ...(item.tags || [])].some((t) => isBlocked(typeof t === 'string' ? t : t?.name))
 
@@ -80,8 +98,8 @@ export function nextEpisodes(schedule = [], now) {
  * @param slugs Map/object AniList id -> live page slug (where-links.json)
  * @param upcoming Map from nextEpisodes()
  */
-export function toCandidate(item, slugs, upcoming = new Map()) {
-  const entry = toEntry(item, slugs, upcoming)
+export function toCandidate(item, slugs, upcoming = new Map(), shopFor = null) {
+  const entry = toEntry(item, slugs, upcoming, shopFor)
   return entry && entry.platforms.length ? entry : null
 }
 
@@ -100,12 +118,15 @@ const castOf = (item) =>
  * not started has a page and a date long before it has a streaming site.
  * toCandidate() is the same record held to the streaming rule.
  */
-export function toEntry(item, slugs, upcoming = new Map()) {
+export function toEntry(item, slugs, upcoming = new Map(), shopFor = null) {
   const slug = slugs?.[item?.id] ?? slugs?.[String(item?.id)]
   if (!slug || item.kind !== 'anime' || !item.title || !item.cover || !isSafe(item)) return null
   const platforms = platformsOf(item.watchLinks)
   const fromRecord = item.nextEpisode?.at && item.nextEpisode?.number ? { number: item.nextEpisode.number, at: item.nextEpisode.at * 1000 } : null
   return {
+    // Rating, another name, a short synopsis (story.mjs) and the site's shop pick (shop.mjs).
+    ...storyOf(item),
+    shop: shopFor ? shopFor(item) : null,
     format: item.format || null,
     source: item.source || null,
     start: startOf(item),
@@ -129,6 +150,7 @@ export function toEntry(item, slugs, upcoming = new Map()) {
     score: item.score || null,
     genres: (item.genres || []).filter((g) => !isBlocked(g)),
     platforms,
+    places: placesOf(item.watchLinks),
     studio: String(item.studios?.[0] || '').trim() || null,
     nextEpisode: upcoming.get(item.id) || fromRecord,
     popularity: item.popularity || 0,
@@ -169,15 +191,15 @@ function attachRecs(candidate, byId) {
  * TODAY: the episodes still to air on this posting day, most popular first;
  * the picker puts them before everything else when the day is short of room.
  */
-export const buildPools = (items, now, slugs, schedule = []) => poolsOf(buildData(items, now, slugs, schedule), now)
+export const buildPools = (items, now, slugs, schedule = [], shopFor = null) => poolsOf(buildData(items, now, slugs, schedule, shopFor), now)
 
 /**
  * What the template posts read: every safe title with a live page (streaming
  * or not), the same list by AniList id, and the airing schedule.
  */
-export function buildData(items, now, slugs, schedule = []) {
+export function buildData(items, now, slugs, schedule = [], shopFor = null) {
   const upcoming = nextEpisodes(schedule, now)
-  const titles = items.map((item) => toEntry(item, slugs, upcoming)).filter(Boolean)
+  const titles = items.map((item) => toEntry(item, slugs, upcoming, shopFor)).filter(Boolean)
   return { now, titles, byId: new Map(titles.map((t) => [t.id, t])), schedule }
 }
 
@@ -248,15 +270,25 @@ async function localSlugs(dir) {
   return whereLinksOf({ registry: readJsonFile(registry), pageUrls: readJsonFile(urls), staff: {}, builtAt: 0 }).anime
 }
 
+/** The site's shop picks; a site without the files simply has no Amazon line. */
+async function siteShop() {
+  try {
+    return (await import('./shop.mjs')).shopFinder()
+  } catch {
+    return null
+  }
+}
+
 /** The data read once, as a function of the day it is looked at from (samples.mjs). */
 export async function dataLoader() {
   const { items, slugs, schedule } = await readData()
-  return (now) => buildData(items, now, slugs, schedule)
+  const shopFor = await siteShop()
+  return (now) => buildData(items, now, slugs, schedule, shopFor)
 }
 
 /** The pools, and a line saying where they came from. */
 export async function loadPools({ now = Date.now() } = {}) {
   const { items, slugs, schedule, from } = await readData()
-  const data = buildData(items, now, slugs, schedule)
+  const data = buildData(items, now, slugs, schedule, await siteShop())
   return { pools: poolsOf(data, now), data, source: `${from}: ${items.length} anime, ${Object.keys(slugs).length} live pages, ${schedule.length} schedule rows` }
 }

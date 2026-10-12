@@ -9,26 +9,26 @@
  * on a flat block of the accent colour, the voices as two plain lines.
  */
 import { clip, fitSize, isDrawable } from '../text.mjs'
-import { byPopularity, streamsLine, top } from './shared.mjs'
+import { aboutOf, byPopularity, ctaOf, keyFacts, single, streamsLine, top } from './shared.mjs'
 
 export const MIN_POPULARITY = 30_000
 /** At most this many characters from one title are offered. */
 const PER_TITLE = 2
-const PORTRAIT = { width: 460, height: 690 }
+const PORTRAIT = { width: 410, height: 615 }
+const CTA = 'Full cast and where to watch: link in the first comment'
 const BLOCK_SHIFT = 26
 const NAME_STEPS = [[9, 124], [12, 100], [16, 80], [22, 62], [40, 50]]
 
 function toPost(title, member) {
   return {
+    ...single(title),
     item: `char:${member.id}`,
-    title: title.title,
-    path: title.path,
     label: 'Cast, voice actors and where to watch',
-    genre: title.genres[0],
     name: member.name,
+    facts: keyFacts(title),
     platforms: top(title.platforms),
     art: { hero: member.image },
-    view: { name: clip(member.name, 40), from: clip(title.title, 64), voice: clip(member.voice, 30), voiceEn: member.voiceEn && clip(member.voiceEn, 30), sites: top(title.platforms).map((s) => clip(s, 16)) },
+    view: { name: clip(member.name, 40), from: clip(title.title, 64), voice: clip(member.voice, 30), voiceEn: member.voiceEn && clip(member.voiceEn, 30), sites: top(title.platforms).map((s) => clip(s, 16)), about: aboutOf(title, { genres: 2, alt: false }) },
   }
 }
 
@@ -42,10 +42,12 @@ function find(data) {
 const english = (v, lead) => (v.voiceEn ? `${lead}${v.voiceEn} in English` : '')
 
 const captions = [
-  (p) => [`${p.name} from ${p.title} is voiced by ${p.view.voice} in Japanese${english(p.view, ' and ')}.`, streamsLine(p.platforms, 'The show streams on')],
-  (p) => [`Character spotlight: ${p.name}, one of the leads of ${p.title}.`, `Japanese voice: ${p.view.voice}.`, p.view.voiceEn && `English voice: ${p.view.voiceEn}.`],
-  (p) => [`Who voices ${p.name} in ${p.title}?`, `${p.view.voice} in Japanese${english(p.view, ', ')}.`],
+  (p) => ({ hook: `🎙️ Who voices ${p.name} in ${p.title}?`, facts: [`${p.view.voice} in Japanese${english(p.view, ', ')}.`, streamsLine(p.platforms, 'The show streams on'), ...p.facts], cta: ctaOf('watch', 0) }),
+  (p) => ({ hook: `✨ Character spotlight: ${p.name}, one of the leads of ${p.title}.`, facts: [`Japanese voice: ${p.view.voice}.`, p.view.voiceEn && `English voice: ${p.view.voiceEn}.`, streamsLine(p.platforms), ...p.facts], cta: ctaOf('watch', 1) }),
+  (p) => ({ hook: `🎭 Meet ${p.name} from ${p.title}.`, facts: [`Voiced by ${p.view.voice} in Japanese${english(p.view, ' and ')}.`, streamsLine(p.platforms, 'Watch it on'), ...p.facts], cta: ctaOf('watch', 2) }),
 ]
+
+const questions = [(p) => `Who is your favourite character in ${p.title}?`, (p) => `Is ${p.name} your favourite in ${p.title}?`, (p) => `Which ${p.title} character should we feature next?`]
 
 function voiceRow(label, name, k, t) {
   return k.col({ borderTop: `2px solid ${t.line}`, paddingTop: 14, paddingBottom: 16 }, k.kicker(label, { color: t.soft, fontSize: 21, letterSpacing: 3 }), k.display({ fontSize: name.length > 20 ? 28 : 34, marginTop: 6 }, name))
@@ -54,8 +56,10 @@ function voiceRow(label, name, k, t) {
 function template(v, k) {
   const t = k.tone('light')
   const portrait = v.art.hero ? k.contain(v.art.hero.ratio, PORTRAIT.width, PORTRAIT.height) : PORTRAIT
+  const side = 936 - portrait.width - BLOCK_SHIFT - 44
   return k.page(
     t,
+    { cta: CTA },
     k.kicker('Character spotlight', { color: t.soft }),
     k.display({ ...k.clamp(2), fontSize: fitSize(v.name, NAME_STEPS), fontWeight: k.f.displayBlack, lineHeight: 1.02, marginTop: 18 }, v.name),
     k.row(
@@ -66,16 +70,17 @@ function template(v, k) {
         k.art(v.art.hero, PORTRAIT.width, PORTRAIT.height, { position: 'absolute', left: 0, top: 0 }),
       ),
       k.col(
-        { marginLeft: 44, width: 936 - portrait.width - BLOCK_SHIFT - 44, justifyContent: 'flex-end' },
+        { marginLeft: 44, width: side, justifyContent: 'flex-end' },
         k.kicker('From', { color: t.soft, fontSize: 21, letterSpacing: 3 }),
-        k.display({ ...k.clamp(4), fontSize: v.from.length > 30 ? 30 : 38, lineHeight: 1.12, marginTop: 8, marginBottom: 30 }, v.from),
+        k.display({ ...k.clamp(4), fontSize: v.from.length > 30 ? 30 : 38, lineHeight: 1.12, marginTop: 8 }, v.from),
+        k.about(v.about, t, { size: 22, width: side, style: { marginTop: 12, marginBottom: 20 } }),
         voiceRow('Japanese voice', v.voice, k, t),
         v.voiceEn && voiceRow('English voice', v.voiceEn, k, t),
       ),
     ),
     v.sites.length > 0 &&
       k.col(
-        { marginTop: 48, borderTop: `2px solid ${t.line}`, paddingTop: 22 },
+        { marginTop: 40, borderTop: `2px solid ${t.line}`, paddingTop: 18 },
         k.kicker('Where to watch', { color: t.soft, fontSize: 21, letterSpacing: 3 }),
         k.display({ fontSize: 34, marginTop: 8 }, v.sites.join(' · ')),
       ),
@@ -83,4 +88,4 @@ function template(v, k) {
   )
 }
 
-export default { key: 'character', name: 'Character spotlight', urgent: false, gapDays: 180, titleGap: false, window: 80, find, captions, tags: (p) => ['anime', p.genre], template }
+export default { key: 'character', name: 'Character spotlight', urgent: false, gapDays: 180, titleGap: false, window: 80, find, captions, questions, tags: (p) => p.tags, template }

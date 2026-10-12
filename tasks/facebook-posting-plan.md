@@ -102,3 +102,26 @@ the owner before a type goes live (repo variable `FB_POST_TYPES`).
   never the real Graph API. The first real template post should be watched.
 - Open: character portraits from AniList are 230 px wide, so they are a little
   soft at the size the spotlight uses.
+
+### Round 2 after the first live post (12 Oct 2026)
+
+- Images: labelled lines (score, genre, status, alt title), a thin line round
+  every cover, a line that points at the first comment. "Where to read / watch"
+  lists every platform the page lists, with the free-to-start count.
+- Captions: hook, synopsis, key facts, question, comment line, up to seven
+  hashtags from the record. The classic posts got the same treatment.
+- First comment: the site link, then (only with the repo variable
+  `FB_AFFILIATE_COMMENT` set to `true`) the Amazon product of that title
+  from the site's own picks and tag. Off by default.
+- Manhwa Index genre rankings now link the site's genre page.
+
+### Later
+
+- Tagging official pages in posts (@Crunchyroll and the like). Not built: it
+  needs the Page Mentions feature, which the app does not have, and automated
+  brand tags from a new Page look like spam. The platform and studio hashtags
+  stand in for now.
+- Pinning the link comment: the API cannot pin a comment.
+- A CJK font for the images, so the native title can be drawn too (today the
+  image shows a Latin alt title and the caption carries the native one).
+
