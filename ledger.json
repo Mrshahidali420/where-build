@@ -1962,6 +1962,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104025697503689",
    "commentId": "122104025697503689_4478146585784724"
+  },
+  {
+   "key": "2026-10-12|onair:202250|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:202250",
+   "title": "Magic Repo Man: Dumped by My Party, I’ll Cash In With a Cute Support Fairy to Become the Strongest!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "202250",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791840205859,
+   "status": "claimed"
   }
  ],
  "health": {
