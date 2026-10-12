@@ -379,6 +379,22 @@
    "status": "posted",
    "postId": "1457563956248177",
    "commentId": "1457563956248177_4349758011908338"
+  },
+  {
+   "key": "2026-10-12|anticipated:anticipated:season:2027-WINTER|whereanime",
+   "day": "2026-10-12",
+   "slug": "anticipated:anticipated:season:2027-WINTER",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:anticipated",
+   "type": "anticipated",
+   "item": "anticipated:season:2027-WINTER",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791814114275,
+   "status": "claimed"
   }
  ],
  "health": {
