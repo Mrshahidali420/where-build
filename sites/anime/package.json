@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "build": "node ../../packages/core/scripts/build-site.mjs",
-    "wrangler": "node ../../packages/core/scripts/make-wrangler.mjs"
+    "wrangler": "node ../../packages/core/scripts/make-wrangler.mjs",
+    "social:samples": "node --max-old-space-size=4000 ../../packages/core/scripts/social/samples.mjs"
   },
   "dependencies": {
     "@fontsource/bricolage-grotesque": "^5.3.0",

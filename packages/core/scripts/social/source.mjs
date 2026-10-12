@@ -81,12 +81,38 @@ export function nextEpisodes(schedule = [], now) {
  * @param upcoming Map from nextEpisodes()
  */
 export function toCandidate(item, slugs, upcoming = new Map()) {
+  const entry = toEntry(item, slugs, upcoming)
+  return entry && entry.platforms.length ? entry : null
+}
+
+const startOf = (item) =>
+  Array.isArray(item.startDate) && item.startDate[0] ? { year: item.startDate[0], month: item.startDate[1] || null, day: item.startDate[2] || null, precision: item.startPrecision || null } : null
+
+/** The main cast with a real picture (the template posts draw them). */
+const castOf = (item) =>
+  (item.characters || [])
+    .filter((c) => c?.role === 'MAIN' && c.name && c.image && !/\/default\./.test(c.image))
+    .map((c) => ({ id: c.id, name: c.name, image: c.image, voice: c.voice || null, voiceEn: c.voiceEn || null }))
+
+/**
+ * One catalog record with a live, safe page, whether or not it streams
+ * anywhere yet. The template posts (types/) read these: an anime that has
+ * not started has a page and a date long before it has a streaming site.
+ * toCandidate() is the same record held to the streaming rule.
+ */
+export function toEntry(item, slugs, upcoming = new Map()) {
   const slug = slugs?.[item?.id] ?? slugs?.[String(item?.id)]
   if (!slug || item.kind !== 'anime' || !item.title || !item.cover || !isSafe(item)) return null
   const platforms = platformsOf(item.watchLinks)
-  if (!platforms.length) return null
   const fromRecord = item.nextEpisode?.at && item.nextEpisode?.number ? { number: item.nextEpisode.number, at: item.nextEpisode.at * 1000 } : null
   return {
+    format: item.format || null,
+    source: item.source || null,
+    start: startOf(item),
+    season: item.season && item.seasonYear ? { name: item.season, year: item.seasonYear } : null,
+    planning: item.readers?.planning || 0,
+    ranks: (item.ranks || []).filter((r) => r?.allTime && r.rank > 0).map((r) => ({ rank: r.rank, type: r.type })),
+    cast: castOf(item),
     id: item.id,
     slug,
     title: item.title,
@@ -143,9 +169,20 @@ function attachRecs(candidate, byId) {
  * TODAY: the episodes still to air on this posting day, most popular first;
  * the picker puts them before everything else when the day is short of room.
  */
-export function buildPools(items, now, slugs, schedule = []) {
+export const buildPools = (items, now, slugs, schedule = []) => poolsOf(buildData(items, now, slugs, schedule), now)
+
+/**
+ * What the template posts read: every safe title with a live page (streaming
+ * or not), the same list by AniList id, and the airing schedule.
+ */
+export function buildData(items, now, slugs, schedule = []) {
   const upcoming = nextEpisodes(schedule, now)
-  const all = items.map((item) => toCandidate(item, slugs, upcoming)).filter(Boolean)
+  const titles = items.map((item) => toEntry(item, slugs, upcoming)).filter(Boolean)
+  return { now, titles, byId: new Map(titles.map((t) => [t.id, t])), schedule }
+}
+
+function poolsOf(data, now) {
+  const all = data.titles.filter((t) => t.platforms.length)
   const byId = new Map(all.map((c) => [c.id, c]))
   const withRecs = all.map((c) => attachRecs(c, byId))
   const byPop = (x, y) => y.popularity - x.popularity
@@ -211,9 +248,15 @@ async function localSlugs(dir) {
   return whereLinksOf({ registry: readJsonFile(registry), pageUrls: readJsonFile(urls), staff: {}, builtAt: 0 }).anime
 }
 
+/** The data read once, as a function of the day it is looked at from (samples.mjs). */
+export async function dataLoader() {
+  const { items, slugs, schedule } = await readData()
+  return (now) => buildData(items, now, slugs, schedule)
+}
+
 /** The pools, and a line saying where they came from. */
 export async function loadPools({ now = Date.now() } = {}) {
   const { items, slugs, schedule, from } = await readData()
-  const pools = buildPools(items, now, slugs, schedule)
-  return { pools, source: `${from}: ${items.length} anime, ${Object.keys(slugs).length} live pages, ${schedule.length} schedule rows` }
+  const data = buildData(items, now, slugs, schedule)
+  return { pools: poolsOf(data, now), data, source: `${from}: ${items.length} anime, ${Object.keys(slugs).length} live pages, ${schedule.length} schedule rows` }
 }

@@ -27,25 +27,26 @@ uploaded as a file. Site fonts and colours. Editorial look: no pill badges, no
 glows.
 
 WhereAnime types
-- [ ] New episode today (one per episode)
-- [ ] Airing right now
-- [ ] New anime starting (premiere)
-- [ ] Coming next week (list)
-- [ ] Coming next month (list)
-- [ ] Most anticipated (ranking)
-- [ ] Character spotlight
-- [ ] Fact card
-- [ ] Where to watch
+- [x] New episode today (one per episode)
+- [x] Airing right now
+- [x] New anime starting (premiere)
+- [x] Coming next week (list)
+- [x] Coming next month (list)
+- [x] Most anticipated (ranking)
+- [x] Character spotlight
+- [x] Fact card
+- [x] Where to watch
 
 Manhwa Index types
-- [ ] Where to read
-- [ ] New title or new volume
-- [ ] Ranking (top by genre, top ongoing)
-- [ ] Character spotlight
-- [ ] Fact card
-- [ ] What to read next
+- [x] Where to read
+- [x] New title (no new-volume post: the catalog has no volume dates)
+- [x] Ranking (top by genre, top ongoing)
+- [x] Character spotlight
+- [x] Fact card
+- [x] What to read next
 
-Gate: samples of every template are shown to the owner before a type goes live.
+Built and pushed, switched OFF. Gate: samples of every template are shown to
+the owner before a type goes live (repo variable `FB_POST_TYPES`).
 
 ## Phase 3: reels
 
@@ -77,3 +78,27 @@ Gate: samples of every template are shown to the owner before a type goes live.
   fix that (the art sits whole inside a 1080x1350 image).
 - WhereAnime: when today's episodes are at least as many as the posts left
   today, the next post is an episode airing today, most popular first.
+
+### Phase 2 (12 Oct 2026): built, not live
+
+- One renderer in each repo (`scripts/social/render/`): satori lays the
+  image out with the site's own font files, sharp turns it into a picture. No
+  browser. 1080x1350, sent to `/photos` as a file. The cover is always whole.
+- One file per post type (`scripts/social/types/`): how it finds its posts,
+  three wordings of the caption, and its own design.
+- Switch: the repo variable `FB_POST_TYPES`, a comma list. Unset means the
+  classic posts only, exactly as before. `classic` is a name in the list too.
+  WhereAnime names: `episode`, `premiere`, `onair`, `next-week`,
+  `next-month`, `anticipated`, `character`, `fact`, `where`.
+  Manhwa Index names: `where`, `new-title`, `ranking`, `character`, `fact`,
+  `next`.
+- The ledger keeps the type and the item of each template post, so the same
+  episode, list, ranking, character or fact does not come back inside its gap.
+- Samples: `npm run social:samples` (see docs/facebook-posting.md in each
+  repo). The first set is in `Desktop\Facebook Page Logos\template-samples`.
+- Not done, on purpose: a "new volume" post. The catalog holds a volume
+  count and no volume dates.
+- Open: the file upload to `/photos` has only been tested against a stand-in,
+  never the real Graph API. The first real template post should be watched.
+- Open: character portraits from AniList are 230 px wide, so they are a little
+  soft at the size the spotlight uses.

@@ -121,6 +121,66 @@ The day is the US Eastern day. It is cut into as many equal parts as
 - A manual run (Run workflow) ignores the pace and sends `count` posts, but
   never more than the day has left.
 
+## Template posts (off until you switch them on)
+
+Besides the classic post (a cover and a caption) there are template posts: an
+image drawn for the post, 1080 x 1350, with the cover placed whole inside it,
+so Facebook never crops the art. Each kind of post has its own design.
+
+| Name | What it posts |
+|---|---|
+| `episode` | New episode today, one post per episode on today's schedule |
+| `premiere` | Episode 1 of a show airs today or tomorrow |
+| `onair` | A show in the middle of its run and the day of its next episode |
+| `next-week` | The shows starting next week (Monday to Sunday), as a dated list |
+| `next-month` | The shows starting next month, as a sheet of covers |
+| `anticipated` | Top 5 shows still to come, by AniList planning lists |
+| `character` | One lead character and their voice actors |
+| `fact` | One fact from the record, set very large |
+| `where` | The official streaming sites of one show |
+
+**Nothing above posts until its name is in the repo variable `FB_POST_TYPES`**
+(Settings → Secrets and variables → Actions → Variables). The variable is a
+comma list, and the list is exactly what runs:
+
+| `FB_POST_TYPES` | What the Page gets |
+|---|---|
+| not set, or empty | classic posts only (as before) |
+| `classic,episode` | classic posts, plus an episode post for today's episodes |
+| `classic,episode,premiere,where` | those four kinds, in turns |
+| `episode,premiere,onair,next-week,next-month,anticipated,character,fact,where` | template posts only |
+
+Leave `classic` in the list for as long as you want the plain cover posts too.
+A name that is misspelt is ignored and named in the run summary; a list with
+no usable name falls back to classic posts.
+
+How the kinds share the day:
+
+- News first. `episode` and `premiere` go before everything else while they
+  have something new. When today's episodes are at least as many as the posts
+  left today, every post is an episode; otherwise an episode post and another
+  kind take turns.
+- The rest rotate: the kind that posted longest ago goes next.
+- Nothing repeats too soon. An episode is posted once. A show comes back as
+  `onair` after 4 weeks, a ranking after 3 weeks, a character after 6 months,
+  `where` and `fact` after the usual 30 days per title. Two posts about the
+  same show never go out on one day.
+
+Look before you switch a type on:
+
+- On the PC, from the repo folder:
+  `npm run social:samples -w @sister/anime -- --out "C:\some\folder"`
+  writes two sample images per type and `captions.md` with every wording of
+  each caption. Add `--long` to see the longest titles.
+- On GitHub: Actions → **Facebook Page post** → Run workflow, keep `dry_run`
+  ticked and write the names in `types` (for example `fact,where`). The run
+  summary shows the captions, and the images are in the run's `fb-preview`
+  artifact. The `types` box works for dry runs only; it can never post.
+
+The images use the site's own fonts and colours and are made on the runner
+(`packages/core/scripts/social/render/`), with no browser. The words on them
+come from the same catalog as the pages; a fact the record lacks is left out.
+
 ## How it chooses
 
 - Episodes first. When there are at least as many episodes still to air today
