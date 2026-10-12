@@ -595,6 +595,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103735501503689",
    "commentId": "122103735501503689_1603282680656009"
+  },
+  {
+   "key": "2026-10-12|fact:fact:21:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:21:popular",
+   "title": "ONE PIECE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:21:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791817734554,
+   "status": "claimed"
   }
  ],
  "health": {
