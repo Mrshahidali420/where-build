@@ -31,6 +31,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103372825503689",
    "commentId": "122103372825503689_2571030870004743"
+  },
+  {
+   "key": "2026-10-12|premiere:198727|whereanime",
+   "day": "2026-10-12",
+   "slug": "premiere:198727",
+   "title": "Chitose Is in the Ramune Bottle 2nd Cour",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:premiere",
+   "type": "premiere",
+   "item": "198727",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791790829686,
+   "status": "claimed"
   }
  ]
 }
