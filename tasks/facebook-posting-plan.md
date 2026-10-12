@@ -155,6 +155,20 @@ has a CC0 music bed (six tracks from OpenGameArt, listed with their pages in
 the closing slide, mixed to about -16 LUFS. The track is chosen from the
 reel's own name, and never repeats the track of the reel before it.
 
+### Airtime and birthday cards (12 Oct 2026)
+
+Built from posts the owner showed from other anime Pages, gated off until he
+has seen the samples: `airtime` (WhereAnime: local time in thirty countries
+for popular episodes and premieres) and `birthday` (both sites: one AniList
+query a day, kept in the ledger). Episode and premiere captions gained the
+"📅 / 🎬 / 📺" labelled lines.
+
+### Needs an image source
+
+Scene screenshots, episode-preview collages, fan art and cosplay posts need
+images we do not hold. Not built in this round; the source decision comes
+first.
+
 ### Later
 
 - Tagging official pages in posts (@Crunchyroll and the like). Not built: it

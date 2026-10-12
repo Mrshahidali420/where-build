@@ -7,7 +7,9 @@
  * (gate.mjs). The classic post (a cover and a caption) is not in this list;
  * its name in the variable is `classic`.
  */
+import airtime from './airtime.mjs'
 import anticipated from './anticipated.mjs'
+import birthday from './birthday.mjs'
 import character from './character.mjs'
 import episode from './episode.mjs'
 import fact from './fact.mjs'
@@ -20,7 +22,7 @@ import reelNextWeek from './reel-next-week.mjs'
 import reelToday from './reel-today.mjs'
 import where from './where.mjs'
 
-export const TYPES = [premiere, episode, onair, nextWeek, nextMonth, anticipated, character, fact, where]
+export const TYPES = [airtime, premiere, episode, onair, nextWeek, nextMonth, anticipated, birthday, character, fact, where]
 
 export const TYPE_KEYS = TYPES.map((type) => type.key)
 

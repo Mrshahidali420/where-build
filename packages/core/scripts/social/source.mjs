@@ -139,6 +139,8 @@ export function toEntry(item, slugs, upcoming = new Map(), shopFor = null) {
     title: item.title,
     path: `/anime/${slug}`,
     image: item.cover,
+    // Wide key art, when the record has it (the airing time card).
+    banner: item.banner || null,
     section: 'anime',
     verb: 'watch',
     noun: SHOW[item.format] || 'anime',

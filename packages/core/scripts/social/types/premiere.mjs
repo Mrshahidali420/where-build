@@ -8,9 +8,9 @@
  * Image: a centred poster. The word, the date line, the cover whole with a
  * thin offset frame, the title, then the genres, rating and other name.
  */
-import { clip, fitSize, sentence } from '../text.mjs'
+import { clip, fitSize } from '../text.mjs'
 import { dayMonthOf, nearDay, timeOf, weekdayOf } from '../when.mjs'
-import { aboutOf, byPopularity, ctaOf, keyFacts, single, streamsLine, top, uniqueBy, usable } from './shared.mjs'
+import { aboutOf, airDetails, byPopularity, ctaOf, keyFacts, single, top, uniqueBy, usable } from './shared.mjs'
 
 export const MIN_POPULARITY = 1000
 const COVER = { width: 390, height: 546 }
@@ -24,7 +24,9 @@ function toPost(title, row, now) {
     ...single(title),
     item: String(title.id),
     label: 'Episode dates and where to watch',
-    facts: [streamsLine(top(title.platforms)), title.studio && sentence(`Animation by ${title.studio}`), ...keyFacts(title)],
+    facts: keyFacts(title),
+    // The date, the studio and the streams, as labelled lines under the synopsis.
+    details: airDetails(title, `${weekdayOf(at)} ${dayMonthOf(at)}`, 'Premiere date'),
     art: { hero: title.image },
     view: {
       title: clip(title.title, 70),
@@ -49,9 +51,9 @@ function find(data, { now }) {
 }
 
 const captions = [
-  (p) => ({ hook: `🚨 New anime alert 🚨 ${p.title} premieres ${p.view.day} at ${p.view.time}.`, facts: p.facts, cta: ctaOf('episode', 0) }),
-  (p) => ({ hook: `🎬 Episode 1 of ${p.title} airs ${p.view.day} at ${p.view.time}.`, facts: p.facts, cta: ctaOf('episode', 1) }),
-  (p) => ({ hook: `✨ Starting ${p.view.day}: ${p.title}.`, facts: [`The first episode is set for ${p.view.time}.`, ...p.facts], cta: ctaOf('episode', 2) }),
+  (p) => ({ hook: `🚨 New anime alert 🚨 ${p.title} premieres ${p.view.day} at ${p.view.time}.`, facts: p.facts, details: p.details, cta: ctaOf('episode', 0) }),
+  (p) => ({ hook: `🎬 Episode 1 of ${p.title} airs ${p.view.day} at ${p.view.time}.`, facts: p.facts, details: p.details, cta: ctaOf('episode', 1) }),
+  (p) => ({ hook: `✨ Starting ${p.view.day}: ${p.title}.`, facts: [`The first episode is set for ${p.view.time}.`, ...p.facts], details: p.details, cta: ctaOf('episode', 2) }),
 ]
 
 const questions = [(p) => `Will you give ${p.title} a try?`, (p) => `Is ${p.title} on your watchlist?`, (p) => `What are you hoping for from ${p.title}?`]

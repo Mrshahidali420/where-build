@@ -1,6 +1,7 @@
 // A small made-up catalog for the template post types (social-types.test.js,
 // social-render.test.js): enough records for every type to find a post.
 import { buildData } from '../scripts/social/source.mjs'
+import { dateOf } from '../scripts/social/when.mjs'
 import { NOW, HOUR, DAY, record, anime } from './social-kit.mjs'
 
 const COVER = 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large'
@@ -77,8 +78,11 @@ export function sampleSchedule() {
 /** The data the types read, built the way the poster builds it. */
 export function sampleData(now = NOW) {
   const items = sampleItems()
-  return buildData(items, now, Object.fromEntries(items.map((i) => [i.id, i.slug])), sampleSchedule())
+  return { ...buildData(items, now, Object.fromEntries(items.map((i) => [i.id, i.slug])), sampleSchedule()), birthdays: sampleBirthdays(now) }
 }
+
+/** Today's birthdays as birthdays.mjs hands them over: one lead of Steel Harbor. */
+export const sampleBirthdays = (now = NOW) => ({ day: dateOf(now), list: [{ id: 901, name: 'Mira Vale', image: `${FACE}/b901-x.png`, favourites: 5000, mediaId: 100, voice: 'Voice 901' }] })
 
 /** Loaded art in the shape a template is handed (no real picture needed to build the tree). */
 export const fakeArt = (post) => ({

@@ -236,6 +236,43 @@ The images use the site's own fonts and colours and are made on the runner
 (`packages/core/scripts/social/render/`), with no browser. The words on them
 come from the same catalog as the pages; a fact the record lacks is left out.
 
+## New types, 12 Oct 2026
+
+### `airtime`: global airing time (off until named)
+
+The show's wide key art (its cover beside the title when there is none), the
+title, the episode (or PREMIERE) and the date, then the local time in thirty
+countries with a small round flag (Twemoji, CC BY 4.0, `flags/SOURCES.md`),
+"+1" where it is already the next day, and where it streams. Every time is
+worked out from the schedule's real timestamp with real time zones, so
+daylight saving is right for that day (USA and Canada on Eastern, Australia
+on Sydney, Brazil on Sao Paulo, Mexico on Mexico City, Indonesia on Jakarta).
+It is for the shows people wait for: an episode airing today of a show with
+40,000+ AniList followers, or a first episode today or tomorrow (8,000+).
+Urgent, like the episode card. One post per title a day still holds, so put
+`airtime` before `episode` and `premiere` in `FB_POST_TYPES` to give the
+popular shows this card instead of the plain one.
+
+The episode, premiere and airtime captions carry three labelled lines under
+the synopsis: "📅 Release date", "🎬 Studio", "📺 Streaming" (a line the
+record lacks is left out).
+
+### `birthday`: character birthday (off until named)
+
+"HAPPY BIRTHDAY" in large type, the character's portrait, the day as a big
+number, the name in a solid band, then where the work is. The catalog holds
+no birthdays, so a run with `birthday` switched on asks AniList ONE question
+a day (the 50 most-favourited characters born today) and keeps the answer in
+the ledger (`birthdays`), so the chain does not ask again; with nobody for
+this site it asks again after three hours at most. A character is kept only
+when one of their works has a live page on this site (anime for WhereAnime), with
+at least 100 favourites; five a day at most, most-favourited first, each
+character once a year (gap 330 days). Only a character whose birth month and
+day are today on the US Eastern clock is used, and only on that day: never
+the wrong day. If AniList fails, there are no birthday posts that hour and
+nothing else changes. A birthday post does not count as a post about the
+title, so it never stops (or is stopped by) an episode card the same day.
+
 ## Reels (off until you switch them on)
 
 A reel is a short vertical video (1080x1920, 8 to 20 seconds, with music and slide sounds) made

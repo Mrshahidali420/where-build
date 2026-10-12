@@ -10,10 +10,10 @@
  * lines (score, genre, alt title) and where it streams, the cover whole on
  * the right.
  */
-import { clip, fitSize, sentence } from '../text.mjs'
-import { dateOf, shortDayMonthOf, shortWeekdayOf, timeOf } from '../when.mjs'
+import { clip, fitSize } from '../text.mjs'
+import { dateOf, dayMonthOf, shortDayMonthOf, shortWeekdayOf, timeOf, weekdayOf } from '../when.mjs'
 import { FOOT, H, INNER, PAD, linesOf } from '../render/parts.mjs'
-import { aboutOf, byPopularity, ctaOf, keyFacts, onPlatform, single, streamsLine, TITLE_MAX, top, uniqueBy, usable } from './shared.mjs'
+import { aboutOf, airDetails, byPopularity, ctaOf, keyFacts, onPlatform, single, TITLE_MAX, top, uniqueBy, usable } from './shared.mjs'
 
 export const MIN_POPULARITY = 3000
 /** The size of the number by how many digits it has. */
@@ -36,7 +36,9 @@ function toPost(title, row, now) {
     item: `${title.id}:${row.episode}`,
     at,
     label: 'Episode dates and where to watch',
-    facts: [title.studio && sentence(`Animation by ${title.studio}`), ...keyFacts(title)],
+    facts: keyFacts(title),
+    // The date, the studio and the streams, as labelled lines under the synopsis.
+    details: airDetails(title, `${weekdayOf(at)} ${dayMonthOf(at)}`),
     art: { hero: title.image },
     view: {
       title: clip(title.title, TITLE_MAX),
@@ -64,9 +66,9 @@ function find(data, { now }) {
 const when = (v) => `${v.aired ? 'aired' : 'airs'} today at ${v.time}`
 
 const captions = [
-  (p) => ({ hook: `🚨 New episode alert 🚨 ${p.title} episode ${p.view.number} ${when(p.view)}.`, facts: [streamsLine(p.view.platforms), ...p.facts], cta: ctaOf('episode', 0) }),
-  (p) => ({ hook: `📺 It is ${p.title} day: episode ${p.view.number} ${when(p.view)}.`, facts: [streamsLine(p.view.platforms, 'Watch it on'), ...p.facts], cta: ctaOf('episode', 1) }),
-  (p) => ({ hook: `⏰ ${p.title} is back today with episode ${p.view.number}.`, facts: [`It ${p.view.aired ? 'aired' : 'airs'} at ${p.view.time}.`, streamsLine(p.view.platforms, 'Official streams:'), ...p.facts], cta: ctaOf('episode', 2) }),
+  (p) => ({ hook: `🚨 New episode alert 🚨 ${p.title} episode ${p.view.number} ${when(p.view)}.`, facts: p.facts, details: p.details, cta: ctaOf('episode', 0) }),
+  (p) => ({ hook: `📺 It is ${p.title} day: episode ${p.view.number} ${when(p.view)}.`, facts: p.facts, details: p.details, cta: ctaOf('episode', 1) }),
+  (p) => ({ hook: `⏰ ${p.title} is back today with episode ${p.view.number}.`, facts: [`It ${p.view.aired ? 'aired' : 'airs'} at ${p.view.time}.`, ...p.facts], details: p.details, cta: ctaOf('episode', 2) }),
 ]
 
 const questions = [(p) => onPlatform(p, 'Are you watching'), (p) => `What do you expect from episode ${p.view.number} of ${p.title}?`, (p) => `How is ${p.title} going for you so far?`]
