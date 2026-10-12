@@ -1050,6 +1050,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103835119503689",
    "commentId": "122103835119503689_1117141770825925"
+  },
+  {
+   "key": "2026-10-12|fact:fact:136430:rated|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:136430:rated",
+   "title": "Vinland Saga Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:136430:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791825310917,
+   "status": "claimed"
   }
  ],
  "health": {
