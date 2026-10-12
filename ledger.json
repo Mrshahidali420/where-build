@@ -757,6 +757,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103767871503689",
    "commentId": "122103767871503689_1107616755147997"
+  },
+  {
+   "key": "2026-10-12|where:21049|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:21049",
+   "title": "ReLIFE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21049",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791820452150,
+   "status": "claimed"
   }
  ],
  "health": {
