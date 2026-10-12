@@ -1366,6 +1366,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103909267503689",
    "commentId": "122103909267503689_1445322330996638"
+  },
+  {
+   "key": "2026-10-12|fact:fact:523:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:523:popular",
+   "title": "My Neighbor Totoro",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:523:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791830495347,
+   "status": "claimed"
   }
  ],
  "health": {
