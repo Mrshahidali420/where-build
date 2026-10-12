@@ -1199,6 +1199,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103862353503689",
    "commentId": "122103862353503689_28752595651015624"
+  },
+  {
+   "key": "2026-10-12|scenes:108463:2|whereanime",
+   "day": "2026-10-12",
+   "slug": "scenes:108463:2",
+   "title": "Toilet-bound Hanako-kun",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "108463:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791827752725,
+   "status": "claimed"
   }
  ],
  "health": {
