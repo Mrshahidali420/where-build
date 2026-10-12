@@ -811,6 +811,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103775707503689",
    "commentId": "122103775707503689_1785137836039576"
+  },
+  {
+   "key": "2026-10-12|fact:fact:43:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:43:popular",
+   "title": "Ghost in the Shell",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:43:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791821355907,
+   "status": "claimed"
   }
  ],
  "health": {
