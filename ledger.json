@@ -2206,6 +2206,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104062135503689",
    "commentId": "122104062135503689_1448758656750176"
+  },
+  {
+   "key": "2026-10-12|character:char:120462|whereanime",
+   "day": "2026-10-12",
+   "slug": "character:char:120462",
+   "title": "Fire Force",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:120462",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791844182219,
+   "status": "claimed"
   }
  ],
  "health": {
