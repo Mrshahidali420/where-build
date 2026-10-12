@@ -1003,5 +1003,10 @@
   "cut": null,
   "blockedUntil": 0,
   "halted": null
+ },
+ "birthdays": {
+  "day": "2026-10-12",
+  "at": 1791824381589,
+  "list": []
  }
 }
