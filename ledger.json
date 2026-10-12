@@ -2016,6 +2016,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104035843503689",
    "commentId": "122104035843503689_1816812816295430"
+  },
+  {
+   "key": "2026-10-12|where:124410|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:124410",
+   "title": "Rent-a-Girlfriend Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "124410",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791841136689,
+   "status": "claimed"
   }
  ],
  "health": {
