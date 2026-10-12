@@ -1998,6 +1998,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104033743503689",
    "commentId": "122104033743503689_1375855394628197"
+  },
+  {
+   "key": "2026-10-12|fact:fact:1575:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:1575:popular",
+   "title": "Code Geass: Lelouch of the Rebellion",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:1575:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791840835395,
+   "status": "claimed"
   }
  ],
  "health": {
