@@ -1849,6 +1849,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104008843503689",
    "commentId": "122104008843503689_1135833432220458"
+  },
+  {
+   "key": "2026-10-12|onair:187402|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:187402",
+   "title": "A Tale of the Secret Saint",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "187402",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791838398471,
+   "status": "claimed"
   }
  ],
  "health": {
