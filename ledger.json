@@ -1384,6 +1384,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103913161503689",
    "commentId": "122103913161503689_2183985029202502"
+  },
+  {
+   "key": "2026-10-12|where:16870|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:16870",
+   "title": "The Last: Naruto the Movie",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "16870",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791830796636,
+   "status": "claimed"
   }
  ],
  "health": {
