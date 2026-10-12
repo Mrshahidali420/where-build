@@ -85,6 +85,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103583017503689",
    "commentId": "122103583017503689_1155119687466838"
+  },
+  {
+   "key": "2026-10-12|episode:160803:2|whereanime",
+   "day": "2026-10-12",
+   "slug": "episode:160803:2",
+   "title": "MAGICAL GIRL RAISING PROJECT restart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "160803:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791809096057,
+   "status": "claimed"
   }
  ],
  "health": {
