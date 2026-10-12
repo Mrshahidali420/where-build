@@ -5,10 +5,13 @@ The poster itself is live since 12 Oct 2026. This plan grows it.
 
 ## Owner decisions
 
-- Slow build-up, not "no limit from day one". Both Pages are new and the
-  account was locked twice the same week.
-- Target pace: 8 a day now, 15 a day from 19 Oct, one an hour (24) from 26 Oct,
-  if reach stays healthy. Raise `FB_POSTS_PER_DAY` by hand at each step.
+- **Pace, changed 12 Oct 2026 (later the same day):** as many posts as is
+  safely possible, under Facebook's daily limit, minimum 5 minutes apart. No
+  ramp. The owner does not know Facebook's limit, so the cap starts at 24 in
+  any rolling 24 hours (under the 25 a day third parties report; Meta
+  publishes no number) and is raised by hand while the health record in the
+  ledger stays clean. The code never raises it.
+- Superseded: the slow build-up of 8, then 15, then 24 a day.
 - Many templates: a different image design per post type, not one for all.
 - Link stays in the first comment.
 - No re-uploaded trailers. Reels are made from our own images and rankings.
@@ -118,6 +121,19 @@ the owner before a type goes live (repo variable `FB_POST_TYPES`).
 ### Refinement round (12 Oct 2026)
 
 Fifteen points from the coordinator's own review, both sites, one commit each. Bugs: new-title takes only running series; next-month in date order; blank covers found and left out of grids; no line ends on a separator and a short last word is tied to the one before; the synopsis never ends loose; the title hashtag drops season and part suffixes. Content: fact cards scored and named; the episode card leads with the title; a one-line tagline under titles; scores under the three "read next" picks; the comment line and the Amazon line say what the link really is. Polish: portraits capped at 400 px; no kind three times in a row; the most useful fact on line 2 of the caption. Not done on purpose: a title is never dropped from a ranking for a blank cover (the ranking would be wrong), and yearly, seasonal and genre ranks are not used for facts (the record does not hold them reliably).
+
+### Task A: the chain and the limit watch (12 Oct 2026)
+
+GitHub's hourly schedule fired no run for over three hours in either repo, so
+posting moved off it. One workflow run loops (post, wait, post) and starts its
+successor; a cron job every 30 minutes is only the backstop. The gap (5
+minutes at least), the cap (24 in any rolling 24 hours, ceiling 288) and the
+even pace are read from the ledger's timestamps. Limit signals from Facebook
+are written to the ledger: throttling backs off (doubling, an hour at most), a
+block stops posting for 24 hours and cuts the cap to 75% of what was reached.
+One failed post does not stop the chain; a refused token or five failures in a
+row do. Manhwa Index runs two-hour links so each one restores a fresh catalog
+cache; WhereAnime reads R2 again every hour inside a five-and-a-half-hour link.
 
 ### Later
 
