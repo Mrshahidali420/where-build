@@ -2450,9 +2450,9 @@
  "health": {
   "signals": [],
   "peak": {
-   "pct": 3,
+   "pct": 4,
    "source": "x-business-use-case-usage",
-   "at": 1791833556707
+   "at": 1791847826842
   },
   "cut": null,
   "blockedUntil": 0,
