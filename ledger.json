@@ -103,6 +103,22 @@
    "status": "posted",
    "postId": "1329988470202923_122103624861503689",
    "commentId": "122103624861503689_2148566732360943"
+  },
+  {
+   "key": "2026-10-12|onair:178083|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:178083",
+   "title": "Tokyo Revengers: War of the Three Titans Arc",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "178083",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791809581636,
+   "status": "claimed"
   }
  ],
  "health": {
