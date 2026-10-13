@@ -4436,6 +4436,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104437129503689",
    "commentId": "122104437129503689_879632671806595"
+  },
+  {
+   "key": "2026-10-13|character:char:89276|whereanime",
+   "day": "2026-10-13",
+   "slug": "character:char:89276",
+   "title": "ERASED",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89276",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791880540729,
+   "status": "claimed"
   }
  ],
  "health": {
