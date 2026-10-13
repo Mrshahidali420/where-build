@@ -4824,6 +4824,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104521357503689",
    "commentId": "122104521357503689_1805759733880819"
+  },
+  {
+   "key": "2026-10-13|where:117193|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:117193",
+   "title": "My Hero Academia Season 5",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "117193",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791886912411,
+   "status": "claimed"
   }
  ],
  "health": {
