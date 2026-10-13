@@ -5163,6 +5163,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104597581503689",
    "commentId": "122104597581503689_1104653829219711"
+  },
+  {
+   "key": "2026-10-13|fact:fact:142455:popular|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:142455:popular",
+   "title": "Bubble",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:142455:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791892364187,
+   "status": "claimed"
   }
  ],
  "health": {
