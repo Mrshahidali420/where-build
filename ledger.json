@@ -4973,6 +4973,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104550121503689",
    "commentId": "122104550121503689_1587553115837820"
+  },
+  {
+   "key": "2026-10-13|fact:fact:150429:rated|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:150429:rated",
+   "title": "Sound! Euphonium: Ensemble Contest",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:150429:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791889349172,
+   "status": "claimed"
   }
  ],
  "health": {
