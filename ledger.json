@@ -4770,6 +4770,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104507365503689",
    "commentId": "122104507365503689_2055745701803574"
+  },
+  {
+   "key": "2026-10-13|character:char:82037|whereanime",
+   "day": "2026-10-13",
+   "slug": "character:char:82037",
+   "title": "Death Parade",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:82037",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791886007939,
+   "status": "claimed"
   }
  ],
  "health": {
