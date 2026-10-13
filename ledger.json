@@ -3822,6 +3822,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104306653503689",
    "commentId": "122104306653503689_1081087368018260"
+  },
+  {
+   "key": "2026-10-13|onair:209219|whereanime",
+   "day": "2026-10-13",
+   "slug": "onair:209219",
+   "title": "So What's Wrong with Getting Reborn as a Goblin?",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "209219",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791870542490,
+   "status": "claimed"
   }
  ],
  "health": {
