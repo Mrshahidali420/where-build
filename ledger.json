@@ -4693,6 +4693,27 @@
    "status": "posted",
    "postId": "1329988470202923_122104490169503689",
    "commentId": "122104490169503689_1983221625706300"
+  },
+  {
+   "rare": true,
+   "hash": "e7110974b455ee01c63607a42bf68452",
+   "rating": "g",
+   "ecchi": false,
+   "source": "danbooru",
+   "key": "2026-10-13|fanart:danbooru:12161328|whereanime",
+   "day": "2026-10-13",
+   "slug": "fanart:danbooru:12161328",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fanart",
+   "type": "fanart",
+   "item": "danbooru:12161328",
+   "gapDays": 3650,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791884778670,
+   "status": "claimed"
   }
  ],
  "health": {
