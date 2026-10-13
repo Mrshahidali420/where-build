@@ -5868,6 +5868,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104749903503689",
    "commentId": "122104749903503689_3137584769919387"
+  },
+  {
+   "key": "2026-10-13|where:118419|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:118419",
+   "title": "The Day I Became a God",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "118419",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791903993670,
+   "status": "claimed"
   }
  ],
  "health": {
