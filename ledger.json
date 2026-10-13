@@ -5181,6 +5181,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104601619503689",
    "commentId": "122104601619503689_2432034537612055"
+  },
+  {
+   "key": "2026-10-13|where:16049|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:16049",
+   "title": "A Certain Scientific Railgun S",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "16049",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791892693418,
+   "status": "claimed"
   }
  ],
  "health": {
