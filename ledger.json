@@ -4210,6 +4210,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104398489503689",
    "commentId": "122104398489503689_1169453522182680"
+  },
+  {
+   "key": "2026-10-13|fact:fact:125367:rated|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:125367:rated",
+   "title": "Kaguya-sama: Love is War -Ultra Romantic-",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:125367:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791876908059,
+   "status": "claimed"
   }
  ],
  "health": {
