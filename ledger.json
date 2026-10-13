@@ -5683,6 +5683,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104707441503689",
    "commentId": "122104707441503689_1368040231799690"
+  },
+  {
+   "key": "2026-10-13|fact:fact:100723:popular|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:100723:popular",
+   "title": "My Hero Academia: Two Heroes",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:100723:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791900901696,
+   "status": "claimed"
   }
  ],
  "health": {
