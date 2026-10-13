@@ -4454,6 +4454,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104438989503689",
    "commentId": "122104438989503689_1415630620763213"
+  },
+  {
+   "key": "2026-10-13|scenes:163270:2|whereanime",
+   "day": "2026-10-13",
+   "slug": "scenes:163270:2",
+   "title": "WIND BREAKER",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "163270:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791880841602,
+   "status": "claimed"
   }
  ],
  "health": {
