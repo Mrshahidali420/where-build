@@ -4323,6 +4323,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104416477503689",
    "commentId": "122104416477503689_2098046087747097"
+  },
+  {
+   "key": "2026-10-13|where:107068|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:107068",
+   "title": "Teasing Master Takagi-san Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "107068",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791878712787,
+   "status": "claimed"
   }
  ],
  "health": {
