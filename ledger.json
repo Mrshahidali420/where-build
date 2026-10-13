@@ -6672,6 +6672,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104906443503689",
    "commentId": "122104906443503689_1100993982856296"
+  },
+  {
+   "key": "2026-10-13|character:char:417|whereanime",
+   "day": "2026-10-13",
+   "slug": "character:char:417",
+   "title": "Code Geass: Lelouch of the Rebellion R2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:417",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791917067872,
+   "status": "claimed"
   }
  ],
  "health": {
