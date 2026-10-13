@@ -4174,6 +4174,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104393623503689",
    "commentId": "122104393623503689_1057690857264853"
+  },
+  {
+   "key": "2026-10-13|character:char:13020|whereanime",
+   "day": "2026-10-13",
+   "slug": "character:char:13020",
+   "title": "Vinland Saga",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:13020",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791876277524,
+   "status": "claimed"
   }
  ],
  "health": {
