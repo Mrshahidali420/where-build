@@ -6762,6 +6762,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104923525503689",
    "commentId": "122104923525503689_1784225056013479"
+  },
+  {
+   "key": "2026-10-13|where:9513|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:9513",
+   "title": "Beelzebub",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "9513",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791918574344,
+   "status": "claimed"
   }
  ],
  "health": {
