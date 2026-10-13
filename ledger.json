@@ -3876,6 +3876,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104317153503689",
    "commentId": "122104317153503689_1104781108626868"
+  },
+  {
+   "key": "2026-10-13|where:99426|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:99426",
+   "title": "A Place Further Than the Universe",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "99426",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791871444905,
+   "status": "claimed"
   }
  ],
  "health": {
