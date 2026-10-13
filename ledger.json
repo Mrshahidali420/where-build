@@ -2612,6 +2612,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104123647503689",
    "commentId": "122104123647503689_2063028324400349"
+  },
+  {
+   "key": "2026-10-12|scenes:20770:3|whereanime",
+   "day": "2026-10-12",
+   "slug": "scenes:20770:3",
+   "title": "Yona of the Dawn",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "20770:3",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791850844186,
+   "status": "claimed"
   }
  ],
  "health": {
