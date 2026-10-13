@@ -6017,6 +6017,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104783539503689",
    "commentId": "122104783539503689_851581464680537"
+  },
+  {
+   "key": "2026-10-13|fact:fact:104157:popular|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:104157:popular",
+   "title": "Rascal Does Not Dream of a Dreaming Girl",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:104157:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791906434639,
+   "status": "claimed"
   }
  ],
  "health": {
