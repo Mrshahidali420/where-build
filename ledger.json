@@ -4752,6 +4752,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104502901503689",
    "commentId": "122104502901503689_1133991876255477"
+  },
+  {
+   "key": "2026-10-13|where:20968|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:20968",
+   "title": "The Anthem of the Heart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20968",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791885706407,
+   "status": "claimed"
   }
  ],
  "health": {
