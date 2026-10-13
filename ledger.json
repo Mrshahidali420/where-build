@@ -5420,6 +5420,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104655493503689",
    "commentId": "122104655493503689_2214784195893845"
+  },
+  {
+   "key": "2026-10-13|where:154967|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:154967",
+   "title": "Rascal Does Not Dream of a Sister Venturing Out",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "154967",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791896658210,
+   "status": "claimed"
   }
  ],
  "health": {
