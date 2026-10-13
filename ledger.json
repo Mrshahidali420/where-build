@@ -4716,6 +4716,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104495107503689",
    "commentId": "122104495107503689_1258439056456114"
+  },
+  {
+   "key": "2026-10-13|scenes:21428:2|whereanime",
+   "day": "2026-10-13",
+   "slug": "scenes:21428:2",
+   "title": "Grimgar of Fantasy and Ash",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "21428:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791885079477,
+   "status": "claimed"
   }
  ],
  "health": {
