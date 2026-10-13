@@ -6832,7 +6832,10 @@
   },
   "cut": null,
   "blockedUntil": 0,
-  "halted": null,
+  "halted": {
+   "why": "the Page token was refused",
+   "at": 1791919188122
+  },
   "reel": {
    "at": 1791897891157,
    "code": 100,
