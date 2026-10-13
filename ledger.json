@@ -3375,6 +3375,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104235061503689",
    "commentId": "122104235061503689_1431468848532401"
+  },
+  {
+   "key": "2026-10-12|where:145728|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:145728",
+   "title": "Spice and Wolf: MERCHANT MEETS THE WISE WOLF",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "145728",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791863245786,
+   "status": "claimed"
   }
  ],
  "health": {
