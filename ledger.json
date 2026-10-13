@@ -6315,6 +6315,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104845405503689",
    "commentId": "122104845405503689_2273479130168892"
+  },
+  {
+   "key": "2026-10-13|where:190327|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:190327",
+   "title": "STEEL BALL RUN JoJo's Bizarre Adventure 1st STAGE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "190327",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791911281304,
+   "status": "claimed"
   }
  ],
  "health": {
