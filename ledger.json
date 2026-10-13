@@ -3411,6 +3411,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104239747503689",
    "commentId": "122104239747503689_1666102955180694"
+  },
+  {
+   "key": "2026-10-12|fact:fact:173693:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:173693:popular",
+   "title": "Loner Life in Another World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:173693:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791863872193,
+   "status": "claimed"
   }
  ],
  "health": {
