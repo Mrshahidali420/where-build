@@ -3316,6 +3316,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104228017503689",
    "commentId": "122104228017503689_1677487127429357"
+  },
+  {
+   "key": "2026-10-12|fact:fact:47:popular|whereanime",
+   "day": "2026-10-12",
+   "slug": "fact:fact:47:popular",
+   "title": "Akira",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:47:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791862343439,
+   "status": "claimed"
   }
  ],
  "health": {
