@@ -2946,6 +2946,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104173831503689",
    "commentId": "122104173831503689_1106460101761195"
+  },
+  {
+   "key": "2026-10-12|where:113596|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:113596",
+   "title": "Josee, the Tiger and the Fish",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "113596",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791856279971,
+   "status": "claimed"
   }
  ],
  "health": {
