@@ -6297,6 +6297,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104842297503689",
    "commentId": "122104842297503689_2034237217245110"
+  },
+  {
+   "key": "2026-10-13|fact:fact:1535:popular|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:1535:popular",
+   "title": "Death Note",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:1535:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791910979928,
+   "status": "claimed"
   }
  ],
  "health": {
