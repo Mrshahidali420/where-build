@@ -2738,6 +2738,27 @@
    "status": "posted",
    "postId": "1329988470202923_122104144257503689",
    "commentId": "122104144257503689_1808872607234917"
+  },
+  {
+   "rare": true,
+   "hash": "58cf520f4bb7f7c2ee3bfc009ae4d570",
+   "rating": "g",
+   "ecchi": false,
+   "source": "danbooru",
+   "key": "2026-10-12|cosplay:danbooru:11062515|whereanime",
+   "day": "2026-10-12",
+   "slug": "cosplay:danbooru:11062515",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:cosplay",
+   "type": "cosplay",
+   "item": "danbooru:11062515",
+   "gapDays": 3650,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791852971288,
+   "status": "claimed"
   }
  ],
  "health": {
