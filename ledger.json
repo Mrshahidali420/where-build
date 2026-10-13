@@ -6243,6 +6243,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104829319503689",
    "commentId": "122104829319503689_2046729925892729"
+  },
+  {
+   "key": "2026-10-13|fact:fact:170893:rated|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:170893:rated",
+   "title": "After-school Hanako-kun Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:170893:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791910075611,
+   "status": "claimed"
   }
  ],
  "health": {
