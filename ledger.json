@@ -2630,6 +2630,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104127019503689",
    "commentId": "122104127019503689_1083772144647966"
+  },
+  {
+   "key": "2026-10-12|where:5680|whereanime",
+   "day": "2026-10-12",
+   "slug": "where:5680",
+   "title": "K-ON!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "5680",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791851144888,
+   "status": "claimed"
   }
  ],
  "health": {
