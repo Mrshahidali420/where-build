@@ -5796,6 +5796,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104733007503689",
    "commentId": "122104733007503689_1089761813866850"
+  },
+  {
+   "key": "2026-10-13|where:12355|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:12355",
+   "title": "Wolf Children",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "12355",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1791902711492,
+   "status": "claimed"
   }
  ],
  "health": {
