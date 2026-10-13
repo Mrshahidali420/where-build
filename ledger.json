@@ -6356,6 +6356,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104851081503689",
    "commentId": "122104851081503689_1072438625659859"
+  },
+  {
+   "key": "2026-10-13|character:char:145342|whereanime",
+   "day": "2026-10-13",
+   "slug": "character:char:145342",
+   "title": "Tokyo Revengers",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:145342",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791911884487,
+   "status": "claimed"
   }
  ],
  "health": {
