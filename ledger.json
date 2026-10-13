@@ -3858,6 +3858,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104312485503689",
    "commentId": "122104312485503689_2821313468246953"
+  },
+  {
+   "key": "2026-10-13|scenes:103223:4|whereanime",
+   "day": "2026-10-13",
+   "slug": "scenes:103223:4",
+   "title": "Bungo Stray Dogs 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "103223:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791871144132,
+   "status": "claimed"
   }
  ],
  "health": {
