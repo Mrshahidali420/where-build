@@ -6374,6 +6374,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104854927503689",
    "commentId": "122104854927503689_1428039552633125"
+  },
+  {
+   "key": "2026-10-13|fact:fact:21795:rated|whereanime",
+   "day": "2026-10-13",
+   "slug": "fact:fact:21795:rated",
+   "title": "Honobono Log",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:21795:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1791912186030,
+   "status": "claimed"
   }
  ],
  "health": {
