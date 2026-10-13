@@ -5570,6 +5570,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104685739503689",
    "commentId": "122104685739503689_1042043998878413"
+  },
+  {
+   "key": "2026-10-13|scenes:20657:2|whereanime",
+   "day": "2026-10-13",
+   "slug": "scenes:20657:2",
+   "title": "Saekano: How to Raise a Boring Girlfriend",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "20657:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1791899070542,
+   "status": "claimed"
   }
  ],
  "health": {
