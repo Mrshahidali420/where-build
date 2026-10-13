@@ -5348,6 +5348,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104642647503689",
    "commentId": "122104642647503689_1501860731971966"
+  },
+  {
+   "key": "2026-10-13|where:103302|whereanime",
+   "day": "2026-10-13",
+   "slug": "where:103302",
+   "title": "Kono Oto Tomare!: Sounds of Life",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "103302",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1791895407184,
+   "status": "claimed"
   }
  ],
  "health": {
