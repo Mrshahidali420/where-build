@@ -3167,6 +3167,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104208055503689",
    "commentId": "122104208055503689_3161406967401707"
+  },
+  {
+   "key": "2026-10-12|onair:178868|whereanime",
+   "day": "2026-10-12",
+   "slug": "onair:178868",
+   "title": "Magic Knight Rayearth (2026)",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "178868",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1791859910576,
+   "status": "claimed"
   }
  ],
  "health": {
