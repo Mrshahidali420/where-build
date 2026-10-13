@@ -3763,6 +3763,22 @@
    "status": "posted",
    "postId": "1329988470202923_122104297455503689",
    "commentId": "122104297455503689_28854637410841995"
+  },
+  {
+   "key": "2026-10-13|character:char:69407|whereanime",
+   "day": "2026-10-13",
+   "slug": "character:char:69407",
+   "title": "Your lie in April",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:69407",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1791869640054,
+   "status": "claimed"
   }
  ],
  "health": {
