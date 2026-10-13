@@ -6818,7 +6818,9 @@
    "titleGap": false,
    "variant": 2,
    "at": 1791919176809,
-   "status": "claimed"
+   "status": "posted",
+   "postId": "1329988470202923_122104933965503689",
+   "commentError": "POST /1329988470202923_122104933965503689/comments failed: (#200) You do not have sufficient permissions to perform this action"
   }
  ],
  "health": {
