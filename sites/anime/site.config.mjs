@@ -62,6 +62,10 @@ export default defineSite({
   turnstileSiteKey: '0x4AAAAAAFDnqEYGLNby5wlj',
   // GA4 property "whereanime.com" (26 Sep 2026), web stream "WhereAnime web".
   ga4Id: 'G-0LMT9QWS4K',
+  // The owner's one AdSense account (the same publisher as manhwaindex: an
+  // account is per person, not per site). It turns on the AdSense tag and
+  // /ads.txt (packages/core/integration.mjs).
+  adsensePub: 'ca-pub-2789392733984505',
   indexNow: { key: 'ec506d4661c0e73b37312c89acb68d6a' },
 
   // Mail to both goes on to the owner's inbox (Cloudflare Email Routing, set
