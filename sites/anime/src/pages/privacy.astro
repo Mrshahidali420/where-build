@@ -50,6 +50,19 @@ const amazon = Object.values(config.amazon.stores).some(Boolean)
       )
     }
     {
+      config.adsensePub && (
+        <>
+          <h2>Advertising</h2>
+          <p>
+            This site may show ads served by <strong>Google AdSense</strong>. Google and its partners use cookies
+            to serve ads based on your visits to this site and others. You can turn off personalised ads in
+            <a href="https://adssettings.google.com" rel="noopener nofollow">Google's Ad Settings</a>, and read
+            <a href="https://policies.google.com/technologies/ads" rel="noopener nofollow">how Google uses data from sites that show its ads</a>.
+          </p>
+        </>
+      )
+    }
+    {
       amazon && (
         <>
           <h2>Amazon affiliate links</h2>

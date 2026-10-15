@@ -35,6 +35,8 @@ const contrast = (a, b) => {
 
 // Sites that have launched on their own domain. The rest live on their dev address.
 const LIVE = new Set(['whereanime'])
+// The owner's AdSense publisher, the same on every site that shows ads.
+const OWNER_ADSENSE = 'ca-pub-2789392733984505'
 
 test('four sites, each on its dev address until it launches on its planned domain', () => {
   assert.deepEqual(NAMES.sort(), ['anime', 'manga', 'manhua', 'novel'])
@@ -66,8 +68,10 @@ test('no site carries a borrowed id: analytics, ads, shop tags and keys are empt
     // 2026); until then the id is null. Never manhwaindex's, checked below.
     assert.ok(site.d1.id === null || /^[0-9a-f-]{36}$/.test(site.d1.id), `${site.key}.d1.id`)
   }
+  // AdSense is the one shared id: the owner has one account for every site.
+  for (const site of sites) assert.ok(site.adsensePub === null || site.adsensePub === OWNER_ADSENSE, `${site.key}.adsensePub`)
   // And nothing copied from manhwaindex's config, whatever the key.
-  const ids = /G-R1V6DJN1L3|ca-pub-|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
+  const ids = /G-R1V6DJN1L3|manhwaindex-2|manhwaindex\d+-2|manhwainde0f6|0x4AAAAAAE|368b5571dfe5|a31cde34-/
   for (const name of [...NAMES.map((n) => join(n, 'site.config.mjs')), 'family.mjs']) {
     assert.doesNotMatch(readFileSync(join(HERE, name), 'utf8'), ids, name)
   }
