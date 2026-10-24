@@ -78,6 +78,9 @@ export default defineSite({
   // the other stores stay empty and every reader falls back to the US store
   // (packages/core/src/lib/shop-links.js storeFor).
   amazon: { stores: { ...FAMILY.amazon.stores, us: 'whereanime-20' } },
+  // Linkvertise on the official watch and read platform links only, never
+  // Amazon (owner decision, 24 Oct 2026). packages/core/src/lib/linkvertise.js.
+  linkvertiseId: 10316435,
   workerName: 'whereanime',
 
   colors: {

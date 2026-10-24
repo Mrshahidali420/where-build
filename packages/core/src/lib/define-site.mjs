@@ -158,6 +158,7 @@ export function defineSite(input) {
   need(input.builder === undefined || BUILDERS.includes(input.builder), 'builder', `must be one of ${BUILDERS.join(', ')}`)
   checkRoutes(input.routes)
   checkAmazon(input.amazon)
+  need(input.linkvertiseId == null || Number.isInteger(input.linkvertiseId), 'linkvertiseId', 'must be a whole number or left out')
   checkLinks(input.nav, 'nav')
   checkText(input.footer, ['blurb', 'bar'])
   checkLinks(input.footer.browse, 'footer.browse')

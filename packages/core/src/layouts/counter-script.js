@@ -425,7 +425,10 @@ document.addEventListener('click', function (event) {
   if (!link) return
 
   var url
-  try { url = new URL(link.href, location.href) } catch (e) { return }
+  // A platform link Linkvertise rewrote keeps its real address in data-dest
+  // (src/lib/linkvertise.js), so the click still records where the reader was
+  // going, not the link-to.net hop.
+  try { url = new URL(link.getAttribute('data-dest') || link.href, location.href) } catch (e) { return }
   // One of ours: the queue travels to the next page instead of being
   // sent, so a three page visit still costs one request.
   if (url.hostname === location.hostname) {
@@ -496,6 +499,11 @@ document.addEventListener('click', function (event) {
     dwell: miVisible(),
     // Where an Amazon link sat: pick, buybox, shop, themes or trial. It
     // says which of the five places earns, which the kind alone cannot.
-    detail: kind ? link.getAttribute('data-aff-src') || '' : '',
+    // A read or watch link says 'lv' when Linkvertise rewrote it, so the
+    // Money tab can count what went through Linkvertise and what an ad
+    // blocker let go straight to the platform.
+    detail: kind
+      ? link.getAttribute('data-aff-src') || ''
+      : go && link.href.indexOf('link-to.net') !== -1 ? 'lv' : '',
   })
 })
