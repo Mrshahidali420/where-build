@@ -20,6 +20,7 @@ import '../styles/where-hubs.css'
 import config from '../lib/site.mjs'
 import { isDevHost } from '../lib/define-site.mjs'
 import { DOCK_ICONS } from '../lib/dock-icons.js'
+import { lvInit } from '../lib/linkvertise.js'
 import { dockItems, isDockActive } from '../lib/dock.js'
 import { pageGraph, graphJson } from '../lib/page-graph.mjs'
 import { homeBase } from '../where/cross.mjs'
@@ -102,6 +103,17 @@ const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    {/* Linkvertise on the official watch and read platform links only, never
+        Amazon. Both run in order after parsing and before DOMContentLoaded,
+        which is when Linkvertise rewrites the links (an inline module is
+        deferred too). The set-up is src/lib/linkvertise.js. */}
+    {config.linkvertiseId && (
+      <>
+        <script is:inline src="https://publisher.linkvertise.com/cdn/linkvertise.js" defer></script>
+        <script is:inline type="module" set:html={lvInit(config.linkvertiseId)}></script>
+      </>
+    )}
 
     {fontPreload.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <link rel="preconnect" href="https://s4.anilist.co" />
