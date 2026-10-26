@@ -79,8 +79,10 @@ export default defineSite({
   // (packages/core/src/lib/shop-links.js storeFor).
   amazon: { stores: { ...FAMILY.amazon.stores, us: 'whereanime-20' } },
   // Linkvertise on the official watch and read platform links only, never
-  // Amazon (owner decision, 24 Oct 2026). packages/core/src/lib/linkvertise.js.
-  linkvertiseId: 10316435,
+  // Amazon (packages/core/src/lib/linkvertise.js). Off since 26 Oct 2026, by
+  // the owner: 28 Linkvertise views, 6 got through, $0.01. Set it to 10316435
+  // to turn it on again.
+  linkvertiseId: null,
   workerName: 'whereanime',
 
   colors: {
