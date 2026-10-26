@@ -90,3 +90,19 @@ export function listJsonld(name, items, siteUrl, start = 0) {
     itemListElement: items.map((item, i) => clean({ '@type': 'ListItem', position: start + i + 1, name: item.title || item.name, url: abs(siteUrl, item.href) })),
   }
 }
+
+/**
+ * The characters page: the cards in the order the page prints them. A
+ * character is not a schema.org type of its own, so each is a plain list
+ * item with its name and picture, and the list is tied to the show.
+ */
+export function charactersJsonld(r, siteUrl) {
+  return {
+    '@type': 'ItemList',
+    name: `${r.title} characters`,
+    url: `${siteUrl}/anime/${r.slug}/characters`,
+    about: { '@id': `${siteUrl}/anime/${r.slug}#anime` },
+    numberOfItems: (r.characters || []).length,
+    itemListElement: (r.characters || []).map((c, i) => clean({ '@type': 'ListItem', position: i + 1, name: c.name, image: c.image || undefined })),
+  }
+}

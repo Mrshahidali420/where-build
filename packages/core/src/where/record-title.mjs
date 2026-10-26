@@ -13,6 +13,7 @@ import { crossCards, characterUrl } from './cross.mjs'
 import { mainChain } from './franchises.mjs'
 import { picksForTitleIn, booksKnownIn } from '../lib/picks-core.js'
 import { capPicks } from './link-spread.mjs'
+import { idOfSlug, charactersOf } from './characters.mjs'
 
 /** How many cast rows a title record keeps: the credits walk fetched 25. */
 const CAST_MAX = 25
@@ -38,15 +39,13 @@ function creditsOf(row, ctx) {
   return { key: key.filter((k) => k.people.length), crew }
 }
 
-/** The id at the end of a catalog cast slug ("eren-yeager-40882"). */
-const idOfSlug = (slug) => Number(/-(\d+)$/.exec(slug || '')?.[1]) || null
-
 /**
  * The cast table: each character's face and name, and their Japanese and
  * English voices. From credits.json when the walk reached the title, else
  * from the catalog's own cast list (faces and names, no voice links).
+ * Each row keeps its character id; castOf drops it for the title page.
  */
-function castOf(item, row, ctx) {
+function castRowsOf(item, row, ctx) {
   const listed = new Map((item.characters || []).map((c) => [c.id || idOfSlug(c.slug), c]))
   const fromCredits = (row?.characters || []).map((character) => {
     const known = ctx.cast[String(character.id)] || []
@@ -65,8 +64,10 @@ function castOf(item, row, ctx) {
     .slice(0, CAST_MAX)
     // The character's page on the home site is linked only from a row with no
     // voice actor page to open here: a row that has one keeps the reader on this site.
-    .map(({ id, ...c }) => ({ ...c, face: id && !c.voices.some((v) => v.href) ? characterUrl(id, ctx.cross) : null }))
+    .map((c) => ({ ...c, face: c.id && !c.voices.some((v) => v.href) ? characterUrl(c.id, ctx.cross) : null }))
 }
+
+const castOf = (rows) => rows.map(({ id, ...c }) => c)
 
 /**
  * The voices in other languages this page names (src/where/dub-links.mjs),
@@ -240,13 +241,14 @@ function chartOf(item) {
   return best ? { rank: best.rank, words: words[best.type] } : null
 }
 
-/** t: one entry of computeWhere's titles ({ item, rows, dated, episodesPage }). */
+/** t: one entry of computeWhere's titles ({ item, rows, dated, episodesPage, charactersPage }). */
 export function titleRecord(t, ctx) {
   const { item } = t
   const row = ctx.credits[String(item.id)]
   const { key, crew } = creditsOf(row, ctx)
   const related = relatedOf(item, ctx)
   const recs = recsOf(item, ctx, related)
+  const castRows = castRowsOf(item, row, ctx)
   return {
     id: item.id,
     slug: item.slug,
@@ -299,7 +301,11 @@ export function titleRecord(t, ctx) {
     studios: studiosOfTitle(ctx.credits, item.id).map((s) => ({ name: s.name, href: ctx.link.studio(s.id) })),
     key,
     crew,
-    cast: castOf(item, row, ctx),
+    cast: castOf(castRows),
+    // The characters page (/anime/<slug>/characters): only a title past its
+    // gate carries the fields at all, so the other shard records keep their
+    // old size and their lastmod stamp (src/where/lastmod.mjs) does not move.
+    ...(t.charactersPage ? { charactersPage: true, characters: charactersOf(castRows, ctx.characters || {}) } : {}),
     dubs: dubsOf(item, ctx),
     songs: songsOf(item, ctx),
     watch: watchOf(item, ctx),

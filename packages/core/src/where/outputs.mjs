@@ -254,6 +254,7 @@ export function pageUrlsOf({ titles, people, studios, artists, watch, hubs, extr
       group('hubs', '0.5', hubPaths(hubs).map(({ path }) => ({ path }))),
       group('anime', '0.8', titles.map((t) => ({ path: `/anime/${t.slug}`, image: t.cover, caption: `Cover of ${t.title}` }))),
       group('episodes', '0.6', titles.filter((t) => t.episodesPage).map((t) => ({ path: `/anime/${t.slug}/episodes` }))),
+      group('characters', '0.6', titles.filter((t) => t.charactersPage).map((t) => ({ path: `/anime/${t.slug}/characters` }))),
       group('voice-actors', '0.7', people.filter((p) => p.voicePage && !p.noindexVoice).map((p) => ({ path: p.voiceHref, ...portrait(p.image, p.name) }))),
       group('staff', '0.6', people.filter((p) => p.staffPage && !p.noindexStaff).map((p) => ({ path: p.staffHref, ...portrait(p.image, p.name) }))),
       group('studios', '0.7', studios.map((s) => ({ path: `/studio/${s.slug}` }))),

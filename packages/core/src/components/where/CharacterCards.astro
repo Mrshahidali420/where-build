@@ -1,0 +1,64 @@
+---
+/**
+ * The characters page's cards (src/where/characters.mjs charactersOf): each
+ * character's picture, name and part, the facts AniList keeps for them, their
+ * Japanese and English voices and a short bio. A fact that is not known is
+ * left out with its label: no card ever prints an empty "Age".
+ */
+import { castRoleWord } from '../../where/words.mjs'
+
+const { cards = [], title = '' } = Astro.props
+const SHORT = { Japanese: 'JP', English: 'EN' }
+const VOICED = Object.keys(SHORT)
+const medium = (url) => String(url || '').replace('/character/large/', '/character/medium/')
+const factsOf = (c) =>
+  [
+    ['Age', c.age],
+    ['Birthday', c.birthday],
+    ['Gender', c.gender],
+    ['Height', c.height],
+    ['Blood type', c.blood],
+    ['AniList favourites', c.favourites ? Number(c.favourites).toLocaleString('en-US') : ''],
+  ].filter(([, value]) => value)
+---
+
+<ol class="w-chars" aria-label={title ? `Characters of ${title}` : undefined}>
+  {
+    cards.map((c) => {
+      const facts = factsOf(c)
+      const voices = (c.voices || []).filter((v) => VOICED.includes(v.language))
+      return (
+        <li class:list={['w-char', { 'w-char--main': c.role === 'MAIN' }]}>
+          {c.image ? <img class="w-char__img" src={medium(c.image)} alt={c.name} width="96" height="136" loading="lazy" decoding="async" /> : <span class="w-char__img" />}
+          <div class="w-char__body">
+            <h3 class="w-char__name">
+              {c.face ? <a href={c.face} rel="noopener" title={`${c.name}: character profile`}>{c.name}</a> : c.name}
+            </h3>
+            {castRoleWord(c.role) && <p class="w-char__role">{castRoleWord(c.role)} character</p>}
+            {facts.length > 0 && (
+              <dl class="w-char__facts">
+                {facts.map(([label, value]) => (
+                  <div>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {voices.length > 0 && (
+              <ul class="w-voices">
+                {voices.map((v) => (
+                  <li>
+                    <abbr class="w-lang" title={`${v.language} voice`}>{SHORT[v.language]}</abbr>
+                    {v.href ? <a href={v.href}>{v.name}</a> : <span>{v.name}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {c.bio && <p class="w-char__bio">{c.bio}</p>}
+          </div>
+        </li>
+      )
+    })
+  }
+</ol>

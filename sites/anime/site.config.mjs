@@ -125,6 +125,8 @@ export default defineSite({
   gates: [
     { page: '/anime/<slug>', count: 'where', type: 'title', credits: 3 },
     { page: '/anime/<slug>/episodes', count: 'where', type: 'episodes', min: 13 },
+    // Six or more cast rows with fetched character facts (data/characters.json).
+    { page: '/anime/<slug>/characters', count: 'where', type: 'characters', min: 6 },
     { page: '/voice-actor/<slug>', count: 'where', type: 'voiceActor', min: 3 },
     // Real crew work on 3+ shows, or a key credit (director, writer, creator,
     // designer, composer) on 2+. Song performances and producer seats do not count.

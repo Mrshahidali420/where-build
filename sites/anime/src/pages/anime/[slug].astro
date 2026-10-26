@@ -306,6 +306,7 @@ const listItem = {
               <p class="w-sec__note">{castNote(r)}</p>
             )}
             <CastList cast={r.cast} title={r.title} />
+            {r.charactersPage && <a class="w-more" href={`${path}/characters`}>Every character of {r.title} with age and birthday</a>}
             {dubs.length > 0 && (
               <>
                 <h3 class="w-sub">Voices in other languages</h3>

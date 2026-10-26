@@ -25,6 +25,8 @@ export function loadWhereData(dir) {
     airing: readData(dir, 'airing.json', { schedule: [], history: {} }),
     themes: readData(dir, 'themes.json', { byAnilistId: {} }).byAnilistId || {},
     cast: readData(dir, 'cast.json', {}),
+    // Character facts (scripts/ingest-character-facts.mjs). Missing: no characters pages.
+    characters: readData(dir, 'characters.json', {}),
     comics: readData(dir, 'linked-comics.json', []),
     home: readData(dir, 'home-registry.json', { t: {}, c: {} }),
   }

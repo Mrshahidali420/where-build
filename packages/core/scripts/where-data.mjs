@@ -9,8 +9,8 @@
  *   1. the shared catalog, r2.catalogBucket/latest/ (read only: the site that
  *      owns it is the only writer). meta.json is read first; the bucket
  *      writes it last, so a half-finished push is never trusted.
- *   2. the sister data, r2.dataBucket/latest/: credits.json, staff.json and
- *      airing.json (docs/ingest.md). A missing file is an empty one: every
+ *   2. the sister data, r2.dataBucket/latest/: credits.json, staff.json,
+ *      airing.json and characters.json (docs/ingest.md). A missing file is an empty one: every
  *      page gates on the data it needs, so less data means fewer pages, never
  *      a broken one.
  *   3. this site's own state, r2.dataBucket/<r2.statePrefix>/: the frozen slug
@@ -122,9 +122,14 @@ async function pullSister(tmp, animeIds) {
   writeJson('staff.json', staff)
   const airing = await optional('airing.json', { schedule: [], history: {}, incomplete: {} })
   writeJson('airing.json', airing)
+  // Character facts for the characters pages (scripts/ingest-character-facts.mjs).
+  // Missing: the build makes no characters page and the title pages are unchanged.
+  const characters = await optional('characters.json', {})
+  writeJson('characters.json', characters)
   console.log(
     `sister data: credits for ${Object.keys(credits).length} anime, ${Object.keys(staff).length} of ` +
-      `${named.people.size} named people, airing history for ${Object.keys(airing.history || {}).length} anime`,
+      `${named.people.size} named people, airing history for ${Object.keys(airing.history || {}).length} anime, ` +
+      `facts for ${Object.keys(characters).length} characters`,
   )
   return named
 }

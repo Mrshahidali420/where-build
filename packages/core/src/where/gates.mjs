@@ -19,6 +19,8 @@
 export const WHERE_GATE_DEFAULTS = {
   title: { credits: 3 },
   episodes: { min: 13 },
+  // The characters page: at least `min` cast rows with fetched facts (src/where/characters.mjs).
+  characters: { min: 6 },
   voiceActor: { min: 3 },
   // min: shows with real crew work; keyMin: shows with a key credit. Either lets a person in.
   staff: { min: 3, keyMin: 2 },
@@ -63,6 +65,9 @@ export function passesTitle(item, facts, gate) {
 
 /** The full episode list earns its own page only past what the title page shows. */
 export const passesEpisodes = (dated, gate) => dated >= gate.min
+
+/** The characters page: enough cast rows with an age, birthday, bio or other fact to print. */
+export const passesCharacters = (withFacts, gate) => withFacts >= gate.min
 
 /** A voice actor: a name to print and enough distinct roles. */
 export const passesVoiceActor = (person, gate) => Boolean(person.name) && person.voiceRoleCount >= gate.min

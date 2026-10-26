@@ -1,0 +1,50 @@
+---
+/**
+ * Every character of one anime with the facts AniList keeps for them (age,
+ * birthday, gender, height, blood type, a short bio) and their Japanese and
+ * English voices, for "X characters" searches. Built only past the characters
+ * gate (6+ cast rows with fetched facts, src/where/characters.mjs); below it
+ * this address is a 404 and nothing links to it.
+ */
+import Where from '@sister/core/src/layouts/Where.astro'
+import config from '@sister/core/src/lib/site.mjs'
+import { envOf, notFound, unavailable } from '@sister/core/src/lib/runtime.js'
+import { truncate } from '@sister/core/src/lib/format.js'
+import { loadAnime } from '@sister/core/src/where/runtime.mjs'
+import { charactersJsonld } from '@sister/core/src/where/jsonld.mjs'
+import { charactersSummary, charactersDescription } from '@sister/core/src/where/characters.mjs'
+import { plural } from '@sister/core/src/where/words.mjs'
+import TitleHead from '@sister/core/src/components/where/TitleHead.astro'
+import CharacterCards from '@sister/core/src/components/where/CharacterCards.astro'
+
+let r
+try {
+  r = await loadAnime(envOf(Astro), Astro.params.slug)
+} catch (e) {
+  return unavailable(Astro, e)
+}
+if (!r || !r.charactersPage || !r.characters?.length) return notFound(Astro)
+
+const cards = r.characters
+const path = `/anime/${r.slug}`
+---
+
+<Where
+  title={`${r.title} Characters: Names, Ages, Birthdays and Voice Actors | ${config.name}`}
+  description={truncate(charactersDescription(r.title, cards), 158)}
+  canonical={`${path}/characters`}
+  image={r.cover}
+  jsonld={charactersJsonld(r, config.siteUrl)}
+  crumbs={[{ name: 'Anime', href: '/anime' }, { name: r.title, href: path }, { name: 'Characters' }]}
+>
+  <TitleHead record={r} />
+  <section class="w-sec" aria-labelledby="characters">
+    <div class="w-sec__head">
+      <h2 id="characters">Every character</h2>
+      <p class="w-sec__count">{plural(cards.length, 'character')}</p>
+    </div>
+    <p class="w-sec__note">{charactersSummary(cards)} Main characters come first, then the rest by how many AniList users favourited them.</p>
+    <CharacterCards cards={cards} title={r.title} />
+    <a class="w-more" href={path}>Episodes, staff and songs of {r.title}</a>
+  </section>
+</Where>

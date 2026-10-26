@@ -143,6 +143,8 @@ function main() {
     credits: data.credits,
     staff: data.staff,
     cast: data.cast,
+    // Character facts (data/characters.json) for the characters pages.
+    characters: data.characters,
     themes: data.themes,
     titleById,
     franchiseOf,

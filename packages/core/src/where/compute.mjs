@@ -6,7 +6,7 @@
  * scripts/make-where.mjs builds from this, and scripts/count-pages.mjs counts
  * from it, so the counts printed are exactly the pages built.
  *
- *   data: { anime, credits, staff, airing, themes }   (the files in data/,
+ *   data: { anime, credits, staff, airing, themes, cast, characters }   (the files in data/,
  *         scripts/where-data.mjs; blocked titles already out)
  *
  * Pure.
@@ -22,6 +22,7 @@ import {
   gatesOf,
   passesTitle,
   passesEpisodes,
+  passesCharacters,
   passesVoiceActor,
   passesStaff,
   passesStudio,
@@ -32,6 +33,7 @@ import {
 import { shopName } from '../lib/shop-links.js'
 import { similarAll, likePagesOf } from './similar.mjs'
 import { buildMoods } from './moods.mjs'
+import { castIdsOfTitle, factCount } from './characters.mjs'
 
 /** How many titles /shop could shelve: a cover and a name a shop knows (src/where/shop.mjs). */
 export const shelvableCount = (items) => items.filter((item) => item.cover && shopName(item).length >= 2).length
@@ -44,6 +46,20 @@ export function creditCount(row) {
   return crew + voiced
 }
 
+/**
+ * How many of a title's cast rows have character facts (data/characters.json)
+ * and a name to print: the number the characters gate counts. No facts file,
+ * no characters pages.
+ */
+export function characterFactCount(item, data) {
+  const facts = data.characters
+  if (!facts) return 0
+  const listed = new Map((item.characters || []).map((c) => [c.id, c.name]))
+  const named = (id) => Boolean(data.cast?.[String(id)]?.[0] || listed.get(id))
+  const rows = castIdsOfTitle(item, data.credits?.[String(item.id)]).filter(named).map((id) => ({ id }))
+  return factCount(rows, facts)
+}
+
 /** Every owned title with its episode rows, and whether it passed its gate. */
 export function gateTitles(site, data, gates = gatesOf(site)) {
   const window = windowById(data.airing?.schedule)
@@ -53,7 +69,13 @@ export function gateTitles(site, data, gates = gatesOf(site)) {
     const dated = datedCount(rows)
     const facts = { episodes: item.episodes > 0 || rows.length > 0, airing: dated > 0, credits: creditCount(data.credits[String(item.id)]) }
     if (!passesTitle(item, facts, gates.title)) continue
-    titles.push({ item, rows, dated, episodesPage: passesEpisodes(dated, gates.episodes) })
+    titles.push({
+      item,
+      rows,
+      dated,
+      episodesPage: passesEpisodes(dated, gates.episodes),
+      charactersPage: passesCharacters(characterFactCount(item, data), gates.characters),
+    })
   }
   return titles
 }
@@ -89,6 +111,7 @@ export function computeWhere(site, data, { now = Math.floor(Date.now() / 1000) }
   const counts = {
     title: titles.length,
     episodes: titles.filter((t) => t.episodesPage).length,
+    characters: titles.filter((t) => t.charactersPage).length,
     voiceActor: pages.voice.size,
     staff: pages.staff.size,
     studio: pages.studio.size,

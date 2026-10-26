@@ -1,0 +1,66 @@
+name: 'Sister ingest: character facts'
+
+# Gender, age, birthday, blood type, height, favourites and a short bio for
+# every character the anime site's cast tables show, for its characters pages
+# (/anime/<slug>/characters). scripts/ingest-character-facts.mjs writes
+# sister-data/latest/characters.json; deploy-anime.yml pulls it before the
+# build (scripts/where-data.mjs pull). With no file the build simply makes no
+# characters pages.
+#
+# Nightly at 01:30 UTC, clear of the 03:00 credits run and the 04:00 deploy.
+# Each run asks only for ids never fetched or checked more than 90 days ago,
+# so once the file is full a night costs a call or two. Until then every
+# night adds up to MAX_CALLS x 50 characters.
+#
+# The first fill: Actions -> Sister ingest: character facts -> Run workflow,
+# max_calls 1800 (about 88,000 ids at 50 per call, roughly 75 to 90 minutes
+# of AniList pacing). If AniList answers 403 for a while the run stops after
+# two failed batches in a row, pushes what it got, and the next run carries on.
+#
+# Never touches the shared catalog's own bucket: that one is pulled read only.
+
+on:
+  schedule:
+    - cron: '30 1 * * *' # nightly 01:30 UTC: new and stale ids only
+  workflow_dispatch:
+    inputs:
+      max_calls:
+        description: 'API call ceiling for this run (blank = 300; 1800 covers about 88,000 ids for the first fill)'
+        required: false
+        default: ''
+      limit:
+        description: 'Cap the id list to this many (testing only)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sister-characters
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+
+      - name: Walk character facts
+        working-directory: packages/core
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_SISTER }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SITE_CONFIG: ../../sites/anime/site.config.mjs
+          MAX_CALLS: ${{ github.event.inputs.max_calls }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          PUSH: '1'
+        run: node scripts/ingest-character-facts.mjs
