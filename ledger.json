@@ -7348,6 +7348,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113937067503689",
    "commentId": "122113937067503689_4490492234557304"
+  },
+  {
+   "key": "2026-10-27|where:130588|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:130588",
+   "title": "The Misfit of Demon King Academy Ⅱ: History's Strongest Demon King Reincarnates and Goes to School with His Descendants",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "130588",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793139470182,
+   "status": "claimed"
   }
  ],
  "health": {
