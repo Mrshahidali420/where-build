@@ -6843,50 +6843,9 @@
   }
  },
  "birthdays": {
-  "day": "2026-10-13",
-  "at": 1791865676429,
-  "list": [
-   {
-    "id": 671,
-    "name": "Reborn",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b671-G7Z01vwnpbxS.png",
-    "favourites": 574,
-    "mediaId": 1604,
-    "voice": "Ken Narita"
-   },
-   {
-    "id": 90015,
-    "name": "Sonia Nevermind",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b90015-KxplFCRHMlib.jpg",
-    "favourites": 438,
-    "mediaId": 97672,
-    "voice": "Miho Arakawa"
-   },
-   {
-    "id": 155648,
-    "name": "Soi Purson",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b155648-LxHHE9Mjx6si.jpg",
-    "favourites": 173,
-    "mediaId": 107693,
-    "voice": null
-   },
-   {
-    "id": 35286,
-    "name": "Izou",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b35286-8mzkLDbXLEz0.jpg",
-    "favourites": 171,
-    "mediaId": 21,
-    "voice": "Yuusei Oda"
-   },
-   {
-    "id": 4627,
-    "name": "Haruka Saigusa",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b4627-eg4Nswb856cr.png",
-    "favourites": 165,
-    "mediaId": 13655,
-    "voice": "Keiko Suzuki"
-   }
-  ]
+  "day": "2026-10-27",
+  "at": 1793127204176,
+  "list": []
  },
  "artSeen": [
   "danbooru:12349377",
