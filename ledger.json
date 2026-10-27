@@ -7497,6 +7497,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113947087503689",
    "commentId": "122113947087503689_1484574146852079"
+  },
+  {
+   "key": "2026-10-27|fact:fact:263:rated|whereanime",
+   "day": "2026-10-27",
+   "slug": "fact:fact:263:rated",
+   "title": "Hajime no Ippo: The Fighting!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:263:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793141879463,
+   "status": "claimed"
   }
  ],
  "health": {
