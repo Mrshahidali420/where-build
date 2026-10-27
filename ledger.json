@@ -7438,6 +7438,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113943175503689",
    "commentId": "122113943175503689_1084173917772065"
+  },
+  {
+   "key": "2026-10-27|character:char:5|whereanime",
+   "day": "2026-10-27",
+   "slug": "character:char:5",
+   "title": "Bleach",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:5",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793140976108,
+   "status": "claimed"
   }
  ],
  "health": {
