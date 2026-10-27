@@ -7420,6 +7420,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113941921503689",
    "commentId": "122113941921503689_2127067282016468"
+  },
+  {
+   "key": "2026-10-27|where:115740|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:115740",
+   "title": "By the Grace of the Gods",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "115740",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793140674938,
+   "status": "claimed"
   }
  ],
  "health": {
