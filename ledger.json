@@ -6931,6 +6931,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113906965503689",
    "commentId": "122113906965503689_1105781992501366"
+  },
+  {
+   "key": "2026-10-27|episode:187316:4|whereanime",
+   "day": "2026-10-27",
+   "slug": "episode:187316:4",
+   "title": "Gensou Suikoden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "187316:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793132789368,
+   "status": "claimed"
   }
  ],
  "health": {
