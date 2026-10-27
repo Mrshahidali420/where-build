@@ -292,6 +292,7 @@ const graph = nodes.length > 0 ? { '@context': 'https://schema.org', '@graph': n
             {config.footer.blurb}
           </p>
           <p class="colophon__count">Refreshed every day.</p>
+          {config.facebook && <p class="colophon__count"><a href={config.facebook} rel="noopener">Follow {config.name} on Facebook</a></p>}
         </div>
         {config.footer.browse.length > 0 && (
           <div>

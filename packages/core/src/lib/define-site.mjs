@@ -159,6 +159,7 @@ export function defineSite(input) {
   checkRoutes(input.routes)
   checkAmazon(input.amazon)
   need(input.linkvertiseId == null || Number.isInteger(input.linkvertiseId), 'linkvertiseId', 'must be a whole number or left out')
+  need(input.facebook == null || /^https:\/\/www\.facebook\.com\/[A-Za-z0-9.]+$/.test(input.facebook), 'facebook', 'must be a https://www.facebook.com/<Page> link or left out')
   checkLinks(input.nav, 'nav')
   checkText(input.footer, ['blurb', 'bar'])
   checkLinks(input.footer.browse, 'footer.browse')

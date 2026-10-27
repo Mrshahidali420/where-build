@@ -206,6 +206,7 @@ const hasAmazonTag = Object.values(config.amazon.stores).some(Boolean)
           <p class="foot__small">
             Rebuilt every day at {config.rebuildUtc} UTC. {config.name} is not affiliated with any studio or streaming service.
           </p>
+          {config.facebook && <p class="foot__small"><a href={config.facebook} rel="noopener">Follow {config.name} on Facebook</a></p>}
         </div>
         {columns.map((col) => (
           <div class="foot__col">

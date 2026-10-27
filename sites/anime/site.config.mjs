@@ -83,6 +83,8 @@ export default defineSite({
   // the owner: 28 Linkvertise views, 6 got through, $0.01. Set it to 10316435
   // to turn it on again.
   linkvertiseId: null,
+  // The site's Facebook Page, linked from the footer.
+  facebook: 'https://www.facebook.com/WhereAnime',
   workerName: 'whereanime',
 
   colors: {
