@@ -7682,6 +7682,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113965261503689",
    "commentId": "122113965261503689_1472647351625962"
+  },
+  {
+   "key": "2026-10-27|where:129192|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:129192",
+   "title": "My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "129192",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793144914836,
+   "status": "claimed"
   }
  ],
  "health": {
