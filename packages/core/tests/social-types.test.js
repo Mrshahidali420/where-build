@@ -250,7 +250,7 @@ test('run: a switched-on type draws its picture, claims, sends the file, then co
   assert.match(order[0][2], /^🚨 New episode alert 🚨 .+ episode \d+ (airs|aired) today at /)
   assert.match(order[0][2], /\?\n\n👇 .+first comment\.\n\n#\S+/)
   assert.doesNotMatch(order[0][2], /https?:/)
-  assert.match(order[1][2], /^Episode dates and where to watch: https:\/\/.+\/anime\/.+utm_source=facebook/)
+  assert.match(order[1][2], /^Episode dates and where to watch: https:\/\/.+\/anime\/[^?\s]+$/m)
   const [entry] = h.store.snapshot().entries
   assert.deepEqual([entry.status, entry.type, entry.postId, entry.commentId], ['posted', 'episode', 'p7', 'c7'])
   assert.match(h.text.join(''), /Post types switched on: episode/)

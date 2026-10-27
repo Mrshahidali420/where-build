@@ -199,7 +199,7 @@ test('every Amazon link the Facebook poster can write carries whereanime-20, nev
     const comment = commentFor({ label: 'Where to watch it', path: '/anime/x', shop }, { affiliate: true })
     const [siteLine, shopLine, ...more] = comment.split('\n')
     assert.deepEqual(more, [])
-    assert.match(siteLine, /^Where to watch it: https:\/\/whereanime\.com\/anime\/x\?/)
+    assert.match(siteLine, /^Where to watch it: https:\/\/whereanime\.com\/anime\/x$/)
     const link = new URL(shopLine.split(': ').at(-1))
     assert.equal(link.hostname, 'www.amazon.com', shopLine)
     assert.match(link.pathname, /^\/dp\//, shopLine)
