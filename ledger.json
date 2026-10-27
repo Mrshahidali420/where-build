@@ -7646,6 +7646,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113960767503689",
    "commentId": "122113960767503689_1315859533943665"
+  },
+  {
+   "key": "2026-10-27|scenes:10793:2|whereanime",
+   "day": "2026-10-27",
+   "slug": "scenes:10793:2",
+   "title": "Guilty Crown",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "10793:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793144312380,
+   "status": "claimed"
   }
  ],
  "health": {
