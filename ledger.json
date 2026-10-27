@@ -7533,6 +7533,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113949553503689",
    "commentId": "122113949553503689_1831041774561623"
+  },
+  {
+   "key": "2026-10-27|character:char:124142|whereanime",
+   "day": "2026-10-27",
+   "slug": "character:char:124142",
+   "title": "Dr. STONE: STONE WARS",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:124142",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793142505275,
+   "status": "claimed"
   }
  ],
  "health": {
