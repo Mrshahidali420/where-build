@@ -7140,6 +7140,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113923429503689",
    "commentId": "122113923429503689_3353427808175328"
+  },
+  {
+   "key": "2026-10-27|fact:fact:2236:popular|whereanime",
+   "day": "2026-10-27",
+   "slug": "fact:fact:2236:popular",
+   "title": "The Girl Who Leapt Through Time",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:2236:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793136131491,
+   "status": "claimed"
   }
  ],
  "health": {
