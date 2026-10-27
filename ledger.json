@@ -7271,6 +7271,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113931781503689",
    "commentId": "122113931781503689_1393135610548719"
+  },
+  {
+   "key": "2026-10-27|character:char:123285|whereanime",
+   "day": "2026-10-27",
+   "slug": "character:char:123285",
+   "title": "Black Clover",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:123285",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793138241715,
+   "status": "claimed"
   }
  ],
  "health": {
