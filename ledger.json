@@ -9271,6 +9271,22 @@
    "status": "posted",
    "postId": "1655703439360693",
    "commentId": "1655703439360693_1442282131368068"
+  },
+  {
+   "key": "2026-10-28|character:char:672|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:672",
+   "title": "Gintama",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:672",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793170677751,
+   "status": "claimed"
   }
  ],
  "health": {
