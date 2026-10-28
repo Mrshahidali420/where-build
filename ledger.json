@@ -8452,6 +8452,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114031903503689",
    "commentId": "122114031903503689_4433651640220474"
+  },
+  {
+   "key": "2026-10-27|where:170019|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:170019",
+   "title": "The Angel Next Door Spoils Me Rotten2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "170019",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793157342717,
+   "status": "claimed"
   }
  ],
  "health": {
