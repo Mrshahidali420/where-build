@@ -12114,6 +12114,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114376171503689",
    "commentId": "122114376171503689_1086509811039869"
+  },
+  {
+   "key": "2026-10-28|where:133845|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:133845",
+   "title": "OVERLORD: The Sacred Kingdom",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "133845",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793217195453,
+   "status": "claimed"
   }
  ],
  "health": {
