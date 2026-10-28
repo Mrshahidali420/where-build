@@ -9215,6 +9215,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114105511503689",
    "commentId": "122114105511503689_963223996401459"
+  },
+  {
+   "key": "2026-10-28|fact:fact:192809:rated|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:192809:rated",
+   "title": "JUJUTSU KAISEN: Hidden Inventory / Premature Death – The Movie",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:192809:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793169774193,
+   "status": "claimed"
   }
  ],
  "health": {
