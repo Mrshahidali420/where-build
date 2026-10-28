@@ -11092,6 +11092,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114287209503689",
    "commentId": "122114287209503689_1130056033113465"
+  },
+  {
+   "key": "2026-10-28|fact:fact:97889:rated|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:97889:rated",
+   "title": "Gintama Season 4",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:97889:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793200425352,
+   "status": "claimed"
   }
  ],
  "health": {
