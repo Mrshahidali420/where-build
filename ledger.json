@@ -7736,6 +7736,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113973145503689",
    "commentId": "122113973145503689_1136007992308330"
+  },
+  {
+   "key": "2026-10-27|fact:fact:137909:popular|whereanime",
+   "day": "2026-10-27",
+   "slug": "fact:fact:137909:popular",
+   "title": "Ningen Fushin: Adventurers Who Don’t Believe in Humanity Will Save the World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:137909:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793145839233,
+   "status": "claimed"
   }
  ],
  "health": {
