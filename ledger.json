@@ -11557,6 +11557,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114331567503689",
    "commentId": "122114331567503689_2203226947203141"
+  },
+  {
+   "key": "2026-10-28|where:20849|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:20849",
+   "title": "God Eater",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20849",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793208037328,
+   "status": "claimed"
   }
  ],
  "health": {
