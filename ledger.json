@@ -7922,6 +7922,27 @@
    "track": "the-rush.m4a",
    "status": "failed",
    "error": "GET /1811788809890773 failed: Unsupported get request. Object with ID '1811788809890773' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "rare": true,
+   "hash": "41df04d36e53e4712d9b16065a5e1358",
+   "rating": "g",
+   "ecchi": false,
+   "source": "danbooru",
+   "key": "2026-10-27|fanart:danbooru:11967056|whereanime",
+   "day": "2026-10-27",
+   "slug": "fanart:danbooru:11967056",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fanart",
+   "type": "fanart",
+   "item": "danbooru:11967056",
+   "gapDays": 3650,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793148850890,
+   "status": "claimed"
   }
  ],
  "health": {
