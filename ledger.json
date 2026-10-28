@@ -10663,6 +10663,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114249349503689",
    "commentId": "122114249349503689_1139842781836922"
+  },
+  {
+   "key": "2026-10-28|where:6746|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:6746",
+   "title": "Durarara!!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "6746",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793193443044,
+   "status": "claimed"
   }
  ],
  "health": {
