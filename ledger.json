@@ -10997,6 +10997,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114277447503689",
    "commentId": "122114277447503689_1138235258631949"
+  },
+  {
+   "key": "2026-10-28|character:char:81967|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:81967",
+   "title": "Masamune-kun's Revenge",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:81967",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793198916761,
+   "status": "claimed"
   }
  ],
  "health": {
