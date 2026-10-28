@@ -12317,6 +12317,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114392581503689",
    "commentId": "122114392581503689_1150065277711751"
+  },
+  {
+   "key": "2026-10-28|character:char:88753|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:88753",
+   "title": "Plastic Memories",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:88753",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793220564452,
+   "status": "claimed"
   }
  ],
  "health": {
