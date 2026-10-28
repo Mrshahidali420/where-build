@@ -8935,6 +8935,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114073273503689",
    "commentId": "122114073273503689_1101447576089700"
+  },
+  {
+   "key": "2026-10-28|where:116006|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:116006",
+   "title": "The God of High School",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "116006",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793165212241,
+   "status": "claimed"
   }
  ],
  "health": {
