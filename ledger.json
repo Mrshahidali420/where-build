@@ -10537,6 +10537,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114235747503689",
    "commentId": "122114235747503689_1522854943208039"
+  },
+  {
+   "key": "2026-10-28|fact:fact:113108:rated|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:113108:rated",
+   "title": "Kingdom Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:113108:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793191333467,
+   "status": "claimed"
   }
  ],
  "health": {
