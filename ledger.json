@@ -9348,6 +9348,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114117193503689",
    "commentId": "122114117193503689_2627316444406831"
+  },
+  {
+   "key": "2026-10-28|where:10087|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:10087",
+   "title": "Fate/Zero",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "10087",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793171904825,
+   "status": "claimed"
   }
  ],
  "health": {
