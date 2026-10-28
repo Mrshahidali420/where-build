@@ -11354,6 +11354,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114314395503689",
    "commentId": "122114314395503689_968910322479029"
+  },
+  {
+   "key": "2026-10-28|where:99531|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:99531",
+   "title": "Devils' Line",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "99531",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793204676811,
+   "status": "claimed"
   }
  ],
  "health": {
