@@ -12860,6 +12860,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114426667503689",
    "commentId": "122114426667503689_1093920619922722"
+  },
+  {
+   "key": "2026-10-28|fact:fact:10033:run|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:10033:run",
+   "title": "Toriko",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:10033:run",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793229421003,
+   "status": "claimed"
   }
  ],
  "health": {
