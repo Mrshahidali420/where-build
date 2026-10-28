@@ -8786,6 +8786,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114060181503689",
    "commentId": "122114060181503689_1096479296693102"
+  },
+  {
+   "key": "2026-10-28|character:char:508|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:508",
+   "title": "Howl‘s Moving Castle",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:508",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793162803022,
+   "status": "claimed"
   }
  ],
  "health": {
