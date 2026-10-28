@@ -9664,6 +9664,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114143431503689",
    "commentId": "122114143431503689_1109837188641680"
+  },
+  {
+   "key": "2026-10-28|fact:fact:1604:run|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:1604:run",
+   "title": "REBORN!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:1604:run",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793177051660,
+   "status": "claimed"
   }
  ],
  "health": {
