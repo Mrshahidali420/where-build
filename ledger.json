@@ -12986,6 +12986,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114435079503689",
    "commentId": "122114435079503689_2312568999593112"
+  },
+  {
+   "key": "2026-10-28|character:char:268676|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:268676",
+   "title": "The Fragrant Flower Blooms With Dignity",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:268676",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793231544257,
+   "status": "claimed"
   }
  ],
  "health": {
