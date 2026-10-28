@@ -10332,7 +10332,8 @@
    "variant": 0,
    "at": 1793187664456,
    "track": "the-rush.m4a",
-   "status": "claimed"
+   "status": "failed",
+   "error": "GET /2194021081187962 failed: Unsupported get request. Object with ID '2194021081187962' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
   }
  ],
  "health": {
