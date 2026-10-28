@@ -11110,6 +11110,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114288385503689",
    "commentId": "122114288385503689_1100403259415200"
+  },
+  {
+   "key": "2026-10-28|where:21679|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:21679",
+   "title": "Bungo Stray Dogs 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21679",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793200726680,
+   "status": "claimed"
   }
  ],
  "health": {
