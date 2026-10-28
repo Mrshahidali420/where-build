@@ -7754,6 +7754,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113975239503689",
    "commentId": "122113975239503689_2594439000992771"
+  },
+  {
+   "key": "2026-10-27|where:151252|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:151252",
+   "title": "The Ice Guy and His Cool Female Colleague",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "151252",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793146140401,
+   "status": "claimed"
   }
  ],
  "health": {
