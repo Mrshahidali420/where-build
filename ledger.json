@@ -12168,6 +12168,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114380707503689",
    "commentId": "122114380707503689_1846932576477061"
+  },
+  {
+   "key": "2026-10-28|where:10029|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:10029",
+   "title": "From Up on Poppy Hill",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "10029",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793218135552,
+   "status": "claimed"
   }
  ],
  "health": {
