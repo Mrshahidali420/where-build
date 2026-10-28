@@ -9251,6 +9251,24 @@
    "status": "posted",
    "postId": "1329988470202923_122114110971503689",
    "commentId": "122114110971503689_1417871186996943"
+  },
+  {
+   "reel": true,
+   "key": "2026-10-28|reel-anticipated:anticipated:season:2027-SPRING|whereanime",
+   "day": "2026-10-28",
+   "slug": "reel-anticipated:anticipated:season:2027-SPRING",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:season:2027-SPRING",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793170376560,
+   "track": "fast-fight.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
