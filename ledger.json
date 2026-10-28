@@ -12878,6 +12878,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114427909503689",
    "commentId": "122114427909503689_1793580359049729"
+  },
+  {
+   "key": "2026-10-28|where:21626|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:21626",
+   "title": "Handa-kun",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21626",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793229722117,
+   "status": "claimed"
   }
  ],
  "health": {
