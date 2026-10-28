@@ -10370,6 +10370,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114217417503689",
    "commentId": "122114217417503689_1159135410015660"
+  },
+  {
+   "key": "2026-10-28|fact:fact:15:run|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:15:run",
+   "title": "Eyeshield 21",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:15:run",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793188568750,
+   "status": "claimed"
   }
  ],
  "health": {
