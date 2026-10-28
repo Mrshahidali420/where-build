@@ -7813,6 +7813,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113979355503689",
    "commentId": "122113979355503689_1133274602618229"
+  },
+  {
+   "key": "2026-10-27|fact:fact:127399:popular|whereanime",
+   "day": "2026-10-27",
+   "slug": "fact:fact:127399:popular",
+   "title": "Record of Ragnarok",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:127399:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793147043850,
+   "status": "claimed"
   }
  ],
  "health": {
