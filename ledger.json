@@ -8017,6 +8017,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113992939503689",
    "commentId": "122113992939503689_29191516080483508"
+  },
+  {
+   "key": "2026-10-27|fact:fact:20751:rated|whereanime",
+   "day": "2026-10-27",
+   "slug": "fact:fact:20751:rated",
+   "title": "MUSHI-SHI The Next Passage 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:20751:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793150381769,
+   "status": "claimed"
   }
  ],
  "health": {
