@@ -12824,6 +12824,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114424381503689",
    "commentId": "122114424381503689_1055413730893702"
+  },
+  {
+   "key": "2026-10-28|where:169580|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:169580",
+   "title": "I Made Friends with the Second Prettiest Girl in My Class",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "169580",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793228792790,
+   "status": "claimed"
   }
  ],
  "health": {
