@@ -12019,6 +12019,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114368827503689",
    "commentId": "122114368827503689_2991373071209534"
+  },
+  {
+   "key": "2026-10-28|fact:fact:139820:popular|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:139820:popular",
+   "title": "I'm the Villainess, So I'm Taming the Final Boss",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:139820:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793215685673,
+   "status": "claimed"
   }
  ],
  "health": {
