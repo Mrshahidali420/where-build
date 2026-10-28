@@ -11241,6 +11241,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114302473503689",
    "commentId": "122114302473503689_1251861897157075"
+  },
+  {
+   "key": "2026-10-28|fact:fact:139589:rated|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:139589:rated",
+   "title": "Kotaro Lives Alone",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:139589:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793202865414,
+   "status": "claimed"
   }
  ],
  "health": {
