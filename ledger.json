@@ -9289,6 +9289,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114113389503689",
    "commentId": "122114113389503689_1813172013217144"
+  },
+  {
+   "key": "2026-10-28|scenes:131646:2|whereanime",
+   "day": "2026-10-28",
+   "slug": "scenes:131646:2",
+   "title": "The Case Study of Vanitas",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "131646:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793171001025,
+   "status": "claimed"
   }
  ],
  "health": {
