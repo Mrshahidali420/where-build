@@ -8297,6 +8297,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114019693503689",
    "commentId": "122114019693503689_1840542710271958"
+  },
+  {
+   "key": "2026-10-27|where:21878|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:21878",
+   "title": "Gabriel DropOut",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21878",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793154934034,
+   "status": "claimed"
   }
  ],
  "health": {
