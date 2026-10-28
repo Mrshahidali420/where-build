@@ -11983,6 +11983,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114366571503689",
    "commentId": "122114366571503689_951575924341224"
+  },
+  {
+   "key": "2026-10-28|where:142984|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:142984",
+   "title": "Komi Can't Communicate Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "142984",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793215081891,
+   "status": "claimed"
   }
  ],
  "health": {
