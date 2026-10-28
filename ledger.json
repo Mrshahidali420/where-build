@@ -10627,6 +10627,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114246121503689",
    "commentId": "122114246121503689_1847770876362086"
+  },
+  {
+   "key": "2026-10-28|character:char:67067|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:67067",
+   "title": "My Teen Romantic Comedy SNAFU",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:67067",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793192840630,
+   "status": "claimed"
   }
  ],
  "health": {
