@@ -7981,6 +7981,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113990599503689",
    "commentId": "122113990599503689_1628981768775850"
+  },
+  {
+   "key": "2026-10-27|where:129190|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:129190",
+   "title": "The Genius Prince's Guide to Raising a Nation Out of Debt",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "129190",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793149779239,
+   "status": "claimed"
   }
  ],
  "health": {
