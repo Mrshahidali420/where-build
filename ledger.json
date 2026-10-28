@@ -8035,6 +8035,22 @@
    "status": "posted",
    "postId": "1329988470202923_122113994427503689",
    "commentId": "122113994427503689_1103890152622634"
+  },
+  {
+   "key": "2026-10-27|where:189117|whereanime",
+   "day": "2026-10-27",
+   "slug": "where:189117",
+   "title": "Dr. STONE SCIENCE FUTURE Cour 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "189117",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793150683003,
+   "status": "claimed"
   }
  ],
  "health": {
