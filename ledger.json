@@ -11462,6 +11462,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114324487503689",
    "commentId": "122114324487503689_29229334430084286"
+  },
+  {
+   "key": "2026-10-28|fact:fact:141014:popular|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:141014:popular",
+   "title": "Tomodachi Game",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:141014:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793206528363,
+   "status": "claimed"
   }
  ],
  "health": {
