@@ -9904,6 +9904,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114166999503689",
    "commentId": "122114166999503689_1573761171169012"
+  },
+  {
+   "key": "2026-10-28|character:char:28030|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:28030",
+   "title": "Vinland Saga Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:28030",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793180989572,
+   "status": "claimed"
   }
  ],
  "health": {
