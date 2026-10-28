@@ -9551,6 +9551,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114132247503689",
    "commentId": "122114132247503689_1254524750218381"
+  },
+  {
+   "key": "2026-10-28|where:186497|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:186497",
+   "title": "The Ramparts of Ice",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "186497",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793175244146,
+   "status": "claimed"
   }
  ],
  "health": {
