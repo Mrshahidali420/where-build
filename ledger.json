@@ -10943,6 +10943,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114272815503689",
    "commentId": "122114272815503689_1079781978211558"
+  },
+  {
+   "key": "2026-10-28|character:char:120969|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:120969",
+   "title": "Miss Kobayashi's Dragon Maid",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:120969",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793198013016,
+   "status": "claimed"
   }
  ],
  "health": {
