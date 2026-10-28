@@ -12968,6 +12968,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114434461503689",
    "commentId": "122114434461503689_1072249739137690"
+  },
+  {
+   "key": "2026-10-28|where:157397|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:157397",
+   "title": "The Dreaming Boy is a Realist",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "157397",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793231243144,
+   "status": "claimed"
   }
  ],
  "health": {
