@@ -10220,6 +10220,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114194983503689",
    "commentId": "122114194983503689_1397322038841581"
+  },
+  {
+   "key": "2026-10-28|fact:fact:104460:rated|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:104460:rated",
+   "title": "Laid-Back Camp The Movie",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:104460:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793186157780,
+   "status": "claimed"
   }
  ],
  "health": {
