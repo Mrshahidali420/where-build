@@ -10089,6 +10089,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114183175503689",
    "commentId": "122114183175503689_1471086311536652"
+  },
+  {
+   "key": "2026-10-28|fact:fact:184237:popular|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:184237:popular",
+   "title": "SAKAMOTO DAYS Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:184237:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793184025457,
+   "status": "claimed"
   }
  ],
  "health": {
