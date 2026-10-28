@@ -9030,6 +9030,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114086053503689",
    "commentId": "122114086053503689_1065968939812512"
+  },
+  {
+   "key": "2026-10-28|fact:fact:125426:popular|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:125426:popular",
+   "title": "The Way of the Househusband",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:125426:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793166742376,
+   "status": "claimed"
   }
  ],
  "health": {
