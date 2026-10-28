@@ -8434,6 +8434,22 @@
    "at": 1793156740565,
    "status": "posted",
    "postId": "1329988470202923_122114030571503689"
+  },
+  {
+   "key": "2026-10-27|fact:fact:516:run|whereanime",
+   "day": "2026-10-27",
+   "slug": "fact:fact:516:run",
+   "title": "Sgt. Frog",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:516:run",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793157041630,
+   "status": "claimed"
   }
  ],
  "health": {
