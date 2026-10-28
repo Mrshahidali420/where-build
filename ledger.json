@@ -9778,6 +9778,22 @@
    "at": 1793178577695,
    "status": "posted",
    "postId": "1329988470202923_122114154075503689"
+  },
+  {
+   "key": "2026-10-28|where:20031|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:20031",
+   "title": "D-Frag!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20031",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793178878977,
+   "status": "claimed"
   }
  ],
  "health": {
