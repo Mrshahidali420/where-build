@@ -13004,6 +13004,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114435925503689",
    "commentId": "122114435925503689_1840331576991870"
+  },
+  {
+   "key": "2026-10-28|where:147103|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:147103",
+   "title": "My Happy Marriage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "147103",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793231845253,
+   "status": "claimed"
   }
  ],
  "health": {
