@@ -11888,6 +11888,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114359641503689",
    "commentId": "122114359641503689_1613072989849909"
+  },
+  {
+   "key": "2026-10-28|where:146850|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:146850",
+   "title": "Farming Life in Another World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "146850",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793213544126,
+   "status": "claimed"
   }
  ],
  "health": {
