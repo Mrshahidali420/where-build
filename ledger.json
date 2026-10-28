@@ -11575,6 +11575,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114333073503689",
    "commentId": "122114333073503689_2298152294307267"
+  },
+  {
+   "key": "2026-10-28|character:char:37832|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:37832",
+   "title": "Puella Magi Madoka Magica",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:37832",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793208339229,
+   "status": "claimed"
   }
  ],
  "health": {
