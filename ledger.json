@@ -10035,6 +10035,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114178483503689",
    "commentId": "122114178483503689_1788727525727287"
+  },
+  {
+   "key": "2026-10-28|where:107871|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:107871",
+   "title": "Princess Connect! Re:Dive",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "107871",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793183121891,
+   "status": "claimed"
   }
  ],
  "health": {
