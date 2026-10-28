@@ -10297,6 +10297,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114209707503689",
    "commentId": "122114209707503689_1125353110390717"
+  },
+  {
+   "key": "2026-10-28|fact:fact:21688:rated|whereanime",
+   "day": "2026-10-28",
+   "slug": "fact:fact:21688:rated",
+   "title": "The Ancient Magus' Bride: Those Awaiting a Star",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:21688:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793187363118,
+   "status": "claimed"
   }
  ],
  "health": {
