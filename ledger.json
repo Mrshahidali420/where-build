@@ -8971,6 +8971,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114077107503689",
    "commentId": "122114077107503689_1111817388161292"
+  },
+  {
+   "key": "2026-10-28|scenes:177709:2|whereanime",
+   "day": "2026-10-28",
+   "slug": "scenes:177709:2",
+   "title": "SAKAMOTO DAYS",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "177709:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793165838870,
+   "status": "claimed"
   }
  ],
  "health": {
