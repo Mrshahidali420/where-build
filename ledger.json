@@ -8768,6 +8768,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114057811503689",
    "commentId": "122114057811503689_2213261586263923"
+  },
+  {
+   "key": "2026-10-28|episode:178868:4|whereanime",
+   "day": "2026-10-28",
+   "slug": "episode:178868:4",
+   "title": "Magic Knight Rayearth (2026)",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "178868:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793162501843,
+   "status": "claimed"
   }
  ],
  "health": {
