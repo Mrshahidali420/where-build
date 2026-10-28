@@ -8392,6 +8392,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114028237503689",
    "commentId": "122114028237503689_1135382378899914"
+  },
+  {
+   "key": "2026-10-27|character:char:2727|whereanime",
+   "day": "2026-10-27",
+   "slug": "character:char:2727",
+   "title": "Princess Mononoke",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:2727",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793156439508,
+   "status": "claimed"
   }
  ],
  "health": {
