@@ -14348,6 +14348,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114536125503689",
    "commentId": "122114536125503689_1461766779221025"
+  },
+  {
+   "key": "2026-10-29|where:173694|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:173694",
+   "title": "Failure Frame: I Became the Strongest and Annihilated Everything with Low-Level Spells",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "173694",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793253683905,
+   "status": "claimed"
   }
  ],
  "health": {
