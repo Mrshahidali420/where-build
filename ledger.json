@@ -14795,6 +14795,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114573865503689",
    "commentId": "122114573865503689_1661926935289088"
+  },
+  {
+   "key": "2026-10-29|where:148116|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:148116",
+   "title": "The Iceblade Sorcerer Shall Rule the World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "148116",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793260979481,
+   "status": "claimed"
   }
  ],
  "health": {
