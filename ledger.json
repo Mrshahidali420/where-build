@@ -17737,6 +17737,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114849049503689",
    "commentId": "122114849049503689_2664232497366454"
+  },
+  {
+   "key": "2026-10-29|where:13659|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:13659",
+   "title": "Oreimo 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "13659",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793310592147,
+   "status": "claimed"
   }
  ],
  "health": {
