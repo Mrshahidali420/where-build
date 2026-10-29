@@ -16222,6 +16222,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114719293503689",
    "commentId": "122114719293503689_1135043985573554"
+  },
+  {
+   "key": "2026-10-29|character:char:196522|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:196522",
+   "title": "SAKAMOTO DAYS",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:196522",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793284423265,
+   "status": "claimed"
   }
  ],
  "health": {
