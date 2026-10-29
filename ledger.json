@@ -15852,6 +15852,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114677977503689",
    "commentId": "122114677977503689_2423409298189756"
+  },
+  {
+   "key": "2026-10-29|scenes:20946:2|whereanime",
+   "day": "2026-10-29",
+   "slug": "scenes:20946:2",
+   "title": "My Love Story!!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "20946:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793278348677,
+   "status": "claimed"
   }
  ],
  "health": {
