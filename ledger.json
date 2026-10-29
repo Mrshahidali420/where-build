@@ -16492,6 +16492,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114749443503689",
    "commentId": "122114749443503689_1130712322686949"
+  },
+  {
+   "key": "2026-10-29|where:11785|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:11785",
+   "title": "Nyaruko: Crawling with Love!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "11785",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793289959341,
+   "status": "claimed"
   }
  ],
  "health": {
