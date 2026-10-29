@@ -16690,6 +16690,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114766951503689",
    "commentId": "122114766951503689_1468249805406144"
+  },
+  {
+   "key": "2026-10-29|character:char:158448|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:158448",
+   "title": "Great Pretender",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:158448",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793293274130,
+   "status": "claimed"
   }
  ],
  "health": {
