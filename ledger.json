@@ -15631,6 +15631,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114655849503689",
    "commentId": "122114655849503689_969566665739286"
+  },
+  {
+   "key": "2026-10-29|character:char:123691|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:123691",
+   "title": "No Game, No Life Zero",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:123691",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793274697245,
+   "status": "claimed"
   }
  ],
  "health": {
