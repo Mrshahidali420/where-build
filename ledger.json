@@ -17546,6 +17546,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114836107503689",
    "commentId": "122114836107503689_2108724829742217"
+  },
+  {
+   "key": "2026-10-29|where:124140|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:124140",
+   "title": "Sword Art Online the Movie -Progressive- Aria of a Starless Night",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "124140",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793307529400,
+   "status": "claimed"
   }
  ],
  "health": {
