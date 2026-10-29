@@ -16744,6 +16744,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114772711503689",
    "commentId": "122114772711503689_979293554672728"
+  },
+  {
+   "key": "2026-10-29|where:98034|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:98034",
+   "title": "The Disastrous Life of Saiki K. Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "98034",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793294204274,
+   "status": "claimed"
   }
  ],
  "health": {
