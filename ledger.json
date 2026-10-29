@@ -16780,6 +16780,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114775531503689",
    "commentId": "122114775531503689_2165092214445715"
+  },
+  {
+   "key": "2026-10-29|where:154|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:154",
+   "title": "Shaman King",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "154",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793294806570,
+   "status": "claimed"
   }
  ],
  "health": {
