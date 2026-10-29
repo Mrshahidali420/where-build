@@ -14294,6 +14294,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114531193503689",
    "commentId": "122114531193503689_1670089074904711"
+  },
+  {
+   "key": "2026-10-29|where:142853|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:142853",
+   "title": "Tokyo Revengers Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "142853",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793252779204,
+   "status": "claimed"
   }
  ],
  "health": {
