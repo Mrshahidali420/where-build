@@ -14086,6 +14086,22 @@
    "status": "posted",
    "postId": "1428738072106307",
    "commentId": "1428738072106307_1137146022339598"
+  },
+  {
+   "key": "2026-10-29|scenes:131565:2|whereanime",
+   "day": "2026-10-29",
+   "slug": "scenes:131565:2",
+   "title": "takt op.Destiny",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "131565:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793249436701,
+   "status": "claimed"
   }
  ],
  "health": {
