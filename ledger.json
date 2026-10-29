@@ -13577,6 +13577,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114475999503689",
    "commentId": "122114475999503689_968437999184028"
+  },
+  {
+   "key": "2026-10-28|character:char:155701|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:155701",
+   "title": "Shikimori's Not Just a Cutie",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:155701",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793241226269,
+   "status": "claimed"
   }
  ],
  "health": {
