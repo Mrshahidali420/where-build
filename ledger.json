@@ -14443,6 +14443,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114545095503689",
    "commentId": "122114545095503689_988846733607148"
+  },
+  {
+   "key": "2026-10-29|where:18245|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:18245",
+   "title": "White Album 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "18245",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793255219504,
+   "status": "claimed"
   }
  ],
  "health": {
