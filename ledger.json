@@ -13672,6 +13672,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114483487503689",
    "commentId": "122114483487503689_1137852225244094"
+  },
+  {
+   "key": "2026-10-28|where:7647|whereanime",
+   "day": "2026-10-28",
+   "slug": "where:7647",
+   "title": "Arakawa Under the Bridge",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "7647",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793242757803,
+   "status": "claimed"
   }
  ],
  "health": {
