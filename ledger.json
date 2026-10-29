@@ -17266,6 +17266,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114815551503689",
    "commentId": "122114815551503689_2271608176953140"
+  },
+  {
+   "key": "2026-10-29|character:char:162246|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:162246",
+   "title": "The Eminence in Shadow Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:162246",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793302982239,
+   "status": "claimed"
   }
  ],
  "health": {
