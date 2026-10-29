@@ -15685,6 +15685,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114660421503689",
    "commentId": "122114660421503689_1648135630311659"
+  },
+  {
+   "key": "2026-10-29|character:char:913|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:913",
+   "title": "Dragon Ball Z",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:913",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793275601962,
+   "status": "claimed"
   }
  ],
  "health": {
