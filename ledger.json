@@ -16672,6 +16672,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114765475503689",
    "commentId": "122114765475503689_997046736089656"
+  },
+  {
+   "key": "2026-10-29|where:114308|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:114308",
+   "title": "Sword Art Online: Alicization - War of Underworld Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "114308",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793292973081,
+   "status": "claimed"
   }
  ],
  "health": {
