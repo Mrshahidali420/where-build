@@ -16366,6 +16366,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114734851503689",
    "commentId": "122114734851503689_1439835451590596"
+  },
+  {
+   "key": "2026-10-29|where:146323|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:146323",
+   "title": "Spy Classroom",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "146323",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793287805939,
+   "status": "claimed"
   }
  ],
  "health": {
