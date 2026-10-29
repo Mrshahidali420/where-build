@@ -14276,6 +14276,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114530323503689",
    "commentId": "122114530323503689_1645834763788979"
+  },
+  {
+   "key": "2026-10-29|character:char:83017|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:83017",
+   "title": "Seraph of the End: Vampire Reign",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:83017",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793252477629,
+   "status": "claimed"
   }
  ],
  "health": {
