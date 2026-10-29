@@ -15500,6 +15500,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114644515503689",
    "commentId": "122114644515503689_2540451909757786"
+  },
+  {
+   "key": "2026-10-29|where:119675|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:119675",
+   "title": "SHAMAN KING (2021)",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "119675",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793272559554,
+   "status": "claimed"
   }
  ],
  "health": {
