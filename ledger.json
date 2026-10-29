@@ -16888,6 +16888,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114785323503689",
    "commentId": "122114785323503689_2263720487875366"
+  },
+  {
+   "key": "2026-10-29|where:176273|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:176273",
+   "title": "ZENSHU",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "176273",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793296614431,
+   "status": "claimed"
   }
  ],
  "health": {
