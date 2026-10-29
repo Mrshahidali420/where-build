@@ -17832,6 +17832,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114855517503689",
    "commentId": "122114855517503689_1098217706453559"
+  },
+  {
+   "key": "2026-10-29|where:197824|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:197824",
+   "title": "Farming Life in Another World 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "197824",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793312100093,
+   "status": "claimed"
   }
  ],
  "health": {
