@@ -13958,6 +13958,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114503647503689",
    "commentId": "122114503647503689_2315387009247212"
+  },
+  {
+   "key": "2026-10-29|episode:212503:4|whereanime",
+   "day": "2026-10-29",
+   "slug": "episode:212503:4",
+   "title": "The Iceblade Sorcerer Shall Rule the World II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "212503:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793247301442,
+   "status": "claimed"
   }
  ],
  "health": {
