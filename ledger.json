@@ -14759,6 +14759,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114571123503689",
    "commentId": "122114571123503689_1089844923821457"
+  },
+  {
+   "key": "2026-10-29|where:134732|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:134732",
+   "title": "Aoashi",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "134732",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793260376307,
+   "status": "claimed"
   }
  ],
  "health": {
