@@ -15302,6 +15302,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114628489503689",
    "commentId": "122114628489503689_1473558671294704"
+  },
+  {
+   "key": "2026-10-29|where:148098|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:148098",
+   "title": "A Galaxy Next Door",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "148098",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793269224329,
+   "status": "claimed"
   }
  ],
  "health": {
