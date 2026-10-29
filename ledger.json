@@ -13022,6 +13022,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114437131503689",
    "commentId": "122114437131503689_1477726737545323"
+  },
+  {
+   "key": "2026-10-28|character:char:2589|whereanime",
+   "day": "2026-10-28",
+   "slug": "character:char:2589",
+   "title": "Akira",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:2589",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793232146358,
+   "status": "claimed"
   }
  ],
  "health": {
