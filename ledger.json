@@ -17791,6 +17791,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114852895503689",
    "commentId": "122114852895503689_4604801133125043"
+  },
+  {
+   "key": "2026-10-29|character:char:497|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:497",
+   "title": "Fate/stay night",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:497",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793311496903,
+   "status": "claimed"
   }
  ],
  "health": {
