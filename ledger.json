@@ -17606,6 +17606,22 @@
    "at": 1793308154717,
    "status": "posted",
    "postId": "1329988470202923_122114840541503689"
+  },
+  {
+   "key": "2026-10-29|where:144092|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:144092",
+   "title": "Handyman Saitou in Another World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "144092",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793308457276,
+   "status": "claimed"
   }
  ],
  "health": {
