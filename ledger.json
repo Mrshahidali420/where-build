@@ -17904,6 +17904,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114859843503689",
    "commentId": "122114859843503689_4134925746814616"
+  },
+  {
+   "key": "2026-10-29|where:112609|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:112609",
+   "title": "Wandering Witch: The Journey of Elaina",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "112609",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793313325573,
+   "status": "claimed"
   }
  ],
  "health": {
