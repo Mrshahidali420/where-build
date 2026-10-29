@@ -14067,32 +14067,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-10-28",
-  "at": 1793162180499,
+  "day": "2026-10-29",
+  "at": 1793248807104,
   "list": [
    {
-    "id": 55171,
-    "name": "Mutta Nanba",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b55171-d8qSVw9zpN7r.jpg",
-    "favourites": 705,
-    "mediaId": 12431,
-    "voice": "Hiroaki Hirata"
+    "id": 120462,
+    "name": "Shinra Kusakabe",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/n120462-oSWdz2MhkbDE.png",
+    "favourites": 5815,
+    "mediaId": 105310,
+    "voice": "Gakuto Kajiwara"
    },
    {
-    "id": 123055,
-    "name": "Azusa Mukami",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/123055-brxgYLMKfO5N.png",
-    "favourites": 192,
-    "mediaId": 21046,
-    "voice": "Daisuke Kishio"
+    "id": 2159,
+    "name": "Kuririn",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b2159-qtEuMYyOUkwY.jpg",
+    "favourites": 972,
+    "mediaId": 813,
+    "voice": "Mayumi Tanaka"
    },
    {
-    "id": 88921,
-    "name": "Haruka Ogasawara",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b88921-BebUQkezSiaO.jpg",
-    "favourites": 113,
-    "mediaId": 20912,
-    "voice": "Saori Hayami"
+    "id": 2828,
+    "name": "Setsuna Meiou",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b2828-1mJZhqN5Tzoo.png",
+    "favourites": 393,
+    "mediaId": 740,
+    "voice": "Chiyoko Kawashima"
+   },
+   {
+    "id": 114,
+    "name": "Athrun Zala",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b114-R2qjrrCKVuBk.png",
+    "favourites": 218,
+    "mediaId": 94,
+    "voice": "Akira Ishida"
+   },
+   {
+    "id": 272552,
+    "name": "Mei Yoneme",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b272552-xFaYQbBP28f6.png",
+    "favourites": 140,
+    "mediaId": 140642,
+    "voice": "Akane Yabushima"
    }
   ]
  },
