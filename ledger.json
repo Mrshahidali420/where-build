@@ -18071,6 +18071,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114870277503689",
    "commentId": "122114870277503689_1691568942323554"
+  },
+  {
+   "key": "2026-10-29|where:145604|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:145604",
+   "title": "Shinobi no Ittoki",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "145604",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793316045360,
+   "status": "claimed"
   }
  ],
  "health": {
