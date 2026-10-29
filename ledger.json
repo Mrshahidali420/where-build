@@ -17981,6 +17981,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114864427503689",
    "commentId": "122114864427503689_28244975025182013"
+  },
+  {
+   "key": "2026-10-29|character:char:138191|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:138191",
+   "title": "Wise Man’s Grandchild",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:138191",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793314537283,
+   "status": "claimed"
   }
  ],
  "health": {
