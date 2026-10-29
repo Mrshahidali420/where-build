@@ -15320,6 +15320,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114629845503689",
    "commentId": "122114629845503689_4156821247784234"
+  },
+  {
+   "key": "2026-10-29|scenes:125426:2|whereanime",
+   "day": "2026-10-29",
+   "slug": "scenes:125426:2",
+   "title": "The Way of the Househusband",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "125426:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793269525919,
+   "status": "claimed"
   }
  ],
  "health": {
