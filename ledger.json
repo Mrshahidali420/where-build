@@ -15780,6 +15780,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114668251503689",
    "commentId": "122114668251503689_2610333492731322"
+  },
+  {
+   "key": "2026-10-29|where:20646|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:20646",
+   "title": "When Supernatural Battles Became Commonplace",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20646",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793277109597,
+   "status": "claimed"
   }
  ],
  "health": {
