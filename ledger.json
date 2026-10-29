@@ -15667,6 +15667,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114658939503689",
    "commentId": "122114658939503689_1103241438984811"
+  },
+  {
+   "key": "2026-10-29|where:20652|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:20652",
+   "title": "Durarara!! X2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20652",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793275300511,
+   "status": "claimed"
   }
  ],
  "health": {
