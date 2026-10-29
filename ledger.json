@@ -18130,6 +18130,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114874237503689",
    "commentId": "122114874237503689_1445443430993524"
+  },
+  {
+   "key": "2026-10-29|where:45|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:45",
+   "title": "Rurouni Kenshin",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "45",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793316968853,
+   "status": "claimed"
   }
  ],
  "health": {
