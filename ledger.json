@@ -19564,6 +19564,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114994471503689",
    "commentId": "122114994471503689_1639688504275383"
+  },
+  {
+   "key": "2026-10-30|character:char:124697|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:124697",
+   "title": "DON'T TOY WITH ME, MISS NAGATORO",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:124697",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793340333225,
+   "status": "claimed"
   }
  ],
  "health": {
