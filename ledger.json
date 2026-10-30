@@ -19934,6 +19934,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115023685503689",
    "commentId": "122115023685503689_1942920283388758"
+  },
+  {
+   "key": "2026-10-30|character:char:494|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:494",
+   "title": "Grave of the Fireflies",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:494",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793346403981,
+   "status": "claimed"
   }
  ],
  "health": {
