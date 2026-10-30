@@ -20500,6 +20500,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115077265503689",
    "commentId": "122115077265503689_1324798639679559"
+  },
+  {
+   "key": "2026-10-30|character:char:89030|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:89030",
+   "title": "Gate",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89030",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793355502646,
+   "status": "claimed"
   }
  ],
  "health": {
