@@ -18482,6 +18482,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114900943503689",
    "commentId": "122114900943503689_1124435070298429"
+  },
+  {
+   "key": "2026-10-29|character:char:22055|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:22055",
+   "title": "Nekomonogatari Black",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:22055",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793322723266,
+   "status": "claimed"
   }
  ],
  "health": {
