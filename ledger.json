@@ -19266,6 +19266,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114965323503689",
    "commentId": "122114965323503689_2116504038952391"
+  },
+  {
+   "key": "2026-10-30|episode:204650:5|whereanime",
+   "day": "2026-10-30",
+   "slug": "episode:204650:5",
+   "title": "TOUGEN ANKI: Nikko Kegon Falls Arc",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "204650:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793335490247,
+   "status": "claimed"
   }
  ],
  "health": {
