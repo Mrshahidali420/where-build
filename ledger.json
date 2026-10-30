@@ -19284,6 +19284,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114967681503689",
    "commentId": "122114967681503689_1147265291584025"
+  },
+  {
+   "key": "2026-10-30|character:char:143291|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:143291",
+   "title": "The God of High School",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:143291",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793335791779,
+   "status": "claimed"
   }
  ],
  "health": {
