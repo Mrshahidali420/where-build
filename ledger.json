@@ -23144,6 +23144,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115316425503689",
    "commentId": "122115316425503689_999980069804332"
+  },
+  {
+   "key": "2026-10-30|character:char:135592|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:135592",
+   "title": "I've Been Killing Slimes for 300 Years and Maxed Out My Level",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:135592",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793398971126,
+   "status": "claimed"
   }
  ],
  "health": {
