@@ -23162,6 +23162,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115317523503689",
    "commentId": "122115317523503689_1612365783247642"
+  },
+  {
+   "key": "2026-10-30|where:186052|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:186052",
+   "title": "The Water Magician",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "186052",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793399272088,
+   "status": "claimed"
   }
  ],
  "health": {
