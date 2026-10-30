@@ -20083,6 +20083,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115039423503689",
    "commentId": "122115039423503689_2078316606141523"
+  },
+  {
+   "key": "2026-10-30|where:20521|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:20521",
+   "title": "Hamatora",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20521",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793348834247,
+   "status": "claimed"
   }
  ],
  "health": {
