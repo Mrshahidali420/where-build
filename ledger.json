@@ -19790,6 +19790,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115012501503689",
    "commentId": "122115012501503689_1595454431909369"
+  },
+  {
+   "key": "2026-10-30|character:char:1811|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:1811",
+   "title": "5 Centimeters per Second",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:1811",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793343972132,
+   "status": "claimed"
   }
  ],
  "health": {
