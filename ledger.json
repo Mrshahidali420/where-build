@@ -21979,6 +21979,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115226335503689",
    "commentId": "122115226335503689_1621169426155259"
+  },
+  {
+   "key": "2026-10-30|character:char:122732|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:122732",
+   "title": "In Another World With My Smartphone",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:122732",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793379828534,
+   "status": "claimed"
   }
  ],
  "health": {
