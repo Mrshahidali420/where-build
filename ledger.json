@@ -18757,6 +18757,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114922513503689",
    "commentId": "122114922513503689_1114525624645261"
+  },
+  {
+   "key": "2026-10-29|character:char:64591|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:64591",
+   "title": "K",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:64591",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793327269362,
+   "status": "claimed"
   }
  ],
  "health": {
