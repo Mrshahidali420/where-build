@@ -20196,6 +20196,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115049353503689",
    "commentId": "122115049353503689_1135445425646807"
+  },
+  {
+   "key": "2026-10-30|character:char:127925|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:127925",
+   "title": "Higehiro: After Being Rejected, I Shaved and Took in a High School Runaway",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:127925",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793350658509,
+   "status": "claimed"
   }
  ],
  "health": {
