@@ -18667,6 +18667,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114915031503689",
    "commentId": "122114915031503689_1742500493506062"
+  },
+  {
+   "key": "2026-10-29|where:178462|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:178462",
+   "title": "I'm Getting Married to a Girl I Hate in My Class",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "178462",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793325761645,
+   "status": "claimed"
   }
  ],
  "health": {
