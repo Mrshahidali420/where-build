@@ -18906,6 +18906,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114937345503689",
    "commentId": "122114937345503689_1144424641575277"
+  },
+  {
+   "key": "2026-10-29|where:21377|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:21377",
+   "title": "Kuroko's Basketball: Last Game",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21377",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793329737050,
+   "status": "claimed"
   }
  ],
  "health": {
