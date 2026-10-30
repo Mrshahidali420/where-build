@@ -23257,6 +23257,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115323187503689",
    "commentId": "122115323187503689_1116251467617532"
+  },
+  {
+   "key": "2026-10-30|where:108891|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:108891",
+   "title": "Kono Oto Tomare!: Sounds of Life Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "108891",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793400802434,
+   "status": "claimed"
   }
  ],
  "health": {
