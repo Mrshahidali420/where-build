@@ -21001,6 +21001,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115132909503689",
    "commentId": "122115132909503689_968700696310791"
+  },
+  {
+   "key": "2026-10-30|character:char:147893|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:147893",
+   "title": "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:147893",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793363685399,
+   "status": "claimed"
   }
  ],
  "health": {
