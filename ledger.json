@@ -18315,6 +18315,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114889123503689",
    "commentId": "122114889123503689_1667688024943317"
+  },
+  {
+   "key": "2026-10-29|character:char:138137|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:138137",
+   "title": "TSUKIMICHI -Moonlit Fantasy-",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:138137",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793319986851,
+   "status": "claimed"
   }
  ],
  "health": {
