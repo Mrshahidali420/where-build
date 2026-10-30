@@ -21204,6 +21204,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115153303503689",
    "commentId": "122115153303503689_1436398355328907"
+  },
+  {
+   "key": "2026-10-30|character:char:209902|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:209902",
+   "title": "Vivy -Fluorite Eye's Song-",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:209902",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793367024206,
+   "status": "claimed"
   }
  ],
  "health": {
