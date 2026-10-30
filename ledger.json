@@ -19731,6 +19731,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115008493503689",
    "commentId": "122115008493503689_1101660162636545"
+  },
+  {
+   "key": "2026-10-30|character:char:155706|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:155706",
+   "title": "Summer Time Rendering",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:155706",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793343067609,
+   "status": "claimed"
   }
  ],
  "health": {
