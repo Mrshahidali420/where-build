@@ -19492,6 +19492,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114988279503689",
    "commentId": "122114988279503689_2927065951000042"
+  },
+  {
+   "key": "2026-10-30|character:char:24593|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:24593",
+   "title": "Durarara!!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:24593",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793339127315,
+   "status": "claimed"
   }
  ],
  "health": {
