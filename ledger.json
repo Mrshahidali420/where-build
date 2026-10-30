@@ -21317,6 +21317,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115165549503689",
    "commentId": "122115165549503689_2142868842985967"
+  },
+  {
+   "key": "2026-10-30|where:4752|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:4752",
+   "title": "Vampire Knight: Guilty",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "4752",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793368866306,
+   "status": "claimed"
   }
  ],
  "health": {
