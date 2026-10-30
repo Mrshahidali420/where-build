@@ -19510,6 +19510,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114989791503689",
    "commentId": "122114989791503689_3145658459103597"
+  },
+  {
+   "key": "2026-10-30|where:187942|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:187942",
+   "title": "Tune In to the Midnight Heart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "187942",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793339428781,
+   "status": "claimed"
   }
  ],
  "health": {
