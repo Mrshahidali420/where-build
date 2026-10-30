@@ -20608,6 +20608,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115087135503689",
    "commentId": "122115087135503689_1477492857579367"
+  },
+  {
+   "key": "2026-10-30|character:char:89020|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:89020",
+   "title": "Himouto! Umaru-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89020",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793357332916,
+   "status": "claimed"
   }
  ],
  "health": {
