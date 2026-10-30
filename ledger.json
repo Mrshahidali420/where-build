@@ -18500,6 +18500,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114902623503689",
    "commentId": "122114902623503689_1109079571902960"
+  },
+  {
+   "key": "2026-10-29|where:430|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:430",
+   "title": "Fullmetal Alchemist: The Movie - Conqueror of Shamballa",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "430",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793323024838,
+   "status": "claimed"
   }
  ],
  "health": {
