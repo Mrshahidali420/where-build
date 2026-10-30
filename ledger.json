@@ -21114,6 +21114,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115145077503689",
    "commentId": "122115145077503689_2558176561687255"
+  },
+  {
+   "key": "2026-10-30|where:170890|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:170890",
+   "title": "THE NEW GATE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "170890",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793365517356,
+   "status": "claimed"
   }
  ],
  "health": {
