@@ -19641,6 +19641,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115000837503689",
    "commentId": "122115000837503689_1586880950123611"
+  },
+  {
+   "key": "2026-10-30|where:20694|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:20694",
+   "title": "Non Non Biyori Repeat",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20694",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793341559803,
+   "status": "claimed"
   }
  ],
  "health": {
