@@ -18369,6 +18369,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114893239503689",
    "commentId": "122114893239503689_4649663041968333"
+  },
+  {
+   "key": "2026-10-29|where:154745|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:154745",
+   "title": "Rent-a-Girlfriend Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "154745",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793320913512,
+   "status": "claimed"
   }
  ],
  "health": {
