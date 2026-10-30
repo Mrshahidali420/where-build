@@ -20065,6 +20065,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115035829503689",
    "commentId": "122115035829503689_1123266857229942"
+  },
+  {
+   "key": "2026-10-30|character:char:89295|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:89295",
+   "title": "Kiznaiver",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89295",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793348532630,
+   "status": "claimed"
   }
  ],
  "health": {
