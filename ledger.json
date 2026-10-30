@@ -20590,6 +20590,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115084951503689",
    "commentId": "122115084951503689_2457684341727573"
+  },
+  {
+   "key": "2026-10-30|where:15379|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:15379",
+   "title": "The Troubled Life of Miss Kotoura",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "15379",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793357031641,
+   "status": "claimed"
   }
  ],
  "health": {
