@@ -19157,48 +19157,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-10-29",
-  "at": 1793248807104,
+  "day": "2026-10-30",
+  "at": 1793333354290,
   "list": [
    {
-    "id": 120462,
-    "name": "Shinra Kusakabe",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/n120462-oSWdz2MhkbDE.png",
-    "favourites": 5815,
-    "mediaId": 105310,
-    "voice": "Gakuto Kajiwara"
+    "id": 4606,
+    "name": "Tomoya Okazaki",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b4606-61r9h3WUrkA9.png",
+    "favourites": 4685,
+    "mediaId": 2167,
+    "voice": "Yuuichi Nakamura"
    },
    {
-    "id": 2159,
-    "name": "Kuririn",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b2159-qtEuMYyOUkwY.jpg",
-    "favourites": 972,
-    "mediaId": 813,
-    "voice": "Mayumi Tanaka"
+    "id": 89898,
+    "name": "Fumikage Tokoyami",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89898-yAYDmPQPSOTV.png",
+    "favourites": 3545,
+    "mediaId": 21459,
+    "voice": "Yoshimasa Hosoya"
    },
    {
-    "id": 2828,
-    "name": "Setsuna Meiou",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b2828-1mJZhqN5Tzoo.png",
-    "favourites": 393,
-    "mediaId": 740,
-    "voice": "Chiyoko Kawashima"
+    "id": 89517,
+    "name": "Lev Haiba",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89517-qVTrohFmBcSM.png",
+    "favourites": 851,
+    "mediaId": 20992,
+    "voice": "Mark Ishii"
    },
    {
-    "id": 114,
-    "name": "Athrun Zala",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b114-R2qjrrCKVuBk.png",
-    "favourites": 218,
-    "mediaId": 94,
-    "voice": "Akira Ishida"
+    "id": 10446,
+    "name": "Alexander Volg Zangief",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b10446-D1EvOLDWrSko.jpg",
+    "favourites": 693,
+    "mediaId": 263,
+    "voice": "Toshiyuki Morikawa"
    },
    {
-    "id": 272552,
-    "name": "Mei Yoneme",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b272552-xFaYQbBP28f6.png",
-    "favourites": 140,
-    "mediaId": 140642,
-    "voice": "Akane Yabushima"
+    "id": 379,
+    "name": "Alicia Florence",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b379-R8Dj8uP0fB7B.png",
+    "favourites": 506,
+    "mediaId": 477,
+    "voice": "Sayaka Oohara"
    }
   ]
  },
