@@ -18387,6 +18387,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114894127503689",
    "commentId": "122114894127503689_2518039255375415"
+  },
+  {
+   "key": "2026-10-29|character:char:204522|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:204522",
+   "title": "ODDTAXI",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:204522",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793321215098,
+   "status": "claimed"
   }
  ],
  "health": {
