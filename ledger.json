@@ -20119,6 +20119,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115043467503689",
    "commentId": "122115043467503689_1648635076660517"
+  },
+  {
+   "key": "2026-10-30|where:138882|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:138882",
+   "title": "The Yakuza's Guide to Babysitting",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "138882",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793349452848,
+   "status": "claimed"
   }
  ],
  "health": {
