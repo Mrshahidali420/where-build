@@ -21281,6 +21281,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115161553503689",
    "commentId": "122115161553503689_1120661094162542"
+  },
+  {
+   "key": "2026-10-30|where:98292|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:98292",
+   "title": "NEW GAME!!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "98292",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793368263745,
+   "status": "claimed"
   }
  ],
  "health": {
