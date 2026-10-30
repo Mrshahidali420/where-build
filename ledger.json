@@ -23239,6 +23239,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115321711503689",
    "commentId": "122115321711503689_1436154571957774"
+  },
+  {
+   "key": "2026-10-30|character:char:2379|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:2379",
+   "title": "Lovely Complex",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:2379",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793400501461,
+   "status": "claimed"
   }
  ],
  "health": {
