@@ -23275,6 +23275,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115324267503689",
    "commentId": "122115324267503689_1508847594419908"
+  },
+  {
+   "key": "2026-10-30|character:char:205566|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:205566",
+   "title": "Uncle from Another World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:205566",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793401103329,
+   "status": "claimed"
   }
  ],
  "health": {
