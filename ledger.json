@@ -21533,6 +21533,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115187611503689",
    "commentId": "122115187611503689_1682682020227032"
+  },
+  {
+   "key": "2026-10-30|where:4975|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:4975",
+   "title": "ChäoS;HEAd",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "4975",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793372507932,
+   "status": "claimed"
   }
  ],
  "health": {
