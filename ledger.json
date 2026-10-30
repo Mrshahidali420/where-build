@@ -18649,6 +18649,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114913663503689",
    "commentId": "122114913663503689_971484402684375"
+  },
+  {
+   "key": "2026-10-29|character:char:207|whereanime",
+   "day": "2026-10-29",
+   "slug": "character:char:207",
+   "title": "Fruits Basket The Final Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:207",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793325460136,
+   "status": "claimed"
   }
  ],
  "health": {
