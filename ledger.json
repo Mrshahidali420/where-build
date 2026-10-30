@@ -19061,6 +19061,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114950689503689",
    "commentId": "122114950689503689_4303755116423887"
+  },
+  {
+   "key": "2026-10-29|where:162983|whereanime",
+   "day": "2026-10-29",
+   "slug": "where:162983",
+   "title": "Undead Murder Farce",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "162983",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793332148962,
+   "status": "claimed"
   }
  ],
  "health": {
