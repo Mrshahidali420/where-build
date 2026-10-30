@@ -19302,6 +19302,22 @@
    "status": "posted",
    "postId": "1329988470202923_122114971203503689",
    "commentId": "122114971203503689_1477414537820383"
+  },
+  {
+   "key": "2026-10-30|episode:186742:4|whereanime",
+   "day": "2026-10-30",
+   "slug": "episode:186742:4",
+   "title": "A Certain Dark Item",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "186742:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793336093305,
+   "status": "claimed"
   }
  ],
  "health": {
