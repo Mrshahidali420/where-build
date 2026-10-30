@@ -21795,6 +21795,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115209193503689",
    "commentId": "122115209193503689_28831104789877386"
+  },
+  {
+   "key": "2026-10-30|where:1691|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:1691",
+   "title": "Kaze no Stigma",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "1691",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793376812389,
+   "status": "claimed"
   }
  ],
  "health": {
