@@ -20649,6 +20649,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115091107503689",
    "commentId": "122115091107503689_30158850793714579"
+  },
+  {
+   "key": "2026-10-30|where:100891|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:100891",
+   "title": "KENGAN ASHURA Part I",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "100891",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793357935519,
+   "status": "claimed"
   }
  ],
  "health": {
