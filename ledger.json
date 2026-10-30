@@ -23370,6 +23370,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115330579503689",
    "commentId": "122115330579503689_2261306841097080"
+  },
+  {
+   "key": "2026-10-30|character:char:132848|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:132848",
+   "title": "Arifureta: From Commonplace to World's Strongest Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:132848",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793402607952,
+   "status": "claimed"
   }
  ],
  "health": {
