@@ -21592,6 +21592,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115191505503689",
    "commentId": "122115191505503689_1840712560256748"
+  },
+  {
+   "key": "2026-10-30|where:165790|whereanime",
+   "day": "2026-10-30",
+   "slug": "where:165790",
+   "title": "365 Days to the Wedding",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "165790",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793373460332,
+   "status": "claimed"
   }
  ],
  "health": {
