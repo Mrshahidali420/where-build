@@ -20006,6 +20006,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115030303503689",
    "commentId": "122115030303503689_1095967056596439"
+  },
+  {
+   "key": "2026-10-30|character:char:135022|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:135022",
+   "title": "Welcome to Demon School! Iruma-kun",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:135022",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793347610311,
+   "status": "claimed"
   }
  ],
  "health": {
