@@ -23668,6 +23668,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115357711503689",
    "commentId": "122115357711503689_1758821308556911"
+  },
+  {
+   "key": "2026-10-30|character:char:161741|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:161741",
+   "title": "The Detective Is Already Dead",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:161741",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793407468790,
+   "status": "claimed"
   }
  ],
  "health": {
