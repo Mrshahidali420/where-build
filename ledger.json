@@ -25251,6 +25251,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115472995503689",
    "commentId": "122115472995503689_1124998533264256"
+  },
+  {
+   "key": "2026-10-31|character:char:124545|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:124545",
+   "title": "A Place Further Than the Universe",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:124545",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793433245127,
+   "status": "claimed"
   }
  ],
  "health": {
