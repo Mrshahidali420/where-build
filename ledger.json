@@ -28651,6 +28651,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115769323503689",
    "commentId": "122115769323503689_1375698924430888"
+  },
+  {
+   "key": "2026-10-31|scenes:105333:3|whereanime",
+   "day": "2026-10-31",
+   "slug": "scenes:105333:3",
+   "title": "Dr. STONE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "105333:3",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793488746300,
+   "status": "claimed"
   }
  ],
  "health": {
