@@ -26325,6 +26325,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115580593503689",
    "commentId": "122115580593503689_2917203925331915"
+  },
+  {
+   "key": "2026-10-31|where:9734|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:9734",
+   "title": "K-ON! Season 2: Plan!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "9734",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793450854057,
+   "status": "claimed"
   }
  ],
  "health": {
