@@ -25721,6 +25721,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115517779503689",
    "commentId": "122115517779503689_2694908644277462"
+  },
+  {
+   "key": "2026-10-31|where:237|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:237",
+   "title": "Eureka Seven",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "237",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793440833811,
+   "status": "claimed"
   }
  ],
  "health": {
