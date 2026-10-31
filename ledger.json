@@ -25102,6 +25102,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115460995503689",
    "commentId": "122115460995503689_1440762034832531"
+  },
+  {
+   "key": "2026-10-31|where:140999|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:140999",
+   "title": "Sword Art Online the Movie -Progressive- Scherzo of Deep Night",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "140999",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793430809559,
+   "status": "claimed"
   }
  ],
  "health": {
