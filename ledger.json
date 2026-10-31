@@ -26551,6 +26551,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115601041503689",
    "commentId": "122115601041503689_1387892140086152"
+  },
+  {
+   "key": "2026-10-31|character:char:8524|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:8524",
+   "title": "Castle in the Sky",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:8524",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793454488869,
+   "status": "claimed"
   }
  ],
  "health": {
