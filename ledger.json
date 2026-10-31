@@ -26140,6 +26140,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115563367503689",
    "commentId": "122115563367503689_1886089335890605"
+  },
+  {
+   "key": "2026-10-31|character:char:230873|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:230873",
+   "title": "Makeine: Too Many Losing Heroines!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:230873",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793447823173,
+   "status": "claimed"
   }
  ],
  "health": {
