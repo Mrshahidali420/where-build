@@ -26122,6 +26122,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115561777503689",
    "commentId": "122115561777503689_1651197503061606"
+  },
+  {
+   "key": "2026-10-31|where:185736|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:185736",
+   "title": "My Hero Academia: Vigilantes",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "185736",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793447521807,
+   "status": "claimed"
   }
  ],
  "health": {
