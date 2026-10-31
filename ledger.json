@@ -27345,6 +27345,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115666393503689",
    "commentId": "122115666393503689_1675268114205003"
+  },
+  {
+   "key": "2026-10-31|where:949|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:949",
+   "title": "Gunbuster",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "949",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793467536907,
+   "status": "claimed"
   }
  ],
  "health": {
