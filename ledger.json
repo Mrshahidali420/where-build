@@ -27584,6 +27584,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115693417503689",
    "commentId": "122115693417503689_2180925705823737"
+  },
+  {
+   "key": "2026-10-31|where:112444|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:112444",
+   "title": "APPARE-RANMAN!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "112444",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793471465752,
+   "status": "claimed"
   }
  ],
  "health": {
