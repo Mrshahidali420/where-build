@@ -28180,6 +28180,29 @@
    "status": "posted",
    "postId": "1329988470202923_122115738771503689",
    "commentId": "122115738771503689_1647471443395274"
+  },
+  {
+   "share": true,
+   "key": "2026-10-31|share:1318170941390322_122119875843500964|whereanime",
+   "day": "2026-10-31",
+   "slug": "share:1318170941390322_122119875843500964",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1318170941390322_122119875843500964",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1318170941390322_122119875843500964",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "You Got Me, Sempai!",
+   "sourceFormat": "type:next",
+   "link": "https://www.facebook.com/1318170941390322/posts/122119875843500964",
+   "message": "New on our sister Page, Manhwa Index:",
+   "at": 1793481161890,
+   "status": "claimed"
   }
  ],
  "health": {
