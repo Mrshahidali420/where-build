@@ -25978,6 +25978,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115547683503689",
    "commentId": "122115547683503689_923073867407064"
+  },
+  {
+   "key": "2026-10-31|character:char:4839|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:4839",
+   "title": "Fairy Tail Final Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:4839",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793445074794,
+   "status": "claimed"
   }
  ],
  "health": {
