@@ -26253,6 +26253,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115573975503689",
    "commentId": "122115573975503689_4833973953594623"
+  },
+  {
+   "key": "2026-10-31|where:155730|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:155730",
+   "title": "My Tiny Senpai",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "155730",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793449648854,
+   "status": "claimed"
   }
  ],
  "health": {
