@@ -25305,6 +25305,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115477381503689",
    "commentId": "122115477381503689_1597926681575960"
+  },
+  {
+   "key": "2026-10-31|where:20529|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:20529",
+   "title": "The Kawai Complex Guide to Manors and Hostel Behavior",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20529",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793434148865,
+   "status": "claimed"
   }
  ],
  "health": {
