@@ -26533,6 +26533,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115599619503689",
    "commentId": "122115599619503689_2181915366011526"
+  },
+  {
+   "key": "2026-10-31|where:101231|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:101231",
+   "title": "Flavors of Youth",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "101231",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793454187574,
+   "status": "claimed"
   }
  ],
  "health": {
