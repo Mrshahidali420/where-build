@@ -27625,6 +27625,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115696351503689",
    "commentId": "122115696351503689_1844525330301074"
+  },
+  {
+   "key": "2026-10-31|scenes:11757:2|whereanime",
+   "day": "2026-10-31",
+   "slug": "scenes:11757:2",
+   "title": "Sword Art Online",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "11757:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793472086990,
+   "status": "claimed"
   }
  ],
  "health": {
