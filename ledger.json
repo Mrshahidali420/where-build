@@ -26104,6 +26104,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115559983503689",
    "commentId": "122115559983503689_4611722192482757"
+  },
+  {
+   "key": "2026-10-31|character:char:133334|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:133334",
+   "title": "How a Realist Hero Rebuilt the Kingdom",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:133334",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793447220430,
+   "status": "claimed"
   }
  ],
  "health": {
