@@ -24451,48 +24451,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-10-30",
-  "at": 1793333354290,
+  "day": "2026-10-31",
+  "at": 1793419891683,
   "list": [
    {
-    "id": 4606,
-    "name": "Tomoya Okazaki",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b4606-61r9h3WUrkA9.png",
-    "favourites": 4685,
-    "mediaId": 2167,
-    "voice": "Yuuichi Nakamura"
+    "id": 71,
+    "name": "L Lawliet",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b71-1W4panC53vfs.png",
+    "favourites": 26958,
+    "mediaId": 1535,
+    "voice": "Kappei Yamaguchi"
    },
    {
-    "id": 89898,
-    "name": "Fumikage Tokoyami",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89898-yAYDmPQPSOTV.png",
-    "favourites": 3545,
-    "mediaId": 21459,
-    "voice": "Yoshimasa Hosoya"
+    "id": 88114,
+    "name": "Yuu Kashima",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/88114.jpg",
+    "favourites": 974,
+    "mediaId": 20869,
+    "voice": "Mai Nakahara"
    },
    {
-    "id": 89517,
-    "name": "Lev Haiba",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89517-qVTrohFmBcSM.png",
-    "favourites": 851,
-    "mediaId": 20992,
-    "voice": "Mark Ishii"
+    "id": 89546,
+    "name": "Asuma Mutsumi",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89546-6i8jczykMo1o.jpg",
+    "favourites": 773,
+    "mediaId": 21686,
+    "voice": "Nobunaga Shimazaki"
    },
    {
-    "id": 10446,
-    "name": "Alexander Volg Zangief",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b10446-D1EvOLDWrSko.jpg",
-    "favourites": 693,
-    "mediaId": 263,
-    "voice": "Toshiyuki Morikawa"
+    "id": 88990,
+    "name": "Ferid Bathory",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b88990-GQCTvKZPTg3h.png",
+    "favourites": 684,
+    "mediaId": 20829,
+    "voice": "Takahiro Sakurai"
    },
    {
-    "id": 379,
-    "name": "Alicia Florence",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b379-R8Dj8uP0fB7B.png",
-    "favourites": 506,
-    "mediaId": 477,
-    "voice": "Sayaka Oohara"
+    "id": 126569,
+    "name": "Ruby Rose",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b126569-0BUT2Wnk0DSm.png",
+    "favourites": 670,
+    "mediaId": 146668,
+    "voice": "Saori Hayami"
    }
   ]
  },
