@@ -27232,6 +27232,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115658077503689",
    "commentId": "122115658077503689_1656005762744463"
+  },
+  {
+   "key": "2026-10-31|where:155657|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:155657",
+   "title": "Train to the End of the World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "155657",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793465704816,
+   "status": "claimed"
   }
  ],
  "health": {
