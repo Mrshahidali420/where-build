@@ -25942,6 +25942,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115544539503689",
    "commentId": "122115544539503689_2192461338032627"
+  },
+  {
+   "key": "2026-10-31|character:char:179809|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:179809",
+   "title": "A Sign of Affection",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:179809",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793444471959,
+   "status": "claimed"
   }
  ],
  "health": {
