@@ -24876,6 +24876,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115442941503689",
    "commentId": "122115442941503689_1133961135874508"
+  },
+  {
+   "key": "2026-10-31|scenes:114124:2|whereanime",
+   "day": "2026-10-31",
+   "slug": "scenes:114124:2",
+   "title": "Moriarty the Patriot",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "114124:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793427174718,
+   "status": "claimed"
   }
  ],
  "health": {
