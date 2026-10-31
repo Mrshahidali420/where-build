@@ -28090,6 +28090,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115733293503689",
    "commentId": "122115733293503689_1802624884325089"
+  },
+  {
+   "key": "2026-10-31|character:char:54145|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:54145",
+   "title": "Non Non Biyori",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:54145",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793479657487,
+   "status": "claimed"
   }
  ],
  "health": {
