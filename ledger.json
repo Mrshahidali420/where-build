@@ -27959,6 +27959,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115723879503689",
    "commentId": "122115723879503689_3930886113721290"
+  },
+  {
+   "key": "2026-10-31|character:char:75186|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:75186",
+   "title": "Tamako -love story-",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:75186",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793477525089,
+   "status": "claimed"
   }
  ],
  "health": {
