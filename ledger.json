@@ -26402,6 +26402,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115588885503689",
    "commentId": "122115588885503689_29511395098547336"
+  },
+  {
+   "key": "2026-10-31|character:char:138851|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:138851",
+   "title": "Skip and Loafer",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:138851",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793452059268,
+   "status": "claimed"
   }
  ],
  "health": {
