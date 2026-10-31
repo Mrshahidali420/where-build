@@ -26176,6 +26176,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115566535503689",
    "commentId": "122115566535503689_4366772503635943"
+  },
+  {
+   "key": "2026-10-31|character:char:127574|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:127574",
+   "title": "Megalobox",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:127574",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793448425776,
+   "status": "claimed"
   }
  ],
  "health": {
