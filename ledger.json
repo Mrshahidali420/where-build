@@ -24146,6 +24146,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115390657503689",
    "commentId": "122115390657503689_1148183428182516"
+  },
+  {
+   "key": "2026-10-30|character:char:121874|whereanime",
+   "day": "2026-10-30",
+   "slug": "character:char:121874",
+   "title": "AHO-GIRL",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:121874",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793415353964,
+   "status": "claimed"
   }
  ],
  "health": {
