@@ -28258,6 +28258,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115742785503689",
    "commentId": "122115742785503689_1849507592717033"
+  },
+  {
+   "key": "2026-10-31|character:char:139|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:139",
+   "title": "D.Gray-man",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:139",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793482365551,
+   "status": "claimed"
   }
  ],
  "health": {
