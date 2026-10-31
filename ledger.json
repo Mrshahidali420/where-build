@@ -27941,6 +27941,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115722565503689",
    "commentId": "122115722565503689_2523697454788637"
+  },
+  {
+   "key": "2026-10-31|where:106319|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:106319",
+   "title": "The 8th Son? Are You Kidding Me?",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "106319",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793477224177,
+   "status": "claimed"
   }
  ],
  "health": {
