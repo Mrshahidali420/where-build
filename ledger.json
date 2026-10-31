@@ -25512,6 +25512,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115497463503689",
    "commentId": "122115497463503689_2021480931899985"
+  },
+  {
+   "key": "2026-10-31|where:182300|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:182300",
+   "title": "Wistoria: Wand and Sword Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "182300",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793437486920,
+   "status": "claimed"
   }
  ],
  "health": {
