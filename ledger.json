@@ -25626,6 +25626,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115507909503689",
    "commentId": "122115507909503689_1863736114800745"
+  },
+  {
+   "key": "2026-10-31|character:char:192862|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:192862",
+   "title": "I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:192862",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793439296107,
+   "status": "claimed"
   }
  ],
  "health": {
