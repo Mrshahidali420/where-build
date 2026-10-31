@@ -24935,6 +24935,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115446415503689",
    "commentId": "122115446415503689_2971422913216875"
+  },
+  {
+   "key": "2026-10-31|where:132474|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:132474",
+   "title": "Skeleton Knight in Another World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "132474",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793428078286,
+   "status": "claimed"
   }
  ],
  "health": {
