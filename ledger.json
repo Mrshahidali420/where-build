@@ -27810,6 +27810,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115711813503689",
    "commentId": "122115711813503689_2362863617788488"
+  },
+  {
+   "key": "2026-10-31|where:101227|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:101227",
+   "title": "Didn't I Say to Make My Abilities Average in the Next Life?!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "101227",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793475097053,
+   "status": "claimed"
   }
  ],
  "health": {
