@@ -26438,6 +26438,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115592233503689",
    "commentId": "122115592233503689_1472363931433980"
+  },
+  {
+   "key": "2026-10-31|where:72|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:72",
+   "title": "Full Metal Panic? Fumoffu",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "72",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793452681185,
+   "status": "claimed"
   }
  ],
  "health": {
