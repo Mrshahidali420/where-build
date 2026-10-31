@@ -27643,6 +27643,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115697743503689",
    "commentId": "122115697743503689_4593588687621508"
+  },
+  {
+   "key": "2026-10-31|character:char:89537|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:89537",
+   "title": "Twin Star Exorcists",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89537",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793472389366,
+   "status": "claimed"
   }
  ],
  "health": {
