@@ -25775,6 +25775,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115522807503689",
    "commentId": "122115522807503689_1678646610548965"
+  },
+  {
+   "key": "2026-10-31|character:char:169395|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:169395",
+   "title": "BLUE LOCK Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:169395",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793441737407,
+   "status": "claimed"
   }
  ],
  "health": {
