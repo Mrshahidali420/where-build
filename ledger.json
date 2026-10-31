@@ -24414,6 +24414,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115408177503689",
    "commentId": "122115408177503689_3706328302866473"
+  },
+  {
+   "key": "2026-10-31|episode:235:1218|whereanime",
+   "day": "2026-10-31",
+   "slug": "episode:235:1218",
+   "title": "Detective Conan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "235:1218",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793419591119,
+   "status": "claimed"
   }
  ],
  "health": {
