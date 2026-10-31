@@ -24619,6 +24619,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115423771503689",
    "commentId": "122115423771503689_3270021159857074"
+  },
+  {
+   "key": "2026-10-31|where:153406|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:153406",
+   "title": "Tower of God Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "153406",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793422922041,
+   "status": "claimed"
   }
  ],
  "health": {
