@@ -24786,6 +24786,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115434175503689",
    "commentId": "122115434175503689_1633845968421779"
+  },
+  {
+   "key": "2026-10-31|character:char:215188|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:215188",
+   "title": "takt op.Destiny",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:215188",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793425650213,
+   "status": "claimed"
   }
  ],
  "health": {
