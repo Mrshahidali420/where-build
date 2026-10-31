@@ -26903,6 +26903,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115631977503689",
    "commentId": "122115631977503689_1494285302636515"
+  },
+  {
+   "key": "2026-10-31|where:143271|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:143271",
+   "title": "The Irregular at Magic High School Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "143271",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793460256366,
+   "status": "claimed"
   }
  ],
  "health": {
