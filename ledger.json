@@ -28669,6 +28669,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115770691503689",
    "commentId": "122115770691503689_3390982551102161"
+  },
+  {
+   "key": "2026-10-31|where:100878|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:100878",
+   "title": "Saga of Tanya the Evil - the Movie -",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "100878",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793489047488,
+   "status": "claimed"
   }
  ],
  "health": {
