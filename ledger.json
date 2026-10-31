@@ -27088,6 +27088,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115647061503689",
    "commentId": "122115647061503689_1463761351880174"
+  },
+  {
+   "key": "2026-10-31|scenes:113415:2|whereanime",
+   "day": "2026-10-31",
+   "slug": "scenes:113415:2",
+   "title": "JUJUTSU KAISEN",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "113415:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793463292222,
+   "status": "claimed"
   }
  ],
  "health": {
