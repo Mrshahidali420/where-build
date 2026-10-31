@@ -24470,6 +24470,22 @@
    "status": "posted",
    "postId": "4663267023994297",
    "commentId": "4663267023994297_1290073796596481"
+  },
+  {
+   "key": "2026-10-31|episode:187402:6|whereanime",
+   "day": "2026-10-31",
+   "slug": "episode:187402:6",
+   "title": "A Tale of the Secret Saint",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "187402:6",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793420513007,
+   "status": "claimed"
   }
  ],
  "health": {
