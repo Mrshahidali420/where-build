@@ -92,11 +92,11 @@ test('cards: with stills, the white band over a grid; without, the wide picture 
   const fake = { src: 'data:image/jpeg;base64,AA==', ratio: 16 / 9 }
   const grid = outNow.template({ ...post.view, art: { frames: post.art.frames.map(() => fake) } }, kit)
   const g = walk(grid)
-  assert.ok(['EPISODE 12', 'OUT', 'TODAY', 'Fixture Index', 'example.com'].every((text) => g.texts.includes(text)), g.texts.join('|'))
+  assert.ok(['EPISODE 12', 'AIRED', 'TODAY', 'Fixture Index', 'example.com'].every((text) => g.texts.includes(text)), g.texts.join('|'))
   assert.equal(g.images.length, 4)
   const plain = outNow.template({ ...post.view, art: { hero: fake } }, kit)
   const p = walk(plain)
-  assert.ok(['EPISODE 12', 'OUT NOW', 'STEEL HARBOR'].every((text) => p.texts.includes(text)), p.texts.join('|'))
+  assert.ok(['EPISODE 12', 'AIRED TODAY', 'STEEL HARBOR'].every((text) => p.texts.includes(text)), p.texts.join('|'))
   for (const tree of [grid, plain]) assert.deepEqual([tree.props.style.width, tree.props.style.height], [1080, 1350])
   // A finale says so.
   const [last] = finale.find(sampleData(), { now: NOW })
@@ -109,6 +109,6 @@ test('the fact never names Amazon (the caption gate bans the word), so the post 
   const title = { ...data.byId.get(100), platforms: ['Amazon Prime Video', 'Crunchyroll'] }
   const byId = new Map(data.byId).set(100, title)
   const [post] = outNow.find({ ...data, byId }, { now: NOW })
-  assert.equal(post.fact, 'It streams on Crunchyroll.')
+  assert.match(post.fact, /^It aired in Japan at .* ET. Crunchyroll usually adds it within hours/); assert.doesNotMatch(post.fact, /amazon/i)
   assert.ok(captionFor(outNow, post, 0, BLOCKED))
 })

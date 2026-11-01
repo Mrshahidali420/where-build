@@ -79,7 +79,8 @@ export function airingPost(data, title, row, { mark, label = 'Episode dates and 
 /** The one fact under the hook: where it streams (never Amazon by name: the caption gate bans the word), else when it airs. */
 function factOf(title, at) {
   const streams = top(title.platforms.filter((name) => !/amazon/i.test(name)), 2)
-  return streams.length ? `It streams on ${streams.join(' and ')}.` : `It airs ${weekdayOf(at)} ${dayMonthOf(at)} at ${timeOf(at)} ET.`
+  // The time is the TV broadcast in Japan: a stream adds the episode later, and the day differs by country.
+  return streams.length ? `It aired in Japan at ${timeOf(at)} ET. ${streams.join(' and ')} usually ${streams.length > 1 ? 'add' : 'adds'} it within hours (it can differ by country).` : `It airs ${weekdayOf(at)} ${dayMonthOf(at)} at ${timeOf(at)} ET in Japan.`
 }
 
 /** The schedule rows of popular shows with a stream, most popular first, one per episode. */
@@ -99,8 +100,8 @@ function find(data, { now }) {
 const loud = (p) => p.title.toUpperCase()
 
 const captions = [
-  (p) => ({ hook: `🔥 ${loud(p)} EPISODE ${p.episode} IS OUT NOW!`, facts: [p.fact], cta: ctaOf('episode', 0) }),
-  (p) => ({ hook: `🚨 EPISODE ${p.episode} OF ${loud(p)} JUST DROPPED!`, facts: [p.fact], cta: ctaOf('episode', 1) }),
+  (p) => ({ hook: `🔥 ${loud(p)} EPISODE ${p.episode} AIRED IN JAPAN TODAY!`, facts: [p.fact], cta: ctaOf('episode', 0) }),
+  (p) => ({ hook: `🚨 EPISODE ${p.episode} OF ${loud(p)} HAS AIRED!`, facts: [p.fact], cta: ctaOf('episode', 1) }),
   (p) => ({ hook: `📺 ${loud(p)} IS BACK WITH EPISODE ${p.episode}!`, facts: [p.fact], cta: ctaOf('episode', 2) }),
 ]
 
@@ -191,7 +192,7 @@ export function heroCard(v, k, headline) {
 
 const template = (v, k) =>
   v.art.frames?.length >= GRID.min
-    ? gridCard(v, k, { kicker: [`The ${ordinal(v.episode)} episode released`, 'TODAY'], head: [`EPISODE ${v.episode}`, ['OUT', 'TODAY']], spaced: v.spaced })
-    : heroCard(v, k, [`EPISODE ${v.episode}`, 'OUT NOW'])
+    ? gridCard(v, k, { kicker: [`The ${ordinal(v.episode)} episode aired`, 'TODAY'], head: [`EPISODE ${v.episode}`, ['AIRED', 'TODAY']], spaced: v.spaced })
+    : heroCard(v, k, [`EPISODE ${v.episode}`, 'AIRED TODAY'])
 
 export default { key: 'out-now', name: 'Episode out now', urgent: true, sameDay: true, gapDays: 300, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, template, extra: stillsExtra }
