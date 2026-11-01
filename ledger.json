@@ -30323,6 +30323,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115888993503689",
    "commentId": "122115888993503689_1543711581110863"
+  },
+  {
+   "key": "2026-11-01|where:169935|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:169935",
+   "title": "The Strongest Tank's Labyrinth Raids -A Tank with a Rare 9999 Resistance Skill Got Kicked from the Hero's Party-",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "169935",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793516049012,
+   "status": "claimed"
   }
  ],
  "health": {
