@@ -80,8 +80,20 @@ export function sampleSchedule() {
 export function sampleData(now = NOW) {
   const items = sampleItems()
   const data = buildData(items, now, Object.fromEntries(items.map((i) => [i.id, i.slug])), sampleSchedule())
-  return { ...data, birthdays: sampleBirthdays(now), art: sampleArt(data.byId.get(100)), stills: sampleStills(2) }
+  return { ...data, birthdays: sampleBirthdays(now), art: sampleArt(data.byId.get(100)), stills: sampleStills(2), ratings: sampleRatings(now) }
 }
+
+/** The day's IMDb snapshot as ratings/load.mjs hands it over: a new high score, one up and one down since our post, a low one. */
+export const sampleRatings = (now = NOW) => ({
+  at: now,
+  rows: [
+    { id: 'tt0100012', titleId: 100, ep: 12, aired: now - 2 * HOUR, score: 9.1, votes: 2400, base: null },
+    { id: 'tt0100011', titleId: 100, ep: 11, aired: now - 6 * DAY, score: 9.4, votes: 3100, base: 9.1 },
+    { id: 'tt0002006', titleId: 2, ep: 6, aired: now - 2 * DAY, score: 8.7, votes: 1500, base: null },
+    { id: 'tt0101023', titleId: 101, ep: 23, aired: now - 3 * DAY, score: 8.2, votes: 1200, base: 8.6 },
+    { id: 'tt0003004', titleId: 3, ep: 4, aired: now - 4 * DAY, score: 7.9, votes: 400, base: null },
+  ],
+})
 
 /** Pictures as art/load.mjs hands them over: one fan art and one cosplay of the first title. */
 export function sampleArt(title) {

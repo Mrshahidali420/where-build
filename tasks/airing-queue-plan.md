@@ -37,7 +37,7 @@ moves.
 - [ ] Popularity floor for the airing types: 2000 (episode was 3000).
 - [ ] Samples shown to the owner before switching on.
 
-## Phase 2: episode ratings
+## Phase 2: episode ratings (built 2 Nov 2026: types rating, rating-move, rating-week; scripts/social/ratings/)
 
 - TMDB episode `vote_average` / `vote_count` (we already call TMDB for
   stills), or IMDb's free daily files (title.ratings + title.episode, the

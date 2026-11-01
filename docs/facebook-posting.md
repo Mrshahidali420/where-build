@@ -137,6 +137,18 @@ the others, and the airing news, take its turns. Unset means no caps. Why:
 on 28 Oct - 1 Nov, 34 episode posts brought 28 Facebook visits, while 884
 where and character posts brought 14 (tasks/airing-queue-plan.md).
 
+**Episode ratings on IMDb** (2 Nov 2026, off until named in `FB_POST_TYPES`):
+`rating` (an episode with 1,000+ votes and 8.5+, once per episode),
+`rating-move` (a posted episode whose score moved 0.2+ since our post, once
+per direction) and `rating-week` (the top four episodes of the last seven
+days, once a week). The scores come from IMDb's free daily files
+(datasets.imdbws.com), read at most once in 20 hours by the post run itself
+(scripts/social/ratings/load.mjs); the shows are matched to IMDb through TMDB
+(`TMDB_API_KEY`, already set for the stills). The run keeps a dated snapshot
+of each followed episode's score and votes in the ledger (`ratings`, branch
+`social-state`) next to the matches (`imdbIds`); that snapshot is how a
+change is seen. No new workflow, secret or variable.
+
 **Reels have a budget of their own** (owner decision, 28 Oct 2026: "a simple
 post every 25 minutes, and reels separately"). `FB_POSTS_PER_DAY` counts the
 posts and shares only; a reel never takes a post's slot. `FB_REELS_PER_DAY`

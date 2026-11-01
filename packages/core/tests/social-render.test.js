@@ -30,8 +30,8 @@ const kit = kitOf(THEME, {})
 const data = sampleData()
 const postsOf = (type) => type.find(data, { now: NOW })
 
-test('types: the nineteen WhereAnime types are there, each with its own name and design', () => {
-  assert.deepEqual([...TYPE_KEYS].sort(), ['airtime', 'anticipated', 'birthday', 'character', 'collage', 'cosplay', 'episode', 'fact', 'fanart', 'finale', 'next-month', 'next-week', 'onair', 'out-now', 'premiere', 'scenes', 'stills', 'today', 'where'])
+test('types: the twenty-two WhereAnime types are there, each with its own name and design', () => {
+  assert.deepEqual([...TYPE_KEYS].sort(), ['airtime', 'anticipated', 'birthday', 'character', 'collage', 'cosplay', 'episode', 'fact', 'fanart', 'finale', 'next-month', 'next-week', 'onair', 'out-now', 'premiere', 'rating', 'rating-move', 'rating-week', 'scenes', 'stills', 'today', 'where'])
   // Fan art and cosplay share one design (types/art-card.mjs): a picture and its credit.
   assert.equal(new Set(TYPES.map((t) => t.template)).size, TYPES.length - 1)
   for (const type of TYPES) {
