@@ -30879,6 +30879,22 @@
    "at": 1793524822645,
    "status": "posted",
    "postId": "1329988470202923_122115939519503689"
+  },
+  {
+   "key": "2026-11-01|where:99425|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:99425",
+   "title": "Promare",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "99425",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793525123888,
+   "status": "claimed"
   }
  ],
  "health": {
