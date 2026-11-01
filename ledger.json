@@ -29976,6 +29976,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115862113503689",
    "commentId": "122115862113503689_1648326530096852"
+  },
+  {
+   "key": "2026-11-01|character:char:151488|whereanime",
+   "day": "2026-11-01",
+   "slug": "character:char:151488",
+   "title": "Moriarty the Patriot",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:151488",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793510288975,
+   "status": "claimed"
   }
  ],
  "health": {
