@@ -31722,6 +31722,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116024791503689",
    "commentId": "122116024791503689_1145356038190611"
+  },
+  {
+   "key": "2026-11-01|where:180929|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:180929",
+   "title": "Ruri Rocks",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "180929",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793538779665,
+   "status": "claimed"
   }
  ],
  "health": {
