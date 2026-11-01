@@ -29432,6 +29432,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115824715503689",
    "commentId": "122115824715503689_1111982378368681"
+  },
+  {
+   "key": "2026-10-31|where:167141|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:167141",
+   "title": "Sword Art Online Alternative: Gun Gale Online II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "167141",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793501481657,
+   "status": "claimed"
   }
  ],
  "health": {
