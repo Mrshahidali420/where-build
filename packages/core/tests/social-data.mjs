@@ -67,6 +67,7 @@ export function sampleSchedule() {
   return [
     { mediaId: 2, episode: 7, at: (NOW + 3 * HOUR) / 1000 },
     { mediaId: 100, episode: 12, at: (NOW - 2 * HOUR) / 1000 }, // aired earlier today
+    { mediaId: 101, episode: 24, at: (NOW - 1 * HOUR) / 1000 }, // the last episode of Iron Coast, an hour ago
     { mediaId: 3, episode: 5, at: (NOW + 3 * DAY) / 1000 },
     { mediaId: 200, episode: 1, at: (NOW + 20 * HOUR) / 1000 }, // a premiere tomorrow
     { mediaId: 201, episode: 1, at: (NEXT_MONDAY + DAY) / 1000 },

@@ -165,6 +165,8 @@ jobs:
           FB_MIN_GAP_MINUTES: ${{ vars.FB_MIN_GAP_MINUTES }}
           # Reels in any 24 hours on their own budget, not in FB_POSTS_PER_DAY, never within 5 minutes of another post (unset = 3, at most 10). A reel type posts only when FB_POST_TYPES names it.
           FB_REELS_PER_DAY: ${{ vars.FB_REELS_PER_DAY }}
+          # The most posts one kind may have in any 24 hours, e.g. "where:30,character:30" (unset = no caps).
+          FB_TYPE_CAPS: ${{ vars.FB_TYPE_CAPS }}
           # Shares of the sister Page's posts in any 24 hours, inside the cap (unset = off, at most 4), read from the FB_SHARE_FROM repo's public ledger.
           FB_SHARES_PER_DAY: ${{ vars.FB_SHARES_PER_DAY }}
           FB_SHARE_FROM: ${{ vars.FB_SHARE_FROM }}

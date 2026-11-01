@@ -7,7 +7,7 @@
  * MAX_ITEMS of them. It needs MIN_ITEMS, and is made once a day. Off until
  * its name is written in FB_POST_TYPES.
  */
-import { END_LINE, endSlide, itemSlide, titleSlide } from '../reel/slides.mjs'
+import { BIO_END_LINE, CAROUSEL_FRAME, END_LINE, endSlide, hookSlide, itemSlide, titleSlide } from '../reel/slides.mjs'
 import { tagOf, uniqueTags } from '../story.mjs'
 import { clip, listOf } from '../text.mjs'
 import { dateOf, dayMonthOf, weekdayOf } from '../when.mjs'
@@ -62,4 +62,14 @@ function slides(v, k) {
   ]
 }
 
-export default { key: 'reel-today', name: 'Reel: airing today', reel: true, urgent: false, gapDays: 300, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, slides }
+/** The same day as an Instagram swipe post of the "Episodes out today" post (today.mjs). */
+function carousel(v, k) {
+  const f = CAROUSEL_FRAME
+  return [
+    hookSlide(k, { kicker: v.date, lines: [{ text: 'EPISODES' }, { text: 'OUT TODAY', pop: true }], sub: `${v.items.length} new episodes, in order of air time.`, pictures: v.art.thumbs.slice(0, 3) }, f),
+    ...v.items.map((row, i) => itemSlide(k, { tag: row.time, tagNote: 'ET', picture: v.art.thumbs[i], title: row.title, note: row.note, step: `${i + 1} / ${v.items.length}` }, f)),
+    endSlide(k, { head: 'Save this list. Follow for more.', line: BIO_END_LINE }, f),
+  ]
+}
+
+export default { key: 'reel-today', carouselOf: 'today', fromPost: (post) => post, carousel, name: 'Reel: airing today', reel: true, urgent: false, gapDays: 300, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, slides }

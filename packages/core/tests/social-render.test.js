@@ -30,8 +30,8 @@ const kit = kitOf(THEME, {})
 const data = sampleData()
 const postsOf = (type) => type.find(data, { now: NOW })
 
-test('types: the sixteen WhereAnime types are there, each with its own name and design', () => {
-  assert.deepEqual([...TYPE_KEYS].sort(), ['airtime', 'anticipated', 'birthday', 'character', 'collage', 'cosplay', 'episode', 'fact', 'fanart', 'next-month', 'next-week', 'onair', 'premiere', 'scenes', 'stills', 'where'])
+test('types: the nineteen WhereAnime types are there, each with its own name and design', () => {
+  assert.deepEqual([...TYPE_KEYS].sort(), ['airtime', 'anticipated', 'birthday', 'character', 'collage', 'cosplay', 'episode', 'fact', 'fanart', 'finale', 'next-month', 'next-week', 'onair', 'out-now', 'premiere', 'scenes', 'stills', 'today', 'where'])
   // Fan art and cosplay share one design (types/art-card.mjs): a picture and its credit.
   assert.equal(new Set(TYPES.map((t) => t.template)).size, TYPES.length - 1)
   for (const type of TYPES) {
@@ -86,7 +86,7 @@ test('types: every image tree is whole (the right size, no missing text, sized p
 
 test('types: what each one says comes from the record', () => {
   const episodes = postsOf(TYPES.find((t) => t.key === 'episode'))
-  assert.deepEqual(episodes.map((p) => p.item), ['100:12', '2:7']) // today's episodes, most popular first
+  assert.deepEqual(episodes.map((p) => p.item), ['100:12', '2:7', '101:24']) // today's episodes, most popular first
   const ep = episodes[1]
   assert.deepEqual([ep.view.number, ep.view.time, ep.view.aired], [7, '5:00 PM ET', false])
   assert.deepEqual([episodes[0].view.time, episodes[0].view.aired], ['12:00 PM ET', true])

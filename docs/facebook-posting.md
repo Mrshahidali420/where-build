@@ -131,6 +131,12 @@ Three rules, all read from the ledger's own timestamps:
 - **Links are plain addresses** (28 Oct 2026): no `utm_` query. The site
   counts Facebook visits from the referrer and Facebook's own `fbclid`.
 
+**Caps per kind** (1 Nov 2026): `FB_TYPE_CAPS`, e.g. `where:30,character:30`,
+is the most posts one kind may have in any 24 hours. A kind at its cap waits;
+the others, and the airing news, take its turns. Unset means no caps. Why:
+on 28 Oct - 1 Nov, 34 episode posts brought 28 Facebook visits, while 884
+where and character posts brought 14 (tasks/airing-queue-plan.md).
+
 **Reels have a budget of their own** (owner decision, 28 Oct 2026: "a simple
 post every 25 minutes, and reels separately"). `FB_POSTS_PER_DAY` counts the
 posts and shares only; a reel never takes a post's slot. `FB_REELS_PER_DAY`
