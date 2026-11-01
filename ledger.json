@@ -31461,6 +31461,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115994059503689",
    "commentId": "122115994059503689_1629839405183998"
+  },
+  {
+   "key": "2026-11-01|character:char:89119|whereanime",
+   "day": "2026-11-01",
+   "slug": "character:char:89119",
+   "title": "Dagashi Kashi",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89119",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793534547942,
+   "status": "claimed"
   }
  ],
  "health": {
