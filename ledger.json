@@ -31574,6 +31574,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116006569503689",
    "commentId": "122116006569503689_1439009181127831"
+  },
+  {
+   "key": "2026-11-01|where:105200|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:105200",
+   "title": "Aggretsuko: Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "105200",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793536354778,
+   "status": "claimed"
   }
  ],
  "health": {
