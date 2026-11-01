@@ -29605,6 +29605,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115834735503689",
    "commentId": "122115834735503689_1707428337469553"
+  },
+  {
+   "key": "2026-10-31|character:char:89196|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:89196",
+   "title": "Bungo Stray Dogs 4",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89196",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793504223211,
+   "status": "claimed"
   }
  ],
  "health": {
