@@ -31668,6 +31668,22 @@
     "id": "17907730647597413",
     "at": 1793537575641
    }
+  },
+  {
+   "key": "2026-11-01|where:4835|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:4835",
+   "title": "Bleach the Movie: Fade to Black",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "4835",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793537876634,
+   "status": "claimed"
   }
  ],
  "health": {
