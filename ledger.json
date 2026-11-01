@@ -29414,6 +29414,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115823539503689",
    "commentId": "122115823539503689_1414334557537611"
+  },
+  {
+   "key": "2026-10-31|character:char:122871|whereanime",
+   "day": "2026-10-31",
+   "slug": "character:char:122871",
+   "title": "The Boy and the Beast",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:122871",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793501180347,
+   "status": "claimed"
   }
  ],
  "health": {
