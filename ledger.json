@@ -30120,6 +30120,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115873561503689",
    "commentId": "122115873561503689_2264144267491567"
+  },
+  {
+   "key": "2026-11-01|where:5300|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:5300",
+   "title": "Natsume's Book of Friends Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "5300",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793512718560,
+   "status": "claimed"
   }
  ],
  "health": {
