@@ -109,6 +109,6 @@ test('the fact never names Amazon (the caption gate bans the word), so the post 
   const title = { ...data.byId.get(100), platforms: ['Amazon Prime Video', 'Crunchyroll'] }
   const byId = new Map(data.byId).set(100, title)
   const [post] = outNow.find({ ...data, byId }, { now: NOW })
-  assert.match(post.fact, /^It aired in Japan at .* ET. Crunchyroll usually adds it within hours/); assert.doesNotMatch(post.fact, /amazon/i)
+  assert.match(post.fact, /^It airs today at .* ET. Crunchyroll usually adds it within hours/); assert.doesNotMatch(post.fact, /amazon/i)
   assert.ok(captionFor(outNow, post, 0, BLOCKED))
 })
