@@ -29468,6 +29468,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115826983503689",
    "commentId": "122115826983503689_29016315344654184"
+  },
+  {
+   "key": "2026-10-31|where:68|whereanime",
+   "day": "2026-10-31",
+   "slug": "where:68",
+   "title": "Black Cat",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "68",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793502084556,
+   "status": "claimed"
   }
  ],
  "health": {
