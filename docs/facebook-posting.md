@@ -455,6 +455,84 @@ Nothing is re-uploaded from anyone: the slides are our own.
   waits until Facebook has processed the reel, then adds the site link as the
   first comment on it.
 
+## Instagram (off until you switch it on)
+
+After a Facebook post goes through, the same post goes to the site's
+Instagram account (@whereanimeofficial), from the same run
+(`scripts/social/ig.mjs`). Facebook stays the main Page: an Instagram
+failure is written on the post's ledger entry (`ig.error`) and said in the
+summary, and Facebook goes on as if nothing happened.
+
+What changes on Instagram:
+
+- **"Link in bio".** Links in an Instagram caption cannot be clicked, so the
+  caption line about the first comment becomes "🔗 Link in bio:
+  whereanime.com", and a template picture is drawn again with "link in
+  bio" in place of "link in the first comment". There is no first comment.
+  Fan art and cosplay say "Art by <artist>." in the caption.
+- **The shape.** Instagram takes pictures from 4:5 to 1.91:1. The template
+  pictures are 4:5 already. A taller picture (a cover, a tall fan art) is
+  placed whole, uncropped, on the site's night colour.
+- **How the picture gets there.** Instagram fetches a picture by its
+  address and takes no upload, so each picture is first kept on the Facebook
+  Page as an **unpublished** photo (it never shows in the feed) and
+  Instagram is given that photo's address.
+- **Reels.** A reel goes as the same MP4 (1080x1920, 9:16), by the
+  resumable upload: no public address is needed. Instagram takes reels of 3
+  seconds to 15 minutes; a reel outside that stays on Facebook. Reels are
+  shared to the Instagram feed too. `IG_POST_TYPES=reel` sends only reels.
+- **Its own pace.** At most `IG_POSTS_PER_DAY` posts in any 24 hours (8
+  unless set, 25 at most), spread evenly: a Facebook post goes to Instagram
+  only when the last Instagram post is far enough back. A reel skips the
+  even spread: it goes when the last Instagram post is 10 minutes back, still
+  inside the cap (owner's wish, 1 Nov 2026: more reels on Instagram). If
+  Instagram answers "Media ID is not available", the post is tried again
+  twice, 15 seconds apart. A text-only classic post (no cover) stays on
+  Facebook.
+- **Reel music.** Calm or anime-style tracks only (owner's rule, 1 Nov 2026);
+  see `packages/core/scripts/social/audio/SOURCES.md`.
+
+### Switch it on
+
+1. **Make the account professional.** In the Instagram app: Settings →
+   *Account type and tools* → *Switch to professional account* → **Business**
+   (Creator works too). Add the site logo as the profile picture and
+   `whereanime.com` as the website (the "link in bio").
+2. **Link it to the Facebook Page.** On Facebook, open the Page → Settings →
+   *Linked accounts* → Instagram → **Connect**, and log in to
+   @whereanimeofficial.
+3. **Give the app the Instagram permissions.** In the Meta app from step 2,
+   add `instagram_basic` and `instagram_content_publish` (Standard access is
+   enough for an account you own).
+4. **Make a new Page token** exactly as in step 3, ticking the four Page
+   permissions **and** the two Instagram ones. Put it in the
+   `FB_PAGE_TOKEN` secret (it replaces the old one and still posts to
+   Facebook). If you would rather keep the Facebook token as it is, put the
+   new one in an `IG_TOKEN` secret instead.
+5. **The Instagram account id is found by itself.** Each run asks the Page
+   (`<page-id>?fields=instagram_business_account{id,username}`) and names
+   the account it found. The secret `IG_USER_ID` is optional; when set, it
+   must match the account linked to the Page.
+6. **Put it in GitHub** (Settings → Secrets and variables → Actions):
+   - variable `IG_POSTS_PER_DAY` (optional): e.g. `8`
+   - variable `IG_POST_TYPES` (optional): only these kinds go to Instagram,
+     e.g. `classic,where,fanart,cosplay`; every kind Facebook posts when
+     unset
+7. **Look first.** Set the variable `IG_POST_ENABLED` to `check`: every run
+   finds the account and says what it would post to Instagram, and posts
+   nothing there. Or run Actions → *Facebook Page post* with `dry_run`
+   ticked.
+   The summary says, for each post, whether Instagram would get it, and the
+   `fb-preview` artifact holds the Instagram pictures (`*.instagram.jpg`)
+   beside the Facebook ones. The run also checks the token and names the
+   Instagram account it reached.
+8. With `IG_POST_ENABLED` set to `true`, the next run of the chain posts to
+   Instagram too. Set it to anything else to stop; Facebook is untouched.
+
+If the summary says "the account check failed", the token lacks the
+Instagram permissions or `IG_USER_ID` is wrong: Instagram sits that run out
+and Facebook posts as usual.
+
 ## What every post carries
 
 A post exists to send people to the site, so each one is built the same way:

@@ -88,10 +88,14 @@ export function usageOf(headers) {
   return best
 }
 
-const redact = (text, token) => (token ? String(text).split(token).join('***') : String(text))
+export const redact = (text, token) => (token ? String(text).split(token).join('***') : String(text))
 
-export function graphClient({ pageId, token, fetch = globalThis.fetch, version = GRAPH_VERSION }) {
-  if (!pageId || !token) throw new Error('graphClient needs a page id and a token')
+/**
+ * One Graph caller bound to a token: call(method, path, params, file) and the
+ * highest usage seen. The Page client below and the Instagram one (ig.mjs)
+ * both talk through it.
+ */
+export function graphCaller({ token, fetch = globalThis.fetch, version = GRAPH_VERSION }) {
   const base = `${GRAPH_HOST}/${version}`
   let peak = null
 
@@ -136,6 +140,13 @@ export function graphClient({ pageId, token, fetch = globalThis.fetch, version =
     return json
   }
 
+  return { call, usage: () => peak }
+}
+
+export function graphClient({ pageId, token, fetch = globalThis.fetch, version = GRAPH_VERSION }) {
+  if (!pageId || !token) throw new Error('graphClient needs a page id and a token')
+  const { call, usage } = graphCaller({ token, fetch, version })
+
   /** The reel file to Facebook's upload host. The address Facebook hands back is used only when it is on that host. */
   async function upload(videoId, given, bytes) {
     const safe = (() => {
@@ -161,7 +172,7 @@ export function graphClient({ pageId, token, fetch = globalThis.fetch, version =
 
   return {
     /** The highest usage any answer has reported so far, or null. */
-    usage: () => peak,
+    usage,
     async pageName() {
       const json = await call('GET', `/${pageId}`, { fields: 'name' })
       return json.name || ''
@@ -175,6 +186,22 @@ export function graphClient({ pageId, token, fetch = globalThis.fetch, version =
       if (!bytes?.length) throw new GraphError('publishPhotoFile needs the image bytes')
       const json = await call('POST', `/${pageId}/photos`, { caption, published: 'true' }, { bytes, filename, contentType })
       return { photoId: json.id, postId: json.post_id || json.id }
+    },
+    /**
+     * A picture kept on the Page but never shown (published=false): Facebook
+     * hosts it, so Instagram can fetch it by its address (ig.mjs).
+     */
+    async hostPhoto({ bytes, filename = 'instagram.jpg', contentType = 'image/jpeg' }) {
+      if (!bytes?.length) throw new GraphError('hostPhoto needs the image bytes')
+      const json = await call('POST', `/${pageId}/photos`, { published: 'false' }, { bytes, filename, contentType })
+      return { photoId: json.id }
+    },
+    /** The public address of a photo on the Page: its largest size. */
+    async photoUrl(photoId) {
+      const json = await call('GET', `/${photoId}`, { fields: 'images' })
+      const best = [...(json.images || [])].sort((x, y) => (y.width || 0) - (x.width || 0))[0]
+      if (!best?.source) throw new GraphError(`no address came back for the photo ${photoId}`)
+      return best.source
     },
     /** A link post: a share of the sister Page's post (share.mjs). */
     async publishLink({ link, message }) {

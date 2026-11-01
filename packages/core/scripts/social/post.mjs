@@ -46,6 +46,7 @@ import { fileURLToPath } from 'node:url'
 import { attemptOnce } from './attempt.mjs'
 import { runChain } from './chain.mjs'
 import { graphClient, GraphError } from './fb.mjs'
+import { igClient, igSettingsOf } from './ig.mjs'
 import { CLASSIC, enabledTypes } from './gate.mjs'
 import { resolveCover } from './image.mjs'
 import { gitStore, memoryStore } from './ledger.mjs'
@@ -128,6 +129,31 @@ async function openGraph(s, env, makeGraph, out) {
   }
 }
 
+/**
+ * Instagram for this run: { settings, client, off } or null when it is off.
+ * A missing setup or a refused token is said and Instagram sits the run out;
+ * the Facebook posts are never held up by it.
+ */
+async function openInstagram(s, env, makeInstagram, out) {
+  const settings = igSettingsOf(env)
+  if (!settings.enabled) return null
+  if (!settings.configured) {
+    out.push('Instagram: **not configured** (needs the FB_PAGE_ID or IG_USER_ID secret, and a token). Facebook only.', '')
+    return null
+  }
+  try {
+    const client = makeInstagram({ userId: settings.userId, pageId: settings.pageId, token: settings.token })
+    const { id, username } = await client.account()
+    const only = settings.types ? `, only ${[...settings.types].join(', ')}` : ''
+    const check = settings.checkOnly ? ' Check only: nothing is posted to Instagram.' : ''
+    out.push(`Instagram: token works for **@${username || '(no name)'}** (account ${id}). Up to ${settings.perDay} posts in any 24 hours${only}.${check}`, '')
+    return { settings, client, off: null }
+  } catch (error) {
+    out.push(`Instagram: the account check failed (${error.message}). Facebook only this run.`, '')
+    return null
+  }
+}
+
 /** The switched-on kinds: type objects and the string 'classic', in the owner's order. */
 async function kindsOf(s, loadTypes, out) {
   if (!s.typesValue) return [CLASSIC]
@@ -162,7 +188,7 @@ function paceLines(s, health, cap, used) {
  * @param output (name, value) => void; the workflow reads `chain` to start the next run
  * @returns exit code (0 ok, 1 the owner must look)
  */
-export async function run({ fetch = globalThis.fetch, env, now, clock = now === undefined ? Date.now : () => now, rng = Math.random, loadPools, store, makeGraph, summary, sleep, blockedTags = [], resolveImage = resolveCover, loadTypes = defaultTypes, render = defaultRender, preview = null, output = () => {} }) {
+export async function run({ fetch = globalThis.fetch, env, now, clock = now === undefined ? Date.now : () => now, rng = Math.random, loadPools, store, makeGraph, makeInstagram = igClient, summary, sleep, blockedTags = [], resolveImage = resolveCover, loadTypes = defaultTypes, render = defaultRender, preview = null, output = () => {} }) {
   const s = settingsOf(env)
   const out = [`## Facebook Page poster: ${SITE.name}`, '']
   const flush = () => out.length && summary(`${out.splice(0).join('\n')}\n`)
@@ -202,10 +228,11 @@ export async function run({ fetch = globalThis.fetch, env, now, clock = now === 
   out.push(shareLine(s.share), '')
   out.push(`Amazon line in the first comment: ${s.affiliate ? 'on' : 'off (the FB_AFFILIATE_COMMENT variable is not true)'}.`, '')
 
+  const ig = await openInstagram(s, env, makeInstagram, out)
   const kinds = await kindsOf(s, loadTypes, out)
   // A kind that wants today's birthdays (types/birthday-card.mjs) gets them with the data; no other run asks.
   const say = (line) => out.push(line, '')
-  const base = { fetch, s, graph, book, kinds, rng, blockedTags, out, flush, resolveImage, render, preview, clock, sleep, loadPools: withExtras(withBirthdays(loadPools, kinds, { book, fetch, say }), kinds, { book, fetch, say }) }
+  const base = { fetch, s, graph, ig, book, kinds, rng, blockedTags, out, flush, resolveImage, render, preview, clock, sleep, loadPools: withExtras(withBirthdays(loadPools, kinds, { book, fetch, say }), kinds, { book, fetch, say }) }
   if (s.mode === 'chain') {
     if (health.halted && s.startedBy === 'watch') return end(0, `The chain was halted (${health.halted.why}). It is started by hand once that is fixed; the watch job does not restart it.`)
     if (health.halted) await saveHealth(book, (h) => withHalt(h, null, clock()), 'Chain restarted')
@@ -264,10 +291,15 @@ async function sendPosts(base, { loaded, want, left, cap }) {
 /** Every kind the site has: the picture types, and the reels (off, like all of them, until named). */
 const defaultTypes = async () => (await import('./types/index.mjs')).KINDS
 
-async function defaultRender(type, post, { avoidTrack = null } = {}) {
+async function defaultRender(type, post, { avoidTrack = null, words, swipe = false } = {}) {
   const { THEME } = await import('./theme.mjs')
+  // The Instagram swipe post of a list post: the slides of the reel type made from it, or null when it has none.
+  if (swipe) {
+    const reel = (await import('./types/index.mjs')).REELS.find((r) => r.carouselOf === type.key && r.carousel)
+    return reel ? { jpegs: await (await import('./reel/engine.mjs')).renderCarousel(reel, reel.fromPost(post), { theme: THEME }) } : null
+  }
   if (type.reel) return (await import('./reel/engine.mjs')).renderReel(type, post, { theme: THEME, avoidTrack })
-  return (await import('./render/engine.mjs')).renderPost(type, post, { theme: THEME })
+  return (await import('./render/engine.mjs')).renderPost(type, post, { theme: THEME, words })
 }
 
 /** git with this repo's credentials; throws on a non-zero exit. */
