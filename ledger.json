@@ -31889,6 +31889,22 @@
     "at": 1793541211130,
     "slides": 8
    }
+  },
+  {
+   "key": "2026-11-01|out-now:215835:6:out|whereanime",
+   "day": "2026-11-01",
+   "slug": "out-now:215835:6:out",
+   "title": "Umayuru: Full Gate!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "215835:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793541512184,
+   "status": "claimed"
   }
  ],
  "health": {
