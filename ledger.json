@@ -31443,6 +31443,22 @@
     "id": "18101448452533372",
     "at": 1793533945764
    }
+  },
+  {
+   "key": "2026-11-01|where:141351|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:141351",
+   "title": "Kakegurui Twin",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "141351",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793534246873,
+   "status": "claimed"
   }
  ],
  "health": {
