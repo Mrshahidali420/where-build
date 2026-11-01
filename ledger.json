@@ -31515,6 +31515,22 @@
    "status": "posted",
    "postId": "1329988470202923_122115998727503689",
    "commentId": "122115998727503689_4576247595975572"
+  },
+  {
+   "key": "2026-11-01|where:113311|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:113311",
+   "title": "Kakushigoto",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "113311",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793535451462,
+   "status": "claimed"
   }
  ],
  "health": {
