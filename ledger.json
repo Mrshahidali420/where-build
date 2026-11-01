@@ -29755,48 +29755,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-10-31",
-  "at": 1793419891683,
+  "day": "2026-11-01",
+  "at": 1793506332558,
   "list": [
    {
-    "id": 71,
-    "name": "L Lawliet",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b71-1W4panC53vfs.png",
-    "favourites": 26958,
-    "mediaId": 1535,
-    "voice": "Kappei Yamaguchi"
+    "id": 124546,
+    "name": "Shirase Kobuchizawa",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b124546-m2grkrB5gfCJ.png",
+    "favourites": 1663,
+    "mediaId": 99426,
+    "voice": "Kana Hanazawa"
    },
    {
-    "id": 88114,
-    "name": "Yuu Kashima",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/88114.jpg",
-    "favourites": 974,
-    "mediaId": 20869,
-    "voice": "Mai Nakahara"
+    "id": 81753,
+    "name": "Mitsuki Nase",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b81753-lsPYVQvvD1TZ.png",
+    "favourites": 854,
+    "mediaId": 18153,
+    "voice": "Minori Chihara"
    },
    {
-    "id": 89546,
-    "name": "Asuma Mutsumi",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89546-6i8jczykMo1o.jpg",
-    "favourites": 773,
-    "mediaId": 21686,
-    "voice": "Nobunaga Shimazaki"
+    "id": 46011,
+    "name": "Rin Hoshizora",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b46011-UNG2CkZtHKLU.png",
+    "favourites": 832,
+    "mediaId": 15051,
+    "voice": "Riho Iida"
    },
    {
-    "id": 88990,
-    "name": "Ferid Bathory",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b88990-GQCTvKZPTg3h.png",
-    "favourites": 684,
-    "mediaId": 20829,
-    "voice": "Takahiro Sakurai"
+    "id": 154755,
+    "name": "Kon",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b154755-ffZEEdfYjOgv.png",
+    "favourites": 634,
+    "mediaId": 114085,
+    "voice": "Yumiri Hanamori"
    },
    {
-    "id": 126569,
-    "name": "Ruby Rose",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b126569-0BUT2Wnk0DSm.png",
-    "favourites": 670,
-    "mediaId": 146668,
-    "voice": "Saori Hayami"
+    "id": 281251,
+    "name": "Yuusuke Tani",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b281251-fpCKCGSQH6Rv.png",
+    "favourites": 528,
+    "mediaId": 184951,
+    "voice": "Shougo Sakata"
    }
   ]
  },
