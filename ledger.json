@@ -31610,6 +31610,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116013151503689",
    "commentId": "122116013151503689_28654923057541004"
+  },
+  {
+   "key": "2026-11-01|where:187663|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:187663",
+   "title": "A Gatherer's Adventure in Isekai",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "187663",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793536957087,
+   "status": "claimed"
   }
  ],
  "health": {
