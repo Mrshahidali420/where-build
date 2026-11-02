@@ -34234,6 +34234,22 @@
     "id": "17903712081607751",
     "at": 1793633886077
    }
+  },
+  {
+   "key": "2026-11-02|out-now:160803:5:out|whereanime",
+   "day": "2026-11-02",
+   "slug": "out-now:160803:5:out",
+   "title": "MAGICAL GIRL RAISING PROJECT restart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "160803:5:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793638918952,
+   "status": "claimed"
   }
  ],
  "health": {
