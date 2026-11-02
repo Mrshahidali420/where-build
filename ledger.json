@@ -32410,48 +32410,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-01",
-  "at": 1793506332558,
+  "day": "2026-11-02",
+  "at": 1793596774932,
   "list": [
    {
-    "id": 124546,
-    "name": "Shirase Kobuchizawa",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b124546-m2grkrB5gfCJ.png",
-    "favourites": 1663,
-    "mediaId": 99426,
+    "id": 83419,
+    "name": "Maho Hiyajou",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b83419-p2gjgTL37GTU.jpg",
+    "favourites": 1150,
+    "mediaId": 21127,
+    "voice": "Sayuri Yahagi"
+   },
+   {
+    "id": 255701,
+    "name": "Scarlet El Vandimion",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b255701-vTMYByCyesD4.png",
+    "favourites": 824,
+    "mediaId": 181447,
+    "voice": "Asami Seto"
+   },
+   {
+    "id": 5343,
+    "name": "Kobato Hanato",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b5343-XHTtP0cV1uXG.png",
+    "favourites": 454,
+    "mediaId": 5678,
     "voice": "Kana Hanazawa"
    },
    {
-    "id": 81753,
-    "name": "Mitsuki Nase",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b81753-lsPYVQvvD1TZ.png",
-    "favourites": 854,
-    "mediaId": 18153,
-    "voice": "Minori Chihara"
+    "id": 89829,
+    "name": "Rei Sakuma",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89829-ejB5plkWrAt8.png",
+    "favourites": 435,
+    "mediaId": 21512,
+    "voice": "Toshiki Masuda"
    },
    {
-    "id": 46011,
-    "name": "Rin Hoshizora",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b46011-UNG2CkZtHKLU.png",
-    "favourites": 832,
-    "mediaId": 15051,
-    "voice": "Riho Iida"
-   },
-   {
-    "id": 154755,
-    "name": "Kon",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b154755-ffZEEdfYjOgv.png",
-    "favourites": 634,
-    "mediaId": 114085,
-    "voice": "Yumiri Hanamori"
-   },
-   {
-    "id": 281251,
-    "name": "Yuusuke Tani",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b281251-fpCKCGSQH6Rv.png",
-    "favourites": 528,
-    "mediaId": 184951,
-    "voice": "Shougo Sakata"
+    "id": 1348,
+    "name": "Loran Cehack",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1348-s1NCqMFAbJcm.png",
+    "favourites": 376,
+    "mediaId": 95,
+    "voice": "Romi Park"
    }
   ]
  },
