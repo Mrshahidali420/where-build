@@ -32233,6 +32233,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116235403503689",
    "commentId": "122116235403503689_1135812682277601"
+  },
+  {
+   "key": "2026-11-01|where:178005|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:178005",
+   "title": "Tamon's B-Side",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "178005",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793589157351,
+   "status": "claimed"
   }
  ],
  "health": {
