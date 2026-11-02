@@ -33620,6 +33620,22 @@
     "id": "18237186643320843",
     "at": 1793620540820
    }
+  },
+  {
+   "key": "2026-11-02|character:char:539|whereanime",
+   "day": "2026-11-02",
+   "slug": "character:char:539",
+   "title": "Nausicaä of the Valley of the Wind",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:539",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793620843171,
+   "status": "claimed"
   }
  ],
  "health": {
