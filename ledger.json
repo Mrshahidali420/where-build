@@ -32107,6 +32107,22 @@
     "id": "18093709709202564",
     "at": 1793585524605
    }
+  },
+  {
+   "key": "2026-11-01|character:char:272339|whereanime",
+   "day": "2026-11-01",
+   "slug": "character:char:272339",
+   "title": "The Tunnel to Summer, the Exit of Goodbyes",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:272339",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793585825899,
+   "status": "claimed"
   }
  ],
  "health": {
