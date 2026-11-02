@@ -33449,6 +33449,22 @@
     "id": "18183713086379498",
     "at": 1793616612810
    }
+  },
+  {
+   "key": "2026-11-02|character:char:130429|whereanime",
+   "day": "2026-11-02",
+   "slug": "character:char:130429",
+   "title": "The Helpful Fox Senko-san",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:130429",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793616914995,
+   "status": "claimed"
   }
  ],
  "health": {
