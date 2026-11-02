@@ -32433,6 +32433,22 @@
     "id": "18120281549105696",
     "at": 1793597103194
    }
+  },
+  {
+   "key": "2026-11-02|episode:207191:5|whereanime",
+   "day": "2026-11-02",
+   "slug": "episode:207191:5",
+   "title": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "207191:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793597404543,
+   "status": "claimed"
   }
  ],
  "health": {
