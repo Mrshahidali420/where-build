@@ -33733,6 +33733,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116404153503689",
    "commentId": "122116404153503689_1131149535955403"
+  },
+  {
+   "key": "2026-11-02|out-now:207191:5:out|whereanime",
+   "day": "2026-11-02",
+   "slug": "out-now:207191:5:out",
+   "title": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "207191:5:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793622649012,
+   "status": "claimed"
   }
  ],
  "health": {
