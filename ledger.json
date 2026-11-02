@@ -33751,6 +33751,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116405701503689",
    "commentId": "122116405701503689_1508420251339206"
+  },
+  {
+   "key": "2026-11-02|where:153452|whereanime",
+   "day": "2026-11-02",
+   "slug": "where:153452",
+   "title": "Ranking of Kings: The Treasure Chest of Courage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "153452",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793622949887,
+   "status": "claimed"
   }
  ],
  "health": {
