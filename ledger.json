@@ -34210,6 +34210,24 @@
     "at": 1793632364663,
     "slides": 7
    }
+  },
+  {
+   "reel": true,
+   "key": "2026-11-02|reel-anticipated:anticipated:all|whereanime",
+   "day": "2026-11-02",
+   "slug": "reel-anticipated:anticipated:all",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:all",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793633886077,
+   "track": "determination-anime.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
