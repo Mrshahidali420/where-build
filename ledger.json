@@ -33679,6 +33679,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116397121503689",
    "commentId": "122116397121503689_2200397997543720"
+  },
+  {
+   "key": "2026-11-02|character:char:128038|whereanime",
+   "day": "2026-11-02",
+   "slug": "character:char:128038",
+   "title": "That Time I Got Reincarnated as a Slime the Movie: Scarlet Bond",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:128038",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793621746158,
+   "status": "claimed"
   }
  ],
  "health": {
