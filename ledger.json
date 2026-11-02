@@ -32689,6 +32689,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116291851503689",
    "commentId": "122116291851503689_1432313461770431"
+  },
+  {
+   "key": "2026-11-02|where:99424|whereanime",
+   "day": "2026-11-02",
+   "slug": "where:99424",
+   "title": "SSSS.GRIDMAN",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "99424",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793601644876,
+   "status": "claimed"
   }
  ],
  "health": {
