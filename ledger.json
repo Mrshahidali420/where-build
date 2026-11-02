@@ -33925,6 +33925,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116420917503689",
    "commentId": "122116420917503689_1830230581506982"
+  },
+  {
+   "key": "2026-11-02|anticipated:anticipated:all|whereanime",
+   "day": "2026-11-02",
+   "slug": "anticipated:anticipated:all",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:anticipated",
+   "type": "anticipated",
+   "item": "anticipated:all",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793625678804,
+   "status": "claimed"
   }
  ],
  "health": {
