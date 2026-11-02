@@ -34256,6 +34256,24 @@
     "id": "18132886351828664",
     "at": 1793638918952
    }
+  },
+  {
+   "reel": true,
+   "key": "2026-11-02|reel-anticipated:anticipated:season:2026-FALL|whereanime",
+   "day": "2026-11-02",
+   "slug": "reel-anticipated:anticipated:season:2026-FALL",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:season:2026-FALL",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793642877130,
+   "track": "chill-lofi.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
