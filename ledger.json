@@ -32161,6 +32161,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116212063503689",
    "commentId": "122116212063503689_1668218961314343"
+  },
+  {
+   "key": "2026-11-01|where:173295|whereanime",
+   "day": "2026-11-01",
+   "slug": "where:173295",
+   "title": "SHOSHIMIN: How to Become Ordinary",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "173295",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793587951881,
+   "status": "claimed"
   }
  ],
  "health": {
