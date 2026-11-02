@@ -32391,6 +32391,22 @@
     "id": "18642322051060453",
     "at": 1793594935003
    }
+  },
+  {
+   "key": "2026-11-02|today:today:2026-11-02|whereanime",
+   "day": "2026-11-02",
+   "slug": "today:today:2026-11-02",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:today",
+   "type": "today",
+   "item": "today:2026-11-02",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793596801902,
+   "status": "claimed"
   }
  ],
  "health": {
