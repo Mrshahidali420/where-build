@@ -33093,6 +33093,22 @@
     "id": "18036677312850917",
     "at": 1793609242117
    }
+  },
+  {
+   "key": "2026-11-02|where:3731|whereanime",
+   "day": "2026-11-02",
+   "slug": "where:3731",
+   "title": "ItaKiss",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "3731",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793609545708,
+   "status": "claimed"
   }
  ],
  "health": {
