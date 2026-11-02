@@ -33851,6 +33851,24 @@
     "at": 1793624173773,
     "slides": 7
    }
+  },
+  {
+   "reel": true,
+   "key": "2026-11-02|reel-anticipated:anticipated:season:2027-SUMMER|whereanime",
+   "day": "2026-11-02",
+   "slug": "reel-anticipated:anticipated:season:2027-SUMMER",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:season:2027-SUMMER",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793624474669,
+   "track": "anime-intro.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
