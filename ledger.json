@@ -33409,6 +33409,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116359909503689",
    "commentId": "122116359909503689_29551459024457672"
+  },
+  {
+   "key": "2026-11-02|character:char:285560|whereanime",
+   "day": "2026-11-02",
+   "slug": "character:char:285560",
+   "title": "Romantic Killer",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:285560",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793614690672,
+   "status": "claimed"
   }
  ],
  "health": {
