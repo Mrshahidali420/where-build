@@ -32707,6 +32707,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116293303503689",
    "commentId": "122116293303503689_1862851801383586"
+  },
+  {
+   "key": "2026-11-02|character:char:157882|whereanime",
+   "day": "2026-11-02",
+   "slug": "character:char:157882",
+   "title": "Campfire Cooking in Another World with my Absurd Skill",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:157882",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793601946203,
+   "status": "claimed"
   }
  ],
  "health": {
