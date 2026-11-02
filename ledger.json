@@ -32743,6 +32743,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116296357503689",
    "commentId": "122116296357503689_1756022385480765"
+  },
+  {
+   "key": "2026-11-02|where:127400|whereanime",
+   "day": "2026-11-02",
+   "slug": "where:127400",
+   "title": "World Trigger 3rd Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "127400",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793602548811,
+   "status": "claimed"
   }
  ],
  "health": {
