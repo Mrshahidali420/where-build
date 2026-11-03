@@ -1,6 +1,30 @@
 {
  "v": 1,
- "entries": [],
+ "entries": [
+  {
+   "share": true,
+   "key": "2026-11-03|share:1318170941390322_122120947425500964|whereanime",
+   "day": "2026-11-03",
+   "slug": "share:1318170941390322_122120947425500964",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1318170941390322_122120947425500964",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1318170941390322_122120947425500964",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "Emma",
+   "sourceFormat": "type:where",
+   "link": "https://www.facebook.com/1318170941390322/posts/122120947425500964",
+   "message": "New on our sister Page, Manhwa Index:",
+   "at": 1793708336956,
+   "status": "claimed"
+  }
+ ],
  "health": {
   "signals": [],
   "peak": {
