@@ -2509,6 +2509,22 @@
     "id": "18434138920148323",
     "at": 1793750063601
    }
+  },
+  {
+   "key": "2026-11-03|character:char:36765|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:36765",
+   "title": "Sword Art Online",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:36765",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793750364689,
+   "status": "claimed"
   }
  ],
  "health": {
