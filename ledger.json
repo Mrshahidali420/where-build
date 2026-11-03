@@ -1485,6 +1485,22 @@
     "id": "18118024370122369",
     "at": 1793732416120
    }
+  },
+  {
+   "key": "2026-11-03|where:15809|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:15809",
+   "title": "The Devil is a Part-Timer!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "15809",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793732745536,
+   "status": "claimed"
   }
  ],
  "health": {
