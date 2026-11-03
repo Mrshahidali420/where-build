@@ -34747,6 +34747,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116647255503689",
    "commentId": "122116647255503689_1612986877536477"
+  },
+  {
+   "key": "2026-11-03|episode:198727:4|whereanime",
+   "day": "2026-11-03",
+   "slug": "episode:198727:4",
+   "title": "Chitose Is in the Ramune Bottle 2nd Cour",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "198727:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793684006475,
+   "status": "claimed"
   }
  ],
  "health": {
