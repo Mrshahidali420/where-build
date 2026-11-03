@@ -35003,6 +35003,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116665585503689",
    "commentId": "122116665585503689_1471830498191785"
+  },
+  {
+   "key": "2026-11-03|where:21712|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:21712",
+   "title": "ISLAND",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21712",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793688250273,
+   "status": "claimed"
   }
  ],
  "health": {
