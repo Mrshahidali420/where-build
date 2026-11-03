@@ -34326,6 +34326,22 @@
     "id": "17984786853102745",
     "at": 1793661481689
    }
+  },
+  {
+   "key": "2026-11-02|fact:fact:130003:rated|whereanime",
+   "day": "2026-11-02",
+   "slug": "fact:fact:130003:rated",
+   "title": "BOCCHI THE ROCK!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:130003:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793672782283,
+   "status": "claimed"
   }
  ],
  "health": {
