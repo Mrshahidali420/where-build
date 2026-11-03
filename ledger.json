@@ -35709,6 +35709,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116745913503689",
    "commentId": "122116745913503689_1662122302594837"
+  },
+  {
+   "key": "2026-11-03|character:char:42307|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:42307",
+   "title": "No.6",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:42307",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793705595268,
+   "status": "claimed"
   }
  ],
  "health": {
