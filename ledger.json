@@ -1665,6 +1665,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116900665503689",
    "commentId": "122116900665503689_1635141581388146"
+  },
+  {
+   "key": "2026-11-03|scenes:114888:2|whereanime",
+   "day": "2026-11-03",
+   "slug": "scenes:114888:2",
+   "title": "The Millionaire Detective - Balance: UNLIMITED",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "114888:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793736118307,
+   "status": "claimed"
   }
  ],
  "health": {
