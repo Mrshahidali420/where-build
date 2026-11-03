@@ -34711,6 +34711,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116644531503689",
    "commentId": "122116644531503689_1598884481476182"
+  },
+  {
+   "key": "2026-11-03|where:142666|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:142666",
+   "title": "Migi&Dali",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "142666",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793683404185,
+   "status": "claimed"
   }
  ],
  "health": {
