@@ -35655,6 +35655,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116739421503689",
    "commentId": "122116739421503689_2342337529899123"
+  },
+  {
+   "key": "2026-11-03|where:98448|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:98448",
+   "title": "Kino's Journey -the Beautiful World- the Animated Series",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "98448",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793704691895,
+   "status": "claimed"
   }
  ],
  "health": {
