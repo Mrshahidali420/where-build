@@ -1783,6 +1783,22 @@
     "id": "18117108596603067",
     "at": 1793737768056
    }
+  },
+  {
+   "key": "2026-11-03|where:117612|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:117612",
+   "title": "How a Realist Hero Rebuilt the Kingdom",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "117612",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793738087060,
+   "status": "claimed"
   }
  ],
  "health": {
