@@ -725,6 +725,24 @@
    "status": "posted",
    "postId": "1329988470202923_122116822197503689",
    "commentId": "122116822197503689_1670196647800835"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-03|reel-anticipated:anticipated:all|whereanime",
+   "day": "2026-11-03",
+   "slug": "reel-anticipated:anticipated:all",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:all",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793719999940,
+   "track": "jrpg-piano.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
