@@ -35543,6 +35543,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116726479503689",
    "commentId": "122116726479503689_1790196025783082"
+  },
+  {
+   "key": "2026-11-03|where:114340|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:114340",
+   "title": "Kuma Kuma Kuma Bear",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "114340",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793701655045,
+   "status": "claimed"
   }
  ],
  "health": {
