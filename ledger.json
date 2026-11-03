@@ -803,6 +803,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116826367503689",
    "commentId": "122116826367503689_28984953671169166"
+  },
+  {
+   "key": "2026-11-03|character:char:89334|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:89334",
+   "title": "Mob Psycho 100 II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89334",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793721210638,
+   "status": "claimed"
   }
  ],
  "health": {
