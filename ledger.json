@@ -47,6 +47,22 @@
     "at": 1793708638038,
     "slides": 8
    }
+  },
+  {
+   "key": "2026-11-03|out-now:206949:5:out|whereanime",
+   "day": "2026-11-03",
+   "slug": "out-now:206949:5:out",
+   "title": "Nia Liston: The Merciless Maiden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "206949:5:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793708939359,
+   "status": "claimed"
   }
  ],
  "health": {
