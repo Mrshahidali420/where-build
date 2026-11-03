@@ -2289,6 +2289,22 @@
     "id": "18110416907225673",
     "at": 1793746426241
    }
+  },
+  {
+   "key": "2026-11-03|character:char:222593|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:222593",
+   "title": "DAN DA DAN",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:222593",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793746727699,
+   "status": "claimed"
   }
  ],
  "health": {
