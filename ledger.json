@@ -34670,48 +34670,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-02",
-  "at": 1793596774932,
+  "day": "2026-11-03",
+  "at": 1793682480622,
   "list": [
    {
-    "id": 83419,
-    "name": "Maho Hiyajou",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b83419-p2gjgTL37GTU.jpg",
-    "favourites": 1150,
-    "mediaId": 21127,
-    "voice": "Sayuri Yahagi"
+    "id": 46494,
+    "name": "Armin Arlert",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b46494-g7xYYuBtYPnO.png",
+    "favourites": 14230,
+    "mediaId": 110277,
+    "voice": "Marina Inoue"
    },
    {
-    "id": 255701,
-    "name": "Scarlet El Vandimion",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b255701-vTMYByCyesD4.png",
-    "favourites": 824,
-    "mediaId": 181447,
-    "voice": "Asami Seto"
+    "id": 674,
+    "name": "Kagura",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b674-w8wCh0A5Qa8R.png",
+    "favourites": 6140,
+    "mediaId": 918,
+    "voice": "Rie Kugimiya"
    },
    {
-    "id": 5343,
-    "name": "Kobato Hanato",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b5343-XHTtP0cV1uXG.png",
-    "favourites": 454,
-    "mediaId": 5678,
-    "voice": "Kana Hanazawa"
+    "id": 145343,
+    "name": "Keisuke Baji",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b145343-vRrkdWEUXwYM.jpg",
+    "favourites": 4390,
+    "mediaId": 120120,
+    "voice": "Masaaki Mizunaka"
    },
    {
-    "id": 89829,
-    "name": "Rei Sakuma",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89829-ejB5plkWrAt8.png",
-    "favourites": 435,
-    "mediaId": 21512,
-    "voice": "Toshiki Masuda"
+    "id": 176840,
+    "name": "Yamato",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b176840-8KRqXXLJeLOg.png",
+    "favourites": 2367,
+    "mediaId": 21,
+    "voice": "Saori Hayami"
    },
    {
-    "id": 1348,
-    "name": "Loran Cehack",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1348-s1NCqMFAbJcm.png",
-    "favourites": 376,
-    "mediaId": 95,
-    "voice": "Romi Park"
+    "id": 185661,
+    "name": "Ai Kamiya",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b185661-hU8QpclbKiwI.jpg",
+    "favourites": 1285,
+    "mediaId": 127911,
+    "voice": "Ayaka Fukuhara"
    }
   ]
  },
