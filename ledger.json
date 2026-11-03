@@ -34783,6 +34783,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116650291503689",
    "commentId": "122116650291503689_1456280013109313"
+  },
+  {
+   "key": "2026-11-03|episode:207809:18|whereanime",
+   "day": "2026-11-03",
+   "slug": "episode:207809:18",
+   "title": "Red River",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "207809:18",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793684608732,
+   "status": "claimed"
   }
  ],
  "health": {
