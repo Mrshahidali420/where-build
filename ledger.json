@@ -34348,6 +34348,22 @@
     "id": "18076202999736783",
     "at": 1793672782283
    }
+  },
+  {
+   "key": "2026-11-02|where:126830|whereanime",
+   "day": "2026-11-02",
+   "slug": "where:126830",
+   "title": "Code Geass: Rozé of the Recapture",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "126830",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793673085495,
+   "status": "claimed"
   }
  ],
  "health": {
