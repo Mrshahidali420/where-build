@@ -35021,6 +35021,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116667115503689",
    "commentId": "122116667115503689_1124769337022603"
+  },
+  {
+   "key": "2026-11-03|character:char:130430|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:130430",
+   "title": "The Helpful Fox Senko-san",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:130430",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793688551444,
+   "status": "claimed"
   }
  ],
  "health": {
