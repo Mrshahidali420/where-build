@@ -1,4 +1,15 @@
 {
  "v": 1,
- "entries": []
+ "entries": [],
+ "health": {
+  "signals": [],
+  "peak": {
+   "pct": 2,
+   "source": "x-business-use-case-usage",
+   "at": 1793708335053
+  },
+  "cut": null,
+  "blockedUntil": 0,
+  "halted": null
+ }
 }
