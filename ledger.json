@@ -35151,6 +35151,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116684713503689",
    "commentId": "122116684713503689_957988687040864"
+  },
+  {
+   "key": "2026-11-03|where:97875|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:97875",
+   "title": "NANBAKA - Part Two",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "97875",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793693107046,
+   "status": "claimed"
   }
  ],
  "health": {
