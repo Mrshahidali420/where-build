@@ -1909,6 +1909,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116922049503689",
    "commentId": "122116922049503689_1146452687881576"
+  },
+  {
+   "key": "2026-11-03|where:132473|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:132473",
+   "title": "The Faraway Paladin",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "132473",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793740374733,
+   "status": "claimed"
   }
  ],
  "health": {
