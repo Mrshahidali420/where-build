@@ -1963,6 +1963,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116926663503689",
    "commentId": "122116926663503689_1660041825621299"
+  },
+  {
+   "key": "2026-11-03|where:20996|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:20996",
+   "title": "Gintama Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20996",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793741355510,
+   "status": "claimed"
   }
  ],
  "health": {
