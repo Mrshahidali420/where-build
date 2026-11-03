@@ -35561,6 +35561,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116727631503689",
    "commentId": "122116727631503689_1044184072016174"
+  },
+  {
+   "key": "2026-11-03|character:char:256379|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:256379",
+   "title": "Ya Boy Kongming!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:256379",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793701956218,
+   "status": "claimed"
   }
  ],
  "health": {
