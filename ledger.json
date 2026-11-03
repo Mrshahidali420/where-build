@@ -2265,6 +2265,24 @@
    "status": "posted",
    "postId": "1329988470202923_122116948305503689",
    "commentId": "122116948305503689_1862292534774895"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-03|reel-anticipated:anticipated:season:2027-SPRING|whereanime",
+   "day": "2026-11-03",
+   "slug": "reel-anticipated:anticipated:season:2027-SPRING",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:season:2027-SPRING",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793746426241,
+   "track": "hot-springs-town.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
