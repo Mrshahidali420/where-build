@@ -1687,6 +1687,22 @@
     "id": "18107456828614842",
     "at": 1793736118307
    }
+  },
+  {
+   "key": "2026-11-03|character:char:13020|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:13020",
+   "title": "Vinland Saga",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:13020",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793736423230,
+   "status": "claimed"
   }
  ],
  "health": {
