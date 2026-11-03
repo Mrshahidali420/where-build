@@ -35525,6 +35525,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116724859503689",
    "commentId": "122116724859503689_1112717908398136"
+  },
+  {
+   "key": "2026-11-03|character:char:207817|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:207817",
+   "title": "Chillin' in Another World with Level 2 Super Cheat Powers",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:207817",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793701353901,
+   "status": "claimed"
   }
  ],
  "health": {
