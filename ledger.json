@@ -2075,6 +2075,29 @@
    "status": "posted",
    "postId": "1329988470202923_122116936167503689",
    "commentId": "122116936167503689_2161562894475902"
+  },
+  {
+   "share": true,
+   "key": "2026-11-03|share:3039436086390231|whereanime",
+   "day": "2026-11-03",
+   "slug": "share:3039436086390231",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "3039436086390231",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "3039436086390231",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": null,
+   "sourceFormat": "reel:reel-ranking",
+   "link": "https://www.facebook.com/reel/3039436086390231",
+   "message": "Seen this yet? From our sister Page, Manhwa Index:",
+   "at": 1793743349660,
+   "status": "claimed"
   }
  ],
  "health": {
