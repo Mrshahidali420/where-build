@@ -34525,6 +34525,22 @@
     "id": "18018266267753102",
     "at": 1793676425837
    }
+  },
+  {
+   "key": "2026-11-02|character:char:128692|whereanime",
+   "day": "2026-11-02",
+   "slug": "character:char:128692",
+   "title": "Ride Your Wave",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:128692",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793676726935,
+   "status": "claimed"
   }
  ],
  "health": {
