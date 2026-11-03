@@ -197,6 +197,22 @@
     "id": "18646230358037751",
     "at": 1793711119971
    }
+  },
+  {
+   "key": "2026-11-03|episode:187316:5|whereanime",
+   "day": "2026-11-03",
+   "slug": "episode:187316:5",
+   "title": "Gensou Suikoden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "187316:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793711421219,
+   "status": "claimed"
   }
  ],
  "health": {
