@@ -3511,6 +3511,24 @@
    "status": "posted",
    "postId": "1329988470202923_122117067489503689",
    "commentId": "122117067489503689_1653863879866353"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-04|reel-today:today:2026-11-04|whereanime",
+   "day": "2026-11-04",
+   "slug": "reel-today:today:2026-11-04",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-today",
+   "type": "reel-today",
+   "item": "today:2026-11-04",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793772878727,
+   "track": "anime-intro.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
