@@ -4322,6 +4322,22 @@
     "id": "18204927616332365",
     "at": 1793813806565
    }
+  },
+  {
+   "key": "2026-11-04|where:99420|whereanime",
+   "day": "2026-11-04",
+   "slug": "where:99420",
+   "title": "Girls' Last Tour",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "99420",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793814107994,
+   "status": "claimed"
   }
  ],
  "health": {
