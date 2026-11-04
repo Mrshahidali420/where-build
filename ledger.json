@@ -3584,6 +3584,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117072271503689",
    "commentId": "122117072271503689_4140972616209929"
+  },
+  {
+   "key": "2026-11-04|stills:212888:1|whereanime",
+   "day": "2026-11-04",
+   "slug": "stills:212888:1",
+   "title": "Overgeared",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:stills",
+   "type": "stills",
+   "item": "212888:1",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793774085075,
+   "status": "claimed"
   }
  ],
  "health": {
