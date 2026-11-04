@@ -3832,6 +3832,22 @@
     "id": "17945223024364998",
     "at": 1793799171713
    }
+  },
+  {
+   "key": "2026-11-04|scenes:21234:2|whereanime",
+   "day": "2026-11-04",
+   "slug": "scenes:21234:2",
+   "title": "ERASED",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "21234:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793799473429,
+   "status": "claimed"
   }
  ],
  "health": {
