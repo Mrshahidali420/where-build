@@ -4056,6 +4056,22 @@
     "id": "17907001065355511",
     "at": 1793806473626
    }
+  },
+  {
+   "key": "2026-11-04|scenes:140960:2|whereanime",
+   "day": "2026-11-04",
+   "slug": "scenes:140960:2",
+   "title": "SPY x FAMILY",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "140960:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793806775521,
+   "status": "claimed"
   }
  ],
  "health": {
