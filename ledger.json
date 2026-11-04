@@ -3309,48 +3309,48 @@
   "halted": null
  },
  "birthdays": {
-  "day": "2026-11-03",
-  "at": 1793710746027,
+  "day": "2026-11-04",
+  "at": 1793769223322,
   "list": [
    {
-    "id": 46494,
-    "name": "Armin Arlert",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b46494-g7xYYuBtYPnO.png",
-    "favourites": 14230,
-    "mediaId": 110277,
-    "voice": "Marina Inoue"
+    "id": 179809,
+    "name": "Yuki Itose",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b179809-pxG89n30MGwl.jpg",
+    "favourites": 2166,
+    "mediaId": 166794,
+    "voice": "Sumire Morohoshi"
    },
    {
-    "id": 674,
-    "name": "Kagura",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b674-w8wCh0A5Qa8R.png",
-    "favourites": 6140,
-    "mediaId": 918,
-    "voice": "Rie Kugimiya"
+    "id": 89856,
+    "name": "Kyouka Izumi",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89856-GB3SOKXTBnrX.jpg",
+    "favourites": 1888,
+    "mediaId": 21311,
+    "voice": "Sumire Morohoshi"
    },
    {
-    "id": 145343,
-    "name": "Keisuke Baji",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b145343-vRrkdWEUXwYM.jpg",
-    "favourites": 4390,
-    "mediaId": 120120,
-    "voice": "Masaaki Mizunaka"
+    "id": 3169,
+    "name": "Nozomu Itoshiki",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b3169-brSagWOQuVZp.png",
+    "favourites": 1326,
+    "mediaId": 10469,
+    "voice": "Hiroshi Kamiya"
    },
    {
-    "id": 176840,
-    "name": "Yamato",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b176840-8KRqXXLJeLOg.png",
-    "favourites": 2367,
-    "mediaId": 21,
-    "voice": "Saori Hayami"
+    "id": 1335,
+    "name": "Amuro Ray",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1335-uzT1UsLOu3nE.png",
+    "favourites": 906,
+    "mediaId": 80,
+    "voice": "Tooru Furuya"
    },
    {
-    "id": 185661,
-    "name": "Ai Kamiya",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b185661-hU8QpclbKiwI.jpg",
-    "favourites": 1285,
-    "mediaId": 127911,
-    "voice": "Ayaka Fukuhara"
+    "id": 79551,
+    "name": "Subaru Sakamaki",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/79551.jpg",
+    "favourites": 356,
+    "mediaId": 17513,
+    "voice": "Takashi Kondou"
    }
   ]
  },
