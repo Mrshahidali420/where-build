@@ -2933,6 +2933,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116995771503689",
    "commentId": "122116995771503689_1149100717537708"
+  },
+  {
+   "key": "2026-11-03|where:17074|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:17074",
+   "title": "Monogatari Series Second Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "17074",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793757348600,
+   "status": "claimed"
   }
  ],
  "health": {
