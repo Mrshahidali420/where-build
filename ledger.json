@@ -3177,6 +3177,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117010495503689",
    "commentId": "122117010495503689_1151602574024800"
+  },
+  {
+   "key": "2026-11-03|where:162804|whereanime",
+   "day": "2026-11-03",
+   "slug": "where:162804",
+   "title": "Alya Sometimes Hides Her Feelings in Russian",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "162804",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793761304934,
+   "status": "claimed"
   }
  ],
  "health": {
