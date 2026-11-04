@@ -2861,6 +2861,22 @@
    "status": "posted",
    "postId": "1329988470202923_122116990875503689",
    "commentId": "122116990875503689_1138326381987040"
+  },
+  {
+   "key": "2026-11-03|character:char:127212|whereanime",
+   "day": "2026-11-03",
+   "slug": "character:char:127212",
+   "title": "JUJUTSU KAISEN Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:127212",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793756142569,
+   "status": "claimed"
   }
  ],
  "health": {
