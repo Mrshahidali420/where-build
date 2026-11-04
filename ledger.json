@@ -3271,6 +3271,24 @@
     "id": "18352254208267391",
     "at": 1793762534508
    }
+  },
+  {
+   "reel": true,
+   "key": "2026-11-03|reel-anticipated:anticipated:films|whereanime",
+   "day": "2026-11-03",
+   "slug": "reel-anticipated:anticipated:films",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-anticipated",
+   "type": "reel-anticipated",
+   "item": "anticipated:films",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793764054048,
+   "track": "determination-anime.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
