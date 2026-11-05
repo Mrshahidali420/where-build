@@ -6773,6 +6773,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117663715503689",
    "commentId": "122117663715503689_2228194328108866"
+  },
+  {
+   "key": "2026-11-05|collage:210482:7|whereanime",
+   "day": "2026-11-05",
+   "slug": "collage:210482:7",
+   "title": "STEEL BALL RUN JoJo's Bizarre Adventure 2nd - 3rd STAGE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:collage",
+   "type": "collage",
+   "item": "210482:7",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793906756148,
+   "status": "claimed"
   }
  ],
  "health": {
