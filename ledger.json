@@ -5797,6 +5797,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793856192228
    }
+  },
+  {
+   "key": "2026-11-05|episode:213805:6|whereanime",
+   "day": "2026-11-05",
+   "slug": "episode:213805:6",
+   "title": "The Ramparts of Ice Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "213805:6",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793856493226,
+   "status": "claimed"
   }
  ],
  "health": {
