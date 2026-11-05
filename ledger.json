@@ -6549,6 +6549,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117628231503689",
    "commentId": "122117628231503689_1777881804012653"
+  },
+  {
+   "key": "2026-11-05|where:21258|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:21258",
+   "title": "Snow White with the Red Hair Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21258",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793900693506,
+   "status": "claimed"
   }
  ],
  "health": {
