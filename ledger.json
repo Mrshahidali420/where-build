@@ -6827,6 +6827,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117668197503689",
    "commentId": "122117668197503689_1176834174904775"
+  },
+  {
+   "key": "2026-11-05|where:20457|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:20457",
+   "title": "Black Bullet",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20457",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793907659709,
+   "status": "claimed"
   }
  ],
  "health": {
