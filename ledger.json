@@ -6845,6 +6845,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117669619503689",
    "commentId": "122117669619503689_28995241313438319"
+  },
+  {
+   "key": "2026-11-05|character:char:140856|whereanime",
+   "day": "2026-11-05",
+   "slug": "character:char:140856",
+   "title": "BLUE LOCK",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:140856",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793907961057,
+   "status": "claimed"
   }
  ],
  "health": {
