@@ -6359,6 +6359,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117605023503689",
    "commentId": "122117605023503689_4562023610731271"
+  },
+  {
+   "key": "2026-11-05|out-now:212503:5:out|whereanime",
+   "day": "2026-11-05",
+   "slug": "out-now:212503:5:out",
+   "title": "The Iceblade Sorcerer Shall Rule the World II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "212503:5:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793896455236,
+   "status": "claimed"
   }
  ],
  "health": {
