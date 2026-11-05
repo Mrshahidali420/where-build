@@ -5773,7 +5773,8 @@
    "variant": 2,
    "at": 1793855891277,
    "track": "gods-notebook-lofi.m4a",
-   "status": "claimed"
+   "status": "failed",
+   "error": "GET /2471666873640260 failed: Unsupported get request. Object with ID '2471666873640260' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
   }
  ],
  "health": {
