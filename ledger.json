@@ -6157,6 +6157,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117587689503689",
    "commentId": "122117587689503689_1589585669881027"
+  },
+  {
+   "key": "2026-11-05|fact:fact:12029:rated|whereanime",
+   "day": "2026-11-05",
+   "slug": "fact:fact:12029:rated",
+   "title": "Star Blazers: Space Battleship Yamato 2199",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:12029:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793891894912,
+   "status": "claimed"
   }
  ],
  "health": {
