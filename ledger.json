@@ -5306,6 +5306,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117382189503689",
    "commentId": "122117382189503689_975133995208856"
+  },
+  {
+   "key": "2026-11-04|character:char:80243|whereanime",
+   "day": "2026-11-04",
+   "slug": "character:char:80243",
+   "title": "A Silent Voice",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:80243",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793843608526,
+   "status": "claimed"
   }
  ],
  "health": {
