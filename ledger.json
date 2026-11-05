@@ -5775,48 +5775,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-04",
-  "at": 1793769223322,
+  "day": "2026-11-05",
+  "at": 1793855865514,
   "list": [
    {
-    "id": 179809,
-    "name": "Yuki Itose",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b179809-pxG89n30MGwl.jpg",
-    "favourites": 2166,
-    "mediaId": 166794,
-    "voice": "Sumire Morohoshi"
+    "id": 127613,
+    "name": "Kaede Azusagawa",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b127613-LBtFkMJfUWpg.png",
+    "favourites": 3351,
+    "mediaId": 101291,
+    "voice": "Yurika Kubo"
    },
    {
-    "id": 89856,
-    "name": "Kyouka Izumi",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89856-GB3SOKXTBnrX.jpg",
-    "favourites": 1888,
-    "mediaId": 21311,
-    "voice": "Sumire Morohoshi"
+    "id": 30030,
+    "name": "Alois Trancy",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b30030-FSfaQblvhuOM.jpg",
+    "favourites": 669,
+    "mediaId": 6707,
+    "voice": "Nana Mizuki"
    },
    {
-    "id": 3169,
-    "name": "Nozomu Itoshiki",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b3169-brSagWOQuVZp.png",
-    "favourites": 1326,
-    "mediaId": 10469,
-    "voice": "Hiroshi Kamiya"
+    "id": 41492,
+    "name": "Hayato Kamitani",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b41492-fSSM7Z9OOjuK.jpg",
+    "favourites": 541,
+    "mediaId": 98503,
+    "voice": "Yuuichirou Umehara"
    },
    {
-    "id": 1335,
-    "name": "Amuro Ray",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1335-uzT1UsLOu3nE.png",
-    "favourites": 906,
-    "mediaId": 80,
-    "voice": "Tooru Furuya"
+    "id": 467,
+    "name": "Gorou Honda",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b467-AgZhOfZWlRU4.png",
+    "favourites": 526,
+    "mediaId": 627,
+    "voice": "Motoko Kumai"
    },
    {
-    "id": 79551,
-    "name": "Subaru Sakamaki",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/79551.jpg",
-    "favourites": 356,
-    "mediaId": 17513,
-    "voice": "Takashi Kondou"
+    "id": 71949,
+    "name": "Jugram Haschwalth",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b71949-wcakVhS04k9t.png",
+    "favourites": 373,
+    "mediaId": 159322,
+    "voice": "Yuuichirou Umehara"
    }
   ]
  },
