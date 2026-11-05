@@ -6341,6 +6341,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117603589503689",
    "commentId": "122117603589503689_2494206604319915"
+  },
+  {
+   "key": "2026-11-05|where:112667|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:112667",
+   "title": "Our Last Crusade or the Rise of a New World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "112667",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793894933553,
+   "status": "claimed"
   }
  ],
  "health": {
