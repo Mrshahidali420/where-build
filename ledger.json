@@ -7295,6 +7295,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117714355503689",
    "commentId": "122117714355503689_1410270907760117"
+  },
+  {
+   "key": "2026-11-05|where:129191|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:129191",
+   "title": "The Strongest Sage with the Weakest Crest",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "129191",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793920078023,
+   "status": "claimed"
   }
  ],
  "health": {
