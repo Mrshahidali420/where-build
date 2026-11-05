@@ -5716,6 +5716,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117415771503689",
    "commentId": "122117415771503689_2413932436100215"
+  },
+  {
+   "key": "2026-11-04|where:155963|whereanime",
+   "day": "2026-11-04",
+   "slug": "where:155963",
+   "title": "Hokkaido Gals Are Super Adorable!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "155963",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793850266214,
+   "status": "claimed"
   }
  ],
  "health": {
