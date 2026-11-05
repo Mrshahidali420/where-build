@@ -6229,6 +6229,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117594487503689",
    "commentId": "122117594487503689_1446758003607982"
+  },
+  {
+   "key": "2026-11-05|where:14131|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:14131",
+   "title": "Girls und Panzer",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "14131",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793893126602,
+   "status": "claimed"
   }
  ],
  "health": {
