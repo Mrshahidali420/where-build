@@ -6287,6 +6287,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793893728670
    }
+  },
+  {
+   "key": "2026-11-05|scenes:153845:2|whereanime",
+   "day": "2026-11-05",
+   "slug": "scenes:153845:2",
+   "title": "I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "153845:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793894029634,
+   "status": "claimed"
   }
  ],
  "health": {
