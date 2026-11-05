@@ -7335,6 +7335,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793921599156
    }
+  },
+  {
+   "key": "2026-11-05|where:139630|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:139630",
+   "title": "My Hero Academia Season 6",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "139630",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1793921902548,
+   "status": "claimed"
   }
  ],
  "health": {
