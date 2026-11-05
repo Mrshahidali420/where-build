@@ -6975,6 +6975,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117682783503689",
    "commentId": "122117682783503689_1176709908486092"
+  },
+  {
+   "key": "2026-11-05|stills:207329:5|whereanime",
+   "day": "2026-11-05",
+   "slug": "stills:207329:5",
+   "title": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:stills",
+   "type": "stills",
+   "item": "207329:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793912505655,
+   "status": "claimed"
   }
  ],
  "health": {
