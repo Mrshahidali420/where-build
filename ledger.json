@@ -5323,7 +5323,11 @@
    "at": 1793843608526,
    "status": "posted",
    "postId": "1329988470202923_122117388123503689",
-   "commentId": "122117388123503689_1111607105185195"
+   "commentId": "122117388123503689_1111607105185195",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1793843608526
+   }
   }
  ],
  "health": {
