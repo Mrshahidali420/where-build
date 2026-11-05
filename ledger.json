@@ -5108,6 +5108,22 @@
     "id": "18113951669173048",
     "at": 1793838746145
    }
+  },
+  {
+   "key": "2026-11-04|where:127399|whereanime",
+   "day": "2026-11-04",
+   "slug": "where:127399",
+   "title": "Record of Ragnarok",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "127399",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793839047605,
+   "status": "claimed"
   }
  ],
  "health": {
