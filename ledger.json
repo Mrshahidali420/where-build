@@ -7169,6 +7169,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793917667451
    }
+  },
+  {
+   "key": "2026-11-05|character:char:2727|whereanime",
+   "day": "2026-11-05",
+   "slug": "character:char:2727",
+   "title": "Princess Mononoke",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:2727",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793917968767,
+   "status": "claimed"
   }
  ],
  "health": {
