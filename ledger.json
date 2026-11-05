@@ -5946,7 +5946,11 @@
    "at": 1793882135797,
    "status": "posted",
    "postId": "1329988470202923_122117545509503689",
-   "commentId": "122117545509503689_1548852683736272"
+   "commentId": "122117545509503689_1548852683736272",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1793882135797
+   }
   }
  ],
  "health": {
