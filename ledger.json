@@ -5328,6 +5328,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793843608526
    }
+  },
+  {
+   "key": "2026-11-04|where:98291|whereanime",
+   "day": "2026-11-04",
+   "slug": "where:98291",
+   "title": "Tsuredure Children",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "98291",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793843912296,
+   "status": "claimed"
   }
  ],
  "health": {
