@@ -5572,6 +5572,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793847553343
    }
+  },
+  {
+   "key": "2026-11-04|character:char:78093|whereanime",
+   "day": "2026-11-04",
+   "slug": "character:char:78093",
+   "title": "Komi Can’t Communicate",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:78093",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793847854734,
+   "status": "claimed"
   }
  ],
  "health": {
