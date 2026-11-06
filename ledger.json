@@ -7703,6 +7703,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793930091440
    }
+  },
+  {
+   "key": "2026-11-05|where:10793|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:10793",
+   "title": "Guilty Crown",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "10793",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793930394829,
+   "status": "claimed"
   }
  ],
  "health": {
