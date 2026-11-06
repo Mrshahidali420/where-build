@@ -7793,6 +7793,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117771295503689",
    "commentId": "122117771295503689_1429712459198990"
+  },
+  {
+   "key": "2026-11-05|character:char:180692|whereanime",
+   "day": "2026-11-05",
+   "slug": "character:char:180692",
+   "title": "Kaiju No. 8",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:180692",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793931901373,
+   "status": "claimed"
   }
  ],
  "health": {
