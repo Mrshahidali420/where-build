@@ -9377,6 +9377,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118037539503689",
    "commentId": "122118037539503689_1927782558602351"
+  },
+  {
+   "key": "2026-11-06|character:char:37685|whereanime",
+   "day": "2026-11-06",
+   "slug": "character:char:37685",
+   "title": "My Little Monster",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:37685",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793994906073,
+   "status": "claimed"
   }
  ],
  "health": {
