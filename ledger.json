@@ -7925,6 +7925,22 @@
    "at": 1793934947250,
    "status": "posted",
    "postId": "1329988470202923_122117784369503689"
+  },
+  {
+   "key": "2026-11-05|scenes:1735:4|whereanime",
+   "day": "2026-11-05",
+   "slug": "scenes:1735:4",
+   "title": "Naruto: Shippuden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "1735:4",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793935251099,
+   "status": "claimed"
   }
  ],
  "health": {
