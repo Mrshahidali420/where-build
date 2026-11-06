@@ -8963,6 +8963,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117991021503689",
    "commentId": "122117991021503689_1595458495216432"
+  },
+  {
+   "key": "2026-11-06|scenes:20992:2|whereanime",
+   "day": "2026-11-06",
+   "slug": "scenes:20992:2",
+   "title": "HAIKYU!! 2nd Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "20992:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793984552724,
+   "status": "claimed"
   }
  ],
  "health": {
