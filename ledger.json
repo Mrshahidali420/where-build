@@ -9619,6 +9619,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118062637503689",
    "commentId": "122118062637503689_1559684046206044"
+  },
+  {
+   "key": "2026-11-06|where:2890|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:2890",
+   "title": "Ponyo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "2890",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794002507618,
+   "status": "claimed"
   }
  ],
  "health": {
