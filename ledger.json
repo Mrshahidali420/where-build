@@ -9323,6 +9323,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793992450321
    }
+  },
+  {
+   "key": "2026-11-06|scenes:6702:2|whereanime",
+   "day": "2026-11-06",
+   "slug": "scenes:6702:2",
+   "title": "Fairy Tail",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "6702:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793993998895,
+   "status": "claimed"
   }
  ],
  "health": {
