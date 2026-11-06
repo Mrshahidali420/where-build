@@ -9885,6 +9885,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794008896187
    }
+  },
+  {
+   "key": "2026-11-06|character:char:76364|whereanime",
+   "day": "2026-11-06",
+   "slug": "character:char:76364",
+   "title": "Masamune-kun's Revenge",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:76364",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794009197774,
+   "status": "claimed"
   }
  ],
  "health": {
