@@ -8437,6 +8437,29 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793965987382
    }
+  },
+  {
+   "share": true,
+   "key": "2026-11-06|share:1318170941390322_122122012107500964|whereanime",
+   "day": "2026-11-06",
+   "slug": "share:1318170941390322_122122012107500964",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1318170941390322_122122012107500964",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1318170941390322_122122012107500964",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": null,
+   "sourceFormat": "type:birthday",
+   "link": "https://www.facebook.com/1318170941390322/posts/122122012107500964",
+   "message": "New on our sister Page, Manhwa Index:",
+   "at": 1793968729750,
+   "status": "claimed"
   }
  ],
  "health": {
