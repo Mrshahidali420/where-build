@@ -9715,6 +9715,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118071313503689",
    "commentId": "122118071313503689_1665804048470479"
+  },
+  {
+   "key": "2026-11-06|where:20593|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:20593",
+   "title": "Hanamonogatari",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20593",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794005251843,
+   "status": "claimed"
   }
  ],
  "health": {
