@@ -9601,6 +9601,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118061299503689",
    "commentId": "122118061299503689_1094694973384055"
+  },
+  {
+   "key": "2026-11-06|character:char:18770|whereanime",
+   "day": "2026-11-06",
+   "slug": "character:char:18770",
+   "title": "Kuroko's Basketball",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:18770",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794002206065,
+   "status": "claimed"
   }
  ],
  "health": {
