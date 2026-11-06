@@ -8055,6 +8055,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117792349503689",
    "commentId": "122117792349503689_2319397912153871"
+  },
+  {
+   "key": "2026-11-05|where:530|whereanime",
+   "day": "2026-11-05",
+   "slug": "where:530",
+   "title": "Sailor Moon",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "530",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1793937362147,
+   "status": "claimed"
   }
  ],
  "health": {
