@@ -9211,6 +9211,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118019539503689",
    "commentId": "122118019539503689_981911514479389"
+  },
+  {
+   "key": "2026-11-06|scenes:171018:2|whereanime",
+   "day": "2026-11-06",
+   "slug": "scenes:171018:2",
+   "title": "DAN DA DAN",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "171018:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793990917187,
+   "status": "claimed"
   }
  ],
  "health": {
