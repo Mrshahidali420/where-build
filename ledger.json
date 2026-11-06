@@ -9755,6 +9755,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118073557503689",
    "commentId": "122118073557503689_2133641347523024"
+  },
+  {
+   "key": "2026-11-06|where:6707|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:6707",
+   "title": "Black Butler II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "6707",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794005854954,
+   "status": "claimed"
   }
  ],
  "health": {
