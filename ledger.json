@@ -8945,6 +8945,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793981513419
    }
+  },
+  {
+   "key": "2026-11-06|out-now:178083:6:out|whereanime",
+   "day": "2026-11-06",
+   "slug": "out-now:178083:6:out",
+   "title": "Tokyo Revengers: War of the Three Titans Arc",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "178083:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793984251359,
+   "status": "claimed"
   }
  ],
  "health": {
