@@ -9247,6 +9247,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118022275503689",
    "commentId": "122118022275503689_1667745941673689"
+  },
+  {
+   "key": "2026-11-06|where:112649|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:112649",
+   "title": "Suppose a Kid from the Last Dungeon Boonies moved to a starter town?",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "112649",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1793991519984,
+   "status": "claimed"
   }
  ],
  "health": {
