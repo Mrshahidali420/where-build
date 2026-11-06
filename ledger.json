@@ -7681,6 +7681,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117757885503689",
    "commentId": "122117757885503689_2899261080444556"
+  },
+  {
+   "key": "2026-11-05|character:char:14523|whereanime",
+   "day": "2026-11-05",
+   "slug": "character:char:14523",
+   "title": "Maid-Sama!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:14523",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793930091440,
+   "status": "claimed"
   }
  ],
  "health": {
