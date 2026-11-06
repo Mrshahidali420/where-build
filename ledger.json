@@ -9016,7 +9016,11 @@
    "at": 1793985155294,
    "status": "posted",
    "postId": "1329988470202923_122117995215503689",
-   "commentId": "122117995215503689_1382395643731232"
+   "commentId": "122117995215503689_1382395643731232",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1793985155294
+   }
   }
  ],
  "health": {
