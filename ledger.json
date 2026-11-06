@@ -8150,48 +8150,40 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-05",
-  "at": 1793855865514,
+  "day": "2026-11-06",
+  "at": 1793942207004,
   "list": [
    {
-    "id": 127613,
-    "name": "Kaede Azusagawa",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b127613-LBtFkMJfUWpg.png",
-    "favourites": 3351,
-    "mediaId": 101291,
-    "voice": "Yurika Kubo"
+    "id": 564,
+    "name": "Uryuu Ishida",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b564-a6LJitrjSfKC.jpg",
+    "favourites": 1835,
+    "mediaId": 269,
+    "voice": "Noriaki Sugiyama"
    },
    {
-    "id": 30030,
-    "name": "Alois Trancy",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b30030-FSfaQblvhuOM.jpg",
-    "favourites": 669,
-    "mediaId": 6707,
-    "voice": "Nana Mizuki"
+    "id": 125638,
+    "name": "Retsuko",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b125638-G78SMCBB6E4o.jpg",
+    "favourites": 1001,
+    "mediaId": 101571,
+    "voice": "Rarecho"
    },
    {
-    "id": 41492,
-    "name": "Hayato Kamitani",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b41492-fSSM7Z9OOjuK.jpg",
-    "favourites": 541,
-    "mediaId": 98503,
-    "voice": "Yuuichirou Umehara"
+    "id": 17178,
+    "name": "Ryuuma Shimotsuki",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b17178-SczXHzLzZqzn.jpg",
+    "favourites": 231,
+    "mediaId": 21,
+    "voice": "Choo"
    },
    {
-    "id": 467,
-    "name": "Gorou Honda",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b467-AgZhOfZWlRU4.png",
-    "favourites": 526,
-    "mediaId": 627,
-    "voice": "Motoko Kumai"
-   },
-   {
-    "id": 71949,
-    "name": "Jugram Haschwalth",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b71949-wcakVhS04k9t.png",
-    "favourites": 373,
-    "mediaId": 159322,
-    "voice": "Yuuichirou Umehara"
+    "id": 4632,
+    "name": "Masato Inohara",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b4632-tjaDMf5S2xlG.png",
+    "favourites": 123,
+    "mediaId": 13655,
+    "voice": "Nobutoshi Kanna"
    }
   ]
  },
