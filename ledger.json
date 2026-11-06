@@ -8725,6 +8725,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793977875108
    }
+  },
+  {
+   "key": "2026-11-06|scenes:112641:2|whereanime",
+   "day": "2026-11-06",
+   "slug": "scenes:112641:2",
+   "title": "Kaguya-sama: Love is War?",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "112641:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793978176314,
+   "status": "claimed"
   }
  ],
  "health": {
