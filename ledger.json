@@ -9117,6 +9117,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118006183503689",
    "commentId": "122118006183503689_1436133962050683"
+  },
+  {
+   "key": "2026-11-06|character:char:123962|whereanime",
+   "day": "2026-11-06",
+   "slug": "character:char:123962",
+   "title": "That Time I Got Reincarnated as a Slime Season 2 Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:123962",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793988189135,
+   "status": "claimed"
   }
  ],
  "health": {
