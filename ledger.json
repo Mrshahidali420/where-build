@@ -8126,7 +8126,11 @@
    "at": 1793939485265,
    "status": "posted",
    "postId": "1329988470202923_122117800401503689",
-   "commentId": "122117800401503689_28866932059624101"
+   "commentId": "122117800401503689_28866932059624101",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1793939485265
+   }
   }
  ],
  "health": {
