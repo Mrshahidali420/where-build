@@ -8613,6 +8613,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117946153503689",
    "commentId": "122117946153503689_1796488688065646"
+  },
+  {
+   "key": "2026-11-06|out-now:205909:5:out|whereanime",
+   "day": "2026-11-06",
+   "slug": "out-now:205909:5:out",
+   "title": "Firefly Wedding",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "205909:5:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1793976366977,
+   "status": "claimed"
   }
  ],
  "health": {
