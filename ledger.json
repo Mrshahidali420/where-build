@@ -9170,7 +9170,11 @@
    "at": 1793988791931,
    "status": "posted",
    "postId": "1329988470202923_122118009813503689",
-   "commentId": "122118009813503689_1855478492143468"
+   "commentId": "122118009813503689_1855478492143468",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1793988791931
+   }
   }
  ],
  "health": {
