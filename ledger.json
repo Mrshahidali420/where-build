@@ -8496,7 +8496,11 @@
    "at": 1793970552100,
    "status": "posted",
    "postId": "1329988470202923_122117925531503689",
-   "commentId": "122117925531503689_1142037008787143"
+   "commentId": "122117925531503689_1142037008787143",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1793970552100
+   }
   }
  ],
  "health": {
