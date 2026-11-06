@@ -9732,7 +9732,11 @@
    "at": 1794005251843,
    "status": "posted",
    "postId": "1329988470202923_122118072555503689",
-   "commentId": "122118072555503689_1686905779804611"
+   "commentId": "122118072555503689_1686905779804611",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794005251843
+   }
   }
  ],
  "health": {
