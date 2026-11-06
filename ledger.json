@@ -8357,6 +8357,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1793952603468
    }
+  },
+  {
+   "key": "2026-11-06|episode:216895:6|whereanime",
+   "day": "2026-11-06",
+   "slug": "episode:216895:6",
+   "title": "Welsh & Shedar",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "216895:6",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793957772327,
+   "status": "claimed"
   }
  ],
  "health": {
