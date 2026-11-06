@@ -9525,6 +9525,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118053313503689",
    "commentId": "122118053313503689_1874823590627650"
+  },
+  {
+   "key": "2026-11-06|character:char:70899|whereanime",
+   "day": "2026-11-06",
+   "slug": "character:char:70899",
+   "title": "Sword Art Online: Alicization",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:70899",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1793999779393,
+   "status": "claimed"
   }
  ],
  "health": {
