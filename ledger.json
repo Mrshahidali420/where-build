@@ -9863,6 +9863,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118085887503689",
    "commentId": "122118085887503689_957817517085871"
+  },
+  {
+   "key": "2026-11-06|where:1519|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:1519",
+   "title": "Black Lagoon: The Second Barrage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "1519",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794008896187,
+   "status": "claimed"
   }
  ],
  "health": {
