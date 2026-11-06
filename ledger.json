@@ -8537,6 +8537,22 @@
    "status": "posted",
    "postId": "1329988470202923_122117940507503689",
    "commentId": "122117940507503689_1441591110838094"
+  },
+  {
+   "key": "2026-11-06|out-now:195516:6:out|whereanime",
+   "day": "2026-11-06",
+   "slug": "out-now:195516:6:out",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "195516:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1793973947058,
+   "status": "claimed"
   }
  ],
  "health": {
