@@ -11091,6 +11091,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118315003503689",
    "commentId": "122118315003503689_2243112959970187"
+  },
+  {
+   "key": "2026-11-07|where:151379|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:151379",
+   "title": "Akiba Maid War",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "151379",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794061467129,
+   "status": "claimed"
   }
  ],
  "health": {
