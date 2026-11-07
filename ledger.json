@@ -10609,6 +10609,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118156669503689",
    "commentId": "122118156669503689_1127498400149608"
+  },
+  {
+   "key": "2026-11-06|character:char:385|whereanime",
+   "day": "2026-11-06",
+   "slug": "character:char:385",
+   "title": "Spirited Away",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:385",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794024675318,
+   "status": "claimed"
   }
  ],
  "health": {
