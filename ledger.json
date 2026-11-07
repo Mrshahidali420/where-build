@@ -10889,6 +10889,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794040438475
    }
+  },
+  {
+   "key": "2026-11-07|out-now:235:1219:out|whereanime",
+   "day": "2026-11-07",
+   "slug": "out-now:235:1219:out",
+   "title": "Detective Conan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "235:1219:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794043178418,
+   "status": "claimed"
   }
  ],
  "health": {
