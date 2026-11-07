@@ -11411,6 +11411,22 @@
    "at": 1794073406800,
    "status": "posted",
    "postId": "1329988470202923_122118372579503689"
+  },
+  {
+   "key": "2026-11-07|character:char:128652|whereanime",
+   "day": "2026-11-07",
+   "slug": "character:char:128652",
+   "title": "Toilet-bound Hanako-kun",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:128652",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794073709142,
+   "status": "claimed"
   }
  ],
  "health": {
