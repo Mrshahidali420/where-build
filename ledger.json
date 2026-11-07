@@ -10685,6 +10685,24 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794028027553
    }
+  },
+  {
+   "reel": true,
+   "key": "2026-11-07|reel-today:today:2026-11-07|whereanime",
+   "day": "2026-11-07",
+   "slug": "reel-today:today:2026-11-07",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:reel-today",
+   "type": "reel-today",
+   "item": "today:2026-11-07",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794028329014,
+   "track": "jrpg-piano.m4a",
+   "status": "claimed"
   }
  ],
  "health": {
