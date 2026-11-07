@@ -10682,40 +10682,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-06",
-  "at": 1793942207004,
+  "day": "2026-11-07",
+  "at": 1794028004857,
   "list": [
    {
-    "id": 564,
-    "name": "Uryuu Ishida",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b564-a6LJitrjSfKC.jpg",
-    "favourites": 1835,
-    "mediaId": 269,
-    "voice": "Noriaki Sugiyama"
+    "id": 217334,
+    "name": "Alisa Kujou",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b217334-buImnwO26SgS.jpg",
+    "favourites": 3714,
+    "mediaId": 162804,
+    "voice": "Sumire Uesaka"
    },
    {
-    "id": 125638,
-    "name": "Retsuko",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b125638-G78SMCBB6E4o.jpg",
-    "favourites": 1001,
-    "mediaId": 101571,
-    "voice": "Rarecho"
+    "id": 158154,
+    "name": "Shouko Ieiri",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b158154-UCqbiULli62P.png",
+    "favourites": 1523,
+    "mediaId": 113415,
+    "voice": "Aya Endou"
    },
    {
-    "id": 17178,
-    "name": "Ryuuma Shimotsuki",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b17178-SczXHzLzZqzn.jpg",
-    "favourites": 231,
-    "mediaId": 21,
-    "voice": "Choo"
+    "id": 64621,
+    "name": "Saruhiko Fushimi",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b64621-mC3KL5Bpqb2M.png",
+    "favourites": 373,
+    "mediaId": 14467,
+    "voice": "Mamoru Miyano"
    },
    {
-    "id": 4632,
-    "name": "Masato Inohara",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b4632-tjaDMf5S2xlG.png",
-    "favourites": 123,
-    "mediaId": 13655,
-    "voice": "Nobutoshi Kanna"
+    "id": 128469,
+    "name": "Chartreux Westia",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b128469-MKtpVYyFx199.png",
+    "favourites": 342,
+    "mediaId": 101310,
+    "voice": "Yuu Shimamura"
+   },
+   {
+    "id": 260986,
+    "name": "Sazanka",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b260986-62tYMt2dOSP4.png",
+    "favourites": 113,
+    "mediaId": 141350,
+    "voice": "Miyari Nemoto"
    }
   ]
  },
