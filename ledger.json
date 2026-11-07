@@ -10929,6 +10929,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794044695294
    }
+  },
+  {
+   "key": "2026-11-07|out-now:180894:6:out|whereanime",
+   "day": "2026-11-07",
+   "slug": "out-now:180894:6:out",
+   "title": "Romelia War Chronicle",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "180894:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794052963627,
+   "status": "claimed"
   }
  ],
  "health": {
