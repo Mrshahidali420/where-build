@@ -11693,6 +11693,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118419247503689",
    "commentId": "122118419247503689_1160517023177210"
+  },
+  {
+   "key": "2026-11-07|where:108268|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:108268",
+   "title": "Ascendance of a Bookworm",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "108268",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794084346346,
+   "status": "claimed"
   }
  ],
  "health": {
