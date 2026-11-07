@@ -12035,6 +12035,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118453525503689",
    "commentId": "122118453525503689_2105979680037078"
+  },
+  {
+   "key": "2026-11-07|where:97663|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:97663",
+   "title": "Knight's & Magic",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "97663",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794093451137,
+   "status": "claimed"
   }
  ],
  "health": {
