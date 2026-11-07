@@ -11257,6 +11257,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118343953503689",
    "commentId": "122118343953503689_1761465085985347"
+  },
+  {
+   "key": "2026-11-07|fact:fact:177687:rated|whereanime",
+   "day": "2026-11-07",
+   "slug": "fact:fact:177687:rated",
+   "title": "100 METERS",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:177687:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794067835465,
+   "status": "claimed"
   }
  ],
  "health": {
