@@ -11621,6 +11621,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794081614493
    }
+  },
+  {
+   "key": "2026-11-07|where:237|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:237",
+   "title": "Eureka Seven",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "237",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794081915884,
+   "status": "claimed"
   }
  ],
  "health": {
