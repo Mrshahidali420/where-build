@@ -10555,6 +10555,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794023469897
    }
+  },
+  {
+   "key": "2026-11-06|where:6033|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:6033",
+   "title": "Dragon Ball Z Kai",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "6033",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794023771145,
+   "status": "claimed"
   }
  ],
  "health": {
