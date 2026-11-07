@@ -10235,6 +10235,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118125493503689",
    "commentId": "122118125493503689_1597618701585155"
+  },
+  {
+   "key": "2026-11-06|where:104459|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:104459",
+   "title": "LAID-BACK CAMP SEASON2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "104459",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794017395237,
+   "status": "claimed"
   }
  ],
  "health": {
