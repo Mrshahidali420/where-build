@@ -11167,6 +11167,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794064809074
    }
+  },
+  {
+   "key": "2026-11-07|fact:fact:3972:run|whereanime",
+   "day": "2026-11-07",
+   "slug": "fact:fact:3972:run",
+   "title": "Yu-Gi-Oh! 5D's",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:3972:run",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794065111370,
+   "status": "claimed"
   }
  ],
  "health": {
