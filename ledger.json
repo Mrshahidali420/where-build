@@ -11941,6 +11941,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118447093503689",
    "commentId": "122118447093503689_1789264958794353"
+  },
+  {
+   "key": "2026-11-07|where:169417|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:169417",
+   "title": "Re:Monster",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "169417",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794091944646,
+   "status": "claimed"
   }
  ],
  "health": {
