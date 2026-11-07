@@ -11351,6 +11351,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118358611503689",
    "commentId": "122118358611503689_2172231733370278"
+  },
+  {
+   "key": "2026-11-07|character:char:41025|whereanime",
+   "day": "2026-11-07",
+   "slug": "character:char:41025",
+   "title": "Blue Spring Ride",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:41025",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794071579544,
+   "status": "claimed"
   }
  ],
  "health": {
