@@ -10307,6 +10307,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118130599503689",
    "commentId": "122118130599503689_1907423320634709"
+  },
+  {
+   "key": "2026-11-06|where:154473|whereanime",
+   "day": "2026-11-06",
+   "slug": "where:154473",
+   "title": "Arifureta: From Commonplace to World's Strongest Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "154473",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794018600833,
+   "status": "claimed"
   }
  ],
  "health": {
