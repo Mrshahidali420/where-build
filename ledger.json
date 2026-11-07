@@ -11959,6 +11959,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118448275503689",
    "commentId": "122118448275503689_1128278206356110"
+  },
+  {
+   "key": "2026-11-07|character:char:66591|whereanime",
+   "day": "2026-11-07",
+   "slug": "character:char:66591",
+   "title": "Orange",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:66591",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794092246015,
+   "status": "claimed"
   }
  ],
  "health": {
