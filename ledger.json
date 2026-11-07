@@ -11487,6 +11487,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118382881503689",
    "commentId": "122118382881503689_2180227146223198"
+  },
+  {
+   "key": "2026-11-07|character:char:90108|whereanime",
+   "day": "2026-11-07",
+   "slug": "character:char:90108",
+   "title": "The Disastrous Life of Saiki K.",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:90108",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794077362506,
+   "status": "claimed"
   }
  ],
  "health": {
