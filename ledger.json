@@ -15514,6 +15514,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118813027503689",
    "commentId": "122118813027503689_1703461701189475"
+  },
+  {
+   "key": "2026-11-08|character:char:5186|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:5186",
+   "title": "Fairy Tail Series 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:5186",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794180402041,
+   "status": "claimed"
   }
  ],
  "health": {
