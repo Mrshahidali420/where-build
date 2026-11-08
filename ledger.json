@@ -12237,6 +12237,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118473745503689",
    "commentId": "122118473745503689_1765715454513542"
+  },
+  {
+   "key": "2026-11-07|where:170695|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:170695",
+   "title": "I Parry Everything",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "170695",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794099215248,
+   "status": "claimed"
   }
  ],
  "health": {
