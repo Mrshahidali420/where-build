@@ -12702,7 +12702,9 @@
    "titleGap": true,
    "variant": 1,
    "at": 1794110123477,
-   "status": "claimed"
+   "status": "posted",
+   "postId": "1329988470202923_122118514869503689",
+   "commentId": "122118514869503689_1776003203493008"
   }
  ],
  "health": {
