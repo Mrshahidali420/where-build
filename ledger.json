@@ -12645,6 +12645,29 @@
    "status": "posted",
    "postId": "1329988470202923_122118506571503689",
    "commentId": "122118506571503689_1694517679056226"
+  },
+  {
+   "share": true,
+   "key": "2026-11-07|share:3097853920418110|whereanime",
+   "day": "2026-11-07",
+   "slug": "share:3097853920418110",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "3097853920418110",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "3097853920418110",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "I'll Raise You Well in This Life, Your Majesty!",
+   "sourceFormat": "reel:reel-next",
+   "link": "https://www.facebook.com/reel/3097853920418110",
+   "message": "In case you missed it, from our sister Page, Manhwa Index:",
+   "at": 1794109519038,
+   "status": "claimed"
   }
  ],
  "health": {
