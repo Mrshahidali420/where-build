@@ -12908,6 +12908,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118534831503689",
    "commentId": "122118534831503689_1118687230983598"
+  },
+  {
+   "key": "2026-11-08|episode:189123:5|whereanime",
+   "day": "2026-11-08",
+   "slug": "episode:189123:5",
+   "title": "Blue Box Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "189123:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794114965968,
+   "status": "claimed"
   }
  ],
  "health": {
