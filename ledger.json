@@ -13293,7 +13293,11 @@
    "at": 1794122212299,
    "status": "posted",
    "postId": "1329988470202923_122118571365503689",
-   "commentId": "122118571365503689_1569010331647059"
+   "commentId": "122118571365503689_1569010331647059",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794122212299
+   }
   }
  ],
  "health": {
