@@ -13150,6 +13150,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794118589759
    }
+  },
+  {
+   "key": "2026-11-08|scenes:207329:5|whereanime",
+   "day": "2026-11-08",
+   "slug": "scenes:207329:5",
+   "title": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "207329:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794118890700,
+   "status": "claimed"
   }
  ],
  "health": {
