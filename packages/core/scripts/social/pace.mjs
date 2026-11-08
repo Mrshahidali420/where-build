@@ -28,19 +28,19 @@ export const MINUTE_MS = 60_000
 export const HOUR_MS = 60 * MINUTE_MS
 export const DAY_MS = 24 * HOUR_MS
 /** The owner's floor: two posts on one Page are never closer than this. */
-export const MIN_GAP_MINUTES = 5
+export const MIN_GAP_MINUTES = 2
 const MAX_GAP_MINUTES = 24 * 60
 /** Unset means this many a day: under the 25 a day third parties report for business Pages. */
 export const DEFAULT_PER_DAY = 24
 /** One every five minutes, all day. The cap can be raised to this by hand, never past it. */
-export const MAX_PER_DAY = 288
+export const MAX_PER_DAY = 720
 
 const whole = (value) => {
   const n = Number.parseInt(value, 10)
   return Number.isFinite(n) ? n : 0
 }
 
-/** FB_MIN_GAP_MINUTES as a number: 5 when unset, and never under 5. */
+/** FB_MIN_GAP_MINUTES as a number: 2 when unset, and never under 2 (it was 5 until 8 Nov 2026). */
 export const gapMinutesOf = (value) => Math.min(MAX_GAP_MINUTES, Math.max(MIN_GAP_MINUTES, whole(value)))
 
 /** FB_POSTS_PER_DAY as a number: 24 when unset or 0, and never over the ceiling. */
@@ -48,7 +48,7 @@ export const perDayOf = (value) => (whole(value) > 0 ? Math.min(whole(value), MA
 
 /** Reels in any 24 hours when FB_REELS_PER_DAY is unset, and the most it can be set to. Facebook's own limit is 30. */
 export const DEFAULT_REELS_PER_DAY = 3
-export const MAX_REELS_PER_DAY = 10
+export const MAX_REELS_PER_DAY = 30
 
 /** FB_REELS_PER_DAY as a number: 3 when unset, 0 switches reels off, never over 10. */
 export const reelsPerDayOf = (value) => (String(value ?? '').trim() === '' || !Number.isFinite(Number.parseInt(value, 10)) ? DEFAULT_REELS_PER_DAY : Math.min(MAX_REELS_PER_DAY, Math.max(0, whole(value))))

@@ -17,20 +17,20 @@ const at = (minutesAgo) => ({ at: NOW - minutesAgo * MIN, page: SITE.key, status
 
 // --- the rules ---------------------------------------------------------------
 
-test('gap: never closer than five minutes to the last entry in the ledger', () => {
-  assert.deepEqual([gapMinutesOf(undefined), gapMinutesOf('1'), gapMinutesOf('0'), gapMinutesOf('abc'), gapMinutesOf('12')], [5, 5, 5, 5, 12])
-  assert.equal(MIN_GAP_MINUTES, 5)
+test('gap: never closer than two minutes to the last entry in the ledger', () => {
+  assert.deepEqual([gapMinutesOf(undefined), gapMinutesOf('1'), gapMinutesOf('0'), gapMinutesOf('abc'), gapMinutesOf('12')], [2, 2, 2, 2, 12])
+  assert.equal(MIN_GAP_MINUTES, 2)
   const two = nextWait({ entries: [at(2)], now: NOW, cap: MAX_PER_DAY, gapMinutes: 5 })
   assert.deepEqual([two.ms, two.why], [3 * MIN, 'gap'])
   assert.equal(nextWait({ entries: [at(5)], now: NOW, cap: MAX_PER_DAY, gapMinutes: 5 }).ms, 0)
   assert.equal(nextWait({ entries: [], now: NOW, cap: 24 }).ms, 0)
   // A failed post and a claim count like a post; the gap is read from the ledger, not from the run.
-  assert.equal(nextWait({ entries: [{ ...at(1), status: 'failed' }], now: NOW, cap: MAX_PER_DAY }).ms, 4 * MIN)
+  assert.equal(nextWait({ entries: [{ ...at(1), status: 'failed' }], now: NOW, cap: MAX_PER_DAY }).ms, 1 * MIN)
 })
 
-test('cap: unset means 24 a day, the ceiling is 288, and the posts are spread evenly', () => {
-  assert.deepEqual([perDayOf(undefined), perDayOf(''), perDayOf('0'), perDayOf('24'), perDayOf('100'), perDayOf('999')], [24, 24, 24, 24, 100, 288])
-  assert.deepEqual([DEFAULT_PER_DAY, MAX_PER_DAY], [24, 288])
+test('cap: unset means 24 a day, the ceiling is 720, and the posts are spread evenly', () => {
+  assert.deepEqual([perDayOf(undefined), perDayOf(''), perDayOf('0'), perDayOf('24'), perDayOf('100'), perDayOf('999')], [24, 24, 24, 24, 100, 720])
+  assert.deepEqual([DEFAULT_PER_DAY, MAX_PER_DAY], [24, 720])
   assert.equal(settingsOf({}).perDay, 24)
   assert.deepEqual([spacingMs(24, 5), spacingMs(48, 5), spacingMs(288, 5), spacingMs(288, 10)], [60 * MIN, 30 * MIN, 5 * MIN, 10 * MIN])
   const paced = nextWait({ entries: [at(20)], now: NOW, cap: 24 })
@@ -159,7 +159,7 @@ test('hand-over: a dry run and a counted manual run never start a chain', async 
   // A manual run sends its count, five minutes apart, inside the cap, and ends.
   const manual = chain({ COUNT: '2' })
   assert.equal(await manual.go(), 0)
-  assert.deepEqual([manual.outputs.chain, minutesIn(manual.sent)], ['stop', [0, 5]])
+  assert.deepEqual([manual.outputs.chain, minutesIn(manual.sent)], ['stop', [0, 2]])
 })
 
 test('failure: one failed post does not stop the chain; five in a row do', async () => {
@@ -193,11 +193,11 @@ test('failure: a refused token stops the chain at once', async () => {
 test('back-off: a throttle signal doubles the wait, and is written down', async () => {
   const c = chain({ FB_CHAIN_MINUTES: '100', FB_POSTS_PER_DAY: '288' }, { fail: (n) => (n <= 2 ? new GraphError('Page request limit reached', { code: 32 }) : null) })
   assert.equal(await c.go(), 0)
-  // Tries at 0 and 10 are throttled; the next waits 20 minutes, then the usual five.
-  assert.deepEqual(minutesIn(c.sent).slice(0, 3), [30, 35, 40])
+  // Tries at 0 and 4 are throttled; the next waits 8 minutes, then the usual five (288 a day).
+  assert.deepEqual(minutesIn(c.sent).slice(0, 3), [13, 18, 23])
   assert.deepEqual(c.health().signals.map((s) => [s.kind, s.code]), [['throttle', 32], ['throttle', 32]])
-  assert.match(c.text.join(''), /Backing off for 10 minutes/)
-  assert.match(c.text.join(''), /Backing off for 20 minutes/)
+  assert.match(c.text.join(''), /Backing off for 4 minutes/)
+  assert.match(c.text.join(''), /Backing off for 8 minutes/)
 })
 
 test('block: posting stops for 24 hours and the cap drops to 75% of what was reached', async () => {
@@ -222,7 +222,7 @@ test('usage: the highest percentage is printed, kept in the ledger, and slows th
   assert.equal(await c.go(), 0)
   assert.match(c.text.join(''), /Highest usage seen this run: \*\*95%\*\* \(x-app-usage\)/)
   assert.equal(c.health().peak.pct, 95)
-  assert.deepEqual(minutesIn(c.sent), [0, 10, 30]) // each post is followed by a longer back-off
+  assert.deepEqual(minutesIn(c.sent), [0, 5, 13, 29]) // each post is followed by a longer back-off
 })
 
 test('supply: with nothing fresh the chain waits and looks again; it never repeats an item', async () => {

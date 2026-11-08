@@ -289,7 +289,7 @@ test('run: settings default to 24 a day, a chain when it posts for real, and dry
   assert.equal(settingsOf({ ...live, FB_POSTS_PER_DAY: '8' }).count, 1)
   assert.equal(settingsOf({ ...live, FB_POSTS_PER_DAY: '24' }).perDay, 24)
   assert.equal(settingsOf({ ...live, FB_POSTS_PER_DAY: '999' }).perDay, MAX_PER_DAY)
-  assert.equal(MAX_PER_DAY, 288)
+  assert.equal(MAX_PER_DAY, 720)
   assert.equal(settingsOf(live).mode, 'chain')
   assert.equal(settingsOf({ FB_PAGE_ID: '1', FB_PAGE_TOKEN: 't', FB_POST_ENABLED: 'true', DRY_RUN: 'true' }).dry, true)
 })

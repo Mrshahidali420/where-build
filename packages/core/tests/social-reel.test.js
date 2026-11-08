@@ -107,8 +107,8 @@ const reel = { key: 'reel-x', reel: true }
 const picture = { key: 'a' }
 const entry = (minutesAgo, over = {}) => ({ at: NOW - minutesAgo * MINUTE_MS, page: SITE.key, status: 'posted', ...over })
 
-test('limits: three reels in a rolling day unless set, ten at most, and never two in a row', () => {
-  assert.deepEqual([reelsPerDayOf(undefined), reelsPerDayOf(''), reelsPerDayOf('5'), reelsPerDayOf('0'), reelsPerDayOf('99'), reelsPerDayOf('x')], [3, 3, 5, 0, 10, 3])
+test('limits: three reels in a rolling day unless set, thirty at most, and never two in a row', () => {
+  assert.deepEqual([reelsPerDayOf(undefined), reelsPerDayOf(''), reelsPerDayOf('5'), reelsPerDayOf('0'), reelsPerDayOf('99'), reelsPerDayOf('x')], [3, 3, 5, 0, 30, 3])
   assert.equal(settingsOf({}).reelsPerDay, 3)
   const kinds = ['classic', picture, reel]
   assert.deepEqual(kindsNow(kinds, [], NOW, 3), kinds)
@@ -228,7 +228,7 @@ test('run: with the type not named, no reel is ever made', async () => {
   assert.ok(r.sent.length > 5 && r.sent.every((s) => s === 'picture' || s[0] === 'comment'))
 })
 
-test('run: reels have their own budget: out of the posts cap, spread over the day, never within 5 minutes of another post', async () => {
+test('run: reels have their own budget: out of the posts cap, spread over the day, never within 2 minutes of another post', async () => {
   // The owner's pace of 28 Oct 2026: a post every 25 minutes (57 a day), and 5 reels a day besides.
   const r = reelRun({ FB_POST_TYPES: 'a,reel-x', FB_CHAIN_MINUTES: '340', FB_POSTS_PER_DAY: '57', FB_MIN_GAP_MINUTES: '25', FB_REELS_PER_DAY: '5' }, { posts: 5000 })
   for (let i = 0; i < 9; i += 1) assert.equal(await r.go(), 0) // about 51 hours
@@ -244,7 +244,7 @@ test('run: reels have their own budget: out of the posts cap, spread over the da
   assert.ok(posts.some((e) => dayOf(posts, e) === 57))
   assert.ok(all.some((e) => dayOf(all, e) === 62))
   assert.ok(reels.length >= 10, `${reels.length} reels`)
-  for (let i = 1; i < all.length; i += 1) assert.ok(all[i].at - all[i - 1].at >= 5 * MINUTE_MS)
+  for (let i = 1; i < all.length; i += 1) assert.ok(all[i].at - all[i - 1].at >= 2 * MINUTE_MS)
   for (let i = 1; i < posts.length; i += 1) assert.ok(posts[i].at - posts[i - 1].at >= 25 * MINUTE_MS)
   for (let i = 1; i < reels.length; i += 1) assert.ok(reels[i].at - reels[i - 1].at >= DAY_MS / 5)
   // Even: one post about every 25 minutes.
