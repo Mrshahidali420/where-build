@@ -14829,6 +14829,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118777597503689",
    "commentId": "122118777597503689_1606842304081392"
+  },
+  {
+   "key": "2026-11-08|where:147642|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:147642",
+   "title": "The Unwanted Undead Adventurer",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "147642",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794173753834,
+   "status": "claimed"
   }
  ],
  "health": {
