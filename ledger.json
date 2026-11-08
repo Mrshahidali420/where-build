@@ -12799,6 +12799,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118521409503689",
    "commentId": "122118521409503689_1456321984223602"
+  },
+  {
+   "key": "2026-11-07|where:101167|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:101167",
+   "title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "101167",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794111943922,
+   "status": "claimed"
   }
  ],
  "health": {
