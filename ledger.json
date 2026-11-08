@@ -12888,7 +12888,8 @@
    "variant": 2,
    "at": 1794114364130,
    "track": "determination-anime.m4a",
-   "status": "claimed"
+   "status": "failed",
+   "error": "GET /3307999026076401 failed: Unsupported get request. Object with ID '3307999026076401' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
   }
  ],
  "health": {
