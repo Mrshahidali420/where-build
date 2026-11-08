@@ -47,8 +47,6 @@ jobs:
             ffmpeg -v error -y -i clip.mp4 -c:v libx264 -crf 22 -preset veryfast -g 60 -keyint_min 60 -sc_threshold 0 -c:a copy -movflags +faststart fixed.mp4 && mv fixed.mp4 clip.mp4
           fi
           size=$(stat -c %s clip.mp4); echo "size: $size bytes"
-          command -v ffprobe >/dev/null && ffprobe -v error -select_streams v -show_entries packet=pts_time,flags -of csv=p=0 clip.mp4 | grep ',K' | head -6 | tr '
-' ' ' || true
           ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
           caption=$(echo "$item" | jq -r .title)
           made=$(curl -sS -X POST "$api/$ig/media" -d "media_type=REELS" -d "upload_type=resumable" --data-urlencode "caption=$caption" -d "share_to_feed=true" -d "access_token=$FB_PAGE_TOKEN")
