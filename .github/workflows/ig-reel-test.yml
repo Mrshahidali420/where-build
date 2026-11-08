@@ -1,8 +1,10 @@
 name: Instagram reel test
 run-name: Instagram reel test (${{ inputs.kind }} ${{ inputs.number }}, post=${{ inputs.post }})
 
-# Sends one clip from the recap project's store to Instagram by hand, and prints every answer in full, so a
+# Sends one clip from the recap project's store to Instagram by hand and prints every answer in full, so a
 # refused upload shows its real reason. post=false stops before the post (the video is only sent and checked).
+# Found on 8 Nov 2026: a single upload request that runs past about 30 seconds is cut off with
+# "ProcessingFailedError" (HTTP 400), so a big clip sent from a slow runner fails; sent in pieces it does not.
 on:
   workflow_dispatch:
     inputs:
@@ -15,30 +17,18 @@ on:
       version:
         description: 'Graph API version'
         default: 'v21.0'
-      ctype:
-        description: 'true = send a Content-Type header with the bytes'
-        type: boolean
-        default: false
       mode:
         description: 'upload (send the bytes) or url (host the video on the Page, give Instagram the link)'
         default: 'upload'
-      seconds:
-        description: 'Cut the clip to this many seconds first (0 = whole clip)'
+      chunk:
+        description: 'Send the bytes in pieces of this many MB (0 = one request)'
         default: '0'
-      crf:
-        description: 'x264 quality when re-encoding (higher = smaller file)'
-        default: '20'
       start:
-        description: 'Start of the cut, in seconds'
+        description: 'Start of the cut, in seconds (re-encodes the clip)'
         default: '0'
-      mute:
-        description: 'true = remove the sound'
-        type: boolean
-        default: false
-      regop:
-        description: 'true = first re-encode with a fixed 2-second keyframe gap (Instagram wants a closed GOP of 2 to 5 s)'
-        type: boolean
-        default: true
+      seconds:
+        description: 'Cut the clip to this many seconds (0 = whole clip; re-encodes)'
+        default: '0'
       post:
         description: 'true = publish it for real'
         type: boolean
@@ -57,14 +47,11 @@ jobs:
           NUMBER: ${{ inputs.number }}
           KIND: ${{ inputs.kind }}
           POST: ${{ inputs.post }}
-          REGOP: ${{ inputs.regop }}
           VERSION: ${{ inputs.version }}
           MODE: ${{ inputs.mode }}
-          MUTE: ${{ inputs.mute }}
+          CHUNK_MB: ${{ inputs.chunk }}
           START: ${{ inputs.start }}
-          CRF: ${{ inputs.crf }}
           SECONDS_LIMIT: ${{ inputs.seconds }}
-          CTYPE: ${{ inputs.ctype }}
         run: |
           set -u
           api="https://graph.facebook.com/$VERSION"
@@ -72,9 +59,10 @@ jobs:
           echo "clip: $(echo "$item" | jq -r .id)"
           id=$(echo "$item" | jq -r ".${KIND}_id")
           gh api "repos/${{ github.repository_owner }}/recap-assets/releases/assets/$id" -H 'Accept: application/octet-stream' > clip.mp4
-          if [ "$REGOP" = "true" ] || [ "$SECONDS_LIMIT" != "0" ]; then
+          if [ "$START" != "0" ] || [ "$SECONDS_LIMIT" != "0" ]; then
             sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
-            ffmpeg -v error -y -ss $START $( [ "$SECONDS_LIMIT" != "0" ] && echo "-t $SECONDS_LIMIT" ) -i clip.mp4 -c:v libx264 -preset medium -crf $CRF -pix_fmt yuv420p -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -flags +cgop $( [ "$MUTE" = "true" ] && echo "-an" || echo "-c:a aac -b:a 160k -ar 48000 -ac 2" ) -movflags +faststart fixed.mp4 && mv fixed.mp4 clip.mp4
+            cut=(-ss "$START"); [ "$SECONDS_LIMIT" != "0" ] && cut+=(-t "$SECONDS_LIMIT")
+            ffmpeg -v error -y "${cut[@]}" -i clip.mp4 -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -flags +cgop -c:a aac -b:a 160k -ar 48000 -ac 2 -movflags +faststart cut.mp4 && mv cut.mp4 clip.mp4
           fi
           size=$(stat -c %s clip.mp4); echo "size: $size bytes"
           ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
@@ -100,7 +88,17 @@ jobs:
             echo "container: $(echo "$made" | jq -c 'del(.access_token)')"
             cid=$(echo "$made" | jq -r .id); uri=$(echo "$made" | jq -r .uri)
             echo "--- upload"
-            curl -sS -w '\nHTTP %{http_code}\n' -X POST "$uri" -H "Authorization: OAuth $FB_PAGE_TOKEN" -H "offset: 0" -H "file_size: $size" -H "Content-Type: application/octet-stream" --data-binary @clip.mp4
+            if [ "$CHUNK_MB" != "0" ]; then
+              piece=$((CHUNK_MB * 1024 * 1024)); offset=0
+              while [ "$offset" -lt "$size" ]; do
+                tail -c +$((offset + 1)) clip.mp4 | head -c "$piece" > piece.bin
+                n=$(stat -c %s piece.bin)
+                echo "piece at $offset ($n bytes): $(curl -sS -w ' HTTP %{http_code}' -X POST "$uri" -H "Authorization: OAuth $FB_PAGE_TOKEN" -H "offset: $offset" -H "file_size: $size" --data-binary @piece.bin)"
+                offset=$((offset + n))
+              done
+            else
+              curl -sS -w '\nHTTP %{http_code}\n' -X POST "$uri" -H "Authorization: OAuth $FB_PAGE_TOKEN" -H "offset: 0" -H "file_size: $size" --data-binary @clip.mp4
+            fi
           fi
           echo "--- status"
           for i in $(seq 1 30); do
