@@ -14053,7 +14053,11 @@
    "at": 1794152659821,
    "status": "posted",
    "postId": "1329988470202923_122118699069503689",
-   "commentId": "122118699069503689_1838308424027408"
+   "commentId": "122118699069503689_1838308424027408",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794152659821
+   }
   }
  ],
  "health": {
