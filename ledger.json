@@ -13690,6 +13690,22 @@
     "error": "the Instagram reel upload failed: HTTP 400",
     "at": 1794145367743
    }
+  },
+  {
+   "key": "2026-11-08|clip-video:clip-aoashi-season-2-e06-whereanime-03:full|whereanime",
+   "day": "2026-11-08",
+   "slug": "clip-video:clip-aoashi-season-2-e06-whereanime-03:full",
+   "title": "Aoashi Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-aoashi-season-2-e06-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794146892809,
+   "status": "claimed"
   }
  ],
  "health": {
