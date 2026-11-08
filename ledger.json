@@ -12165,6 +12165,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118463173503689",
    "commentId": "122118463173503689_1011020368716074"
+  },
+  {
+   "key": "2026-11-07|where:457|whereanime",
+   "day": "2026-11-07",
+   "slug": "where:457",
+   "title": "MUSHI-SHI",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "457",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794096787266,
+   "status": "claimed"
   }
  ],
  "health": {
