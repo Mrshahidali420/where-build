@@ -14334,6 +14334,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794164180978
    }
+  },
+  {
+   "key": "2026-11-08|character:char:89835|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:89835",
+   "title": "The Case Study of Vanitas",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89835",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794164481808,
+   "status": "claimed"
   }
  ],
  "health": {
