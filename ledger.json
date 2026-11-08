@@ -15550,6 +15550,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118815361503689",
    "commentId": "122118815361503689_1141050028622496"
+  },
+  {
+   "key": "2026-11-08|character:char:252|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:252",
+   "title": "The Melancholy of Haruhi Suzumiya",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:252",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794180769090,
+   "status": "claimed"
   }
  ],
  "health": {
