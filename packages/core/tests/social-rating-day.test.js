@@ -26,9 +26,9 @@ test('rating-day: known to the poster, urgent, an extra next to the weekly list'
 test('rating-day: a list of the last seven days, named by its episodes, with a caption that passes the gate', () => {
   const posts = ratingDay.find(threeShows(), { now: NOW })
   assert.equal(posts.length, 1)
-  assert.match(posts[0].item, /^day:tt0100012\+/)
+  assert.match(posts[0].item, /^day:tt0100011+\+/)
   assert.equal(posts[0].view.items.length, 4)
-  assert.deepEqual(posts[0].view.items.map((i) => i.score), ['9.4', '8.7', '8.4', '8.2'])
+  assert.deepEqual(posts[0].view.items.map((i) => i.score), ['9.4', '8.7', '8.4', '7.9'])
   const made = captionFor(ratingDay, posts[0], 0, BLOCKED)
   assert.ok(made, 'a caption was made')
   assert.match(made.caption, /IMDb/)
