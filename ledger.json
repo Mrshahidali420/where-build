@@ -13762,6 +13762,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118674781503689",
    "commentId": "122118674781503689_2704190476686690"
+  },
+  {
+   "key": "2026-11-08|character:char:127292|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:127292",
+   "title": "Delicious in Dungeon",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:127292",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794148097881,
+   "status": "claimed"
   }
  ],
  "health": {
