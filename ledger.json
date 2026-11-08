@@ -13526,6 +13526,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794133189866
    }
+  },
+  {
+   "key": "2026-11-08|scenes:110277:2|whereanime",
+   "day": "2026-11-08",
+   "slug": "scenes:110277:2",
+   "title": "Attack on Titan Final Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "110277:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794135933371,
+   "status": "claimed"
   }
  ],
  "health": {
