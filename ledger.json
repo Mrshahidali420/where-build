@@ -14352,6 +14352,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118742635503689",
    "commentId": "122118742635503689_2004809413545479"
+  },
+  {
+   "key": "2026-11-08|where:111428|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:111428",
+   "title": "Sleepy Princess in the Demon Castle",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "111428",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794164782691,
+   "status": "claimed"
   }
  ],
  "health": {
