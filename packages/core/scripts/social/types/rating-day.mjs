@@ -2,8 +2,10 @@
  * "Top-rated episodes right now": the same card as the week's list (rating-week.mjs), more often.
  *
  * Data: the day's IMDb snapshot (ratings/load.mjs): the best episode of each show that aired in the
- * last three days, the top four, three at least. It is named by the episodes in it, so the same list
- * is never posted twice inside three days, and a new episode that changes it makes a new post.
+ * last seven days with at least MIN_VOTES votes, the top four, three at least. New episodes get few
+ * votes (checked 8 Nov 2026: one show had 500 votes inside three days, four had 100 inside seven), so
+ * the bar is lower than the weekly list's. It is named by the episodes in it, so the same list is never
+ * posted twice inside three days, and a new episode that changes it makes a new post.
  * Urgent: it goes out when it has news, as an extra post next to the others (the cap per day is set
  * in FB_TYPE_CAPS, e.g. rating-day:2). Off until its name is written in FB_POST_TYPES.
  */
@@ -12,10 +14,11 @@ import { ctaOf } from './shared.mjs'
 import { ratingsExtra } from '../ratings/load.mjs'
 import { findIn, templateWith } from './rating-week.mjs'
 
-export const DAY_WINDOW_MS = 3 * 86_400_000
+export const DAY_WINDOW_MS = 7 * 86_400_000
+export const MIN_VOTES = 100
 
 const find = (data, { now }) =>
-  findIn(data, now, { windowMs: DAY_WINDOW_MS, itemOf: (rows) => `day:${rows.map((r) => r.id || `${r.titleId}.${r.ep}`).join('+')}` }).map((post) => ({
+  findIn(data, now, { windowMs: DAY_WINDOW_MS, minVotes: MIN_VOTES, itemOf: (rows) => `day:${rows.map((r) => r.id || `${r.titleId}.${r.ep}`).join('+')}` }).map((post) => ({
     ...post,
     tags: uniqueTags([...post.names.slice(0, 2).map((name) => tagOf(name)), '#AnimeRatings']).filter((tag) => !/amazon/i.test(tag)).slice(0, 3),
   }))

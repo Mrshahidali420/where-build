@@ -28,10 +28,10 @@ const GAP = 6
 const SPACED_MAX = 26
 
 /** The best-rated episode of each show that aired inside `windowMs`, as one post. `itemOf(rows)` names it for the ledger. */
-export function findIn(data, now, { windowMs, itemOf }) {
+export function findIn(data, now, { windowMs, itemOf, minVotes = MIN_VOTES }) {
   const best = new Map()
   for (const row of ratedEpisodes(data, now)) {
-    if (row.votes < MIN_VOTES || !(row.aired > now - windowMs)) continue
+    if (row.votes < minVotes || !(row.aired > now - windowMs)) continue
     const held = best.get(row.titleId)
     if (!held || row.score > held.score) best.set(row.titleId, row)
   }

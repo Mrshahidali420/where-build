@@ -23,12 +23,12 @@ test('rating-day: known to the poster, urgent, an extra next to the weekly list'
   assert.notEqual(ratingDay.key, ratingWeek.key)
 })
 
-test('rating-day: a list of the last three days, named by its episodes, with a caption that passes the gate', () => {
+test('rating-day: a list of the last seven days, named by its episodes, with a caption that passes the gate', () => {
   const posts = ratingDay.find(threeShows(), { now: NOW })
   assert.equal(posts.length, 1)
   assert.match(posts[0].item, /^day:tt0100012\+/)
-  assert.equal(posts[0].view.items.length, 3)
-  assert.deepEqual(posts[0].view.items.map((i) => i.score), ['9.1', '8.7', '8.4'])
+  assert.equal(posts[0].view.items.length, 4)
+  assert.deepEqual(posts[0].view.items.map((i) => i.score), ['9.4', '8.7', '8.4', '8.2'])
   const made = captionFor(ratingDay, posts[0], 0, BLOCKED)
   assert.ok(made, 'a caption was made')
   assert.match(made.caption, /IMDb/)
@@ -36,7 +36,7 @@ test('rating-day: a list of the last three days, named by its episodes, with a c
 })
 
 test('rating-day: fewer than three shows in the window is no post', () => {
-  assert.deepEqual(ratingDay.find(sampleData(), { now: NOW }), [])
+  assert.deepEqual(ratingDay.find(sampleData(), { now: NOW + 6 * 86_400_000 }), [])
 })
 
 test('rating-day: nothing inside the window means no post, and the week card is unchanged', () => {
