@@ -90,9 +90,9 @@ test('load: reads the files once a day, keeps the snapshot and the matches in th
   assert.equal(airedAtOf(title, 6, []), NOW + DAY - 2 * 7 * DAY)
 })
 
-test('rating: high scores with enough votes, best first, once per episode', () => {
+test('rating: scores of 8.2 and up with 500 votes or more, best first, once per episode', () => {
   const posts = type('rating').find(sampleData(), { now: NOW })
-  assert.deepEqual(posts.map((p) => [p.item, p.score]), [['tt0100011', '9.4'], ['tt0100012', '9.1'], ['tt0002006', '8.7']])
+  assert.deepEqual(posts.map((p) => [p.item, p.score]), [['tt0100011', '9.4'], ['tt0100012', '9.1'], ['tt0002006', '8.7'], ['tt0101023', '8.2']])
   assert.equal(posts[0].episode, 11)
 })
 

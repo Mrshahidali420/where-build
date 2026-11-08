@@ -21,8 +21,8 @@ import { imdbEpisode, imdbMatchOf, keptMatch, lastAiredOf } from './match.mjs'
 
 export const MIN_POPULARITY = 2000
 /** The fewest votes an episode needs before its score is posted. */
-export const MIN_VOTES = 1000
-export const MIN_SCORE = 8.5
+export const MIN_VOTES = 500
+export const MIN_SCORE = 8.2
 /** The smallest change of score that is news. */
 export const MOVE = 0.2
 /** The files are read at most once in this long. */
