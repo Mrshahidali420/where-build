@@ -15312,6 +15312,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118802089503689",
    "commentId": "122118802089503689_1831903458124826"
+  },
+  {
+   "key": "2026-11-08|where:19703|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:19703",
+   "title": "Kyousougiga",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "19703",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794178403366,
+   "status": "claimed"
   }
  ],
  "health": {
