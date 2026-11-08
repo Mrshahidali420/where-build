@@ -1,0 +1,27 @@
+name: Instagram check
+run-name: Instagram check (read only)
+
+# Lists the newest posts on the site's Instagram account, straight from Instagram, so the ledger can be
+# compared with what is really there. Reads only. Posts nothing.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: List the newest Instagram posts and the publishing quota
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+        run: |
+          api="https://graph.facebook.com/v26.0"
+          ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
+          echo "account: $ig"
+          curl -fsS "$api/$ig?fields=username,media_count,followers_count&access_token=$FB_PAGE_TOKEN" | jq -c .
+          echo "--- newest 25 posts (type, product, time, link)"
+          curl -fsS "$api/$ig/media?fields=media_type,media_product_type,timestamp,permalink&limit=25&access_token=$FB_PAGE_TOKEN" \
+            | jq -r '.data[] | [.timestamp, .media_type, .media_product_type, .permalink] | @tsv'
+          echo "--- publishing quota"
+          curl -sS "$api/$ig/content_publishing_limit?fields=quota_usage,config&access_token=$FB_PAGE_TOKEN" | jq -c .
