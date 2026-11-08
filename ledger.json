@@ -15460,6 +15460,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118810015503689",
    "commentId": "122118810015503689_1711959963879549"
+  },
+  {
+   "key": "2026-11-08|where:100179|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:100179",
+   "title": "Tada Never Falls In Love",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "100179",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794179857433,
+   "status": "claimed"
   }
  ],
  "health": {
