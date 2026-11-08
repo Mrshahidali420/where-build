@@ -13258,6 +13258,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118565161503689",
    "commentId": "122118565161503689_1867286301127184"
+  },
+  {
+   "key": "2026-11-08|stills:213805:6|whereanime",
+   "day": "2026-11-08",
+   "slug": "stills:213805:6",
+   "title": "The Ramparts of Ice Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:stills",
+   "type": "stills",
+   "item": "213805:6",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794121911369,
+   "status": "claimed"
   }
  ],
  "health": {
