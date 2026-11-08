@@ -296,5 +296,6 @@ export async function loadPools({ now = Date.now() } = {}) {
   const { items, slugs, schedule, from } = await readData()
   const data = buildData(items, now, slugs, schedule, await siteShop())
   data.clips = await loadClips({ now })
-  return { pools: poolsOf(data, now), data, source: `${from}: ${items.length} anime, ${Object.keys(slugs).length} live pages, ${schedule.length} schedule rows` }
+  const known = data.clips.items.filter((c) => data.byId.has(c.anilist_id)).length
+  return { pools: poolsOf(data, now), data, source: `${from}: ${items.length} anime, ${Object.keys(slugs).length} live pages, ${schedule.length} schedule rows; clips: ${data.clips.note}, ${known} with a title on the site` }
 }
