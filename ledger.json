@@ -14117,6 +14117,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794154779654
    }
+  },
+  {
+   "key": "2026-11-08|fact:fact:100093:popular|whereanime",
+   "day": "2026-11-08",
+   "slug": "fact:fact:100093:popular",
+   "title": "Skull-face Bookseller Honda-san",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:100093:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794155080515,
+   "status": "claimed"
   }
  ],
  "health": {
