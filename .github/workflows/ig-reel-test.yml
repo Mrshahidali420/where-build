@@ -25,6 +25,9 @@ on:
       seconds:
         description: 'Cut the clip to this many seconds first (0 = whole clip)'
         default: '0'
+      crf:
+        description: 'x264 quality when re-encoding (higher = smaller file)'
+        default: '20'
       regop:
         description: 'true = first re-encode with a fixed 2-second keyframe gap (Instagram wants a closed GOP of 2 to 5 s)'
         type: boolean
@@ -50,6 +53,7 @@ jobs:
           REGOP: ${{ inputs.regop }}
           VERSION: ${{ inputs.version }}
           MODE: ${{ inputs.mode }}
+          CRF: ${{ inputs.crf }}
           SECONDS_LIMIT: ${{ inputs.seconds }}
           CTYPE: ${{ inputs.ctype }}
         run: |
@@ -61,7 +65,7 @@ jobs:
           gh api "repos/${{ github.repository_owner }}/recap-assets/releases/assets/$id" -H 'Accept: application/octet-stream' > clip.mp4
           if [ "$REGOP" = "true" ] || [ "$SECONDS_LIMIT" != "0" ]; then
             sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
-            ffmpeg -v error -y $( [ "$SECONDS_LIMIT" != "0" ] && echo "-t $SECONDS_LIMIT" ) -i clip.mp4 -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -flags +cgop -c:a aac -b:a 160k -ar 48000 -ac 2 -movflags +faststart fixed.mp4 && mv fixed.mp4 clip.mp4
+            ffmpeg -v error -y $( [ "$SECONDS_LIMIT" != "0" ] && echo "-t $SECONDS_LIMIT" ) -i clip.mp4 -c:v libx264 -preset medium -crf $CRF -pix_fmt yuv420p -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -flags +cgop -c:a aac -b:a 160k -ar 48000 -ac 2 -movflags +faststart fixed.mp4 && mv fixed.mp4 clip.mp4
           fi
           size=$(stat -c %s clip.mp4); echo "size: $size bytes"
           ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
