@@ -14388,6 +14388,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118745461503689",
    "commentId": "122118745461503689_1007423394990500"
+  },
+  {
+   "key": "2026-11-08|where:140596|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:140596",
+   "title": "DON'T TOY WITH ME, MISS NAGATORO 2nd Attack",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "140596",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794165384406,
+   "status": "claimed"
   }
  ],
  "health": {
