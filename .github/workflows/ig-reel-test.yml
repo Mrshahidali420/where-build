@@ -19,6 +19,9 @@ on:
         description: 'true = send a Content-Type header with the bytes'
         type: boolean
         default: false
+      mode:
+        description: 'upload (send the bytes) or url (host the video on the Page, give Instagram the link)'
+        default: 'upload'
       regop:
         description: 'true = first re-encode with a fixed 2-second keyframe gap (Instagram wants a closed GOP of 2 to 5 s)'
         type: boolean
@@ -43,6 +46,7 @@ jobs:
           POST: ${{ inputs.post }}
           REGOP: ${{ inputs.regop }}
           VERSION: ${{ inputs.version }}
+          MODE: ${{ inputs.mode }}
           CTYPE: ${{ inputs.ctype }}
         run: |
           set -u
@@ -58,11 +62,29 @@ jobs:
           size=$(stat -c %s clip.mp4); echo "size: $size bytes"
           ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
           caption=$(echo "$item" | jq -r .title)
-          made=$(curl -sS -X POST "$api/$ig/media" -d "media_type=REELS" -d "upload_type=resumable" --data-urlencode "caption=$caption" -d "share_to_feed=true" -d "access_token=$FB_PAGE_TOKEN")
-          echo "container: $(echo "$made" | jq -c 'del(.access_token)')"
-          cid=$(echo "$made" | jq -r .id); uri=$(echo "$made" | jq -r .uri)
-          echo "--- upload"
-          curl -sS -w '\nHTTP %{http_code}\n' -X POST "$uri" -H "Authorization: OAuth $FB_PAGE_TOKEN" -H "offset: 0" -H "file_size: $size" -H "Content-Type: application/octet-stream" --data-binary @clip.mp4
+          if [ "$MODE" = "url" ]; then
+            echo "--- host the video on the Page (unpublished)"
+            hosted=$(curl -sS -X POST "$api/$FB_PAGE_ID/videos" -F "published=false" -F "source=@clip.mp4" -F "access_token=$FB_PAGE_TOKEN")
+            echo "hosted: $(echo "$hosted" | jq -c .)"
+            vid=$(echo "$hosted" | jq -r .id)
+            src=""
+            for i in $(seq 1 40); do
+              r=$(curl -sS "$api/$vid?fields=source,status&access_token=$FB_PAGE_TOKEN")
+              src=$(echo "$r" | jq -r '.source // empty')
+              echo "$i: $(echo "$r" | jq -c '{status: .status.video_status, has_source: (.source != null)}')"
+              [ -n "$src" ] && break
+              sleep 10
+            done
+            made=$(curl -sS -X POST "$api/$ig/media" -d "media_type=REELS" --data-urlencode "video_url=$src" --data-urlencode "caption=$caption" -d "share_to_feed=true" -d "access_token=$FB_PAGE_TOKEN")
+            echo "container: $(echo "$made" | jq -c .)"
+            cid=$(echo "$made" | jq -r .id)
+          else
+            made=$(curl -sS -X POST "$api/$ig/media" -d "media_type=REELS" -d "upload_type=resumable" --data-urlencode "caption=$caption" -d "share_to_feed=true" -d "access_token=$FB_PAGE_TOKEN")
+            echo "container: $(echo "$made" | jq -c 'del(.access_token)')"
+            cid=$(echo "$made" | jq -r .id); uri=$(echo "$made" | jq -r .uri)
+            echo "--- upload"
+            curl -sS -w '\nHTTP %{http_code}\n' -X POST "$uri" -H "Authorization: OAuth $FB_PAGE_TOKEN" -H "offset: 0" -H "file_size: $size" -H "Content-Type: application/octet-stream" --data-binary @clip.mp4
+          fi
           echo "--- status"
           for i in $(seq 1 30); do
             s=$(curl -sS "$api/$cid?fields=status_code,status&access_token=$FB_PAGE_TOKEN")
