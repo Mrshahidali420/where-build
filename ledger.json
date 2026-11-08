@@ -12147,6 +12147,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794096184616
    }
+  },
+  {
+   "key": "2026-11-07|character:char:506|whereanime",
+   "day": "2026-11-07",
+   "slug": "character:char:506",
+   "title": "Fate/Zero Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:506",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794096485852,
+   "status": "claimed"
   }
  ],
  "health": {
