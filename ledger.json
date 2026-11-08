@@ -15108,6 +15108,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118793431503689",
    "commentId": "122118793431503689_1630754775400847"
+  },
+  {
+   "key": "2026-11-08|where:31|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:31",
+   "title": "Neon Genesis Evangelion: Death & Rebirth",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "31",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794176383284,
+   "status": "claimed"
   }
  ],
  "health": {
