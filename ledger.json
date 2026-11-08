@@ -14518,6 +14518,23 @@
    "status": "posted",
    "postId": "1329988470202923_122118762261503689",
    "commentId": "122118762261503689_1095472959977703"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-08|clip-reel:clip-aoashi-season-2-e06-whereanime-01:short|whereanime",
+   "day": "2026-11-08",
+   "slug": "clip-reel:clip-aoashi-season-2-e06-whereanime-01:short",
+   "title": "Aoashi Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-aoashi-season-2-e06-whereanime-01:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794170729053,
+   "status": "claimed"
   }
  ],
  "health": {
