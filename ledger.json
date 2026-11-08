@@ -12622,7 +12622,11 @@
    "at": 1794107698487,
    "status": "posted",
    "postId": "1329988470202923_122118505551503689",
-   "commentId": "122118505551503689_2834349543614636"
+   "commentId": "122118505551503689_2834349543614636",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794107698487
+   }
   }
  ],
  "health": {
