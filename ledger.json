@@ -14631,6 +14631,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118769239503689",
    "commentId": "122118769239503689_1106029552250199"
+  },
+  {
+   "key": "2026-11-08|where:71|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:71",
+   "title": "Full Metal Panic!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "71",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794171757773,
+   "status": "claimed"
   }
  ],
  "health": {
