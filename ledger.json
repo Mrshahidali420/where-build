@@ -13964,6 +13964,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118692685503689",
    "commentId": "122118692685503689_3646739152156166"
+  },
+  {
+   "key": "2026-11-08|out-now:199426:6:out|whereanime",
+   "day": "2026-11-08",
+   "slug": "out-now:199426:6:out",
+   "title": "HOTEL INHUMANS Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "199426:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794151456544,
+   "status": "claimed"
   }
  ],
  "health": {
