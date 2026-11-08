@@ -15370,6 +15370,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794178766340
    }
+  },
+  {
+   "key": "2026-11-08|character:char:89295|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:89295",
+   "title": "Kiznaiver",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89295",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794178947828,
+   "status": "claimed"
   }
  ],
  "health": {
