@@ -13892,6 +13892,22 @@
    "status": "posted",
    "postId": "2706854616438675",
    "commentId": "2706854616438675_2052601985459265"
+  },
+  {
+   "key": "2026-11-08|out-now:200455:6:out|whereanime",
+   "day": "2026-11-08",
+   "slug": "out-now:200455:6:out",
+   "title": "Even Though I'm a Super Timid Noble Girl, I Accepted the Bet From My Cunning Fiancé",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "200455:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794150206794,
+   "status": "claimed"
   }
  ],
  "health": {
