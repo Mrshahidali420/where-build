@@ -12741,6 +12741,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118517257503689",
    "commentId": "122118517257503689_1576083004540904"
+  },
+  {
+   "key": "2026-11-07|character:char:10418|whereanime",
+   "day": "2026-11-07",
+   "slug": "character:char:10418",
+   "title": "Nichijou - My Ordinary Life",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:10418",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794111027331,
+   "status": "claimed"
   }
  ],
  "health": {
