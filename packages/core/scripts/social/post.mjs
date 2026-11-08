@@ -315,6 +315,7 @@ async function defaultRender(type, post, { avoidTrack = null, words, swipe = fal
     const reel = (await import('./types/index.mjs')).REELS.find((r) => r.carouselOf === type.key && r.carousel)
     return reel ? { jpegs: await (await import('./reel/engine.mjs')).renderCarousel(reel, reel.fromPost(post), { theme: THEME }) } : null
   }
+  if (type.render) return type.render(type, post)
   if (type.reel) return (await import('./reel/engine.mjs')).renderReel(type, post, { theme: THEME, avoidTrack })
   return (await import('./render/engine.mjs')).renderPost(type, post, { theme: THEME, words })
 }

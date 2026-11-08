@@ -159,6 +159,10 @@ jobs:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           # A hand dry run that names a stills type counts every airing show's stills (stills/load.mjs).
           STILLS_CENSUS: ${{ inputs.dry_run && contains(inputs.types, 'stills') && '1' || '' }}
+          # Clips of a trending episode (scripts/social/clip/store.mjs): a read token for the recap project's private clip store.
+          # Unset = no clips. The kinds clip-reel and clip-video post only when FB_POST_TYPES names them.
+          CLIPS_TOKEN: ${{ secrets.CLIPS_TOKEN }}
+          CLIPS_PAGE: whereanime
           FB_POST_ENABLED: ${{ vars.FB_POST_ENABLED }}
           # The cap for any 24 hours (unset = 24, at most 288), and the least minutes between two posts (5 at least).
           FB_POSTS_PER_DAY: ${{ vars.FB_POSTS_PER_DAY }}

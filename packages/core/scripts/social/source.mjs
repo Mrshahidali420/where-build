@@ -27,6 +27,7 @@ import { join } from 'node:path'
 import { gunzipSync } from 'node:zlib'
 import { freeSplit } from '../../src/lib/answers.mjs'
 import { BLOCKED_TAGS } from '../../src/lib/prose.mjs'
+import { loadClips } from './clip/store.mjs'
 import { dayOf } from './ledger.mjs'
 import { storyOf } from './story.mjs'
 
@@ -294,5 +295,6 @@ export async function dataLoader() {
 export async function loadPools({ now = Date.now() } = {}) {
   const { items, slugs, schedule, from } = await readData()
   const data = buildData(items, now, slugs, schedule, await siteShop())
+  data.clips = await loadClips({ now })
   return { pools: poolsOf(data, now), data, source: `${from}: ${items.length} anime, ${Object.keys(slugs).length} live pages, ${schedule.length} schedule rows` }
 }
