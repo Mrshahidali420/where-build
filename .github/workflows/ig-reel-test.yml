@@ -29,6 +29,9 @@ on:
       seconds:
         description: 'Cut the clip to this many seconds (0 = whole clip; re-encodes)'
         default: '0'
+      vb:
+        description: 'Video bitrate in kbit/s for a small copy at 720x1280 (0 = keep the quality)'
+        default: '0'
       post:
         description: 'true = publish it for real'
         type: boolean
@@ -52,6 +55,7 @@ jobs:
           CHUNK_MB: ${{ inputs.chunk }}
           START: ${{ inputs.start }}
           SECONDS_LIMIT: ${{ inputs.seconds }}
+          VB: ${{ inputs.vb }}
         run: |
           set -u
           api="https://graph.facebook.com/$VERSION"
@@ -59,10 +63,11 @@ jobs:
           echo "clip: $(echo "$item" | jq -r .id)"
           id=$(echo "$item" | jq -r ".${KIND}_id")
           gh api "repos/${{ github.repository_owner }}/recap-assets/releases/assets/$id" -H 'Accept: application/octet-stream' > clip.mp4
-          if [ "$START" != "0" ] || [ "$SECONDS_LIMIT" != "0" ]; then
+          if [ "$START" != "0" ] || [ "$SECONDS_LIMIT" != "0" ] || [ "$VB" != "0" ]; then
             sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
             cut=(-ss "$START"); [ "$SECONDS_LIMIT" != "0" ] && cut+=(-t "$SECONDS_LIMIT")
-            ffmpeg -v error -y "${cut[@]}" -i clip.mp4 -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -flags +cgop -c:a aac -b:a 160k -ar 48000 -ac 2 -movflags +faststart cut.mp4 && mv cut.mp4 clip.mp4
+            q=(-crf 20); [ "$VB" != "0" ] && q=(-b:v "${VB}k" -maxrate "$((VB * 3 / 2))k" -bufsize "$((VB * 2))k" -vf scale=720:1280)
+            ffmpeg -v error -y "${cut[@]}" -i clip.mp4 -c:v libx264 -preset medium "${q[@]}" -pix_fmt yuv420p -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -flags +cgop -c:a aac -b:a 160k -ar 48000 -ac 2 -movflags +faststart cut.mp4 && mv cut.mp4 clip.mp4
           fi
           size=$(stat -c %s clip.mp4); echo "size: $size bytes"
           ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
