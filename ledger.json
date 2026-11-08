@@ -12872,48 +12872,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-07",
-  "at": 1794028004857,
+  "day": "2026-11-08",
+  "at": 1794114048096,
   "list": [
    {
-    "id": 217334,
-    "name": "Alisa Kujou",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b217334-buImnwO26SgS.jpg",
-    "favourites": 3714,
-    "mediaId": 162804,
-    "voice": "Sumire Uesaka"
+    "id": 89225,
+    "name": "Shouta Aizawa",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89225-XBgvUhI9naVI.png",
+    "favourites": 8747,
+    "mediaId": 21459,
+    "voice": "Junichi Suwabe"
    },
    {
-    "id": 158154,
-    "name": "Shouko Ieiri",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b158154-UCqbiULli62P.png",
-    "favourites": 1523,
-    "mediaId": 113415,
-    "voice": "Aya Endou"
+    "id": 1900,
+    "name": "Sasori",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1900-Dpd9wVWtlvIx.png",
+    "favourites": 1630,
+    "mediaId": 1735,
+    "voice": "Takahiro Sakurai"
    },
    {
-    "id": 64621,
-    "name": "Saruhiko Fushimi",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b64621-mC3KL5Bpqb2M.png",
-    "favourites": 373,
-    "mediaId": 14467,
-    "voice": "Mamoru Miyano"
+    "id": 195601,
+    "name": "Amane Fujimiya",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b195601-rDhWj5yC1BAe.png",
+    "favourites": 763,
+    "mediaId": 143338,
+    "voice": "Taito Ban"
    },
    {
-    "id": 128469,
-    "name": "Chartreux Westia",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b128469-MKtpVYyFx199.png",
-    "favourites": 342,
-    "mediaId": 101310,
-    "voice": "Yuu Shimamura"
+    "id": 289970,
+    "name": "Miri Unasaka",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b289970-yEN4aVIRcHN8.png",
+    "favourites": 502,
+    "mediaId": 155907,
+    "voice": "Hina Kino"
    },
    {
-    "id": 260986,
-    "name": "Sazanka",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b260986-62tYMt2dOSP4.png",
-    "favourites": 113,
-    "mediaId": 141350,
-    "voice": "Miyari Nemoto"
+    "id": 25870,
+    "name": "Carue",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/25870.jpg",
+    "favourites": 307,
+    "mediaId": 21,
+    "voice": "Hiroaki Hirata"
    }
   ]
  },
