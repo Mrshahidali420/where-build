@@ -1,0 +1,59 @@
+name: Instagram reel test
+run-name: Instagram reel test (${{ inputs.kind }} ${{ inputs.number }}, post=${{ inputs.post }})
+
+# Sends one clip from the recap project's store to Instagram by hand, and prints every answer in full, so a
+# refused upload shows its real reason. post=false stops before the post (the video is only sent and checked).
+on:
+  workflow_dispatch:
+    inputs:
+      number:
+        description: 'Which clip of the list (1 = the first)'
+        default: '1'
+      kind:
+        description: 'short (60 s) or full'
+        default: 'short'
+      post:
+        description: 'true = publish it for real'
+        type: boolean
+        default: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Send the clip
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          GH_TOKEN: ${{ secrets.CLIPS_TOKEN }}
+          NUMBER: ${{ inputs.number }}
+          KIND: ${{ inputs.kind }}
+          POST: ${{ inputs.post }}
+        run: |
+          set -u
+          api="https://graph.facebook.com/v26.0"
+          item=$(gh api repos/${{ github.repository_owner }}/recap-assets/contents/clips/whereanime.json -H 'Accept: application/vnd.github.raw' | jq -c ".items | sort_by(.made_at) | .[$NUMBER-1]")
+          echo "clip: $(echo "$item" | jq -r .id)"
+          id=$(echo "$item" | jq -r ".${KIND}_id")
+          gh api "repos/${{ github.repository_owner }}/recap-assets/releases/assets/$id" -H 'Accept: application/octet-stream' > clip.mp4
+          size=$(stat -c %s clip.mp4); echo "size: $size bytes"
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,sample_rate,channels,bit_rate -show_entries format=duration,bit_rate -of default=nw=1 clip.mp4 || true
+          ig=$(curl -fsS "$api/$FB_PAGE_ID?fields=instagram_business_account&access_token=$FB_PAGE_TOKEN" | jq -r '.instagram_business_account.id')
+          caption=$(echo "$item" | jq -r .title)
+          made=$(curl -sS -X POST "$api/$ig/media" -d "media_type=REELS" -d "upload_type=resumable" --data-urlencode "caption=$caption" -d "share_to_feed=true" -d "access_token=$FB_PAGE_TOKEN")
+          echo "container: $(echo "$made" | jq -c 'del(.access_token)')"
+          cid=$(echo "$made" | jq -r .id); uri=$(echo "$made" | jq -r .uri)
+          echo "--- upload"
+          curl -sS -w '\nHTTP %{http_code}\n' -X POST "$uri" -H "Authorization: OAuth $FB_PAGE_TOKEN" -H "offset: 0" -H "file_size: $size" -H "Content-Type: application/octet-stream" --data-binary @clip.mp4
+          echo "--- status"
+          for i in $(seq 1 30); do
+            s=$(curl -sS "$api/$cid?fields=status_code,status&access_token=$FB_PAGE_TOKEN")
+            echo "$i: $s"
+            case "$s" in *FINISHED*|*ERROR*|*EXPIRED*) break;; esac
+            sleep 10
+          done
+          if [ "$POST" = "true" ] && echo "$s" | grep -q FINISHED; then
+            echo "--- publish"
+            curl -sS -X POST "$api/$ig/media_publish" -d "creation_id=$cid" -d "access_token=$FB_PAGE_TOKEN"; echo
+          fi
