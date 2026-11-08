@@ -12,6 +12,13 @@ on:
       kind:
         description: 'short (60 s) or full'
         default: 'short'
+      version:
+        description: 'Graph API version'
+        default: 'v21.0'
+      ctype:
+        description: 'true = send a Content-Type header with the bytes'
+        type: boolean
+        default: false
       regop:
         description: 'true = first re-encode with a fixed 2-second keyframe gap (Instagram wants a closed GOP of 2 to 5 s)'
         type: boolean
@@ -35,9 +42,11 @@ jobs:
           KIND: ${{ inputs.kind }}
           POST: ${{ inputs.post }}
           REGOP: ${{ inputs.regop }}
+          VERSION: ${{ inputs.version }}
+          CTYPE: ${{ inputs.ctype }}
         run: |
           set -u
-          api="https://graph.facebook.com/v26.0"
+          api="https://graph.facebook.com/$VERSION"
           item=$(gh api repos/${{ github.repository_owner }}/recap-assets/contents/clips/whereanime.json -H 'Accept: application/vnd.github.raw' | jq -c ".items | sort_by(.made_at) | .[$NUMBER-1]")
           echo "clip: $(echo "$item" | jq -r .id)"
           id=$(echo "$item" | jq -r ".${KIND}_id")
