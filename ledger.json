@@ -14541,6 +14541,22 @@
     "id": "18100290839096969",
     "at": 1794170729053
    }
+  },
+  {
+   "key": "2026-11-08|fact:fact:15417:rated|whereanime",
+   "day": "2026-11-08",
+   "slug": "fact:fact:15417:rated",
+   "title": "Gintama Season 2 Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:15417:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794170850454,
+   "status": "claimed"
   }
  ],
  "health": {
