@@ -14595,6 +14595,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118767205503689",
    "commentId": "122118767205503689_2105055763471892"
+  },
+  {
+   "key": "2026-11-08|fact:fact:513:popular|whereanime",
+   "day": "2026-11-08",
+   "slug": "fact:fact:513:popular",
+   "title": "Castle in the Sky",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:513:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794171394836,
+   "status": "claimed"
   }
  ],
  "health": {
