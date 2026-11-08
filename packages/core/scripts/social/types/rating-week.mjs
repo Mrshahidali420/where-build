@@ -27,10 +27,11 @@ const HEAD = 150
 const GAP = 6
 const SPACED_MAX = 26
 
-function find(data, { now }) {
+/** The best-rated episode of each show that aired inside `windowMs`, as one post. `itemOf(rows)` names it for the ledger. */
+export function findIn(data, now, { windowMs, itemOf }) {
   const best = new Map()
   for (const row of ratedEpisodes(data, now)) {
-    if (row.votes < MIN_VOTES || !(row.aired > now - WEEK_MS)) continue
+    if (row.votes < MIN_VOTES || !(row.aired > now - windowMs)) continue
     const held = best.get(row.titleId)
     if (!held || row.score > held.score) best.set(row.titleId, row)
   }
@@ -39,7 +40,7 @@ function find(data, { now }) {
   const lead = rows[0]
   return [
     {
-      item: 'week',
+      item: itemOf(rows),
       title: null,
       path: lead.title.path,
       label: `${lead.title.title}: episode dates and where to watch`,
@@ -82,7 +83,8 @@ function strip(k, t, picture, item, height) {
   )
 }
 
-function template(v, k) {
+/** The card with its headline: the episodes of the week, or the top-rated now. */
+export const templateWith = (headline) => (v, k) => {
   const t = k.tone('dark')
   const count = v.items.length
   const height = Math.floor((H - HEAD - FOOT_HEIGHT - GAP * (count - 1)) / count)
@@ -92,7 +94,7 @@ function template(v, k) {
       { width: W - PAD * 2, marginLeft: PAD, height: HEAD, justifyContent: 'center' },
       k.row(
         { alignItems: 'baseline' },
-        k.display({ fontSize: 60, fontWeight: k.f.displayBlack, lineHeight: 1 }, 'EPISODES OF THE WEEK'),
+        k.display({ fontSize: 60, fontWeight: k.f.displayBlack, lineHeight: 1 }, headline),
       ),
       k.row({ alignItems: 'baseline', marginTop: 8 }, k.display({ fontSize: 30, color: t.soft, letterSpacing: 2 }, 'RATED ON'), k.display({ fontSize: 30, fontWeight: k.f.displayBlack, color: IMDB_YELLOW, marginLeft: 10 }, 'IMDb')),
     ),
@@ -100,5 +102,8 @@ function template(v, k) {
     foot(k, t),
   )
 }
+
+const find = (data, { now }) => findIn(data, now, { windowMs: WEEK_MS, itemOf: () => 'week' })
+const template = templateWith('EPISODES OF THE WEEK')
 
 export default { key: 'rating-week', name: 'Top-rated episodes of the week', urgent: false, gapDays: 7, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, template, extra: ratingsExtra }

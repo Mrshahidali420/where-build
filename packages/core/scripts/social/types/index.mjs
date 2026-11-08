@@ -24,6 +24,7 @@ import outNow from './out-now.mjs'
 import premiere from './premiere.mjs'
 import rating from './rating.mjs'
 import ratingMove from './rating-move.mjs'
+import ratingDay from './rating-day.mjs'
 import ratingWeek from './rating-week.mjs'
 import scenes from './scenes.mjs'
 import stills from './stills.mjs'
@@ -45,4 +46,7 @@ export const REELS = [reelToday, reelNextWeek, reelAnticipated]
 /** The clips of a trending episode (clip.mjs): a Reel and a normal video, from files the recap project made. */
 export const CLIPS = [clipReel, clipVideo]
 
-export const KINDS = [...TYPES, ...REELS, ...CLIPS]
+/** Extra posts that come on top of the rotation: the top-rated list as often as it has news. */
+export const EXTRAS = [ratingDay]
+
+export const KINDS = [...TYPES, ...REELS, ...CLIPS, ...EXTRAS]

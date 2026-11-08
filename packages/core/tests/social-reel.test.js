@@ -14,7 +14,7 @@ import { sheetTimes } from '../scripts/social/reel/samples.mjs'
 import { END_LINE, SAFE } from '../scripts/social/reel/slides.mjs'
 import { ffmpegArgs, ffmpegError, holdsOf, lengthOf, HOLD, LENGTH, REEL } from '../scripts/social/reel/video.mjs'
 import { SITE } from '../scripts/social/site.mjs'
-import { KINDS, REELS, TYPES, TYPE_KEYS, CLIPS } from '../scripts/social/types/index.mjs'
+import { KINDS, REELS, TYPES, TYPE_KEYS, CLIPS, EXTRAS } from '../scripts/social/types/index.mjs'
 import { NOW, harness } from './social-kit.mjs'
 import { sampleData, walk } from './social-data.mjs'
 
@@ -95,7 +95,7 @@ test('slides: an opening slide, one per item, and a closing slide that names the
 
 test('gate: a reel is off until its own name is written, and is not one of the picture types', () => {
   const names = KINDS.map((kind) => kind.key)
-  assert.deepEqual(names, [...TYPE_KEYS, ...REELS.map((reel) => reel.key), ...CLIPS.map((clip) => clip.key)])
+  assert.deepEqual(names, [...TYPE_KEYS, ...REELS.map((reel) => reel.key), ...CLIPS.map((clip) => clip.key), ...EXTRAS.map((extra) => extra.key)])
   assert.ok(!TYPES.some((type) => type.reel) && REELS.every((reel) => !reel.template))
   assert.deepEqual(REELS.map((reel) => reel.key).sort(), ['reel-anticipated', 'reel-next-week', 'reel-today'])
   assert.deepEqual(enabledTypes('episode', names).types, ['episode'])
