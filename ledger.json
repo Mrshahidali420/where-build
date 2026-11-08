@@ -13708,6 +13708,22 @@
    "status": "posted",
    "postId": "1804752450800033",
    "commentError": "POST /1804752450800033/comments failed: Unsupported post request. Object with ID '1804752450800033' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-08|fact:fact:168872:rated|whereanime",
+   "day": "2026-11-08",
+   "slug": "fact:fact:168872:rated",
+   "title": "Kimi ni Todoke: From Me to You Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:168872:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794147194116,
+   "status": "claimed"
   }
  ],
  "health": {
