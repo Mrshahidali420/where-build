@@ -13128,6 +13128,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118554691503689",
    "commentId": "122118554691503689_1130561796568368"
+  },
+  {
+   "key": "2026-11-08|episode:213657:5|whereanime",
+   "day": "2026-11-08",
+   "slug": "episode:213657:5",
+   "title": "Mission: Yozakura Family Season 2 Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "213657:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794118589759,
+   "status": "claimed"
   }
  ],
  "health": {
