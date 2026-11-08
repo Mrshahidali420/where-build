@@ -13798,6 +13798,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118677871503689",
    "commentId": "122118677871503689_1537695281178212"
+  },
+  {
+   "key": "2026-11-08|where:146953|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:146953",
+   "title": "Masamune-kun's Revenge R",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "146953",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794148700515,
+   "status": "claimed"
   }
  ],
  "health": {
