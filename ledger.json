@@ -17960,6 +17960,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119105329503689",
    "commentId": "122119105329503689_29073557865645712"
+  },
+  {
+   "key": "2026-11-09|where:21799|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:21799",
+   "title": "AJIN: Demi-Human 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21799",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794243159045,
+   "status": "claimed"
   }
  ],
  "health": {
