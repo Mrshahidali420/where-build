@@ -20391,6 +20391,22 @@
    "at": 1794264307740,
    "status": "posted",
    "postId": "1329988470202923_122119214367503689"
+  },
+  {
+   "key": "2026-11-09|character:char:31522|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:31522",
+   "title": "The Tatami Galaxy",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:31522",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794264429116,
+   "status": "claimed"
   }
  ],
  "health": {
