@@ -17978,6 +17978,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119106055503689",
    "commentId": "122119106055503689_28640103218994457"
+  },
+  {
+   "key": "2026-11-09|out-now:160803:6:out|whereanime",
+   "day": "2026-11-09",
+   "slug": "out-now:160803:6:out",
+   "title": "MAGICAL GIRL RAISING PROJECT restart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "160803:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794244558412,
+   "status": "claimed"
   }
  ],
  "health": {
