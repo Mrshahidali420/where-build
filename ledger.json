@@ -18901,6 +18901,22 @@
     "id": "18115370876176372",
     "at": 1794254309533
    }
+  },
+  {
+   "key": "2026-11-09|where:131518|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:131518",
+   "title": "Dr. STONE New World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "131518",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794254431532,
+   "status": "claimed"
   }
  ],
  "health": {
