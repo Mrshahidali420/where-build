@@ -20593,6 +20593,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119221753503689",
    "commentId": "122119221753503689_1474959061486005"
+  },
+  {
+   "key": "2026-11-09|character:char:729|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:729",
+   "title": "Yu Yu Hakusho: Ghostfiles",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:729",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794265780833,
+   "status": "claimed"
   }
  ],
  "health": {
