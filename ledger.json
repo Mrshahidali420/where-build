@@ -17559,6 +17559,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794222927636
    }
+  },
+  {
+   "key": "2026-11-09|out-now:207191:6:out|whereanime",
+   "day": "2026-11-09",
+   "slug": "out-now:207191:6:out",
+   "title": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "207191:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794227984973,
+   "status": "claimed"
   }
  ],
  "health": {
