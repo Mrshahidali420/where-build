@@ -19823,6 +19823,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119195293503689",
    "commentId": "122119195293503689_1686380866504383"
+  },
+  {
+   "key": "2026-11-09|where:186794|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:186794",
+   "title": "My Status as an Assassin Obviously Exceeds the Hero’s",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "186794",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794260642962,
+   "status": "claimed"
   }
  ],
  "health": {
