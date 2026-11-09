@@ -15806,6 +15806,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118826179503689",
    "commentId": "122118826179503689_1458173756448610"
+  },
+  {
+   "key": "2026-11-08|character:char:50689|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:50689",
+   "title": "Daily Lives of High School Boys",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:50689",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794183340091,
+   "status": "claimed"
   }
  ],
  "health": {
