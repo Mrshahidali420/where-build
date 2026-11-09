@@ -17659,6 +17659,22 @@
    "status": "posted",
    "postId": "1407671297782940",
    "commentId": "1407671297782940_2053181892056041"
+  },
+  {
+   "key": "2026-11-09|out-now:204011:5:out|whereanime",
+   "day": "2026-11-09",
+   "slug": "out-now:204011:5:out",
+   "title": "PSYREN",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "204011:5:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794232953448,
+   "status": "claimed"
   }
  ],
  "health": {
