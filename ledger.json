@@ -15860,6 +15860,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118828687503689",
    "commentId": "122118828687503689_1861862315264729"
+  },
+  {
+   "key": "2026-11-08|where:329|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:329",
+   "title": "Planetes",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "329",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794183884665,
+   "status": "claimed"
   }
  ],
  "health": {
