@@ -16206,6 +16206,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118847641503689",
    "commentId": "122118847641503689_29002451879417021"
+  },
+  {
+   "key": "2026-11-08|character:char:206|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:206",
+   "title": "Fruits Basket Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:206",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794187360840,
+   "status": "claimed"
   }
  ],
  "health": {
