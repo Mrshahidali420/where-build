@@ -18334,6 +18334,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119140741503689",
    "commentId": "122119140741503689_1449599807320787"
+  },
+  {
+   "key": "2026-11-09|where:132010|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:132010",
+   "title": "Love After World Domination",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "132010",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794250654599,
+   "status": "claimed"
   }
  ],
  "health": {
