@@ -17996,6 +17996,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119110195503689",
    "commentId": "122119110195503689_30247597054830440"
+  },
+  {
+   "key": "2026-11-09|scenes:21827:2|whereanime",
+   "day": "2026-11-09",
+   "slug": "scenes:21827:2",
+   "title": "Violet Evergarden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "21827:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794244739738,
+   "status": "claimed"
   }
  ],
  "health": {
