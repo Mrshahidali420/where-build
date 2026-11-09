@@ -20809,6 +20809,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119229007503689",
    "commentId": "122119229007503689_1461678805935120"
+  },
+  {
+   "key": "2026-11-09|character:char:129134|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:129134",
+   "title": "My Next Life as a Villainess: All Routes Lead to Doom!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:129134",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794267235440,
+   "status": "claimed"
   }
  ],
  "health": {
