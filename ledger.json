@@ -17641,6 +17641,22 @@
    "at": 1794232650845,
    "status": "failed",
    "error": "GET /1475878514638525 failed: Unsupported get request. Object with ID '1475878514638525' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-09|clip-video:clip-the-apothecary-diaries-season-3-e06-whereanime-03:full|whereanime",
+   "day": "2026-11-09",
+   "slug": "clip-video:clip-the-apothecary-diaries-season-3-e06-whereanime-03:full",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-the-apothecary-diaries-season-3-e06-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794232772091,
+   "status": "claimed"
   }
  ],
  "health": {
