@@ -17251,48 +17251,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-08",
-  "at": 1794114048096,
+  "day": "2026-11-09",
+  "at": 1794201182812,
   "list": [
    {
-    "id": 89225,
-    "name": "Shouta Aizawa",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b89225-XBgvUhI9naVI.png",
-    "favourites": 8747,
-    "mediaId": 21459,
-    "voice": "Junichi Suwabe"
+    "id": 13725,
+    "name": "Ami Kawashima",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b13725-Vk30kjvVT82z.png",
+    "favourites": 2169,
+    "mediaId": 4224,
+    "voice": "Eri Kitamura"
    },
    {
-    "id": 1900,
-    "name": "Sasori",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1900-Dpd9wVWtlvIx.png",
-    "favourites": 1630,
-    "mediaId": 1735,
-    "voice": "Takahiro Sakurai"
+    "id": 122192,
+    "name": "Tarou Kabakura",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b122192-qnLmMg3YaGNd.png",
+    "favourites": 2006,
+    "mediaId": 99578,
+    "voice": "Tomokazu Sugita"
    },
    {
-    "id": 195601,
-    "name": "Amane Fujimiya",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b195601-rDhWj5yC1BAe.png",
-    "favourites": 763,
-    "mediaId": 143338,
-    "voice": "Taito Ban"
+    "id": 1151,
+    "name": "Ikkaku Madarame",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b1151-izBrO6oWMvDv.png",
+    "favourites": 844,
+    "mediaId": 269,
+    "voice": "Nobuyuki Hiyama"
    },
    {
-    "id": 289970,
-    "name": "Miri Unasaka",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b289970-yEN4aVIRcHN8.png",
-    "favourites": 502,
-    "mediaId": 155907,
-    "voice": "Hina Kino"
+    "id": 193218,
+    "name": "Kana Ichikawa",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b193218-3mexVYcc0PoC.jpg",
+    "favourites": 394,
+    "mediaId": 153152,
+    "voice": "Yukari Tamura"
    },
    {
-    "id": 25870,
-    "name": "Carue",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/25870.jpg",
-    "favourites": 307,
-    "mediaId": 21,
-    "voice": "Hiroaki Hirata"
+    "id": 286859,
+    "name": "Sett",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b286859-Ibihr3GeSmFf.png",
+    "favourites": 280,
+    "mediaId": 171038,
+    "voice": "Kouki Uchiyama"
    }
   ]
  },
