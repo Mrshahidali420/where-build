@@ -15716,6 +15716,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794182245460
    }
+  },
+  {
+   "key": "2026-11-08|where:128223|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:128223",
+   "title": "When Will Ayumu Make His Move?",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "128223",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794182426936,
+   "status": "claimed"
   }
  ],
  "health": {
