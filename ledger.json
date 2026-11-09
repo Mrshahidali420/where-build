@@ -21011,6 +21011,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794268464404
    }
+  },
+  {
+   "key": "2026-11-09|character:char:89228|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:89228",
+   "title": "HINAMATSURI",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89228",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794268585540,
+   "status": "claimed"
   }
  ],
  "health": {
