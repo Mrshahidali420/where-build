@@ -21006,7 +21006,11 @@
    "at": 1794268464404,
    "status": "posted",
    "postId": "1329988470202923_122119236207503689",
-   "commentId": "122119236207503689_1489168579776457"
+   "commentId": "122119236207503689_1489168579776457",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794268464404
+   }
   }
  ],
  "health": {
