@@ -16040,6 +16040,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118840495503689",
    "commentId": "122118840495503689_1122246253781366"
+  },
+  {
+   "key": "2026-11-08|where:131548|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:131548",
+   "title": "Akebi’s Sailor Uniform",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "131548",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794185727116,
+   "status": "claimed"
   }
  ],
  "health": {
