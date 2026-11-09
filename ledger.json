@@ -15788,6 +15788,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118825327503689",
    "commentId": "122118825327503689_1483282240361915"
+  },
+  {
+   "key": "2026-11-08|where:98503|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:98503",
+   "title": "School Babysitters",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "98503",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794183156468,
+   "status": "claimed"
   }
  ],
  "health": {
