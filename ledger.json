@@ -18788,6 +18788,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119158909503689",
    "commentId": "122119158909503689_1169624762412779"
+  },
+  {
+   "key": "2026-11-09|scenes:1575:2|whereanime",
+   "day": "2026-11-09",
+   "slug": "scenes:1575:2",
+   "title": "Code Geass: Lelouch of the Rebellion",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "1575:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794253703823,
+   "status": "claimed"
   }
  ],
  "health": {
