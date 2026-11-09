@@ -16080,6 +16080,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118842091503689",
    "commentId": "122118842091503689_1677262771077071"
+  },
+  {
+   "key": "2026-11-08|where:109979|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:109979",
+   "title": "The Boy and the Heron",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "109979",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794186090257,
+   "status": "claimed"
   }
  ],
  "health": {
