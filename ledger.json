@@ -17623,6 +17623,23 @@
    "status": "posted",
    "postId": "1329988470202923_122119043535503689",
    "commentId": "122119043535503689_1122591777336242"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-09|clip-reel:clip-the-apothecary-diaries-season-3-e06-whereanime-03:short|whereanime",
+   "day": "2026-11-09",
+   "slug": "clip-reel:clip-the-apothecary-diaries-season-3-e06-whereanime-03:short",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-the-apothecary-diaries-season-3-e06-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794232650845,
+   "status": "claimed"
   }
  ],
  "health": {
