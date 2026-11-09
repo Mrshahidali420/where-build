@@ -16642,6 +16642,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118867519503689",
    "commentId": "122118867519503689_2094402921260980"
+  },
+  {
+   "key": "2026-11-08|character:char:131519|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:131519",
+   "title": "The Way of the Househusband",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:131519",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794191732659,
+   "status": "claimed"
   }
  ],
  "health": {
