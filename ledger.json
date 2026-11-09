@@ -20463,6 +20463,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119217265503689",
    "commentId": "122119217265503689_29680260471610591"
+  },
+  {
+   "key": "2026-11-09|where:139587|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:139587",
+   "title": "Reincarnated as a Sword",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "139587",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794264931265,
+   "status": "claimed"
   }
  ],
  "health": {
