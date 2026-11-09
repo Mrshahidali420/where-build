@@ -17718,6 +17718,22 @@
    "status": "posted",
    "postId": "1152182883970386",
    "commentId": "1152182883970386_28978588451762458"
+  },
+  {
+   "key": "2026-11-09|fact:fact:104307:rated|whereanime",
+   "day": "2026-11-09",
+   "slug": "fact:fact:104307:rated",
+   "title": "Hi Score Girl: Extra Stage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:104307:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794234716078,
+   "status": "claimed"
   }
  ],
  "health": {
