@@ -20665,6 +20665,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119224351503689",
    "commentId": "122119224351503689_1665987241983561"
+  },
+  {
+   "key": "2026-11-09|character:char:3798|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:3798",
+   "title": "Paprika",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:3798",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794266265497,
+   "status": "claimed"
   }
  ],
  "health": {
