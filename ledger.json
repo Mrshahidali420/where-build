@@ -19953,6 +19953,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794261388780
    }
+  },
+  {
+   "key": "2026-11-09|character:char:151488|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:151488",
+   "title": "Moriarty the Patriot",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:151488",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794261509904,
+   "status": "claimed"
   }
  ],
  "health": {
