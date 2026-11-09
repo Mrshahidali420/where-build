@@ -18478,6 +18478,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119146909503689",
    "commentId": "122119146909503689_1150808181223116"
+  },
+  {
+   "key": "2026-11-09|where:208044|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:208044",
+   "title": "From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "208044",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794251624558,
+   "status": "claimed"
   }
  ],
  "health": {
