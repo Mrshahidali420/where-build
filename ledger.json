@@ -20133,6 +20133,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119205373503689",
    "commentId": "122119205373503689_28993504330314401"
+  },
+  {
+   "key": "2026-11-09|where:20574|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:20574",
+   "title": "Hi Score Girl",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20574",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794262729478,
+   "status": "claimed"
   }
  ],
  "health": {
