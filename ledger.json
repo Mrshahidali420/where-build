@@ -20277,6 +20277,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119210587503689",
    "commentId": "122119210587503689_1638627454624241"
+  },
+  {
+   "key": "2026-11-09|where:21495|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:21495",
+   "title": "Tanaka-kun is Always Listless",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "21495",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794263700079,
+   "status": "claimed"
   }
  ],
  "health": {
