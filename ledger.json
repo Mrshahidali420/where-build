@@ -20205,6 +20205,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119207569503689",
    "commentId": "122119207569503689_3054329534958867"
+  },
+  {
+   "key": "2026-11-09|where:13667|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:13667",
+   "title": "Road to Ninja: Naruto the Movie",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "13667",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794263214891,
+   "status": "claimed"
   }
  ],
  "health": {
