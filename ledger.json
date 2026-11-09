@@ -16444,6 +16444,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118858603503689",
    "commentId": "122118858603503689_1661344282160697"
+  },
+  {
+   "key": "2026-11-08|where:99693|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:99693",
+   "title": "PERSONA5 the Animation",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "99693",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794189740601,
+   "status": "claimed"
   }
  ],
  "health": {
