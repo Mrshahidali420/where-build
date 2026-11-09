@@ -20881,6 +20881,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119231473503689",
    "commentId": "122119231473503689_4651314918444385"
+  },
+  {
+   "key": "2026-11-09|character:char:26243|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:26243",
+   "title": "Say \"I love you\".",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:26243",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794267721569,
+   "status": "claimed"
   }
  ],
  "health": {
