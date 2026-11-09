@@ -20223,6 +20223,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119208211503689",
    "commentId": "122119208211503689_1776495323407531"
+  },
+  {
+   "key": "2026-11-09|character:char:42501|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:42501",
+   "title": "Magi: The Kingdom of Magic",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:42501",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794263336231,
+   "status": "claimed"
   }
  ],
  "health": {
