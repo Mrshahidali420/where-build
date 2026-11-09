@@ -16152,6 +16152,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118845547503689",
    "commentId": "122118845547503689_30289865700613665"
+  },
+  {
+   "key": "2026-11-08|where:13271|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:13271",
+   "title": "Hunter x Hunter: Phantom Rouge",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "13271",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794186816367,
+   "status": "claimed"
   }
  ],
  "health": {
