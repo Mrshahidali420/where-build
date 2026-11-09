@@ -17581,6 +17581,29 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794227984973
    }
+  },
+  {
+   "share": true,
+   "key": "2026-11-09|share:1663522605062181|whereanime",
+   "day": "2026-11-09",
+   "slug": "share:1663522605062181",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1663522605062181",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1663522605062181",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "Heavenly Demon Reborn!",
+   "sourceFormat": "reel:reel-next",
+   "link": "https://www.facebook.com/reel/1663522605062181",
+   "message": "New on our sister Page, Manhwa Index:",
+   "at": 1794229387880,
+   "status": "claimed"
   }
  ],
  "health": {
