@@ -106,4 +106,4 @@ export const templateWith = (headline) => (v, k) => {
 const find = (data, { now }) => findIn(data, now, { windowMs: WEEK_MS, itemOf: () => 'week' })
 const template = templateWith('EPISODES OF THE WEEK')
 
-export default { key: 'rating-week', name: 'Top-rated episodes of the week', urgent: false, gapDays: 7, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, template, extra: ratingsExtra }
+export default { key: 'rating-week', name: 'Top-rated episodes of the week', urgent: true, gapDays: 7, titleGap: false, window: 1, find, captions, questions, tags: (p) => p.tags, template, extra: ratingsExtra }

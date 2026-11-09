@@ -19,7 +19,7 @@ function threeShows() {
 test('rating-day: known to the poster, urgent, an extra next to the weekly list', () => {
   assert.ok(KINDS.includes(ratingDay))
   assert.equal(ratingDay.urgent, true)
-  assert.equal(ratingWeek.urgent, false)
+  assert.equal(ratingWeek.urgent, true)
   assert.notEqual(ratingDay.key, ratingWeek.key)
 })
 
