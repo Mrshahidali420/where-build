@@ -20043,6 +20043,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119202607503689",
    "commentId": "122119202607503689_3577730965737691"
+  },
+  {
+   "key": "2026-11-09|character:char:7373|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:7373",
+   "title": "Spice and Wolf",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:7373",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794262123117,
+   "status": "claimed"
   }
  ],
  "health": {
