@@ -17789,7 +17789,11 @@
    "at": 1794237692552,
    "status": "posted",
    "postId": "1329988470202923_122119080555503689",
-   "commentId": "122119080555503689_1110426288269544"
+   "commentId": "122119080555503689_1110426288269544",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794237692552
+   }
   }
  ],
  "health": {
