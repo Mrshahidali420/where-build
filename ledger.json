@@ -20169,6 +20169,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119206405503689",
    "commentId": "122119206405503689_30249052861351082"
+  },
+  {
+   "key": "2026-11-09|where:177385|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:177385",
+   "title": "Journal with Witch",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "177385",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794262972381,
+   "status": "claimed"
   }
  ],
  "health": {
