@@ -16332,6 +16332,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118853593503689",
    "commentId": "122118853593503689_1523198836285270"
+  },
+  {
+   "key": "2026-11-08|where:119683|whereanime",
+   "day": "2026-11-08",
+   "slug": "where:119683",
+   "title": "EDENS ZERO",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "119683",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794188631563,
+   "status": "claimed"
   }
  ],
  "health": {
