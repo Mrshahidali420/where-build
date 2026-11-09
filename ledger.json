@@ -19225,6 +19225,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119173939503689",
    "commentId": "122119173939503689_1468420065242768"
+  },
+  {
+   "key": "2026-11-09|where:20993|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:20993",
+   "title": "Seraph of the End: Battle in Nagoya",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20993",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794256614752,
+   "status": "claimed"
   }
  ],
  "health": {
