@@ -16862,6 +16862,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118876003503689",
    "commentId": "122118876003503689_1811893423353919"
+  },
+  {
+   "key": "2026-11-08|character:char:22055|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:22055",
+   "title": "Monogatari Series Second Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:22055",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794193903385,
+   "status": "claimed"
   }
  ],
  "health": {
