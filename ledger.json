@@ -16242,6 +16242,22 @@
    "status": "posted",
    "postId": "1329988470202923_122118849375503689",
    "commentId": "122118849375503689_1667981188358305"
+  },
+  {
+   "key": "2026-11-08|character:char:123079|whereanime",
+   "day": "2026-11-08",
+   "slug": "character:char:123079",
+   "title": "BLEND-S",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:123079",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794187723802,
+   "status": "claimed"
   }
  ],
  "health": {
