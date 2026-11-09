@@ -19333,6 +19333,22 @@
    "at": 1794257222817,
    "status": "failed",
    "error": "GET /952385577729432 failed: Unsupported get request. Object with ID '952385577729432' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-09|fact:fact:21733:rated|whereanime",
+   "day": "2026-11-09",
+   "slug": "fact:fact:21733:rated",
+   "title": "Descending Stories: Showa Genroku Rakugo Shinju",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:21733:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794257366124,
+   "status": "claimed"
   }
  ],
  "health": {
