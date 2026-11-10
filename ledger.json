@@ -26787,6 +26787,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119460637503689",
    "commentId": "122119460637503689_1752574190203179"
+  },
+  {
+   "key": "2026-11-10|where:20671|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:20671",
+   "title": "Log Horizon 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20671",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794307425078,
+   "status": "claimed"
   }
  ],
  "health": {
