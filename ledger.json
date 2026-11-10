@@ -27767,6 +27767,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119507911503689",
    "commentId": "122119507911503689_1107951578691690"
+  },
+  {
+   "key": "2026-11-10|character:char:88651|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:88651",
+   "title": "SHIROBAKO",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:88651",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794314019562,
+   "status": "claimed"
   }
  ],
  "health": {
