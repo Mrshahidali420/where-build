@@ -27695,6 +27695,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119504905503689",
    "commentId": "122119504905503689_1848716792935160"
+  },
+  {
+   "key": "2026-11-10|scenes:108725:5|whereanime",
+   "day": "2026-11-10",
+   "slug": "scenes:108725:5",
+   "title": "The Promised Neverland Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "108725:5",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794313535559,
+   "status": "claimed"
   }
  ],
  "health": {
