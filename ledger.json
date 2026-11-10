@@ -26405,6 +26405,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119443909503689",
    "commentId": "122119443909503689_2411632329584458"
+  },
+  {
+   "key": "2026-11-10|where:239|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:239",
+   "title": "Gankutsuou: The Count of Monte Cristo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "239",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794304871766,
+   "status": "claimed"
   }
  ],
  "health": {
