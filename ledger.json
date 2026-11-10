@@ -22135,6 +22135,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119277871503689",
    "commentId": "122119277871503689_1465310398880599"
+  },
+  {
+   "key": "2026-11-09|where:185542|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:185542",
+   "title": "Skeleton Knight in Another World Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "185542",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794276132000,
+   "status": "claimed"
   }
  ],
  "health": {
