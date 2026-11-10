@@ -21532,7 +21532,11 @@
    "at": 1794271997144,
    "status": "posted",
    "postId": "1329988470202923_122119255773503689",
-   "commentId": "122119255773503689_2327039044802439"
+   "commentId": "122119255773503689_2327039044802439",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794271997144
+   }
   }
  ],
  "health": {
