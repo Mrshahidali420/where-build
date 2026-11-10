@@ -27133,6 +27133,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794309651196
    }
+  },
+  {
+   "key": "2026-11-10|character:char:7955|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:7955",
+   "title": "Initial D 1st Stage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:7955",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794309772056,
+   "status": "claimed"
   }
  ],
  "health": {
