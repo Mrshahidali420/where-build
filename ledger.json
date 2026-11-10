@@ -27965,6 +27965,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119516857503689",
    "commentId": "122119516857503689_1827420511879019"
+  },
+  {
+   "key": "2026-11-10|where:185993|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:185993",
+   "title": "Noble Reincarnation: Born Blessed, So I'll Obtain Ultimate Power",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "185993",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794315350675,
+   "status": "claimed"
   }
  ],
  "health": {
