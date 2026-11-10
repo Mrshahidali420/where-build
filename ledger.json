@@ -27547,6 +27547,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119496973503689",
    "commentId": "122119496973503689_1834054957912552"
+  },
+  {
+   "key": "2026-11-10|where:197715|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:197715",
+   "title": "The Villager of Level 999",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "197715",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794312552626,
+   "status": "claimed"
   }
  ],
  "health": {
