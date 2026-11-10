@@ -26751,6 +26751,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119459179503689",
    "commentId": "122119459179503689_1874951690624073"
+  },
+  {
+   "key": "2026-11-10|where:187|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:187",
+   "title": "Initial D 3rd Stage",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "187",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794307182023,
+   "status": "claimed"
   }
  ],
  "health": {
