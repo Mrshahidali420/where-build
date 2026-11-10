@@ -23481,6 +23481,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119328175503689",
    "commentId": "122119328175503689_959847903558199"
+  },
+  {
+   "key": "2026-11-09|where:5258|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:5258",
+   "title": "Hajime no Ippo: The Fighting! New Challenger",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "5258",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794285161019,
+   "status": "claimed"
   }
  ],
  "health": {
