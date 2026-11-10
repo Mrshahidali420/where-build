@@ -21825,6 +21825,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119265799503689",
    "commentId": "122119265799503689_1429057102192610"
+  },
+  {
+   "key": "2026-11-09|character:char:225128|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:225128",
+   "title": "Sonny Boy",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:225128",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794274071490,
+   "status": "claimed"
   }
  ],
  "health": {
