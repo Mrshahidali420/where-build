@@ -21407,6 +21407,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119251519503689",
    "commentId": "122119251519503689_2136578720291616"
+  },
+  {
+   "key": "2026-11-09|where:24|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:24",
+   "title": "School Rumble",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "24",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794271270047,
+   "status": "claimed"
   }
  ],
  "health": {
