@@ -22715,6 +22715,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119299591503689",
    "commentId": "122119299591503689_1156891143513514"
+  },
+  {
+   "key": "2026-11-09|character:char:71267|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:71267",
+   "title": "HAIKYU!! LAND VS. AIR",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:71267",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794280029667,
+   "status": "claimed"
   }
  ],
  "health": {
