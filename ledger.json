@@ -26207,6 +26207,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119437453503689",
    "commentId": "122119437453503689_2645351085983524"
+  },
+  {
+   "key": "2026-11-10|character:char:145224|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:145224",
+   "title": "ID: INVADED",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:145224",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794303506838,
+   "status": "claimed"
   }
  ],
  "health": {
