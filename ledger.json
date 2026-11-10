@@ -26059,6 +26059,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119432035503689",
    "commentId": "122119432035503689_1069071946144907"
+  },
+  {
+   "key": "2026-11-10|character:char:153542|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:153542",
+   "title": "BNA",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:153542",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794302534480,
+   "status": "claimed"
   }
  ],
  "health": {
