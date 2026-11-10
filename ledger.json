@@ -21479,6 +21479,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119253985503689",
    "commentId": "122119253985503689_1449852390693456"
+  },
+  {
+   "key": "2026-11-09|where:13655|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:13655",
+   "title": "Little Busters!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "13655",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794271754791,
+   "status": "claimed"
   }
  ],
  "health": {
