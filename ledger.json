@@ -24845,6 +24845,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119384095503689",
    "commentId": "122119384095503689_1911926560177377"
+  },
+  {
+   "key": "2026-11-10|where:12175|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:12175",
+   "title": "Love, Election and Chocolate",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "12175",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794294342459,
+   "status": "claimed"
   }
  ],
  "health": {
