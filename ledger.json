@@ -21735,6 +21735,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119262493503689",
    "commentId": "122119262493503689_2174817300580524"
+  },
+  {
+   "key": "2026-11-09|where:198113|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:198113",
+   "title": "KILL BLUE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "198113",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794273451417,
+   "status": "claimed"
   }
  ],
  "health": {
