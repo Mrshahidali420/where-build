@@ -26351,6 +26351,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119442421503689",
    "commentId": "122119442421503689_1833917577688240"
+  },
+  {
+   "key": "2026-11-10|where:182587|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:182587",
+   "title": "OSHI NO KO Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "182587",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794304507069,
+   "status": "claimed"
   }
  ],
  "health": {
