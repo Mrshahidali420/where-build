@@ -21609,6 +21609,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119258095503689",
    "commentId": "122119258095503689_2646761295794720"
+  },
+  {
+   "key": "2026-11-09|character:char:28|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:28",
+   "title": "Hunter x Hunter",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:28",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794272603151,
+   "status": "claimed"
   }
  ],
  "health": {
