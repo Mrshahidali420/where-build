@@ -26769,6 +26769,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119459947503689",
    "commentId": "122119459947503689_2398480470689487"
+  },
+  {
+   "key": "2026-11-10|character:char:14545|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:14545",
+   "title": "Bakuman.",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:14545",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794307303492,
+   "status": "claimed"
   }
  ],
  "health": {
