@@ -24521,6 +24521,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119369677503689",
    "commentId": "122119369677503689_1393867902544084"
+  },
+  {
+   "key": "2026-11-10|character:char:124576|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:124576",
+   "title": "Laid-Back Camp",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:124576",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794292132367,
+   "status": "claimed"
   }
  ],
  "health": {
