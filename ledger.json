@@ -26697,6 +26697,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119456053503689",
    "commentId": "122119456053503689_4480421355550887"
+  },
+  {
+   "key": "2026-11-10|character:char:166103|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:166103",
+   "title": "Talentless Nana",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:166103",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794306817358,
+   "status": "claimed"
   }
  ],
  "health": {
