@@ -27893,6 +27893,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119513563503689",
    "commentId": "122119513563503689_987614081084872"
+  },
+  {
+   "key": "2026-11-10|where:146234|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:146234",
+   "title": "My One-Hit Kill Sister",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "146234",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794314866517,
+   "status": "claimed"
   }
  ],
  "health": {
