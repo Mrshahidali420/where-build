@@ -22351,6 +22351,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119286835503689",
    "commentId": "122119286835503689_2926151841086491"
+  },
+  {
+   "key": "2026-11-09|character:char:22054|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:22054",
+   "title": "Owarimonogatari",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:22054",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794277600224,
+   "status": "claimed"
   }
  ],
  "health": {
