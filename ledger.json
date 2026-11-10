@@ -25407,6 +25407,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119405815503689",
    "commentId": "122119405815503689_2018361065526201"
+  },
+  {
+   "key": "2026-11-10|where:210031|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:210031",
+   "title": "You and I Are Polar Opposites Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "210031",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794298139006,
+   "status": "claimed"
   }
  ],
  "health": {
