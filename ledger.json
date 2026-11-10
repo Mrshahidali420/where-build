@@ -22023,6 +22023,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119273617503689",
    "commentId": "122119273617503689_3397512093782479"
+  },
+  {
+   "key": "2026-11-09|where:10163|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:10163",
+   "title": "[C] - CONTROL - The Money and Soul of Possibility",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "10163",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794275405119,
+   "status": "claimed"
   }
  ],
  "health": {
