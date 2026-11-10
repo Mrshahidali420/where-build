@@ -22661,6 +22661,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119297719503689",
    "commentId": "122119297719503689_1111392678477904"
+  },
+  {
+   "key": "2026-11-09|where:442|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:442",
+   "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "442",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794279664389,
+   "status": "claimed"
   }
  ],
  "health": {
