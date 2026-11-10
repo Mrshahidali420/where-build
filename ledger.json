@@ -22005,6 +22005,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119272717503689",
    "commentId": "122119272717503689_1466338545431008"
+  },
+  {
+   "key": "2026-11-09|character:char:89068|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:89068",
+   "title": "Rokka -Braves of the Six Flowers-",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89068",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794275283829,
+   "status": "claimed"
   }
  ],
  "health": {
