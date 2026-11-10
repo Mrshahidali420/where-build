@@ -25101,6 +25101,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119393695503689",
    "commentId": "122119393695503689_1682356513240629"
+  },
+  {
+   "key": "2026-11-10|where:162985|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:162985",
+   "title": "Metallic Rouge",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "162985",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794296043041,
+   "status": "claimed"
   }
  ],
  "health": {
