@@ -26949,6 +26949,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119469445503689",
    "commentId": "122119469445503689_1067445916349645"
+  },
+  {
+   "key": "2026-11-10|where:101239|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:101239",
+   "title": "Ahiru no Sora",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "101239",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794308538091,
+   "status": "claimed"
   }
  ],
  "health": {
