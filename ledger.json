@@ -22607,6 +22607,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119295883503689",
    "commentId": "122119295883503689_1186134663768440"
+  },
+  {
+   "key": "2026-11-09|character:char:121703|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:121703",
+   "title": "Aharen-san wa Hakarenai",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:121703",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794279299081,
+   "status": "claimed"
   }
  ],
  "health": {
