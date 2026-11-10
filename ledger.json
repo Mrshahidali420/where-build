@@ -28230,14 +28230,28 @@
   }
  ],
  "health": {
-  "signals": [],
+  "signals": [
+   {
+    "at": 1794316955022,
+    "kind": "block",
+    "code": 368,
+    "note": "POST /1329988470202923_122119526853503689/comments failed: We limit how often you can post, comment or do other things in a given amount of time in order to hel",
+    "reached": 577,
+    "usage": 1
+   }
+  ],
   "peak": {
    "pct": 1,
    "source": "x-business-use-case-usage",
    "at": 1794283464312
   },
-  "cut": null,
-  "blockedUntil": 0,
+  "cut": {
+   "cap": 432,
+   "reached": 577,
+   "perDay": 720,
+   "at": 1794316955022
+  },
+  "blockedUntil": 1794403355022,
   "halted": null,
   "reel": {
    "at": 1794257243475,
