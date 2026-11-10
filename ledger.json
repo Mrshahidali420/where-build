@@ -28001,6 +28001,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119517997503689",
    "commentId": "122119517997503689_1605994887435448"
+  },
+  {
+   "key": "2026-11-10|where:9135|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:9135",
+   "title": "Fullmetal Alchemist: The Sacred Star of Milos",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "9135",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794315592702,
+   "status": "claimed"
   }
  ],
  "health": {
