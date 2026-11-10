@@ -24445,6 +24445,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119365915503689",
    "commentId": "122119365915503689_1704222621064069"
+  },
+  {
+   "key": "2026-11-10|character:char:191241|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:191241",
+   "title": "Blue Box",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:191241",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794291645805,
+   "status": "claimed"
   }
  ],
  "health": {
