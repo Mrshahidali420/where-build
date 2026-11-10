@@ -27785,6 +27785,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119508571503689",
    "commentId": "122119508571503689_1271800305844455"
+  },
+  {
+   "key": "2026-11-10|where:189987|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:189987",
+   "title": "The Klutzy Class Monitor and the Girl with the Short Skirt",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "189987",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794314140507,
+   "status": "claimed"
   }
  ],
  "health": {
