@@ -23977,6 +23977,22 @@
     "id": "17958314439278265",
     "at": 1794288333163
    }
+  },
+  {
+   "key": "2026-11-10|episode:200294:6|whereanime",
+   "day": "2026-11-10",
+   "slug": "episode:200294:6",
+   "title": "Super Psychic Policeman Chojo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "200294:6",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794288454416,
+   "status": "claimed"
   }
  ],
  "health": {
