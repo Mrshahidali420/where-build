@@ -26297,6 +26297,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119440495503689",
    "commentId": "122119440495503689_1819219022600498"
+  },
+  {
+   "key": "2026-11-10|where:105807|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:105807",
+   "title": "7SEEDS",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "105807",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794304114469,
+   "status": "claimed"
   }
  ],
  "health": {
