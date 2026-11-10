@@ -21461,6 +21461,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119253331503689",
    "commentId": "122119253331503689_1155560860193009"
+  },
+  {
+   "key": "2026-11-09|character:char:136977|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:136977",
+   "title": "Bottom-Tier Character Tomozaki",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:136977",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794271633582,
+   "status": "claimed"
   }
  ],
  "health": {
