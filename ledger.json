@@ -25951,6 +25951,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119426371503689",
    "commentId": "122119426371503689_3036624156700499"
+  },
+  {
+   "key": "2026-11-10|character:char:313120|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:313120",
+   "title": "The Wrong Way to Use Healing Magic",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:313120",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794301805177,
+   "status": "claimed"
   }
  ],
  "health": {
