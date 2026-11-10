@@ -22387,6 +22387,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119288641503689",
    "commentId": "122119288641503689_2237291453800083"
+  },
+  {
+   "key": "2026-11-09|character:char:74850|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:74850",
+   "title": "Tamako Market",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:74850",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794277842693,
+   "status": "claimed"
   }
  ],
  "health": {
