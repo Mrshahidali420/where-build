@@ -22733,6 +22733,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119300479503689",
    "commentId": "122119300479503689_1531463485781163"
+  },
+  {
+   "key": "2026-11-09|where:20514|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:20514",
+   "title": "PSYCHO-PASS: The Movie",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20514",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794280150861,
+   "status": "claimed"
   }
  ],
  "health": {
