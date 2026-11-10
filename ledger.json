@@ -22099,6 +22099,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119276329503689",
    "commentId": "122119276329503689_1671016688027174"
+  },
+  {
+   "key": "2026-11-09|where:156040|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:156040",
+   "title": "The Most Heretical Last Boss Queen: From Villainess to Savior",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "156040",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794275889533,
+   "status": "claimed"
   }
  ],
  "health": {
