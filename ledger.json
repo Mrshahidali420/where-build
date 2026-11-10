@@ -27403,6 +27403,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119487481503689",
    "commentId": "122119487481503689_4686505165005032"
+  },
+  {
+   "key": "2026-11-10|where:98514|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:98514",
+   "title": "Umamusume: Pretty Derby",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "98514",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794311585444,
+   "status": "claimed"
   }
  ],
  "health": {
