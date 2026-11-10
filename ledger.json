@@ -24031,6 +24031,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119348125503689",
    "commentId": "122119348125503689_1505050564805374"
+  },
+  {
+   "key": "2026-11-10|where:4722|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:4722",
+   "title": "Skip Beat!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "4722",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794288818111,
+   "status": "claimed"
   }
  ],
  "health": {
