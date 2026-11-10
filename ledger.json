@@ -27583,6 +27583,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119500639503689",
    "commentId": "122119500639503689_1162510636204178"
+  },
+  {
+   "key": "2026-11-10|where:153360|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:153360",
+   "title": "Reborn as a Vending Machine, I Now Wander the Dungeon",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "153360",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794312794344,
+   "status": "claimed"
   }
  ],
  "health": {
