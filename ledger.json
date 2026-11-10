@@ -23151,6 +23151,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119315749503689",
    "commentId": "122119315749503689_1680714026836496"
+  },
+  {
+   "key": "2026-11-09|where:114862|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:114862",
+   "title": "Log Horizon: Destruction of the Round Table",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "114862",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794282962626,
+   "status": "claimed"
   }
  ],
  "health": {
