@@ -27457,6 +27457,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119489461503689",
    "commentId": "122119489461503689_1180451291312689"
+  },
+  {
+   "key": "2026-11-10|character:char:88573|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:88573",
+   "title": "Re:ZERO -Starting Life in Another World- OVAs",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:88573",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794311948110,
+   "status": "claimed"
   }
  ],
  "health": {
