@@ -23625,6 +23625,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119333767503689",
    "commentId": "122119333767503689_2549595472228237"
+  },
+  {
+   "key": "2026-11-09|where:113950|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:113950",
+   "title": "SSSS.DYNAZENON",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "113950",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794286130670,
+   "status": "claimed"
   }
  ],
  "health": {
