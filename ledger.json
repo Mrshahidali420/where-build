@@ -23193,6 +23193,22 @@
    "at": 1794283083746,
    "status": "posted",
    "postId": "1329988470202923_122119316829503689"
+  },
+  {
+   "key": "2026-11-09|character:char:89168|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:89168",
+   "title": "Dagashi Kashi",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89168",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794283204948,
+   "status": "claimed"
   }
  ],
  "health": {
