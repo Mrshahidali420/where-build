@@ -24701,6 +24701,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119377465503689",
    "commentId": "122119377465503689_4056005721374412"
+  },
+  {
+   "key": "2026-11-10|scenes:21698:2|whereanime",
+   "day": "2026-11-10",
+   "slug": "scenes:21698:2",
+   "title": "HAIKYU!! 3rd Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "21698:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794293368755,
+   "status": "claimed"
   }
  ],
  "health": {
