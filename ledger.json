@@ -21933,6 +21933,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119270083503689",
    "commentId": "122119270083503689_1113849048139365"
+  },
+  {
+   "key": "2026-11-09|character:char:2154|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:2154",
+   "title": "Paranoia Agent",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:2154",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794274798837,
+   "status": "claimed"
   }
  ],
  "health": {
