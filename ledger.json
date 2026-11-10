@@ -24103,6 +24103,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119351383503689",
    "commentId": "122119351383503689_1584025706860716"
+  },
+  {
+   "key": "2026-11-10|where:120|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:120",
+   "title": "Fruits Basket",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "120",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794289303142,
+   "status": "claimed"
   }
  ],
  "health": {
