@@ -25753,6 +25753,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119418433503689",
    "commentId": "122119418433503689_957846163793055"
+  },
+  {
+   "key": "2026-11-10|character:char:49631|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:49631",
+   "title": "Accel World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:49631",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794300447710,
+   "status": "claimed"
   }
  ],
  "health": {
