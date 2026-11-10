@@ -25735,6 +25735,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119417923503689",
    "commentId": "122119417923503689_1604509211481019"
+  },
+  {
+   "key": "2026-11-10|where:18179|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:18179",
+   "title": "Yowamushi Pedal",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "18179",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794300326243,
+   "status": "claimed"
   }
  ],
  "health": {
