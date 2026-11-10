@@ -24211,6 +24211,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119356753503689",
    "commentId": "122119356753503689_1844778163538951"
+  },
+  {
+   "key": "2026-11-10|where:164244|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:164244",
+   "title": "The Foolish Angel Dances with the Devil",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "164244",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794290065378,
+   "status": "claimed"
   }
  ],
  "health": {
