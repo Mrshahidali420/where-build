@@ -25663,6 +25663,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119414893503689",
    "commentId": "122119414893503689_1843082946999344"
+  },
+  {
+   "key": "2026-11-10|where:2144|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:2144",
+   "title": "Naruto the Movie: Guardians of the Crescent Moon Kingdom",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "2144",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794299840026,
+   "status": "claimed"
   }
  ],
  "health": {
