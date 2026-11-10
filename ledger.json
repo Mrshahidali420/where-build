@@ -26985,6 +26985,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119471203503689",
    "commentId": "122119471203503689_1136273435660020"
+  },
+  {
+   "key": "2026-11-10|where:116867|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:116867",
+   "title": "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "116867",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794308781384,
+   "status": "claimed"
   }
  ],
  "health": {
