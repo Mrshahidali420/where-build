@@ -22913,6 +22913,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119306731503689",
    "commentId": "122119306731503689_1840597567120830"
+  },
+  {
+   "key": "2026-11-09|character:char:22052|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:22052",
+   "title": "Owarimonogatari Second Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:22052",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794281386378,
+   "status": "claimed"
   }
  ],
  "health": {
