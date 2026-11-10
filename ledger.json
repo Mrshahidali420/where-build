@@ -23499,6 +23499,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119329021503689",
    "commentId": "122119329021503689_1872611494096088"
+  },
+  {
+   "key": "2026-11-09|character:char:149676|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:149676",
+   "title": "Keep Your Hands Off Eizouken!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:149676",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794285282289,
+   "status": "claimed"
   }
  ],
  "health": {
