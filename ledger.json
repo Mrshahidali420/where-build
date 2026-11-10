@@ -23283,6 +23283,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119319937503689",
    "commentId": "122119319937503689_1444088697189198"
+  },
+  {
+   "key": "2026-11-09|where:20725|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:20725",
+   "title": "Kuroko's Basketball 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "20725",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794283811773,
+   "status": "claimed"
   }
  ],
  "health": {
