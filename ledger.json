@@ -27295,6 +27295,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119483983503689",
    "commentId": "122119483983503689_1903762387278977"
+  },
+  {
+   "key": "2026-11-10|where:166216|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:166216",
+   "title": "The Dangers in My Heart Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "166216",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794310860068,
+   "status": "claimed"
   }
  ],
  "health": {
