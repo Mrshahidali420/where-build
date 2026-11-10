@@ -21807,6 +21807,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119265115503689",
    "commentId": "122119265115503689_1466755925550925"
+  },
+  {
+   "key": "2026-11-09|where:16918|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:16918",
+   "title": "Silver Spoon",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "16918",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794273950184,
+   "status": "claimed"
   }
  ],
  "health": {
