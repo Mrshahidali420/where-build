@@ -24557,6 +24557,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119371405503689",
    "commentId": "122119371405503689_1806009173882037"
+  },
+  {
+   "key": "2026-11-10|character:char:121812|whereanime",
+   "day": "2026-11-10",
+   "slug": "character:char:121812",
+   "title": "Tsukigakirei",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:121812",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794292375252,
+   "status": "claimed"
   }
  ],
  "health": {
