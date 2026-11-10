@@ -22153,6 +22153,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119278567503689",
    "commentId": "122119278567503689_30349487621318136"
+  },
+  {
+   "key": "2026-11-09|character:char:48997|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:48997",
+   "title": "Oreshura",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:48997",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794276253184,
+   "status": "claimed"
   }
  ],
  "health": {
