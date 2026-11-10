@@ -27331,6 +27331,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119485081503689",
    "commentId": "122119485081503689_1636191428216078"
+  },
+  {
+   "key": "2026-11-10|where:179885|whereanime",
+   "day": "2026-11-10",
+   "slug": "where:179885",
+   "title": "Scooped Up by an S-Rank Adventurer!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "179885",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794311101954,
+   "status": "claimed"
   }
  ],
  "health": {
