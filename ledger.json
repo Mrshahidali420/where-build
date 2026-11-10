@@ -21753,6 +21753,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119263273503689",
    "commentId": "122119263273503689_1445313395337791"
+  },
+  {
+   "key": "2026-11-09|character:char:140637|whereanime",
+   "day": "2026-11-09",
+   "slug": "character:char:140637",
+   "title": "Record of Ragnarok",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:140637",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794273586494,
+   "status": "claimed"
   }
  ],
  "health": {
