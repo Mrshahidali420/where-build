@@ -22333,6 +22333,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119286055503689",
    "commentId": "122119286055503689_1687662076319180"
+  },
+  {
+   "key": "2026-11-09|where:209983|whereanime",
+   "day": "2026-11-09",
+   "slug": "where:209983",
+   "title": "HELL MODE: The Hardcore Gamer Dominates in Another World with Garbage Balancing Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "209983",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794277478993,
+   "status": "claimed"
   }
  ],
  "health": {
