@@ -26602,7 +26602,11 @@
    "at": 1794306087893,
    "status": "posted",
    "postId": "1329988470202923_122119452021503689",
-   "commentId": "122119452021503689_1156107970086855"
+   "commentId": "122119452021503689_1156107970086855",
+   "ig": {
+    "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
+    "at": 1794306087893
+   }
   }
  ],
  "health": {
