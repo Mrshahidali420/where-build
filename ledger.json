@@ -28250,6 +28250,29 @@
     "id": "18153937963549001",
     "at": 1794403400450
    }
+  },
+  {
+   "share": true,
+   "key": "2026-11-11|share:1143489075258596|whereanime",
+   "day": "2026-11-11",
+   "slug": "share:1143489075258596",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1143489075258596",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1143489075258596",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": null,
+   "sourceFormat": "reel:reel-ranking",
+   "link": "https://www.facebook.com/reel/1143489075258596",
+   "message": "Worth a look from our sister Page, Manhwa Index:",
+   "at": 1794403521407,
+   "status": "claimed"
   }
  ],
  "health": {
