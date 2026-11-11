@@ -28880,6 +28880,22 @@
    "status": "posted",
    "postId": "1268364192165600",
    "commentId": "1268364192165600_3685728858258629"
+  },
+  {
+   "key": "2026-11-11|birthday:bday:62|whereanime",
+   "day": "2026-11-11",
+   "slug": "birthday:bday:62",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:birthday",
+   "type": "birthday",
+   "item": "bday:62",
+   "gapDays": 330,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794418769045,
+   "status": "claimed"
   }
  ],
  "health": {
