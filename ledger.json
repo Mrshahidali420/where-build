@@ -28803,6 +28803,22 @@
    "status": "posted",
    "postId": "1714283996976738",
    "commentId": "1714283996976738_1456999509695218"
+  },
+  {
+   "key": "2026-11-11|fact:fact:116673:popular|whereanime",
+   "day": "2026-11-11",
+   "slug": "fact:fact:116673:popular",
+   "title": "BURN THE WITCH",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:116673:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794417146139,
+   "status": "claimed"
   }
  ],
  "health": {
