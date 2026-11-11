@@ -28862,6 +28862,22 @@
     "id": "18027192458936685",
     "at": 1794417953041
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-red-river-e19-whereanime-02:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-red-river-e19-whereanime-02:full",
+   "title": "Red River",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-red-river-e19-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794418228047,
+   "status": "claimed"
   }
  ],
  "health": {
