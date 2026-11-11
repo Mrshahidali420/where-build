@@ -28441,6 +28441,22 @@
    "status": "posted",
    "postId": "1535111801984209",
    "commentId": "1535111801984209_1143378864759511"
+  },
+  {
+   "key": "2026-11-11|out-now:176314:6:out|whereanime",
+   "day": "2026-11-11",
+   "slug": "out-now:176314:6:out",
+   "title": "Sasaki and Peeps Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "176314:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794408412440,
+   "status": "claimed"
   }
  ],
  "health": {
