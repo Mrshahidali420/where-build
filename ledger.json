@@ -28346,6 +28346,22 @@
    "status": "posted",
    "postId": "1744384626633701",
    "commentId": "1744384626633701_1643970160606514"
+  },
+  {
+   "key": "2026-11-11|out-now:152677:6:out|whereanime",
+   "day": "2026-11-11",
+   "slug": "out-now:152677:6:out",
+   "title": "The Detective Is Already Dead Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "152677:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794406227238,
+   "status": "claimed"
   }
  ],
  "health": {
