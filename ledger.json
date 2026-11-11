@@ -28631,6 +28631,22 @@
    "status": "posted",
    "postId": "4511413979097576",
    "commentId": "4511413979097576_1135052956167269"
+  },
+  {
+   "key": "2026-11-11|out-now:172192:6:out|whereanime",
+   "day": "2026-11-11",
+   "slug": "out-now:172192:6:out",
+   "title": "A Returner's Magic Should be Special Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "172192:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794412787463,
+   "status": "claimed"
   }
  ],
  "health": {
