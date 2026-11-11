@@ -29171,6 +29171,22 @@
    "status": "posted",
    "postId": "1665725094958470",
    "commentId": "1665725094958470_1164677962615235"
+  },
+  {
+   "key": "2026-11-11|fact:fact:159074:rated|whereanime",
+   "day": "2026-11-11",
+   "slug": "fact:fact:159074:rated",
+   "title": "After-school Hanako-kun",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:159074:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794425857152,
+   "status": "claimed"
   }
  ],
  "health": {
