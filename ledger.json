@@ -29384,6 +29384,22 @@
    "status": "posted",
    "postId": "1329988470202923_122119978389503689",
    "commentId": "122119978389503689_1531095172190315"
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-a-returner-s-magic-should-be-special-season-2-e06-whereanime-02:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-a-returner-s-magic-should-be-special-season-2-e06-whereanime-02:full",
+   "title": "A Returner's Magic Should be Special Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-a-returner-s-magic-should-be-special-season-2-e06-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794436367778,
+   "status": "claimed"
   }
  ],
  "health": {
