@@ -29585,6 +29585,22 @@
    "status": "posted",
    "postId": "1453907931135752",
    "commentId": "1453907931135752_1840129547037065"
+  },
+  {
+   "key": "2026-11-11|fact:fact:101344:rated|whereanime",
+   "day": "2026-11-11",
+   "slug": "fact:fact:101344:rated",
+   "title": "Made in Abyss: Wandering Twilight",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:101344:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794440724200,
+   "status": "claimed"
   }
  ],
  "health": {
