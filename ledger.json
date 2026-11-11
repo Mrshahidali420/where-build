@@ -28703,6 +28703,22 @@
    "status": "posted",
    "postId": "1823750895530841",
    "commentId": "1823750895530841_1753781742392495"
+  },
+  {
+   "key": "2026-11-11|premiere:157330|whereanime",
+   "day": "2026-11-11",
+   "slug": "premiere:157330",
+   "title": "Rakuen Tsuihou: Kokoro no Resonance",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:premiere",
+   "type": "premiere",
+   "item": "157330",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794414951133,
+   "status": "claimed"
   }
  ],
  "health": {
