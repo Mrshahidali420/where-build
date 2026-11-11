@@ -28980,6 +28980,29 @@
     "id": "17886376473523032",
     "at": 1794420834092
    }
+  },
+  {
+   "share": true,
+   "key": "2026-11-11|share:1544028164200843|whereanime",
+   "day": "2026-11-11",
+   "slug": "share:1544028164200843",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1544028164200843",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1544028164200843",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "The Devil Never Cries",
+   "sourceFormat": "reel:reel-next",
+   "link": "https://www.facebook.com/reel/1544028164200843",
+   "message": "Seen this yet? From our sister Page, Manhwa Index:",
+   "at": 1794420962563,
+   "status": "claimed"
   }
  ],
  "health": {
