@@ -28744,6 +28744,22 @@
     "id": "18122833154067059",
     "at": 1794415072039
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-magical-girl-raising-project-restart-e06-whereanime-02:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-magical-girl-raising-project-restart-e06-whereanime-02:full",
+   "title": "MAGICAL GIRL RAISING PROJECT restart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-magical-girl-raising-project-restart-e06-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794415492160,
+   "status": "claimed"
   }
  ],
  "health": {
