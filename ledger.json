@@ -29135,6 +29135,22 @@
    "status": "posted",
    "postId": "1852291912792364",
    "commentId": "1852291912792364_1789842778765263"
+  },
+  {
+   "key": "2026-11-11|where:201903|whereanime",
+   "day": "2026-11-11",
+   "slug": "where:201903",
+   "title": "Cosmic Princess Kaguya!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "201903",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794424775178,
+   "status": "claimed"
   }
  ],
  "health": {
