@@ -28260,48 +28260,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-10",
-  "at": 1794288193414,
+  "day": "2026-11-11",
+  "at": 1794403355589,
   "list": [
    {
-    "id": 71609,
-    "name": "Tadashi Yamaguchi",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b71609-5Ht0aqB34eEa.png",
-    "favourites": 2646,
-    "mediaId": 20464,
-    "voice": "Souma Saitou"
+    "id": 62,
+    "name": "Zoro Roronoa",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b62-S7oAeA9WInjV.png",
+    "favourites": 28854,
+    "mediaId": 21,
+    "voice": "Kazuya Nakai"
    },
    {
-    "id": 154751,
-    "name": "Shiki Tademaru",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b154751-2KiPCiI7G431.png",
-    "favourites": 356,
-    "mediaId": 114085,
-    "voice": "Natsuki Hanae"
+    "id": 10010,
+    "name": "Kiritsugu Emiya",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b10010-fNspzan5MzNk.png",
+    "favourites": 6850,
+    "mediaId": 10087,
+    "voice": "Rikiya Koyama"
    },
    {
-    "id": 215082,
-    "name": "Sarasa Watanabe",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b215082-TR09CcCMN82H.png",
-    "favourites": 289,
-    "mediaId": 125446,
-    "voice": "Sayaka Senbongi"
+    "id": 2423,
+    "name": "Jiraiya",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b2423-RO5MyoXSA9OL.png",
+    "favourites": 6696,
+    "mediaId": 20,
+    "voice": "Houchuu Ootsuka"
    },
    {
-    "id": 289297,
-    "name": "Eta",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b289297-e2DgfeWhVPRa.jpg",
-    "favourites": 289,
-    "mediaId": 130298,
-    "voice": "Reina Kondou"
+    "id": 21173,
+    "name": "Azusa Nakano",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b21173-0RB5dOJdGt9y.png",
+    "favourites": 4249,
+    "mediaId": 5680,
+    "voice": "Ayana Taketatsu"
    },
    {
-    "id": 124148,
-    "name": "Gin Minowa",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b124148-H8l9zsZ5NuzF.png",
-    "favourites": 142,
-    "mediaId": 100791,
-    "voice": "Yumiri Hanamori"
+    "id": 158734,
+    "name": "Mash Burnedead",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b158734-k8FAVIyXKdW1.jpg",
+    "favourites": 3495,
+    "mediaId": 151801,
+    "voice": "Chiaki Kobayashi"
    }
   ]
  },
