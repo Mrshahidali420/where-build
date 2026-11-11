@@ -29366,6 +29366,22 @@
    "status": "posted",
    "postId": "1433808195598658",
    "commentId": "1433808195598658_1629630608910847"
+  },
+  {
+   "key": "2026-11-11|character:char:13783|whereanime",
+   "day": "2026-11-11",
+   "slug": "character:char:13783",
+   "title": "Natsume's Book of Friends Season 1",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:13783",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794435826497,
+   "status": "claimed"
   }
  ],
  "health": {
