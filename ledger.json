@@ -28310,6 +28310,22 @@
    "status": "posted",
    "postId": "1617463803458383",
    "commentId": "1617463803458383_1437122581964105"
+  },
+  {
+   "key": "2026-11-11|rating:tt50436983|whereanime",
+   "day": "2026-11-11",
+   "slug": "rating:tt50436983",
+   "title": "Dragon Ball Super: Beerus",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:rating",
+   "type": "rating",
+   "item": "tt50436983",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794405145059,
+   "status": "claimed"
   }
  ],
  "health": {
