@@ -29022,6 +29022,22 @@
    "status": "posted",
    "postId": "4624655334485880",
    "commentId": "4624655334485880_1714808900272723"
+  },
+  {
+   "key": "2026-11-11|character:char:161678|whereanime",
+   "day": "2026-11-11",
+   "slug": "character:char:161678",
+   "title": "Seirei Gensouki: Spirit Chronicles",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:161678",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794422044674,
+   "status": "claimed"
   }
  ],
  "health": {
