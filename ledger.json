@@ -28518,6 +28518,22 @@
    "status": "posted",
    "postId": "2616787795487066",
    "commentId": "2616787795487066_2389146121829170"
+  },
+  {
+   "key": "2026-11-11|out-now:178868:6:out|whereanime",
+   "day": "2026-11-11",
+   "slug": "out-now:178868:6:out",
+   "title": "Magic Knight Rayearth (2026)",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "178868:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794410050103,
+   "status": "claimed"
   }
  ],
  "health": {
