@@ -28477,6 +28477,23 @@
    "status": "posted",
    "postId": "2212082752703989",
    "commentId": "2212082752703989_1682964416561562"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-11|clip-reel:clip-uncle-s-obsession-with-cute-things-e06-whereanime-03:short|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-reel:clip-uncle-s-obsession-with-cute-things-e06-whereanime-03:short",
+   "title": "Uncle's Obsession with Cute Things",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-uncle-s-obsession-with-cute-things-e06-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794409229239,
+   "status": "claimed"
   }
  ],
  "health": {
