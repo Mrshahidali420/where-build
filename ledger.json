@@ -28839,6 +28839,23 @@
    "status": "posted",
    "postId": "1607738080540477",
    "commentId": "1607738080540477_2268395997415183"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-11|clip-reel:clip-super-psychic-policeman-chojo-e06-whereanime-03:short|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-reel:clip-super-psychic-policeman-chojo-e06-whereanime-03:short",
+   "title": "Super Psychic Policeman Chojo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-super-psychic-policeman-chojo-e06-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794417953041,
+   "status": "claimed"
   }
  ],
  "health": {
