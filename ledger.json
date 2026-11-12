@@ -31291,6 +31291,22 @@
    "status": "posted",
    "postId": "1463096865888590",
    "commentId": "1463096865888590_1704714274591902"
+  },
+  {
+   "key": "2026-11-12|character:char:69437|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:69437",
+   "title": "Problem Children Are Coming From Another World, Aren't They?",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:69437",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794481412653,
+   "status": "claimed"
   }
  ],
  "health": {
