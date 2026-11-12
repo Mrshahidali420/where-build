@@ -30325,6 +30325,22 @@
    "status": "posted",
    "postId": "29083328937976207",
    "commentId": "29083328937976207_1886898766005163"
+  },
+  {
+   "key": "2026-11-11|fact:fact:99634:popular|whereanime",
+   "day": "2026-11-11",
+   "slug": "fact:fact:99634:popular",
+   "title": "Attack on Titan: Lost Girls",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:99634:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794458229614,
+   "status": "claimed"
   }
  ],
  "health": {
