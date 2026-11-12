@@ -31856,6 +31856,23 @@
    "status": "posted",
    "postId": "1152811633950942",
    "commentId": "1152811633950942_1654774982498962"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-12|clip-reel:clip-a-returner-s-magic-should-be-special-season-2-e05-whereanime-03:short|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-reel:clip-a-returner-s-magic-should-be-special-season-2-e05-whereanime-03:short",
+   "title": "A Returner's Magic Should be Special Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-a-returner-s-magic-should-be-special-season-2-e05-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794495226947,
+   "status": "claimed"
   }
  ],
  "health": {
