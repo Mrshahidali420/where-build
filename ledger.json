@@ -31636,7 +31636,12 @@
    "at": 1794489464138,
    "status": "posted",
    "postId": "29248089754799975",
-   "commentId": "29248089754799975_2102126987175354"
+   "commentId": "29248089754799975_2102126987175354",
+   "story": {
+    "at": 1794489464138,
+    "fb": "2325741261537784",
+    "igError": "the Instagram reel upload failed: HTTP 400 Request processing failed"
+   }
   }
  ],
  "health": {
