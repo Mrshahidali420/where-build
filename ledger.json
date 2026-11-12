@@ -29834,6 +29834,22 @@
    "status": "posted",
    "postId": "2003190707025740",
    "commentId": "2003190707025740_1819438652494507"
+  },
+  {
+   "key": "2026-11-11|where:131680|whereanime",
+   "day": "2026-11-11",
+   "slug": "where:131680",
+   "title": "Black Clover: Sword of the Wizard King",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "131680",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794446731435,
+   "status": "claimed"
   }
  ],
  "health": {
