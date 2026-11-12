@@ -31702,6 +31702,22 @@
    "status": "posted",
    "postId": "1116056964369989",
    "commentId": "1116056964369989_1159319680000182"
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-mission-yozakura-family-season-2-part-2-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-mission-yozakura-family-season-2-part-2-e05-whereanime-01:full",
+   "title": "Mission: Yozakura Family Season 2 Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-mission-yozakura-family-season-2-part-2-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794491508000,
+   "status": "claimed"
   }
  ],
  "health": {
