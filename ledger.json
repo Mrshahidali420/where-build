@@ -30510,6 +30510,22 @@
    "status": "posted",
    "postId": "1793157772821880",
    "commentId": "1793157772821880_2134310977207749"
+  },
+  {
+   "key": "2026-11-12|episode:206401:7|whereanime",
+   "day": "2026-11-12",
+   "slug": "episode:206401:7",
+   "title": "FX Fighter Kurumi-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "206401:7",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794463150252,
+   "status": "claimed"
   }
  ],
  "health": {
