@@ -32714,6 +32714,23 @@
    "status": "posted",
    "postId": "28533050736372788",
    "commentId": "28533050736372788_1926785025148834"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-12|clip-reel:clip-the-iceblade-sorcerer-shall-rule-the-world-ii-e06-whereanime-02:short|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-reel:clip-the-iceblade-sorcerer-shall-rule-the-world-ii-e06-whereanime-02:short",
+   "title": "The Iceblade Sorcerer Shall Rule the World II",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-the-iceblade-sorcerer-shall-rule-the-world-ii-e06-whereanime-02:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794515607624,
+   "status": "claimed"
   }
  ],
  "health": {
