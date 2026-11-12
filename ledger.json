@@ -31766,6 +31766,22 @@
     "fb": "1163087622825940",
     "igError": "the Instagram reel upload failed: HTTP 400 Request processing failed"
    }
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-the-apothecary-diaries-season-3-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-the-apothecary-diaries-season-3-e05-whereanime-01:full",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-the-apothecary-diaries-season-3-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794492590698,
+   "status": "claimed"
   }
  ],
  "health": {
