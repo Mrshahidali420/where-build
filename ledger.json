@@ -30507,48 +30507,48 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-11",
-  "at": 1794403355589,
+  "day": "2026-11-12",
+  "at": 1794462040541,
   "list": [
    {
-    "id": 62,
-    "name": "Zoro Roronoa",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b62-S7oAeA9WInjV.png",
-    "favourites": 28854,
-    "mediaId": 21,
-    "voice": "Kazuya Nakai"
+    "id": 120335,
+    "name": "Ann Takamaki",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b120335-122Vh3RaM4ZK.png",
+    "favourites": 755,
+    "mediaId": 99693,
+    "voice": "Nana Mizuki"
    },
    {
-    "id": 10010,
-    "name": "Kiritsugu Emiya",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b10010-fNspzan5MzNk.png",
-    "favourites": 6850,
-    "mediaId": 10087,
-    "voice": "Rikiya Koyama"
+    "id": 311243,
+    "name": "Tasuku Tsubakino",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b311243-HwLsSTluPcL7.jpg",
+    "favourites": 496,
+    "mediaId": 163270,
+    "voice": null
    },
    {
-    "id": 2423,
-    "name": "Jiraiya",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b2423-RO5MyoXSA9OL.png",
-    "favourites": 6696,
-    "mediaId": 20,
-    "voice": "Houchuu Ootsuka"
+    "id": 262902,
+    "name": "Akito Shinonome",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b262902-O8qhGrWnVkqM.png",
+    "favourites": 334,
+    "mediaId": 179878,
+    "voice": "Fumiya Imai"
    },
    {
-    "id": 21173,
-    "name": "Azusa Nakano",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b21173-0RB5dOJdGt9y.png",
-    "favourites": 4249,
-    "mediaId": 5680,
-    "voice": "Ayana Taketatsu"
+    "id": 13887,
+    "name": "Shuuichi Natori",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b13887-YNOjDFZOaS79.png",
+    "favourites": 200,
+    "mediaId": 4081,
+    "voice": "Akira Ishida"
    },
    {
-    "id": 158734,
-    "name": "Mash Burnedead",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b158734-k8FAVIyXKdW1.jpg",
-    "favourites": 3495,
-    "mediaId": 151801,
-    "voice": "Chiaki Kobayashi"
+    "id": 78121,
+    "name": "Mika Jougasaki",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b78121-QLKIdJBjSawx.jpg",
+    "favourites": 164,
+    "mediaId": 20693,
+    "voice": "Haruka Yoshimura"
    }
   ]
  },
