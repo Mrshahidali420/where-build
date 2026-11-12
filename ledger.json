@@ -29934,6 +29934,22 @@
     "id": "18211014613373201",
     "at": 1794448651732
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-super-psychic-policeman-chojo-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-super-psychic-policeman-chojo-e06-whereanime-01:full",
+   "title": "Super Psychic Policeman Chojo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-super-psychic-policeman-chojo-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794448896883,
+   "status": "claimed"
   }
  ],
  "health": {
