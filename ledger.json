@@ -32238,6 +32238,22 @@
     "id": "18442703866183795",
     "at": 1794503871819
    }
+  },
+  {
+   "key": "2026-11-12|fact:fact:104461:rated|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:104461:rated",
+   "title": "ROOM CAMP",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:104461:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794503994017,
+   "status": "claimed"
   }
  ],
  "health": {
