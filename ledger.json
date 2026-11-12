@@ -31036,6 +31036,22 @@
     "fb": "4568064806844962",
     "ig": "18029281682872164"
    }
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-the-apothecary-diaries-season-3-e05-whereanime-03:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-the-apothecary-diaries-season-3-e05-whereanime-03:full",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-the-apothecary-diaries-season-3-e05-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794475195508,
+   "status": "claimed"
   }
  ],
  "health": {
