@@ -30142,6 +30142,22 @@
    "status": "posted",
    "postId": "1118488011049580",
    "commentId": "1118488011049580_1813483219930222"
+  },
+  {
+   "key": "2026-11-11|scenes:166610:2|whereanime",
+   "day": "2026-11-11",
+   "slug": "scenes:166610:2",
+   "title": "MASHLE: MAGIC AND MUSCLES Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "166610:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794454411025,
+   "status": "claimed"
   }
  ],
  "health": {
