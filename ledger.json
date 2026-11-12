@@ -31327,6 +31327,22 @@
    "status": "posted",
    "postId": "1553586769864245",
    "commentId": "1553586769864245_1016265291510444"
+  },
+  {
+   "key": "2026-11-12|where:169583|whereanime",
+   "day": "2026-11-12",
+   "slug": "where:169583",
+   "title": "Oh Boy, Was I Wrong About Her",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "169583",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794482495104,
+   "status": "claimed"
   }
  ],
  "health": {
