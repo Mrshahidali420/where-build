@@ -30047,6 +30047,22 @@
     "id": "18143699653613582",
     "at": 1794451533086
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-firefly-wedding-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-firefly-wedding-e05-whereanime-01:full",
+   "title": "Firefly Wedding",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-firefly-wedding-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794451654353,
+   "status": "claimed"
   }
  ],
  "health": {
