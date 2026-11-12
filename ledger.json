@@ -32827,6 +32827,23 @@
    "status": "posted",
    "postId": "1799852557728640",
    "commentId": "1799852557728640_2731483177288925"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-12|clip-reel:clip-red-river-e18-whereanime-03:short|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-reel:clip-red-river-e18-whereanime-03:short",
+   "title": "Red River",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-red-river-e18-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794518488828,
+   "status": "claimed"
   }
  ],
  "health": {
