@@ -30183,6 +30183,22 @@
     "id": "17957078001037831",
     "at": 1794454532392
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-blue-box-season-2-e05-whereanime-03:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-blue-box-season-2-e05-whereanime-03:full",
+   "title": "Blue Box Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-blue-box-season-2-e05-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794454952351,
+   "status": "claimed"
   }
  ],
  "health": {
