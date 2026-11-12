@@ -30913,6 +30913,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794472019400
    }
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-super-psychic-policeman-chojo-e05-whereanime-02:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-super-psychic-policeman-chojo-e05-whereanime-02:full",
+   "title": "Super Psychic Policeman Chojo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-super-psychic-policeman-chojo-e05-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794472439492,
+   "status": "claimed"
   }
  ],
  "health": {
