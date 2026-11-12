@@ -31479,7 +31479,9 @@
    "titleGap": false,
    "variant": 0,
    "at": 1794485996279,
-   "status": "claimed"
+   "status": "posted",
+   "postId": "3631347730358863",
+   "commentError": "POST /3631347730358863/comments failed: Unsupported post request. Object with ID '3631347730358863' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
   }
  ],
  "health": {
