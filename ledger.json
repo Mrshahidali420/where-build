@@ -32392,6 +32392,29 @@
    "status": "posted",
    "postId": "1329988470202923_122120271297503689",
    "commentId": "122120271297503689_1477351954517154"
+  },
+  {
+   "share": true,
+   "key": "2026-11-12|share:1179049521470195|whereanime",
+   "day": "2026-11-12",
+   "slug": "share:1179049521470195",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1179049521470195",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1179049521470195",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "Devils' Crest",
+   "sourceFormat": "type:clip-video",
+   "link": "https://www.facebook.com/1179049521470195",
+   "message": "Seen this yet? From our sister Page, Manhwa Index:",
+   "at": 1794507812478,
+   "status": "claimed"
   }
  ],
  "health": {
