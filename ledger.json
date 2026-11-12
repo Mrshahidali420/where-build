@@ -32256,6 +32256,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120261019503689",
    "commentId": "122120261019503689_1124946259920724"
+  },
+  {
+   "key": "2026-11-12|character:char:126725|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:126725",
+   "title": "Violet Evergarden: Special",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:126725",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794504535673,
+   "status": "claimed"
   }
  ],
  "health": {
