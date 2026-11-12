@@ -32565,6 +32565,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120289255503689",
    "commentId": "122120289255503689_1854235059087756"
+  },
+  {
+   "key": "2026-11-12|character:char:197114|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:197114",
+   "title": "Remake Our Life!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:197114",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794512172599,
+   "status": "claimed"
   }
  ],
  "health": {
