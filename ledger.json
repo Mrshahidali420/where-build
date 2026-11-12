@@ -32020,6 +32020,22 @@
    "status": "posted",
    "postId": "1136498749282913",
    "commentId": "1136498749282913_1405280772672954"
+  },
+  {
+   "key": "2026-11-12|character:char:33973|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:33973",
+   "title": "Redline",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:33973",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794498840881,
+   "status": "claimed"
   }
  ],
  "health": {
