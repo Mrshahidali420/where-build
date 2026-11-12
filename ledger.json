@@ -31410,6 +31410,22 @@
    "postId": "1142930951567539",
    "commentId": "1142930951567539_1145338247890335",
    "commentError": "POST /1142930951567539/comments failed: Unsupported post request. Object with ID '1142930951567539' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-12|fact:fact:101925:rated|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:101925:rated",
+   "title": "Gintama.: Silver Soul Arc - Second Half War",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:101925:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794484350096,
+   "status": "claimed"
   }
  ],
  "health": {
