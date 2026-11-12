@@ -33195,6 +33195,23 @@
    "status": "posted",
    "postId": "1456744439884071",
    "commentId": "1456744439884071_1730277138448512"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-12|clip-reel:clip-the-vermilion-mask-e05-whereanime-03:short|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-reel:clip-the-vermilion-mask-e05-whereanime-03:short",
+   "title": "The Vermilion Mask",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-the-vermilion-mask-e05-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794527245072,
+   "status": "claimed"
   }
  ],
  "health": {
