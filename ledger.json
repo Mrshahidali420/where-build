@@ -31391,6 +31391,22 @@
     "fb": "1079884458419956",
     "igError": "the Instagram reel upload failed: HTTP 400 Request processing failed"
    }
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-dragon-ball-super-beerus-e04-whereanime-01:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-dragon-ball-super-beerus-e04-whereanime-01:full",
+   "title": "Dragon Ball Super: Beerus",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-dragon-ball-super-beerus-e04-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794483808907,
+   "status": "claimed"
   }
  ],
  "health": {
