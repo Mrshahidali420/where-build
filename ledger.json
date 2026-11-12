@@ -30397,6 +30397,23 @@
    "status": "posted",
    "postId": "2304338450363135",
    "commentId": "2304338450363135_1652286799731362"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-12|clip-reel:clip-romelia-war-chronicle-e06-whereanime-03:short|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-reel:clip-romelia-war-chronicle-e06-whereanime-03:short",
+   "title": "Romelia War Chronicle",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-romelia-war-chronicle-e06-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794460295348,
+   "status": "claimed"
   }
  ],
  "health": {
