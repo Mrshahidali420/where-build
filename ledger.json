@@ -31054,6 +31054,22 @@
    "status": "posted",
    "postId": "1789253869039650",
    "commentId": "1789253869039650_2219043752342780"
+  },
+  {
+   "key": "2026-11-12|where:154982|whereanime",
+   "day": "2026-11-12",
+   "slug": "where:154982",
+   "title": "The Way of the Househusband: Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "154982",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794475736561,
+   "status": "claimed"
   }
  ],
  "health": {
