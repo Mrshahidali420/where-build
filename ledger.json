@@ -32511,6 +32511,22 @@
    "status": "posted",
    "postId": "4200366273433607",
    "commentId": "4200366273433607_1186133520743756"
+  },
+  {
+   "key": "2026-11-12|character:char:46013|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:46013",
+   "title": "Love Live! School Idol Project",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:46013",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794510547637,
+   "status": "claimed"
   }
  ],
  "health": {
