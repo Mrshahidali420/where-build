@@ -31742,6 +31742,23 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794492049443
    }
+  },
+  {
+   "reel": true,
+   "key": "2026-11-12|clip-reel:clip-the-apothecary-diaries-season-3-e05-whereanime-03:short|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-reel:clip-the-apothecary-diaries-season-3-e05-whereanime-03:short",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-the-apothecary-diaries-season-3-e05-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794492345417,
+   "status": "claimed"
   }
  ],
  "health": {
