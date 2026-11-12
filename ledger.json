@@ -31510,6 +31510,22 @@
     "fb": "1153976537074445",
     "ig": "18231618304328485"
    }
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-aoashi-season-2-e05-whereanime-02:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-aoashi-season-2-e05-whereanime-02:full",
+   "title": "Aoashi Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-aoashi-season-2-e05-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794486618301,
+   "status": "claimed"
   }
  ],
  "health": {
