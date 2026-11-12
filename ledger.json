@@ -29680,6 +29680,22 @@
     "id": "18110889362179268",
     "at": 1794442793347
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-magic-knight-rayearth-2026-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-magic-knight-rayearth-2026-e06-whereanime-01:full",
+   "title": "Magic Knight Rayearth (2026)",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-magic-knight-rayearth-2026-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794442914745,
+   "status": "claimed"
   }
  ],
  "health": {
