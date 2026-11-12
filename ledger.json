@@ -31938,6 +31938,22 @@
    "status": "posted",
    "postId": "1852485559099180",
    "commentId": "1852485559099180_2241571053291331"
+  },
+  {
+   "key": "2026-11-12|out-now:199594:6:out|whereanime",
+   "day": "2026-11-12",
+   "slug": "out-now:199594:6:out",
+   "title": "TETSURYO! Meet With Tetsudou Musume",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "199594:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794497068587,
+   "status": "claimed"
   }
  ],
  "health": {
