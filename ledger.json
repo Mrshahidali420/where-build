@@ -31600,6 +31600,22 @@
    "status": "posted",
    "postId": "1668883378246753",
    "commentId": "1668883378246753_2625323541309168"
+  },
+  {
+   "key": "2026-11-12|character:char:89642|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:89642",
+   "title": "NEW GAME!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89642",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794489342944,
+   "status": "claimed"
   }
  ],
  "health": {
