@@ -31760,7 +31760,12 @@
    "at": 1794492345417,
    "status": "posted",
    "postId": "2218189355795987",
-   "commentId": "2218189355795987_1487090856631070"
+   "commentId": "2218189355795987_1487090856631070",
+   "story": {
+    "at": 1794492345417,
+    "fb": "1163087622825940",
+    "igError": "the Instagram reel upload failed: HTTP 400 Request processing failed"
+   }
   }
  ],
  "health": {
