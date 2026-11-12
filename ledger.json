@@ -30307,6 +30307,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794457413889
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-blue-box-season-2-e05-whereanime-02:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-blue-box-season-2-e05-whereanime-02:full",
+   "title": "Blue Box Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-blue-box-season-2-e05-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794457659617,
+   "status": "claimed"
   }
  ],
  "health": {
