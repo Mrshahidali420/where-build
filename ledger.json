@@ -32642,6 +32642,22 @@
    "status": "posted",
    "postId": "1821681535697744",
    "commentId": "1821681535697744_1120805027252444"
+  },
+  {
+   "key": "2026-11-12|where:100855|whereanime",
+   "day": "2026-11-12",
+   "slug": "where:100855",
+   "title": "Today's Menu for the Emiya Family",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "100855",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794513862839,
+   "status": "claimed"
   }
  ],
  "health": {
