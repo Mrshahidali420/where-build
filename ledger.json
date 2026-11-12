@@ -29816,6 +29816,22 @@
     "id": "18121260269088611",
     "at": 1794445770361
    }
+  },
+  {
+   "key": "2026-11-11|clip-video:clip-uncle-s-obsession-with-cute-things-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-11",
+   "slug": "clip-video:clip-uncle-s-obsession-with-cute-things-e06-whereanime-01:full",
+   "title": "Uncle's Obsession with Cute Things",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-uncle-s-obsession-with-cute-things-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794446190035,
+   "status": "claimed"
   }
  ],
  "health": {
