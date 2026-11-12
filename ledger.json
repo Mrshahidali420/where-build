@@ -32493,6 +32493,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794509732385
    }
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-fx-fighter-kurumi-chan-e07-whereanime-02:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-fx-fighter-kurumi-chan-e07-whereanime-02:full",
+   "title": "FX Fighter Kurumi-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-fx-fighter-kurumi-chan-e07-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794510005922,
+   "status": "claimed"
   }
  ],
  "health": {
