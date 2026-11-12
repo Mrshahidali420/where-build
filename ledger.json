@@ -31464,6 +31464,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120172633503689",
    "commentId": "122120172633503689_2298764190973603"
+  },
+  {
+   "key": "2026-11-12|clip-video:clip-aoashi-season-2-e05-whereanime-03:full|whereanime",
+   "day": "2026-11-12",
+   "slug": "clip-video:clip-aoashi-season-2-e05-whereanime-03:full",
+   "title": "Aoashi Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-aoashi-season-2-e05-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794485996279,
+   "status": "claimed"
   }
  ],
  "health": {
