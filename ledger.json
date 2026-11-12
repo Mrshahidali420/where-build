@@ -31091,6 +31091,22 @@
    "postId": "2153098951997515",
    "commentId": "2153098951997515_4546113352278396",
    "commentError": "POST /2153098951997515/comments failed: Unsupported post request. Object with ID '2153098951997515' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-12|fact:fact:137909:popular|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:137909:popular",
+   "title": "Ningen Fushin: Adventurers Who Don’t Believe in Humanity Will Save the World",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:137909:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794476818714,
+   "status": "claimed"
   }
  ],
  "health": {
