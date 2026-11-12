@@ -31155,6 +31155,22 @@
     "fb": "992495056666762",
     "igError": "the Instagram reel upload failed: HTTP 400 Request processing failed"
    }
+  },
+  {
+   "key": "2026-11-12|rating-day:day:tt50436153+tt50728881+tt44925664+tt50436983|whereanime",
+   "day": "2026-11-12",
+   "slug": "rating-day:day:tt50436153+tt50728881+tt44925664+tt50436983",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:rating-day",
+   "type": "rating-day",
+   "item": "day:tt50436153+tt50728881+tt44925664+tt50436983",
+   "gapDays": 3,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794478004946,
+   "status": "claimed"
   }
  ],
  "health": {
