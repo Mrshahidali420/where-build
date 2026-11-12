@@ -32434,6 +32434,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120275473503689",
    "commentId": "122120275473503689_2366644280743550"
+  },
+  {
+   "key": "2026-11-12|where:151380|whereanime",
+   "day": "2026-11-12",
+   "slug": "where:151380",
+   "title": "Date A Live V",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "151380",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794508895888,
+   "status": "claimed"
   }
  ],
  "health": {
