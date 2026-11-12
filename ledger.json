@@ -30836,6 +30836,22 @@
    "status": "posted",
    "postId": "1429882735530595",
    "commentId": "1429882735530595_1135838928933870"
+  },
+  {
+   "key": "2026-11-12|fact:fact:20720:popular|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:20720:popular",
+   "title": "Orenchi no Furo Jijo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:20720:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794470814952,
+   "status": "claimed"
   }
  ],
  "health": {
