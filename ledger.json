@@ -32606,6 +32606,22 @@
     "id": "18100312292432049",
     "at": 1794512614033
    }
+  },
+  {
+   "key": "2026-11-12|fact:fact:137819:rated|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:137819:rated",
+   "title": "The Tatami Time Machine Blues",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:137819:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794512735539,
+   "status": "claimed"
   }
  ],
  "health": {
