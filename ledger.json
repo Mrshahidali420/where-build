@@ -29739,6 +29739,22 @@
    "status": "posted",
    "postId": "2350733692428521",
    "commentId": "2350733692428521_1172380861812220"
+  },
+  {
+   "key": "2026-11-11|character:char:154750|whereanime",
+   "day": "2026-11-11",
+   "slug": "character:char:154750",
+   "title": "Kemono Jihen",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:154750",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794444538886,
+   "status": "claimed"
   }
  ],
  "health": {
