@@ -29952,6 +29952,22 @@
    "status": "posted",
    "postId": "1449543506684621",
    "commentId": "1449543506684621_1900499321319541"
+  },
+  {
+   "key": "2026-11-11|fact:fact:21472:popular|whereanime",
+   "day": "2026-11-11",
+   "slug": "fact:fact:21472:popular",
+   "title": "Please tell me! Galko-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:21472:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794449462682,
+   "status": "claimed"
   }
  ],
  "health": {
