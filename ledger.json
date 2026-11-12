@@ -31149,6 +31149,11 @@
    "ig": {
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794477813083
+   },
+   "story": {
+    "at": 1794477813083,
+    "fb": "992495056666762",
+    "igError": "the Instagram reel upload failed: HTTP 400 Request processing failed"
    }
   }
  ],
