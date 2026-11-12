@@ -31902,6 +31902,22 @@
    "status": "posted",
    "postId": "1750200710223480",
    "commentId": "1750200710223480_1102788859250531"
+  },
+  {
+   "key": "2026-11-12|out-now:213805:7:out|whereanime",
+   "day": "2026-11-12",
+   "slug": "out-now:213805:7:out",
+   "title": "The Ramparts of Ice Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "213805:7:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794495985330,
+   "status": "claimed"
   }
  ],
  "health": {
