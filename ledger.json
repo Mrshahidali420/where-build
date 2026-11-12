@@ -31446,6 +31446,22 @@
    "status": "posted",
    "postId": "2171544170112336",
    "commentError": "POST /2171544170112336/comments failed: Unsupported post request. Object with ID '2171544170112336' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-12|birthday:bday:262902|whereanime",
+   "day": "2026-11-12",
+   "slug": "birthday:bday:262902",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:birthday",
+   "type": "birthday",
+   "item": "bday:262902",
+   "gapDays": 330,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794485455033,
+   "status": "claimed"
   }
  ],
  "health": {
