@@ -32755,6 +32755,22 @@
    "status": "posted",
    "postId": "4626312277690083",
    "commentId": "4626312277690083_3720022744817461"
+  },
+  {
+   "key": "2026-11-12|character:char:19931|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:19931",
+   "title": "Eden of the East",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:19931",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794516568718,
+   "status": "claimed"
   }
  ],
  "health": {
