@@ -88,6 +88,22 @@
    "status": "posted",
    "postId": "937040846006901",
    "commentId": "937040846006901_1779666666435274"
+  },
+  {
+   "key": "2026-11-12|rating:tt49985562|whereanime",
+   "day": "2026-11-12",
+   "slug": "rating:tt49985562",
+   "title": "Black Clover Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:rating",
+   "type": "rating",
+   "item": "tt49985562",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794540807920,
+   "status": "claimed"
   }
  ],
  "health": {
