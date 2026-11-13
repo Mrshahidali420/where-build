@@ -306,6 +306,22 @@
    "status": "posted",
    "postId": "1456144646584950",
    "commentId": "1456144646584950_4215988755366658"
+  },
+  {
+   "key": "2026-11-12|today:today:2026-11-12|whereanime",
+   "day": "2026-11-12",
+   "slug": "today:today:2026-11-12",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:today",
+   "type": "today",
+   "item": "today:2026-11-12",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794545878952,
+   "status": "claimed"
   }
  ],
  "health": {
