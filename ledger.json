@@ -1099,6 +1099,22 @@
    "status": "posted",
    "postId": "1432457028544885",
    "commentId": "1432457028544885_1012708447770244"
+  },
+  {
+   "key": "2026-11-13|out-now:165159:140:out|whereanime",
+   "day": "2026-11-13",
+   "slug": "out-now:165159:140:out",
+   "title": "BEYBLADE X",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "165159:140:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794565655533,
+   "status": "claimed"
   }
  ],
  "health": {
