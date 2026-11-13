@@ -28,6 +28,29 @@
     "fb": "1650418683220176",
     "ig": "18120032084000002"
    }
+  },
+  {
+   "share": true,
+   "key": "2026-11-12|share:1448778766704945|whereanime",
+   "day": "2026-11-12",
+   "slug": "share:1448778766704945",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1448778766704945",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1448778766704945",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "FX Fighter Kurumi-chan",
+   "sourceFormat": "type:clip-video",
+   "link": "https://www.facebook.com/1448778766704945",
+   "message": "New on our sister Page, Manhwa Index:",
+   "at": 1794539185236,
+   "status": "claimed"
   }
  ],
  "health": {
