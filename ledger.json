@@ -2819,6 +2819,22 @@
    "status": "posted",
    "postId": "4571033656478415",
    "commentId": "4571033656478415_1289049980045560"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-pok-mon-horizons-the-series-e156-whereanime-03:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-pok-mon-horizons-the-series-e156-whereanime-03:full",
+   "title": "Pokémon Horizons: The Series",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-pok-mon-horizons-the-series-e156-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794612237410,
+   "status": "claimed"
   }
  ],
  "health": {
