@@ -2642,6 +2642,22 @@
    "status": "posted",
    "postId": "1768919588107290",
    "commentId": "1768919588107290_2102280350416326"
+  },
+  {
+   "key": "2026-11-13|fact:fact:13469:popular|whereanime",
+   "day": "2026-11-13",
+   "slug": "fact:fact:13469:popular",
+   "title": "Hyouka: What Should Be Had",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:13469:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794608423841,
+   "status": "claimed"
   }
  ],
  "health": {
