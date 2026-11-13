@@ -779,6 +779,29 @@
     "fb": "1174548805020324",
     "ig": "17964717531289184"
    }
+  },
+  {
+   "share": true,
+   "key": "2026-11-13|share:1143867581318400|whereanime",
+   "day": "2026-11-13",
+   "slug": "share:1143867581318400",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1143867581318400",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1143867581318400",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "Blue Box Season 2",
+   "sourceFormat": "reel:clip-reel",
+   "link": "https://www.facebook.com/reel/1143867581318400",
+   "message": "Worth a look from our sister Page, Manhwa Index:",
+   "at": 1794556936789,
+   "status": "claimed"
   }
  ],
  "health": {
