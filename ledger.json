@@ -2235,6 +2235,22 @@
    "status": "posted",
    "postId": "1130770532905543",
    "commentId": "1130770532905543_1820284099101787"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-tougen-anki-nikko-kegon-falls-arc-e07-whereanime-03:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-tougen-anki-nikko-kegon-falls-arc-e07-whereanime-03:full",
+   "title": "TOUGEN ANKI: Nikko Kegon Falls Arc",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-tougen-anki-nikko-kegon-falls-arc-e07-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794597822634,
+   "status": "claimed"
   }
  ],
  "health": {
