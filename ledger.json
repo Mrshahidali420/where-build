@@ -2760,6 +2760,22 @@
    "status": "posted",
    "postId": "1651650896365842",
    "commentId": "1651650896365842_1706781901066176"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-the-apothecary-diaries-season-3-e07-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-the-apothecary-diaries-season-3-e07-whereanime-01:full",
+   "title": "The Apothecary Diaries Season 3",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-the-apothecary-diaries-season-3-e07-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794611130435,
+   "status": "claimed"
   }
  ],
  "health": {
