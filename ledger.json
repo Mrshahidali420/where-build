@@ -33585,6 +33585,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794535972711
    }
+  },
+  {
+   "key": "2026-11-12|fact:fact:20478:rated|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:20478:rated",
+   "title": "Natsume's Book of Friends OVA",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:20478:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794536230354,
+   "status": "claimed"
   }
  ],
  "health": {
