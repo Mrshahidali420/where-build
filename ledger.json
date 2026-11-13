@@ -2801,6 +2801,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794611425994
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-a-certain-dark-item-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-a-certain-dark-item-e06-whereanime-01:full",
+   "title": "A Certain Dark Item",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-a-certain-dark-item-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794611671483,
+   "status": "claimed"
   }
  ],
  "health": {
