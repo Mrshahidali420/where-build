@@ -33331,6 +33331,27 @@
     "id": "17977913166154791",
     "at": 1794530126256
    }
+  },
+  {
+   "rare": true,
+   "hash": "6e0ef5c34190a6ca9a69a800701ab4e6",
+   "rating": "g",
+   "ecchi": false,
+   "source": "danbooru",
+   "key": "2026-11-12|cosplay:danbooru:11858455|whereanime",
+   "day": "2026-11-12",
+   "slug": "cosplay:danbooru:11858455",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:cosplay",
+   "type": "cosplay",
+   "item": "danbooru:11858455",
+   "gapDays": 3650,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794530247324,
+   "status": "claimed"
   }
  ],
  "health": {
