@@ -1834,6 +1834,22 @@
    "status": "posted",
    "postId": "1406282551587002",
    "commentId": "1406282551587002_2558067214674161"
+  },
+  {
+   "key": "2026-11-13|where:113936|whereanime",
+   "day": "2026-11-13",
+   "slug": "where:113936",
+   "title": "Dr. STONE: STONE WARS",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "113936",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794586375061,
+   "status": "claimed"
   }
  ],
  "health": {
