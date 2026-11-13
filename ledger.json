@@ -33390,6 +33390,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120359287503689",
    "commentId": "122120359287503689_1155359986971108"
+  },
+  {
+   "key": "2026-11-12|where:195322|whereanime",
+   "day": "2026-11-12",
+   "slug": "where:195322",
+   "title": "My Hero Academia: Vigilantes Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:where",
+   "type": "where",
+   "item": "195322",
+   "gapDays": 30,
+   "titleGap": true,
+   "variant": 1,
+   "at": 1794531871015,
+   "status": "claimed"
   }
  ],
  "health": {
