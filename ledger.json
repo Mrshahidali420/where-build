@@ -33467,6 +33467,22 @@
     "id": "18134129614850052",
     "at": 1794533091866
    }
+  },
+  {
+   "key": "2026-11-12|character:char:534|whereanime",
+   "day": "2026-11-12",
+   "slug": "character:char:534",
+   "title": "Whisper of the Heart",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:534",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794533525872,
+   "status": "claimed"
   }
  ],
  "health": {
