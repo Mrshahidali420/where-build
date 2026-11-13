@@ -1378,6 +1378,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794573299836
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-red-river-e18-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-red-river-e18-whereanime-02:full",
+   "title": "Red River",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-red-river-e18-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794573841033,
+   "status": "claimed"
   }
  ],
  "health": {
