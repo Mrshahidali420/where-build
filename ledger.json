@@ -2022,6 +2022,29 @@
    "status": "posted",
    "postId": "2244357116114355",
    "commentId": "2244357116114355_1804835247414697"
+  },
+  {
+   "share": true,
+   "key": "2026-11-13|share:1414074417556164|whereanime",
+   "day": "2026-11-13",
+   "slug": "share:1414074417556164",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1414074417556164",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1414074417556164",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "My Girlfriend's Friend",
+   "sourceFormat": "type:clip-video",
+   "link": "https://www.facebook.com/1414074417556164",
+   "message": "In case you missed it, from our sister Page, Manhwa Index:",
+   "at": 1794591806355,
+   "status": "claimed"
   }
  ],
  "health": {
