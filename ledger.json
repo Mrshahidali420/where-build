@@ -1171,6 +1171,22 @@
    "status": "posted",
    "postId": "1063371540057857",
    "commentId": "1063371540057857_2376385623116565"
+  },
+  {
+   "key": "2026-11-13|character:char:73979|whereanime",
+   "day": "2026-11-13",
+   "slug": "character:char:73979",
+   "title": "One-Punch Man",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:73979",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794567820419,
+   "status": "claimed"
   }
  ],
  "health": {
