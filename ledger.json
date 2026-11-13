@@ -33236,6 +33236,22 @@
    "status": "posted",
    "postId": "1011084094622818",
    "commentId": "1011084094622818_1443242687998524"
+  },
+  {
+   "key": "2026-11-12|fact:fact:18139:popular|whereanime",
+   "day": "2026-11-12",
+   "slug": "fact:fact:18139:popular",
+   "title": "Tonari no Seki-kun: The Master of Killing Time",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:18139:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 2,
+   "at": 1794528051203,
+   "status": "claimed"
   }
  ],
  "health": {
