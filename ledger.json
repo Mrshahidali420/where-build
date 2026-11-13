@@ -1283,6 +1283,22 @@
    "status": "posted",
    "postId": "1483831433642393",
    "commentId": "1483831433642393_2746883942433545"
+  },
+  {
+   "key": "2026-11-13|fact:fact:101291:popular|whereanime",
+   "day": "2026-11-13",
+   "slug": "fact:fact:101291:popular",
+   "title": "Rascal Does Not Dream of Bunny Girl Senpai",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:101291:popular",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794571092095,
+   "status": "claimed"
   }
  ],
  "health": {
