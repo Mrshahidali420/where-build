@@ -2004,6 +2004,22 @@
     "id": "18224273620347043",
     "at": 1794590723805
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-romelia-war-chronicle-e06-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-romelia-war-chronicle-e06-whereanime-02:full",
+   "title": "Romelia War Chronicle",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-romelia-war-chronicle-e06-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794591265034,
+   "status": "claimed"
   }
  ],
  "health": {
