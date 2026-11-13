@@ -1023,6 +1023,22 @@
    "status": "posted",
    "postId": "2299693130895657",
    "commentId": "2299693130895657_1438086221640717"
+  },
+  {
+   "key": "2026-11-13|next-month:month:2026-12|whereanime",
+   "day": "2026-11-13",
+   "slug": "next-month:month:2026-12",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:next-month",
+   "type": "next-month",
+   "item": "month:2026-12",
+   "gapDays": 12,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794563472286,
+   "status": "claimed"
   }
  ],
  "health": {
