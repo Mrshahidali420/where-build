@@ -2588,6 +2588,22 @@
    "status": "posted",
    "postId": "1983660436086197",
    "commentId": "1983660436086197_1830551764617232"
+  },
+  {
+   "key": "2026-11-13|scenes:151801:2|whereanime",
+   "day": "2026-11-13",
+   "slug": "scenes:151801:2",
+   "title": "MASHLE: MAGIC AND MUSCLES",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "151801:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794606779017,
+   "status": "claimed"
   }
  ],
  "health": {
