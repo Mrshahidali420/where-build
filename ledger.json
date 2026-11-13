@@ -643,6 +643,22 @@
     "fb": "1468624098547568",
     "ig": "18501270940106992"
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-a-returner-s-magic-should-be-special-season-2-e05-whereanime-03:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-a-returner-s-magic-should-be-special-season-2-e05-whereanime-03:full",
+   "title": "A Returner's Magic Should be Special Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-a-returner-s-magic-should-be-special-season-2-e05-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794553690156,
+   "status": "claimed"
   }
  ],
  "health": {
