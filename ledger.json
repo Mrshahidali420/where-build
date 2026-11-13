@@ -2181,6 +2181,22 @@
    "status": "posted",
    "postId": "1106934775443765",
    "commentId": "1106934775443765_2397579174349927"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-blue-box-season-2-e05-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-blue-box-season-2-e05-whereanime-02:full",
+   "title": "Blue Box Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-blue-box-season-2-e05-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794596176475,
+   "status": "claimed"
   }
  ],
  "health": {
