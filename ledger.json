@@ -542,6 +542,22 @@
    "status": "posted",
    "postId": "1679514587185328",
    "commentId": "1679514587185328_2677422626106639"
+  },
+  {
+   "key": "2026-11-13|airtime:210482:8|whereanime",
+   "day": "2026-11-13",
+   "slug": "airtime:210482:8",
+   "title": "STEEL BALL RUN JoJo's Bizarre Adventure 2nd - 3rd STAGE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:airtime",
+   "type": "airtime",
+   "item": "210482:8",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794551359949,
+   "status": "claimed"
   }
  ],
  "health": {
