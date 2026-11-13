@@ -2046,6 +2046,22 @@
    "at": 1794591806355,
    "status": "posted",
    "postId": "1329988470202923_122120591421503689"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-a-certain-dark-item-e06-whereanime-03:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-a-certain-dark-item-e06-whereanime-03:full",
+   "title": "A Certain Dark Item",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-a-certain-dark-item-e06-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794592367727,
+   "status": "claimed"
   }
  ],
  "health": {
