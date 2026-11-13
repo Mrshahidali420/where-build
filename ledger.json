@@ -2370,6 +2370,22 @@
    "status": "posted",
    "postId": "1882408779878319",
    "commentId": "1882408779878319_1751706616318004"
+  },
+  {
+   "key": "2026-11-13|character:char:89275|whereanime",
+   "day": "2026-11-13",
+   "slug": "character:char:89275",
+   "title": "ERASED",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:89275",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794601637337,
+   "status": "claimed"
   }
  ],
  "health": {
