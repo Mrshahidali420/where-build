@@ -1515,6 +1515,22 @@
    "status": "posted",
    "postId": "1928154648148257",
    "commentId": "1928154648148257_1800345214354920"
+  },
+  {
+   "key": "2026-11-13|out-now:186742:6:out|whereanime",
+   "day": "2026-11-13",
+   "slug": "out-now:186742:6:out",
+   "title": "A Certain Dark Item",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "186742:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794577655136,
+   "status": "claimed"
   }
  ],
  "health": {
