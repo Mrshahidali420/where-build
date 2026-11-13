@@ -1591,6 +1591,22 @@
    "status": "posted",
    "postId": "1204737942219035",
    "commentId": "1204737942219035_1478729847535284"
+  },
+  {
+   "key": "2026-11-13|anticipated:anticipated:season:2026-FALL|whereanime",
+   "day": "2026-11-13",
+   "slug": "anticipated:anticipated:season:2026-FALL",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:anticipated",
+   "type": "anticipated",
+   "item": "anticipated:season:2026-FALL",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794579821483,
+   "status": "claimed"
   }
  ],
  "health": {
