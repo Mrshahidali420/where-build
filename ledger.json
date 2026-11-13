@@ -2434,6 +2434,22 @@
     "fb": "1515075654033997",
     "ig": "17966144310213434"
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-from-far-away-e06-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-from-far-away-e06-whereanime-02:full",
+   "title": "From Far Away",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-from-far-away-e06-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794602846216,
+   "status": "claimed"
   }
  ],
  "health": {
