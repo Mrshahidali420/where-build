@@ -1798,6 +1798,22 @@
    "status": "posted",
    "postId": "1602263761585103",
    "commentId": "1602263761585103_1493445095971188"
+  },
+  {
+   "key": "2026-11-13|character:char:66173|whereanime",
+   "day": "2026-11-13",
+   "slug": "character:char:66173",
+   "title": "Horimiya",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:66173",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794585292521,
+   "status": "claimed"
   }
  ],
  "health": {
