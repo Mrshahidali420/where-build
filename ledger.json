@@ -1856,6 +1856,22 @@
     "error": "POST /17841462933957376/media_publish failed: Application request limit reached",
     "at": 1794586375061
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-a-tale-of-the-secret-saint-e07-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-a-tale-of-the-secret-saint-e07-whereanime-02:full",
+   "title": "A Tale of the Secret Saint",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-a-tale-of-the-secret-saint-e07-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794586916398,
+   "status": "claimed"
   }
  ],
  "health": {
