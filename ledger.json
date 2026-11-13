@@ -1663,6 +1663,22 @@
    "at": 1794581050573,
    "status": "failed",
    "error": "GET /29056853160608848 failed: Unsupported get request. Object with ID '29056853160608848' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-black-clover-season-2-e05-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-black-clover-season-2-e05-whereanime-02:full",
+   "title": "Black Clover Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-black-clover-season-2-e05-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794581470676,
+   "status": "claimed"
   }
  ],
  "health": {
