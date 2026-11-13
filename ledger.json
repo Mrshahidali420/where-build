@@ -524,6 +524,22 @@
     "fb": "2590482681464907",
     "ig": "18657304147048671"
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-mission-yozakura-family-season-2-part-2-e05-whereanime-03:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-mission-yozakura-family-season-2-part-2-e05-whereanime-03:full",
+   "title": "Mission: Yozakura Family Season 2 Part 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-mission-yozakura-family-season-2-part-2-e05-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794550818925,
+   "status": "claimed"
   }
  ],
  "health": {
