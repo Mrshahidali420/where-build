@@ -1928,6 +1928,22 @@
    "status": "posted",
    "postId": "1073635229068933",
    "commentId": "1073635229068933_2029955511011665"
+  },
+  {
+   "key": "2026-11-13|out-now:178083:7:out|whereanime",
+   "day": "2026-11-13",
+   "slug": "out-now:178083:7:out",
+   "title": "Tokyo Revengers: War of the Three Titans Arc",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "178083:7:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794589099616,
+   "status": "claimed"
   }
  ],
  "health": {
