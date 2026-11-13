@@ -615,6 +615,23 @@
    "status": "posted",
    "postId": "1167861989234752",
    "commentId": "1167861989234752_1415168704021143"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-13|clip-reel:clip-fx-fighter-kurumi-chan-e07-whereanime-03:short|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-reel:clip-fx-fighter-kurumi-chan-e07-whereanime-03:short",
+   "title": "FX Fighter Kurumi-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-fx-fighter-kurumi-chan-e07-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794553559062,
+   "status": "claimed"
   }
  ],
  "health": {
