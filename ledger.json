@@ -406,6 +406,22 @@
     "fb": "1129281326620532",
     "ig": "18037556768855182"
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-dragon-ball-super-beerus-e04-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-dragon-ball-super-beerus-e04-whereanime-02:full",
+   "title": "Dragon Ball Super: Beerus",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-dragon-ball-super-beerus-e04-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794548042993,
+   "status": "claimed"
   }
  ],
  "health": {
