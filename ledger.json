@@ -242,6 +242,22 @@
    "status": "posted",
    "postId": "1138474068562963",
    "commentId": "1138474068562963_1028972886913219"
+  },
+  {
+   "key": "2026-11-12|rating-week:week|whereanime",
+   "day": "2026-11-12",
+   "slug": "rating-week:week",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:rating-week",
+   "type": "rating-week",
+   "item": "week",
+   "gapDays": 7,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794544776605,
+   "status": "claimed"
   }
  ],
  "health": {
