@@ -2506,6 +2506,22 @@
    "status": "posted",
    "postId": "1147382387888123",
    "commentId": "1147382387888123_1114018421507947"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-dark-machine-the-animation-e05-whereanime-02:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-dark-machine-the-animation-e05-whereanime-02:full",
+   "title": "DARK MACHINE THE ANIMATION",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-dark-machine-the-animation-e05-whereanime-02:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794605028217,
+   "status": "claimed"
   }
  ],
  "health": {
