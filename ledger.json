@@ -2796,7 +2796,11 @@
    "at": 1794611425994,
    "status": "posted",
    "postId": "996394750196849",
-   "commentId": "996394750196849_1602992334473779"
+   "commentId": "996394750196849_1602992334473779",
+   "ig": {
+    "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
+    "at": 1794611425994
+   }
   }
  ],
  "health": {
