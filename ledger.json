@@ -4299,6 +4299,22 @@
    "status": "posted",
    "postId": "1425682846438163",
    "commentId": "1425682846438163_1647714310422041"
+  },
+  {
+   "key": "2026-11-14|out-now:235:1220:out|whereanime",
+   "day": "2026-11-14",
+   "slug": "out-now:235:1220:out",
+   "title": "Detective Conan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "235:1220:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794647565950,
+   "status": "claimed"
   }
  ],
  "health": {
