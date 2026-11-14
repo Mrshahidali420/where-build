@@ -4505,6 +4505,22 @@
    "status": "posted",
    "postId": "952120061095835",
    "commentId": "952120061095835_2176863376256699"
+  },
+  {
+   "key": "2026-11-14|clip-video:clip-firefly-wedding-e05-whereanime-03:full|whereanime",
+   "day": "2026-11-14",
+   "slug": "clip-video:clip-firefly-wedding-e05-whereanime-03:full",
+   "title": "Firefly Wedding",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-firefly-wedding-e05-whereanime-03:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794653576348,
+   "status": "claimed"
   }
  ],
  "health": {
