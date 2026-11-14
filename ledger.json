@@ -3086,6 +3086,22 @@
    "status": "posted",
    "postId": "1666338328213996",
    "commentId": "1666338328213996_1139204425533119"
+  },
+  {
+   "key": "2026-11-13|rating:tt45370556|whereanime",
+   "day": "2026-11-13",
+   "slug": "rating:tt45370556",
+   "title": "ONE PIECE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:rating",
+   "type": "rating",
+   "item": "tt45370556",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794618807579,
+   "status": "claimed"
   }
  ],
  "health": {
