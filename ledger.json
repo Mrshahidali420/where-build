@@ -4411,6 +4411,22 @@
    "status": "posted",
    "postId": "2559806811173114",
    "commentId": "2559806811173114_1172732315194087"
+  },
+  {
+   "key": "2026-11-14|episode:202957:41|whereanime",
+   "day": "2026-11-14",
+   "slug": "episode:202957:41",
+   "title": "Star Detective Precure!",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "202957:41",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794650835320,
+   "status": "claimed"
   }
  ],
  "health": {
