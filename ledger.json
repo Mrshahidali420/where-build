@@ -4523,6 +4523,22 @@
    "status": "posted",
    "postId": "1066462636408312",
    "commentId": "1066462636408312_1148988014551773"
+  },
+  {
+   "key": "2026-11-14|episode:185646:84|whereanime",
+   "day": "2026-11-14",
+   "slug": "episode:185646:84",
+   "title": "Koupen-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "185646:84",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794654117502,
+   "status": "claimed"
   }
  ],
  "health": {
