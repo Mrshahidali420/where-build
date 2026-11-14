@@ -4631,6 +4631,22 @@
    "status": "posted",
    "postId": "2068219407231434",
    "commentId": "2068219407231434_1829497671624762"
+  },
+  {
+   "key": "2026-11-14|fact:fact:21698:rated|whereanime",
+   "day": "2026-11-14",
+   "slug": "fact:fact:21698:rated",
+   "title": "HAIKYU!! 3rd Season",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fact",
+   "type": "fact",
+   "item": "fact:21698:rated",
+   "gapDays": 300,
+   "titleGap": true,
+   "variant": 0,
+   "at": 1794657387451,
+   "status": "claimed"
   }
  ],
  "health": {
