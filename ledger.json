@@ -4671,6 +4671,22 @@
    "status": "posted",
    "postId": "1452032980439351",
    "commentId": "1452032980439351_1811951149949121"
+  },
+  {
+   "key": "2026-11-14|out-now:180894:7:out|whereanime",
+   "day": "2026-11-14",
+   "slug": "out-now:180894:7:out",
+   "title": "Romelia War Chronicle",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "180894:7:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794658469509,
+   "status": "claimed"
   }
  ],
  "health": {
