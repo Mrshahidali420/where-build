@@ -4830,6 +4830,22 @@
     "id": "18194841514406306",
     "at": 1794662280719
    }
+  },
+  {
+   "key": "2026-11-14|onair:191788|whereanime",
+   "day": "2026-11-14",
+   "slug": "onair:191788",
+   "title": "Aoashi Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:onair",
+   "type": "onair",
+   "item": "191788",
+   "gapDays": 28,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794662821756,
+   "status": "claimed"
   }
  ],
  "health": {
