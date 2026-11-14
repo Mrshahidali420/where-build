@@ -3181,6 +3181,22 @@
    "status": "posted",
    "postId": "2407422479790768",
    "commentId": "2407422479790768_39979258265052958"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-super-psychic-policeman-chojo-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-super-psychic-policeman-chojo-e05-whereanime-01:full",
+   "title": "Super Psychic Policeman Chojo",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-super-psychic-policeman-chojo-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794620997294,
+   "status": "claimed"
   }
  ],
  "health": {
