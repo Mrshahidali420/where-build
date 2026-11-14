@@ -3199,6 +3199,22 @@
    "status": "posted",
    "postId": "1195470006487695",
    "commentId": "1195470006487695_28756393344062735"
+  },
+  {
+   "key": "2026-11-13|anticipated:anticipated:season:2027-SPRING|whereanime",
+   "day": "2026-11-13",
+   "slug": "anticipated:anticipated:season:2027-SPRING",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:anticipated",
+   "type": "anticipated",
+   "item": "anticipated:season:2027-SPRING",
+   "gapDays": 21,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794621538202,
+   "status": "claimed"
   }
  ],
  "health": {
