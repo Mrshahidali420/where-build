@@ -3371,6 +3371,29 @@
    "status": "posted",
    "postId": "1771902574108151",
    "commentId": "1771902574108151_1134800705803037"
+  },
+  {
+   "share": true,
+   "key": "2026-11-13|share:1318170941390322_122124754761500964|whereanime",
+   "day": "2026-11-13",
+   "slug": "share:1318170941390322_122124754761500964",
+   "title": null,
+   "page": "whereanime",
+   "mix": "share",
+   "format": "share",
+   "type": "share",
+   "item": "1318170941390322_122124754761500964",
+   "gapDays": 90,
+   "titleGap": false,
+   "sharedFrom": "1318170941390322_122124754761500964",
+   "sharedPage": "manhwaindex",
+   "sharedRepo": "Mrshahidali420/mi-build",
+   "sourceTitle": "Welcome to Demon School! Iruma-kun",
+   "sourceFormat": "type:character",
+   "link": "https://www.facebook.com/1318170941390322/posts/122124754761500964",
+   "message": "New on our sister Page, Manhwa Index:",
+   "at": 1794625910157,
+   "status": "claimed"
   }
  ],
  "health": {
