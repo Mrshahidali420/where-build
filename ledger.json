@@ -4866,6 +4866,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120843619503689",
    "commentId": "122120843619503689_1850023266422000"
+  },
+  {
+   "key": "2026-11-14|character:char:84677|whereanime",
+   "day": "2026-11-14",
+   "slug": "character:char:84677",
+   "title": "Noragami",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:84677",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794663929993,
+   "status": "claimed"
   }
  ],
  "health": {
