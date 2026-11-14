@@ -2991,6 +2991,22 @@
    "status": "posted",
    "postId": "1040945829035099",
    "commentId": "1040945829035099_1665933474942970"
+  },
+  {
+   "key": "2026-11-13|rating-day:day:tt45370556+tt50436153+tt48391174+tt50436983|whereanime",
+   "day": "2026-11-13",
+   "slug": "rating-day:day:tt45370556+tt50436153+tt48391174+tt50436983",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:rating-day",
+   "type": "rating-day",
+   "item": "day:tt45370556+tt50436153+tt48391174+tt50436983",
+   "gapDays": 3,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794616643939,
+   "status": "claimed"
   }
  ],
  "health": {
