@@ -4245,6 +4245,23 @@
    "status": "posted",
    "postId": "1474319341316785",
    "commentId": "1474319341316785_1631951281412347"
+  },
+  {
+   "reel": true,
+   "key": "2026-11-14|clip-reel:clip-the-prince-of-tennis-ii-u-17-world-cup-final-member-selection-match-e07-whereanime-03:short|whereanime",
+   "day": "2026-11-14",
+   "slug": "clip-reel:clip-the-prince-of-tennis-ii-u-17-world-cup-final-member-selection-match-e07-whereanime-03:short",
+   "title": "The Prince of Tennis II U-17 WORLD CUP: Final Member Selection Match",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "reel:clip-reel",
+   "type": "clip-reel",
+   "item": "clip-the-prince-of-tennis-ii-u-17-world-cup-final-member-selection-match-e07-whereanime-03:short",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794646361478,
+   "status": "claimed"
   }
  ],
  "health": {
