@@ -4339,6 +4339,22 @@
    "status": "posted",
    "postId": "1500215098709292",
    "commentId": "1500215098709292_1461436195924528"
+  },
+  {
+   "key": "2026-11-14|clip-video:clip-red-river-e19-whereanime-01:full|whereanime",
+   "day": "2026-11-14",
+   "slug": "clip-video:clip-red-river-e19-whereanime-01:full",
+   "title": "Red River",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-red-river-e19-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794648669199,
+   "status": "claimed"
   }
  ],
  "health": {
