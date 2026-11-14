@@ -3659,6 +3659,22 @@
     "fb": "1120951177501270",
     "ig": "18074164244496323"
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-nia-liston-the-merciless-maiden-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-nia-liston-the-merciless-maiden-e06-whereanime-01:full",
+   "title": "Nia Liston: The Merciless Maiden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-nia-liston-the-merciless-maiden-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794631979924,
+   "status": "claimed"
   }
  ],
  "health": {
