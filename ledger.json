@@ -4357,6 +4357,22 @@
    "status": "posted",
    "postId": "1645275153733812",
    "commentId": "1645275153733812_1077908311970604"
+  },
+  {
+   "key": "2026-11-14|out-now:212799:7:out|whereanime",
+   "day": "2026-11-14",
+   "slug": "out-now:212799:7:out",
+   "title": "The Seven Knights of the Marronnier Kingdom",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "212799:7:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794649210714,
+   "status": "claimed"
   }
  ],
  "health": {
