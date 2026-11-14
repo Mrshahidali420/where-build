@@ -3696,40 +3696,32 @@
   }
  },
  "birthdays": {
-  "day": "2026-11-13",
-  "at": 1794549124575,
+  "day": "2026-11-14",
+  "at": 1794632520618,
   "list": [
    {
-    "id": 154224,
-    "name": "Mami Nanami",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b154224-7dJ09BKEnG3v.png",
-    "favourites": 9710,
-    "mediaId": 113813,
-    "voice": "Aoi Yuuki"
+    "id": 197584,
+    "name": "Kinji Hakari",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b197584-fK7Jc6DLfx7e.jpg",
+    "favourites": 1489,
+    "mediaId": 113415,
+    "voice": null
    },
    {
-    "id": 132800,
-    "name": "Rina Tennouji",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b132800-80RT7p4ZbtBC.png",
-    "favourites": 834,
-    "mediaId": 157654,
-    "voice": "Chiemi Tanaka"
+    "id": 5754,
+    "name": "Aiko Senoo",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b5754-ovx5oJ1cDaYf.png",
+    "favourites": 234,
+    "mediaId": 350,
+    "voice": "Yuki Matsuoka"
    },
    {
-    "id": 85801,
-    "name": "Yuma Isogai",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b85801-MpjzP2b5JYjO.png",
-    "favourites": 414,
-    "mediaId": 101102,
+    "id": 190691,
+    "name": "Ibara Saegusa",
+    "image": "https://s4.anilist.co/file/anilistcdn/character/large/b190691-4XREkoiXzFDn.jpg",
+    "favourites": 109,
+    "mediaId": 21512,
     "voice": "Ryouta Oosaka"
-   },
-   {
-    "id": 1085,
-    "name": "Kaname Tousen",
-    "image": "https://s4.anilist.co/file/anilistcdn/character/large/1085.jpg",
-    "favourites": 332,
-    "mediaId": 269,
-    "voice": "Toshiyuki Morikawa"
    }
   ]
  },
