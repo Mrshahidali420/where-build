@@ -4577,6 +4577,22 @@
    "status": "posted",
    "postId": "1629469682259559",
    "commentId": "1629469682259559_2171378326809277"
+  },
+  {
+   "key": "2026-11-14|scenes:21857:2|whereanime",
+   "day": "2026-11-14",
+   "slug": "scenes:21857:2",
+   "title": "Masamune-kun's Revenge",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "21857:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794655740597,
+   "status": "claimed"
   }
  ],
  "health": {
