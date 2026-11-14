@@ -3813,6 +3813,22 @@
    "status": "posted",
    "postId": "2175976193017554",
    "commentId": "2175976193017554_1838267644085167"
+  },
+  {
+   "key": "2026-11-14|airtime:195604:7|whereanime",
+   "day": "2026-11-14",
+   "slug": "airtime:195604:7",
+   "title": "Black Clover Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:airtime",
+   "type": "airtime",
+   "item": "195604:7",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794635949213,
+   "status": "claimed"
   }
  ],
  "health": {
