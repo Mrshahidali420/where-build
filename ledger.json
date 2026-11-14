@@ -5173,6 +5173,22 @@
    "status": "posted",
    "postId": "1329988470202923_122120877363503689",
    "commentId": "122120877363503689_1021033804359875"
+  },
+  {
+   "key": "2026-11-14|scenes:185660:2|whereanime",
+   "day": "2026-11-14",
+   "slug": "scenes:185660:2",
+   "title": "DAN DA DAN Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "185660:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 2,
+   "at": 1794671562286,
+   "status": "claimed"
   }
  ],
  "health": {
