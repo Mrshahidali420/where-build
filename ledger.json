@@ -4321,6 +4321,22 @@
     "id": "17987603502089440",
     "at": 1794647565950
    }
+  },
+  {
+   "key": "2026-11-14|clip-video:clip-a-certain-dark-item-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-14",
+   "slug": "clip-video:clip-a-certain-dark-item-e05-whereanime-01:full",
+   "title": "A Certain Dark Item",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-a-certain-dark-item-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794648127687,
+   "status": "claimed"
   }
  ],
  "health": {
