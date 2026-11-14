@@ -4209,6 +4209,22 @@
    "status": "posted",
    "postId": "1701746434901842",
    "commentError": "POST /1701746434901842/comments failed: Unsupported post request. Object with ID '1701746434901842' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "key": "2026-11-14|out-now:195571:6:out|whereanime",
+   "day": "2026-11-14",
+   "slug": "out-now:195571:6:out",
+   "title": "The Vermilion Mask",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:out-now",
+   "type": "out-now",
+   "item": "195571:6:out",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794645370444,
+   "status": "claimed"
   }
  ],
  "health": {
