@@ -3459,6 +3459,22 @@
    "status": "posted",
    "postId": "1847863142879176",
    "commentId": "1847863142879176_1702617264820468"
+  },
+  {
+   "key": "2026-11-13|character:char:121101|whereanime",
+   "day": "2026-11-13",
+   "slug": "character:char:121101",
+   "title": "Kaguya-sama: Love is War",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:character",
+   "type": "character",
+   "item": "char:121101",
+   "gapDays": 180,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794627533044,
+   "status": "claimed"
   }
  ],
  "health": {
