@@ -4393,6 +4393,22 @@
    "status": "posted",
    "postId": "1025528533904007",
    "commentId": "1025528533904007_1648720496692919"
+  },
+  {
+   "key": "2026-11-14|clip-video:clip-fx-fighter-kurumi-chan-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-14",
+   "slug": "clip-video:clip-fx-fighter-kurumi-chan-e06-whereanime-01:full",
+   "title": "FX Fighter Kurumi-chan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-fx-fighter-kurumi-chan-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794650293779,
+   "status": "claimed"
   }
  ],
  "health": {
