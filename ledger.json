@@ -3276,6 +3276,22 @@
     "id": "18097659488408407",
     "at": 1794623067658
    }
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-gensou-suikoden-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-gensou-suikoden-e05-whereanime-01:full",
+   "title": "Gensou Suikoden",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-gensou-suikoden-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794623188480,
+   "status": "claimed"
   }
  ],
  "health": {
