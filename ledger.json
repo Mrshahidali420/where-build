@@ -5409,6 +5409,22 @@
     "error": "Instagram could not take the video: Error: Media upload has failed with error code 2207076",
     "at": 1794676721794
    }
+  },
+  {
+   "key": "2026-11-14|scenes:113717:2|whereanime",
+   "day": "2026-11-14",
+   "slug": "scenes:113717:2",
+   "title": "Ranking of Kings",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:scenes",
+   "type": "scenes",
+   "item": "113717:2",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794677141807,
+   "status": "claimed"
   }
  ],
  "health": {
