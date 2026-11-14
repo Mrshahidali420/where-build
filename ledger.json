@@ -4465,6 +4465,22 @@
    "status": "posted",
    "postId": "4284090191881477",
    "commentId": "4284090191881477_2192150848397857"
+  },
+  {
+   "key": "2026-11-14|episode:209562:7|whereanime",
+   "day": "2026-11-14",
+   "slug": "episode:209562:7",
+   "title": "VERTEX FORCE",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:episode",
+   "type": "episode",
+   "item": "209562:7",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794652494356,
+   "status": "claimed"
   }
  ],
  "health": {
