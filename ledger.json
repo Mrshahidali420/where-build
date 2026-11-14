@@ -5209,6 +5209,27 @@
    "status": "posted",
    "postId": "1126810636827215",
    "commentError": "POST /1126810636827215/comments failed: Unsupported post request. Object with ID '1126810636827215' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+   "rare": true,
+   "hash": "293930c8c13efe7c8f8b40315e9987cb",
+   "rating": "g",
+   "ecchi": false,
+   "source": "danbooru",
+   "key": "2026-11-14|fanart:danbooru:12347264|whereanime",
+   "day": "2026-11-14",
+   "slug": "fanart:danbooru:12347264",
+   "title": null,
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:fanart",
+   "type": "fanart",
+   "item": "danbooru:12347264",
+   "gapDays": 3650,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794672666778,
+   "status": "claimed"
   }
  ],
  "health": {
