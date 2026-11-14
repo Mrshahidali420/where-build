@@ -3931,6 +3931,22 @@
    "status": "posted",
    "postId": "1910953223600231",
    "commentId": "1910953223600231_1589493382981567"
+  },
+  {
+   "key": "2026-11-14|airtime:235:1220|whereanime",
+   "day": "2026-11-14",
+   "slug": "airtime:235:1220",
+   "title": "Detective Conan",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:airtime",
+   "type": "airtime",
+   "item": "235:1220",
+   "gapDays": 300,
+   "titleGap": false,
+   "variant": 0,
+   "at": 1794638827963,
+   "status": "claimed"
   }
  ],
  "health": {
