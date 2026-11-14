@@ -3122,6 +3122,22 @@
    "status": "posted",
    "postId": "1672720941026481",
    "commentId": "1672720941026481_1682146840300068"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-black-clover-season-2-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-black-clover-season-2-e05-whereanime-01:full",
+   "title": "Black Clover Season 2",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-black-clover-season-2-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794619889362,
+   "status": "claimed"
   }
  ],
  "health": {
