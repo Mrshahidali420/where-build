@@ -4049,6 +4049,22 @@
    "status": "posted",
    "postId": "1673730387669130",
    "commentId": "1673730387669130_2944910299220147"
+  },
+  {
+   "key": "2026-11-14|clip-video:clip-dragon-ball-super-beerus-e05-whereanime-01:full|whereanime",
+   "day": "2026-11-14",
+   "slug": "clip-video:clip-dragon-ball-super-beerus-e05-whereanime-01:full",
+   "title": "Dragon Ball Super: Beerus",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-dragon-ball-super-beerus-e05-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794641560124,
+   "status": "claimed"
   }
  ],
  "health": {
