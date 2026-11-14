@@ -3353,6 +3353,22 @@
    "status": "posted",
    "postId": "1770412250739060",
    "commentId": "1770412250739060_1143947604657725"
+  },
+  {
+   "key": "2026-11-13|clip-video:clip-dandivine-e06-whereanime-01:full|whereanime",
+   "day": "2026-11-13",
+   "slug": "clip-video:clip-dandivine-e06-whereanime-01:full",
+   "title": "Dandivine",
+   "page": "whereanime",
+   "mix": "type",
+   "format": "type:clip-video",
+   "type": "clip-video",
+   "item": "clip-dandivine-e06-whereanime-01:full",
+   "gapDays": 30,
+   "titleGap": false,
+   "variant": 1,
+   "at": 1794625369085,
+   "status": "claimed"
   }
  ],
  "health": {
